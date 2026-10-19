@@ -2551,54 +2551,106 @@ class DevelopmentSession:
         )
 
     def _prepare_development_opponent(self) -> None:
-        # Dated absences leave the next matchday selection; healthy chosen
-        # starters and the tactical plan are retained. Never heal players here.
-        from football_manager.services.player_aging import repair_managed_unavailable
-        repair_managed_unavailable(self)
-        fixture = self._active_match.fixture
-        opponent_id = fixture.away_club_id if fixture.home_club_id == self.home_club.id else fixture.home_club_id
-        opponent_name = self._world_club_names.get(opponent_id, opponent_id)
-        if getattr(self._world, 'football_world', None) is not None:
-            from football_manager.services.world_matches import opponent_side
-            from football_manager.services.world_squads import recover_world_club
-            registry = self._world.football_world
-            if opponent_id in registry.clubs:
-                # A day progression may have resolved this rival before the
-                # managed clock is published. Never rewind or recover it twice.
-                ready_on = max(self.current_date, registry.last_recovery[opponent_id])
-                recover_world_club(self._world, opponent_id, ready_on)
-            self.away_club, self.away_lineup, self.away_tactic = opponent_side(
-                self._world, opponent_id, opponent_name)
-        else:
-            if opponent_id in self._league_edition.participant_club_ids:
-                participant_index = self._league_edition.participant_club_ids.index(opponent_id)
-            else:
-                participant_index = sum(ord(ch) for ch in opponent_id) % 24
-            strength_gap = self._world.strengths.get(opponent_id, 65) - self._world.strengths[self.home_club.id]
-            # Test-only handicap. Never alter player calibration, world strengths,
-            # saved results or permanent attributes of either team.
-            if self.dev_favorable_mode:
-                strength_gap -= 28
-            presets = (
-                TacticalPreset.BALANCED, TacticalPreset.COUNTER_ATTACK,
-                TacticalPreset.POSSESSION, TacticalPreset.CONSTANT_PRESS,
-            )
-            self.away_club, self.away_lineup, self.away_tactic = _build_side(
-                club_id=opponent_id, name=opponent_name,
-                short_name=_development_short_name(opponent_name),
-                base_offset=max(-45, min(12, strength_gap + ((participant_index * 3) % 9) - 4)),
-                tactic_preset=presets[participant_index % len(presets)], names=_AWAY_NAMES,
-            )
-            self._initialize_familiarity(self.away_lineup, self.away_tactic, 74.0 + float(participant_index % 7))
-        self._away_reference_formation = self.away_lineup.formation
-        self._away_reference_style = self.away_tactic.analyze_style()
-        self._away_base_tactic_familiarity = {
-            player.id: player.tactical_familiarity.tactic_score(self.away_tactic.tactic_id)
-            for player in self.away_club.squad.players
-        }
-        self._away_chemistry = {player.id: 65.0 for player in self.away_club.squad.players}
+        """Prepare the next opponent, settling genuine AI non-appearances first.
 
-        self._sync_effective_tactic_familiarity(home=False)
+        AI players who have retired never come back just to fill a matchday XI.
+        If the registered opponent cannot field eleven *available* players and
+        a natural goalkeeper, the canonical fixture is settled administratively
+        and the managed calendar moves on. This is not a simulated match and
+        does not create players or award appearances/minutes. The manager's own
+        shortages remain the user's responsibility.
+        """
+        from football_manager.services.player_aging import repair_managed_unavailable
+        from football_manager.services.world_matches import opponent_side
+        from football_manager.services.world_squads import recover_world_club
+
+        repair_managed_unavailable(self)
+        # Guard against malformed schedules making an administrative loop.
+        for _ in range(200):
+            if self._active_match is None:
+                return
+            fixture = self._active_match.fixture
+            opponent_id = (fixture.away_club_id if fixture.home_club_id == self.home_club.id
+                           else fixture.home_club_id)
+            opponent_name = self._world_club_names.get(opponent_id, opponent_id)
+            if getattr(self._world, 'football_world', None) is not None:
+                registry = self._world.football_world
+                if opponent_id in registry.clubs:
+                    # A day progression may have resolved this rival before the
+                    # managed clock is published. Never rewind or recover twice.
+                    ready_on = max(self.current_date, registry.last_recovery[opponent_id])
+                    recover_world_club(self._world, opponent_id, ready_on)
+                try:
+                    away = opponent_side(self._world, opponent_id, opponent_name)
+                except ValueError as exc:
+                    # Only a *registered* AI club lacking a valid matchday team
+                    # is eligible for a forfeit. No other selection errors are
+                    # silenced or converted into automatic results.
+                    club = registry.clubs.get(opponent_id)
+                    if club is None or str(exc) != f'{club.name} has no valid lineup':
+                        raise
+                    from football_manager.services.world_matches import _administrative_result
+                    with self._world.transaction():
+                        result = _administrative_result(self._world, fixture.fixture_id)
+                        if result is None:
+                            raise  # A different lineup bug is not a valid forfeit.
+                    if result.resolver != 'administrative':
+                        raise RuntimeError('Missing administrative fixture provenance')
+                    self._sync_world_view()
+                    next_known = self._next_unplayed_managed_match()
+                    cutoff = (next_known.match_date if next_known is not None else
+                              date(int(self._world.season_label[:4]) + 1, 6, 30))
+                    self._world.advance_until(cutoff, protected_club_id=self.home_club.id)
+                    self._sync_world_view()
+                    next_match = self._next_unplayed_managed_match()
+                    if next_match is None:
+                        self._active_match = None
+                        self.current_date = cutoff
+                        self.match_played = False
+                        self.last_result = None
+                        self.update_dressing_room()
+                        return
+                    days = max(0, (next_match.match_date - self.current_date).days)
+                    for player in self.home_club.squad.players:
+                        recover_player_between_matches(player, days=days)
+                    self._active_match = next_match
+                    self.current_date = next_match.match_date
+                    self.match_played = False
+                    self.last_result = None
+                    self.update_dressing_room()
+                    continue
+                self.away_club, self.away_lineup, self.away_tactic = away
+            else:
+                if opponent_id in self._league_edition.participant_club_ids:
+                    participant_index = self._league_edition.participant_club_ids.index(opponent_id)
+                else:
+                    participant_index = sum(ord(ch) for ch in opponent_id) % 24
+                strength_gap = self._world.strengths.get(opponent_id, 65) - self._world.strengths[self.home_club.id]
+                # Test-only handicap. Never alter player calibration, world strengths,
+                # saved results or permanent attributes of either team.
+                if self.dev_favorable_mode:
+                    strength_gap -= 28
+                presets = (
+                    TacticalPreset.BALANCED, TacticalPreset.COUNTER_ATTACK,
+                    TacticalPreset.POSSESSION, TacticalPreset.CONSTANT_PRESS,
+                )
+                self.away_club, self.away_lineup, self.away_tactic = _build_side(
+                    club_id=opponent_id, name=opponent_name,
+                    short_name=_development_short_name(opponent_name),
+                    base_offset=max(-45, min(12, strength_gap + ((participant_index * 3) % 9) - 4)),
+                    tactic_preset=presets[participant_index % len(presets)], names=_AWAY_NAMES,
+                )
+                self._initialize_familiarity(self.away_lineup, self.away_tactic, 74.0 + float(participant_index % 7))
+            self._away_reference_formation = self.away_lineup.formation
+            self._away_reference_style = self.away_tactic.analyze_style()
+            self._away_base_tactic_familiarity = {
+                player.id: player.tactical_familiarity.tactic_score(self.away_tactic.tactic_id)
+                for player in self.away_club.squad.players
+            }
+            self._away_chemistry = {player.id: 65.0 for player in self.away_club.squad.players}
+            self._sync_effective_tactic_familiarity(home=False)
+            return
+        raise RuntimeError('More than 200 consecutive invalid managed AI opponents')
 
     def _actual_match_sides(self) -> tuple[Club, Club]:
         if self.managed_is_home:

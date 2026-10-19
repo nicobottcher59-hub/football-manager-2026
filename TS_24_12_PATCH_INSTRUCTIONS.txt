@@ -1,0 +1,41 @@
+TS-24.12 — VALIDACION INTEGRAL Y CORRECCION DE INCOMPARECENCIA IA
+
+Base obligatoria: TS-24.11. SQLite v16, sin migracion.
+
+QUE CAMBIA
+- Herramientas y resultados reproducibles de auditoria multisemilla.
+- Regresiones focalizadas y muestra de minutos de partidos completos.
+- Solucion al fallo de vista previa de partidos controlados cuando un rival de la
+  IA carece de once elegible: resultado administrativo y calendario continuo.
+- NO se alteran ideologias de fichajes, mercado, economia o decisiones de retiro.
+- NO se crean jugadores ni se conceden minutos ficticios para solucionar carencias.
+
+INSTALACION
+1. Cerrar el juego y respaldar la carpeta del proyecto y la partida SQLite.
+2. Extraer este ZIP incremental sobre la raiz que contiene INICIAR_INTERFAZ_WINDOWS.bat.
+3. Verificar: python tools/verify_ts2412_integral_package.py
+4. Comprobar el cambio: python tools/smoke_ts2412_forfeit.py --output reports/ts2412_local_forfeit_check.json
+5. Reiniciar el juego y usar Ctrl + F5 en el navegador.
+
+AVISOS DE CALIDAD
+- Auditoria larga historica: 18 de 20 temporadas; se detuvo al comenzar la 19.
+- La correccion del error se comprobo con tests/smoke; NO se volvio a completar
+  un recorrido de 20 temporadas. NO declarar la integridad de largo plazo aprobada.
+- El ano 18 mostro 33 clubes sin segundo arquero y 6 vacantes titulares:
+  riesgo generalizado de planificacion que todavia requiere investigacion.
+- El acelerador no reproduce minutos senior, lesiones ni elegibilidad por partido.
+- Suite historica de calibracion conserva 3 errores antiguos de importacion.
+- Sin ejecucion nativa Windows ni revision exhaustiva de toda la interfaz.
+
+REPRODUCIR
+  python tools/run_ts2412_validation.py --mode quick
+  python tools/run_ts2412_validation.py --mode extended
+  pytest -q tests/test_ts_24_12_integral.py
+
+CUIDADO: los comandos de auditoria pueden sobrescribir reportes JSON del ZIP.
+Para conservar los hash, escribir nuevos reportes en otra ruta, por ejemplo
+python tools/run_ts2412_validation.py --mode single --seasons 5 --output reports/local_audit.json
+
+GITHUB DESKTOP
+BRANCH: test/ts-24-12-integral-career-validation
+SUMMARY: fix(career): handle AI administrative defaults and report long-horizon risks

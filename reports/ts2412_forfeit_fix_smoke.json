@@ -1,0 +1,20 @@
+{
+  "version": "TS-24.12",
+  "status": "passed",
+  "scenario": "unplayable-ai-opponent-at-managed-match",
+  "world_seed": 6606,
+  "fixture_id": "dev-premier-2026-27-league-r01-m001",
+  "ai_club_id": "riverside",
+  "result_resolver": "administrative",
+  "home_goals": 3,
+  "away_goals": 0,
+  "next_fixture_id": "carabao-cup-2026-27-round-2-t08-l1",
+  "checks": {
+    "administrative_resolver": true,
+    "no_loaned_or_generated_replacement": true,
+    "forfeited_game_not_registered_as_played_minutes": true,
+    "next_managed_fixture_prepared": true,
+    "sqlite_v16_schema_unchanged": true
+  },
+  "warning": "This targeted smoke test does not certify the unresolved 20-season audit."
+}

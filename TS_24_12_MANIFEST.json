@@ -1,0 +1,31 @@
+{
+  "version": "TS-24.12",
+  "base": "TS-24.11",
+  "save_graph_version": 16,
+  "scope": "integral_validation_and_managed_ai_forfeit_fix",
+  "long_horizon_target_seasons": 20,
+  "long_horizon_completed_seasons": 18,
+  "long_horizon_status": "failed_before_fix_at_season_19",
+  "post_fix_20_year_retest": "not_performed",
+  "targeted_forfeit_smoke": "passed",
+  "sha256": {
+    "src/football_manager/dev_ui/session.py": "d981759755b8f66115a2f89778098d96dac21b96e165db305568f8b2451e8ac0",
+    "docs/TS_24_12_VALIDACION_INTEGRAL.md": "4ca04f0596fbb61bd94cd6e5d6033f5537ac8252bf3e9b5fcaf1f87fefa3b71d",
+    "tools/audit_ts2412_real_matches.py": "2c04865ea81215aa5e75e9c268dbf1ad83b88b94ac277b7c0a12c4cab3fb1d20",
+    "tools/run_ts2412_validation.py": "0c91c63a4a51a0a488b82b968356a9f953a47c6de1d02d60d5d5f699a6ea797a",
+    "tools/summarize_ts2412_validation.py": "e1ba74f3722e5998ab510007f7489bc6dcc5135347391ccb23c3647e890a7966",
+    "tools/smoke_ts2412_forfeit.py": "9a14513bf3a8a3a220e0ac5dda3adf7de54daf8c10a130ab5baa68b5a24eb1dd",
+    "tools/verify_ts2412_integral_package.py": "69c54866deea4c7dbbfffd41bf8c0c460aa05d99eb7d3c01d5db6944d45ce73b",
+    "tests/test_ts_24_12_integral.py": "117342335e545c7bdd94429a86f4cc74ff12bdecb0dd1e912d11ab8ff3fe3936",
+    "TS_24_12_VALIDATION_REPORT.md": "fb6dac5daf7aeb30f861a19018e8ebc351a6c4fad5d479e822d6c52ef890573c",
+    "TS_24_12_TEST_REPORT.md": "9ec692153f3ef5f59b9ea9c06e9a1f959be186028b7749550add86288b2f2021",
+    "TS_24_12_PATCH_INSTRUCTIONS.txt": "5ce372b878b196b9f7ccb3b73581ab3d9aa8a85e5a9a65c0698d1b3551c3c916",
+    "reports/ts2412_seed6606_20y.json": "9319fbef71e8ee0fd5ebae3e182c75a6394b33dcd3d1d70b386ddeedfd7d50d2",
+    "reports/ts2412_seed7707_5y.json": "7b3da1b6dfe9605800656e90cf7faab94b2ef03db5bdf2b5f49ccc4bf2ae1352",
+    "reports/ts2412_seed8808_5y.json": "c9549df4027bf2f2e99bc6112d562105c14ddd30f39283fee659f01f73a9698f",
+    "reports/ts2412_detailed_matches.json": "583d3e9b8bf4b192999325519c66585925a94ebf34b8b2c95fc8ac14d1e6d430",
+    "reports/ts2412_forfeit_fix_smoke.json": "437a68c05dc0722f6cc4d0bc8f17b6b86444d02a71d241f75cfba80c1e2a130a"
+  },
+  "files": 16,
+  "note": "Reports are fixed snapshots. Rerunning tests with the same output paths will change their SHA-256 digests."
+}
