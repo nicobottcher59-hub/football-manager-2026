@@ -1,0 +1,65 @@
+{
+  "patch": "TS-28.1",
+  "base": "TS-27",
+  "format": "copy-and-replace incremental patch",
+  "graph_version": 20,
+  "deleted_files": [],
+  "files": [
+    {
+      "path": "TS_28_1_PATCH_INSTRUCTIONS.txt",
+      "kind": "added",
+      "sha256": "7e309e824e0130a3500aaa346a67c750196d342e1cff7e9e7238522ba2ccf2fc"
+    },
+    {
+      "path": "TS_28_1_TEST_REPORT.md",
+      "kind": "added",
+      "sha256": "c2e0dcb3ce7c4893e1a2e4f1aae65dae11c31b58508639be04011009d30a30b3"
+    },
+    {
+      "path": "frontend/portable/inbox.js",
+      "kind": "modified",
+      "sha256": "4bc131e29da5884c8d92f9d88a1eca7982333a429ca7a6b3bcd4602ca15cf9cf"
+    },
+    {
+      "path": "frontend/portable/index.html",
+      "kind": "modified",
+      "sha256": "3a40b052e9160e3890a94a9407901fbbbbddcb262ab26ba9c199dc369d700dec"
+    },
+    {
+      "path": "frontend/portable/news.css",
+      "kind": "added",
+      "sha256": "4c853b1fc9cc24154d1f2b132c0beecf6090eeadfa870b956226d7e000bc32f2"
+    },
+    {
+      "path": "frontend/portable/news.js",
+      "kind": "added",
+      "sha256": "39ab9f1ede2d52a096322b0928ac3a0af3b8c461037bc9710ebcd97c159036cc"
+    },
+    {
+      "path": "frontend/portable/portable.js",
+      "kind": "modified",
+      "sha256": "3601587f73c7c8d921394910ccda088535e32299cfa31e8663f088899b347e5a"
+    },
+    {
+      "path": "src/football_manager/services/manager_inbox.py",
+      "kind": "modified",
+      "sha256": "dc22e4cdfb0a3016bd428077bbedea47d06770518d9e820b32ab9acde1e9ac9f"
+    },
+    {
+      "path": "src/football_manager/ui_shell/home_news.py",
+      "kind": "added",
+      "sha256": "727ec4bdf08d2a908c03da757be113bbea9caf87649938214d704eab83cfbbdc"
+    },
+    {
+      "path": "src/football_manager/ui_shell/server.py",
+      "kind": "modified",
+      "sha256": "f83df7a2fbb12f952f68861460a772f15ccb218c6c987b814b0a2b0b2978cfe9"
+    },
+    {
+      "path": "tests/test_ts_28_1_living_news.py",
+      "kind": "added",
+      "sha256": "c46a5fc95841ad9c8205b6ec75f6c294a3413b545057ab011eebd8625e71dcfe"
+    }
+  ],
+  "tests": "TS_28_1_TEST_REPORT.md"
+}

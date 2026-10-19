@@ -9,7 +9,6 @@
   const labels = {medical:'Medical',contracts:'Contracts',scouting:'Scouting',calendar:'Calendar',
     results:'Matches',market:'Transfers',dressing_room:'Squad',conversations:'Conversations',
     academy:'Academy',system:'Club'};
-  const headlines = new Set(['results','market','scouting','calendar','academy']);
   const messages = () => data?.messages || [];
   const active = () => data?.players || [];
   const outstanding = m => m.requires_reply && !m.resolved;
@@ -128,8 +127,7 @@
       if(shouldRender)render();
       const activeTab=document.getElementById('activity-inbox');
       if(activeTab?.classList.contains('active'))renderHome(document.getElementById('activity-panel'));
-      else if(document.getElementById('activity-stories')?.classList.contains('active'))renderNews(document.getElementById('activity-panel'));
-      renderCards();
+
     } catch(error){
       if(host)host.innerHTML='<section class="mi-error">Cannot load live Inbox. Start the Python server and retry.</section>';
       console.warn('Live manager inbox unavailable',error);
@@ -147,25 +145,5 @@
     }));
     const badge=document.querySelector('#activity-inbox .unread-count');if(badge)badge.textContent=String(data.unread);
   }
-  function renderNews(panel){
-    if(!panel)return;
-    if(!data){panel.textContent='Loading real club news...';return;}
-    panel.innerHTML=messages().filter(m=>headlines.has(m.category)).slice(0,6).map(m=>
-      `<button type="button" class="notification-row" data-mi-news="${m.id}"><span class="notification-copy"><strong>${esc(m.title)}</strong><span>${esc(m.body)}</span></span></button>`).join('') || '<p class="mi-empty">No recorded club news yet. Progress your career to generate real events.</p>';
-    panel.querySelectorAll('[data-mi-news]').forEach(b=>b.addEventListener('click',()=>{
-      selected=Number(b.dataset.miNews);window.FMNavigation?.navigate('Inbox');
-    }));
-  }
-  function renderCards(){
-    const section=document.querySelector('.club-news .story-grid');if(!section)return;
-    const items=(data?.messages||[]).filter(m=>headlines.has(m.category)).slice(0,4);
-    section.innerHTML=items.map(m=>`<button type="button" class="story-card mi-news-card" data-mi-card="${m.id}">
-      <span class="story-copy"><span class="story-category">${esc(labels[m.category]||'Club News')}</span>
-      <strong>${esc(m.title)}</strong><small>${esc(m.date)}</small></span></button>`).join('')||
-      '<div class="mi-empty">Club news will reflect actual matches, scout reports and transfer events.</div>';
-    section.querySelectorAll('[data-mi-card]').forEach(b=>b.addEventListener('click',()=>{
-      selected=Number(b.dataset.miCard);window.FMNavigation?.navigate('Inbox');
-    }));
-  }
-  window.FMInbox = {mount:(target,playerId)=>{host=target;chosen=playerId||null;refresh();},refresh,renderHome,renderNews,renderCards};
+  window.FMInbox = {mount:(target,playerId)=>{host=target;chosen=playerId||null;refresh();},refresh,renderHome};
 })();

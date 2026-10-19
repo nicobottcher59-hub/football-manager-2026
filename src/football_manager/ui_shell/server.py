@@ -25,6 +25,7 @@ from .match import prematch_read_model
 from .club_profiles import club_profile_read_model
 from .player_profiles import player_profile_read_model
 from .home_competition import home_competition_read_model
+from .home_news import home_news_read_model
 from football_manager.services.opening_balance import preview_opening_balance
 
 HOST = "127.0.0.1"
@@ -198,6 +199,10 @@ class FootballUIHandler(BaseHTTPRequestHandler):
                     self._json(404, {"error": "Club is not in the persistent English world"})
                     return
                 self._json(200, payload)
+            return
+        if path == '/api/news':
+            with self.runtime.lock:
+                self._json(200, home_news_read_model(self.runtime.session))
             return
         if path == '/api/home-competition':
             query = parse_qs(urlsplit(self.path).query)

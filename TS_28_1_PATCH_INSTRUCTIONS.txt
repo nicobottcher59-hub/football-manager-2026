@@ -1,0 +1,25 @@
+TS-28.1 - HOME DINAMICO Y NOTICIAS REALES
+
+REQUISITO: tener TS-27 instalado completamente (sobre TS-26.1).
+
+INSTALACION:
+1. Hacer una copia de seguridad del proyecto y de las partidas.
+2. Descomprimir TS-28-1-PARCHE.zip.
+3. Copiar el contenido del ZIP DENTRO de la carpeta raiz de tu juego.
+4. Aceptar reemplazar los archivos existentes, conservando las subcarpetas.
+5. Iniciar con INICIAR_INTERFAZ_WINDOWS.bat.
+6. Abrir Home: ver las tarjetas de noticias del mundo, tocar Club News y abrir una noticia.
+7. Avanzar el calendario: comprobar que las noticias reflejan resultados y fichajes reales.
+
+EL ZIP CONTIENE SOLO NUEVOS/MODIFICADOS RESPECTO DE TS-27.
+NO incluye partidas guardadas, .git, contenido sin modificar o el juego completo.
+No hay archivos que borrar ni migracion de guardados; se conserva formato v20.
+
+Detalles y pruebas: TS_28_1_TEST_REPORT.md
+
+BRANCH: feat/ts-28-1-live-world-news
+SUMMARY: feat: TS-28.1 live world news and dynamic Home
+DESCRIPTION: Replace demo Home headlines with verified career news from the match,
+transfer and championship ledgers. Add a dedicated news API, world stories,
+article details and relevant navigation while preserving the manager Inbox,
+save schema and instant match simulator. Includes targeted regression tests.

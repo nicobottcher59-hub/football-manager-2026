@@ -366,6 +366,26 @@ def synchronize_manager_inbox(session) -> None:
                 f'result:{fid}')
     state.results = matches
 
+    # TS-28.1: only major titles of the managed club belong in the manager's
+    # Inbox. Global football headlines remain in /api/news, not in this queue.
+    for competition_id, competition in (*session._world.cups.items(), *session._world.staged.items()):
+        if competition.champion_club_id != cid:
+            continue
+        source = f'club-title:{session._world.season_label}:{competition_id}'
+        _notice(state, now, 'results', 'Your club has won a trophy',
+                f'{session.home_club.name} won {competition.name} in '
+                f'{session._world.season_label}. The title is recorded in the competition ledger.',
+                source)
+    for report in session.archived_season_reports[-1:]:
+        for league_id, champion_id in report.champions.items():
+            if champion_id != cid or league_id not in report.league_tables:
+                continue
+            league_label = league_id.removeprefix('dev-').replace('-', ' ').title()
+            _notice(state, now, 'results', 'League title confirmed',
+                    f'{session.home_club.name} finished as {league_label} champions in '
+                    f'{report.season_label}. The final table is recorded in career history.',
+                    f'club-league-title:{report.season_label}:{league_id}')
+
     offers = _offers(session)
     for deal_id, status in sorted(offers.items()):
         if status != state.offers.get(deal_id):

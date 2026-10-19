@@ -1,6 +1,6 @@
 'use strict';
 /* UI-3.1 portable viewer: live Python squad in Home/Squad/Tactics,
- * with clearly labeled UI-1 demo-only league/news modules. No npm required. */
+ * with live career news sourced from the Python world ledger. No npm required. */
 (() => {
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -128,7 +128,7 @@
     $('.preview-label').textContent='UI-3.5 · LIVE PYTHON';
     $('.tactics-caption').textContent='Illustrated portraits are placeholders · Names, current GRL and team metrics come from the Python session';
     $('.app-footer span:first-child').textContent='FM Project · UI-3.5 Python DEV session';
-    $('.app-footer span:last-child').textContent='Live Python world progression · demo news · session not saved';
+    $('.app-footer span:last-child').textContent='Live Python world progression · verified news · manual save required';
     // Continue is managed separately by the authoritative /api/progression service.
   }
   async function refreshHome(){
@@ -140,6 +140,7 @@
       if(serial===homeFetchSerial){
         updateHomeFromPython(snapshot);
         refreshHomeWorldData(serial);
+        window.FMNews?.refresh();
       }
     }catch(err){
       if(serial!==homeFetchSerial)return;
@@ -376,7 +377,7 @@
     if (home) refreshHome();
     headerTitle.textContent = page;
     headerSubhead.textContent = home
-      ? 'Welcome to Northbridge FC. An overview of your club, upcoming fixtures and key information.'
+      ? 'Live results, fixtures and verified football news from your career.'
       : squad ? (page==='Squad' ? 'Sortable roster, full player attributes, recorded season statistics and player management.' : 'Formation, individual roles and team tactics backed by the Python development session.')
       : clubPage ? 'Persistent squad, player profiles and recorded club information. Read-only.'
       : clubSupport ? (page==='Staff'?'Hire coaching, medical and fitness specialists.':page==='Training'?'Configure squad groups and automatic physical protection.':'Injury timelines, recovery treatments and player opinions.')
@@ -521,12 +522,12 @@
     storiesButton.setAttribute('aria-selected',String(!live));
     activityPanel.setAttribute('aria-labelledby',live?'activity-inbox':'activity-stories');
     if(live)window.FMInbox?.renderHome(activityPanel);
-    else window.FMInbox?.renderNews(activityPanel);
+    else window.FMNews?.renderPanel(activityPanel);
   }
   inboxButton.addEventListener('click',()=>activityTab('inbox'));
   storiesButton.addEventListener('click',()=>activityTab('stories'));
-  $('.inbox-card .text-action').addEventListener('click',()=>navigate('Inbox'));
-  $('.club-news .text-action').addEventListener('click',()=>navigate('Inbox'));
+  $('.inbox-card .text-action').addEventListener('click',()=>{if(storiesButton.classList.contains('active'))window.FMNews?.renderPanel(activityPanel);else navigate('Inbox');});
+  $('.club-news .text-action').addEventListener('click',()=>activityTab('stories'));
   activityTab('inbox');
   window.FMInbox?.refresh();
 
