@@ -152,6 +152,7 @@ def build_team_match_snapshot(
     lineup: MatchLineup,
     tactic: Tactic,
     chemistry_by_player: Mapping[str, float] | None = None,
+    set_piece_preferences: Mapping[str, tuple[str, ...]] | None = None,
 ) -> TeamMatchSnapshot:
     club.validate_lineup(lineup)
     if tactic.formation != lineup.formation:
@@ -176,6 +177,7 @@ def build_team_match_snapshot(
             _snapshot_bench_player(player, chemistry_by_player) for player in lineup.bench
         ),
         tactic=_snapshot_tactic(tactic),
+        set_piece_preferences=dict(set_piece_preferences or {}),
     )
 
 
@@ -192,18 +194,22 @@ def build_match_snapshot(
     away_tactic: Tactic,
     home_chemistry_by_player: Mapping[str, float] | None = None,
     away_chemistry_by_player: Mapping[str, float] | None = None,
+    home_set_piece_preferences: Mapping[str, tuple[str, ...]] | None = None,
+    away_set_piece_preferences: Mapping[str, tuple[str, ...]] | None = None,
 ) -> MatchSnapshot:
     home_team = build_team_match_snapshot(
         club=home_club,
         lineup=home_lineup,
         tactic=home_tactic,
         chemistry_by_player=home_chemistry_by_player,
+        set_piece_preferences=home_set_piece_preferences,
     )
     away_team = build_team_match_snapshot(
         club=away_club,
         lineup=away_lineup,
         tactic=away_tactic,
         chemistry_by_player=away_chemistry_by_player,
+        set_piece_preferences=away_set_piece_preferences,
     )
     return MatchSnapshot(
         match_id=match_id,

@@ -24,14 +24,14 @@ from .models import (
 from .session_codec import capture_manager_graph, restore_manager_graph
 from .sqlite_repository import SQLiteSaveRepository
 
-MANAGER_STATE_VERSION = 19
+MANAGER_STATE_VERSION = 20
 _UI_STATE_VERSION = 1
 
 # Explicit contract for the current disposable session. When a later version
 # adds new persistent state, this must be revised and migrated intentionally.
 _REQUIRED_FIELDS = frozenset({
     '_simulator', '_next_seed', '_seed', 'current_date',
-    'home_club', 'home_lineup', 'home_tactic', 'tactical_studio', 'dressing_room', 'manager_inbox',
+    'home_club', 'home_lineup', 'home_tactic', 'tactical_studio', 'dressing_room', 'manager_inbox', 'set_piece_orders',
     'away_club', 'away_lineup', 'away_tactic',
     '_world_squads',
     '_league_club_names', '_league_fixture_plan', '_league_edition',
@@ -94,6 +94,8 @@ def validate_manager_session(session: DevelopmentSession) -> None:
         if not isinstance(session.manager_inbox, ManagerInbox):
             raise SaveIntegrityError('manager inbox state missing')
         session.manager_inbox.validate(session.current_date, session.home_club.id)
+        from football_manager.services.match_preparation import validate_orders
+        validate_orders(session)
         from football_manager.domain.football_world import FootballWorld
         from football_manager.services.world_squads import english_participants
         if (not isinstance(session._world_squads, FootballWorld)

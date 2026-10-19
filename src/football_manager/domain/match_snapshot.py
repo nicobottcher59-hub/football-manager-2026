@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 
 from .attributes import PlayerAttributes
@@ -127,6 +127,7 @@ class TeamMatchSnapshot:
     starters: tuple[PlayerMatchSnapshot, ...]
     bench: tuple[PlayerMatchSnapshot, ...]
     tactic: TacticMatchSnapshot
+    set_piece_preferences: dict[str, tuple[str, ...]] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if not self.club_id.strip():

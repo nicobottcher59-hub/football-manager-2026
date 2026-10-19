@@ -19,6 +19,8 @@ def preserve_squad_edit(session: DevelopmentSession, admin: UIRosterAdmin | None
     """Undo failed edits without replacing the session, players or tactic references."""
     studio = session.tactical_studio
     studio_before = deepcopy(studio)
+    # TS-27 adds persistent preferences to the otherwise lightweight editor.
+    set_pieces_before = dict(session.set_piece_orders)
     lineup = session.home_lineup  # Immutable MatchLineup; command replaces, not mutates.
     tactic = session.home_tactic
     tactic_before = (
@@ -43,6 +45,8 @@ def preserve_squad_edit(session: DevelopmentSession, admin: UIRosterAdmin | None
     try:
         yield
     except BaseException:
+        session.set_piece_orders.clear()
+        session.set_piece_orders.update(set_pieces_before)
         for name in ("library", "plans", "rules", "revision", "sequence", "active_id"):
             setattr(studio, name, getattr(studio_before, name))
         session.tactical_studio = studio

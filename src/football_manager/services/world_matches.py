@@ -280,7 +280,11 @@ def simulate_registered_fixture(world, fixture_id: str):
             context=context, home_club=home, home_lineup=home_lineup, home_tactic=home_tactic,
             away_club=away, away_lineup=away_lineup, away_tactic=away_tactic,
         )
-        result = FastMatchSimulator().simulate(snapshot)
+        from football_manager.fast_simulation.ai_coaching import coach_for_match
+        ai_coaches = {team.club_id: coach_for_match(
+            world.seed, team.club_id, team.tactic.preset_origin.value, fixture_id)
+            for team in (snapshot.home_team, snapshot.away_team)}
+        result = FastMatchSimulator().simulate(snapshot, ai_coaches=ai_coaches)
         record = world.record_result(
             fixture_id, result.home_goals, result.away_goals,
             penalties_home=result.penalties_home, penalties_away=result.penalties_away,

@@ -1,0 +1,15 @@
+/* TS-27: restrained optional match preparation and set-piece controls. */
+.fm-ts27-opponent{margin:12px 0 16px;}
+.fm-ts27-report{padding:13px 16px;display:flex;flex-direction:column;gap:13px;color:#c4d9e8;font-size:12px}
+.fm-ts27-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.fm-ts27-metrics span{border:1px solid #1e5271;border-radius:8px;background:#082c44;padding:10px;display:flex;flex-direction:column;gap:4px}
+.fm-ts27-metrics small{color:#9ab6ca;font-size:10px}.fm-ts27-metrics b{color:#e4faff;font-size:19px}
+.fm-ts27-insights p{line-height:1.5;margin:6px 0}.fm-ts27-players>div{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.fm-ts27-players span{border:1px solid #27546c;background:#103650;padding:7px 10px;border-radius:8px}
+.fm-ts27-report details{border-top:1px solid #23506b;padding-top:10px}.fm-ts27-report summary{cursor:pointer}
+.fm-ts27-pieces{margin:15px 0}.fm-ts27-role{display:flex;flex-direction:column;gap:6px;padding:10px 0;border-bottom:1px solid #27506b}
+.fm-ts27-role>label{display:grid;grid-template-columns:minmax(95px,.8fr) minmax(170px,1.3fr);align-items:center;gap:9px;font-size:12px}
+.fm-ts27-role .fm-select{width:100%;min-width:0}.fm-ts27-role small{color:#a4c7d9;font-size:11px}
+.fm-ts27-role details{font-size:11px;color:#a6c4d8}.fm-ts27-role details summary{cursor:pointer;padding:5px 0}
+.fm-ts27-backup{display:grid;grid-template-columns:98px minmax(150px,1fr);gap:8px;align-items:center;margin:6px 0}
+@media(max-width:650px){.fm-ts27-metrics{grid-template-columns:repeat(2,1fr)}.fm-ts27-role>label{grid-template-columns:1fr}}

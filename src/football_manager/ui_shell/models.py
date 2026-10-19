@@ -8,6 +8,7 @@ from dataclasses import asdict, dataclass, field, fields, replace
 from enum import Enum
 from statistics import mean
 from football_manager.services.tactical_studio import STUDIO_ACTIONS, apply_studio_command, studio_read_model
+from football_manager.services.match_preparation import opponent_report, set_piece_view, assign_order
 from football_manager.domain.tactical_geometry import base_points
 
 from football_manager.services.season_statistics import player_statistics, statistics_options
@@ -245,7 +246,8 @@ def squad_read_model(session: DevelopmentSession, admin: UIRosterAdmin | None = 
             "players": [{"id": p.id, "name": p.full_name} for p in session.away_club.squad.players],
             "roles": sorted({r.role_id for s in player_slots for r in session.role_options_for_slot(s["slot_id"])})
         },
-        "set_pieces": {"supported": False, "message": "Assignment of set-piece takers is not implemented in Python yet."},
+        "set_pieces": set_piece_view(session),
+        "match_preparation": opponent_report(session),
     }
 
 
@@ -278,6 +280,8 @@ def apply_squad_command(session: DevelopmentSession, command: dict, admin: UIRos
     action = command.get("action")
     if action in STUDIO_ACTIONS:
         apply_studio_command(session, command)
+    elif action == "set_piece":
+        assign_order(session, command)
     elif action == "formation":
         session.set_formation(str(command.get("id", "")))
     elif action == "preset":

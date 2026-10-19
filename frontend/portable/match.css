@@ -212,3 +212,13 @@
 /* TS-22: preserve the match design and add compact, readable live ratings. */
 .fm-profile-link{background:transparent;border:0;color:inherit;font:inherit;font-weight:inherit;padding:0;cursor:pointer;max-width:100%}.fm-profile-link:hover{color:#63d4ff}.fm-profile-link:focus-visible{outline:2px solid #63d4ff;outline-offset:3px}.fm-prematch-field{min-height:390px}.fm-prematch-field .fm-on-pitch{width:96px;max-width:96px}.fm-on-pitch>.fm-profile-link{display:flex;justify-content:center;width:100%;line-height:1.1}.fm-sub>.fm-profile-link{font-size:10px;font-weight:680;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:94px}.fm-player-metrics{display:flex;justify-content:center;align-items:center;gap:4px;font-size:10px;line-height:1.1;white-space:nowrap;background:#051e2bd9;border:1px solid #427c7180;border-radius:4px;padding:3px 4px;color:#dcffff;font-variant-numeric:tabular-nums}.fm-player-metrics b{font-size:10px;color:#6ee4fa}.fm-player-metrics small{font-size:7px}.fm-player-metrics i{font-style:normal;font-size:9px;font-weight:750}.fm-player-metrics i.fresh{color:#4ae3b1}.fm-player-metrics i.tired{color:#ffd078}.fm-player-metrics i.low{color:#ff929f}.fm-metric-legend{float:right;font-size:9px;font-weight:400;color:#9cbaca}.fm-sub .fm-player-metrics{gap:3px;font-size:9px}.fm-sub .fm-player-metrics small{display:none}.fm-subs-list{flex-wrap:wrap;row-gap:10px}.fm-sub{flex:1 1 68px}.fm-on-pitch .fm-pitch-name{display:block}
 @media(max-width:750px){.fm-prematch-field{min-height:415px}.fm-prematch-field .fm-on-pitch{width:84px;max-width:84px}.fm-metric-legend{float:none;display:block;margin-top:6px}}
+
+/* TS-27 compact prematch analysis; match remains quick-sim only. */
+.fm-ts27-prematch{margin:15px 0;background:#08243b;border:1px solid #315d80;border-radius:13px;padding:15px 20px;color:#c9e1f2;font-size:12px;line-height:1.5}
+.fm-ts27-prematch h2{margin:0 0 5px;color:#f1faff;font-size:17px}
+.fm-ts27-prematch>p{margin:4px 0 10px}
+.fm-ts27-preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.fm-ts27-preview-grid>div{background:#0c304b;border:1px solid #254c67;padding:12px;border-radius:9px}
+.fm-ts27-preview-grid strong{color:#77d9ec}.fm-ts27-preview-grid p{margin:6px 0}
+.fm-ts27-prematch small{font-size:10px;color:#9bbfd3}
+@media(max-width:680px){.fm-ts27-preview-grid{grid-template-columns:1fr}}

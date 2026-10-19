@@ -267,6 +267,8 @@ class DevelopmentSession:
         # very different lineups repeatedly land on the same visible scoreline.
         from football_manager.domain.tactical_studio import TacticalStudioState
         self.tactical_studio = TacticalStudioState()
+        from football_manager.services.match_preparation import empty_orders
+        self.set_piece_orders = empty_orders()
         self._seed = self._next_seed
         self._next_seed += 1
         self.current_date = date(2026, 8, 15)
@@ -1163,9 +1165,12 @@ class DevelopmentSession:
         snapshot = self._build_snapshot()
         from football_manager.services.tactical_studio import prepared_match_plans
         plans = prepared_match_plans(self)
-        # Keep the established simulator interface for matches with no plans.
-        result = (self._simulator.simulate(snapshot, tactical_plans=plans) if plans
-                  else self._simulator.simulate(snapshot))
+        from football_manager.fast_simulation.ai_coaching import coach_for_match
+        opponent = snapshot.away_team if snapshot.home_team.club_id == self.home_club.id else snapshot.home_team
+        coaches = {opponent.club_id: coach_for_match(
+            self._world.seed, opponent.club_id, opponent.tactic.preset_origin.value,
+            self._active_match.fixture.fixture_id)}
+        result = self._simulator.simulate(snapshot, tactical_plans=plans, ai_coaches=coaches)
         # These projections are updated by _sync_world_view() after the world
         # ledger is committed. A failure during that projection must not leave
         # players or views ahead of the durable world result.
@@ -2849,6 +2854,8 @@ class DevelopmentSession:
             away_tactic=away_tactic,
             home_chemistry_by_player=home_chemistry,
             away_chemistry_by_player=away_chemistry,
+            home_set_piece_preferences=self.set_piece_orders if managed_home else None,
+            away_set_piece_preferences=self.set_piece_orders if not managed_home else None,
         )
 
     @staticmethod

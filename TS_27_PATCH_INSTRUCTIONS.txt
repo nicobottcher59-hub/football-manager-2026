@@ -1,0 +1,19 @@
+TS-27 INCREMENTAL PATCH - MATCH PREPARATION & CONTEXTUAL AI
+
+Prerequisite: Your original game with TS-26 AND TS-26.1 already installed.
+This is NOT a complete game and should NOT be installed over TS-25 alone.
+
+1. Close the game and back up your game folder and your existing career saves.
+2. Extract the ZIP.
+3. Copy everything in the patch directly into the root of your existing game.
+4. Preserve folder hierarchy (src/, frontend/, tests/, etc.).
+5. Allow your operating system to REPLACE matching files. Do not delete anything.
+6. Start the Windows interface normally via INICIAR_INTERFAZ_WINDOWS.bat.
+7. Open Tactics to inspect the next opponent and set captain/set-piece priorities.
+
+Nothing in this patch removes existing files, .git data or save files.
+SQLite manager career version 19 loads with automatic migration to version 20.
+For known limitations and test results read TS_27_TEST_REPORT.md.
+
+GitHub Desktop suggested branch: feat/ts-27-match-preparation-ai
+Suggested commit summary: feat: TS-27 match preparation, set pieces and AI coaches

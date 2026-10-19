@@ -140,12 +140,25 @@ class FastMatchSimulator:
     def __init__(self, config: FastSimulationConfig | None = None) -> None:
         self.config = config or FastSimulationConfig()
 
-    def simulate(self, snapshot: MatchSnapshot, *, tactical_plans: tuple = ()) -> FastMatchResult:
+    def simulate(self, snapshot: MatchSnapshot, *, tactical_plans: tuple = (),
+                 ai_coaches: dict | None = None) -> FastMatchResult:
         from .plans import validate_changes
         validate_changes(snapshot, tactical_plans)
         root = FastMatchRandom(snapshot.seed)
         home = _TeamRuntime(snapshot.home_team, build_fast_team_profile(snapshot.home_team))
         away = _TeamRuntime(snapshot.away_team, build_fast_team_profile(snapshot.away_team))
+        if ai_coaches:
+            from .ai_coaching import adjusted_profile
+            for side, opponent in ((home, away), (away, home)):
+                coach = ai_coaches.get(side.team.club_id)
+                if coach is not None:
+                    if coach.club_id != side.team.club_id:
+                        raise ValueError("AI coach club does not match match side")
+                    decisive = snapshot.context.competition.match_decider is not MatchDecider.DRAW_ALLOWED
+                    side.profile = adjusted_profile(
+                        side.profile, coach, importance=0.85 if decisive else 0.45,
+                        opponent_current=opponent.profile.current,
+                    )
 
         home.possession = self._home_possession(home.profile, away.profile, root.fork("possession"))
         away.possession = round(100.0 - home.possession, 1)
@@ -799,6 +812,32 @@ class FastMatchSimulator:
             shooter = self._select_shooter(attacker.team, shot_random.fork("shooter"), players=active_starters, defenders=active_defenders)
             creator = self._select_assister(attacker.team, shooter.player_id, shot_random.fork("build-up"), players=active_starters)
             xg = self._chance_xg(attacker.profile, defender.profile, shot_random.fork("xg"))
+            # Optional named takers affect a fraction of the SAME real chances.
+            # No fabricated goals, extra shots or external match events.
+            if attacker.team.set_piece_preferences:
+                from football_manager.services.match_preparation import effective_order, role_score
+                orders = attacker.team.set_piece_preferences
+                kind_roll = shot_random.fork("set-pieces/kind").random()
+                kind = ("free_kicks" if kind_roll < .045 else
+                        "corners_left" if kind_roll < .095 else
+                        "corners_right" if kind_roll < .145 else None)
+                if kind:
+                    candidates = effective_order(orders, kind, active_starters)
+                    if candidates:
+                        taker = candidates[0]
+                        if kind == "free_kicks":
+                            shooter = taker
+                            creator = None
+                        else:
+                            # A corner taker is a possible creator, not scorer.
+                            creator = taker if taker.player_id != shooter.player_id else None
+                        quality_shift = max(-.045, min(.045, (role_score(taker, kind) - 65) / 600.0))
+                        xg *= (1.0 + quality_shift)
+                captain = effective_order(orders, "captain", active_starters)
+                if captain:
+                    # Leadership remains much less important than player quality.
+                    captain_score = role_score(captain[0], "captain")
+                    xg *= 1.0 + max(-.012, min(.012, (captain_score - 65) / 1800.0))
             fatigue_quality = self._clamp(
                 1.0 - (1.0 - attacker_energy) * 0.22 + (1.0 - defender_energy) * 0.30,
                 0.84,
@@ -1804,10 +1843,16 @@ class FastMatchSimulator:
             )
             return value, player.player_id
 
-        return tuple(
-            sorted(outfield, key=taker_score, reverse=True)
-            + sorted(goalkeepers, key=taker_score, reverse=True)
-        )
+        ranked = sorted(outfield, key=taker_score, reverse=True)
+        # Manager-specified penalty priority applies only to available
+        # players on the pitch. Others keep the established automatic order.
+        preferred_ids = runtime.team.set_piece_preferences.get("penalties", ())
+        available = {p.player_id: p for p in active}
+        preferred = [available[pid] for pid in preferred_ids if pid in available]
+        seen = {p.player_id for p in preferred}
+        return tuple(preferred + [p for p in ranked if p.player_id not in seen]
+                     + [p for p in sorted(goalkeepers, key=taker_score, reverse=True) if p.player_id not in seen])
+
 
     @staticmethod
     def _active_goalkeeper(runtime: _TeamRuntime, match_minutes: int) -> PlayerMatchSnapshot:

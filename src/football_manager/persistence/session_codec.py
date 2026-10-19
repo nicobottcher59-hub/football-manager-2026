@@ -23,7 +23,7 @@ from football_manager.domain.world_runner import WorldSeasonRunner
 
 from .models import SaveIntegrityError, UnsupportedSaveVersionError
 
-GRAPH_VERSION = 19
+GRAPH_VERSION = 20
 # TS-24.13: a fully populated 92-club career already needs ~286k live
 # graph nodes after its first season (TS-24.12 rejected that save). Keep
 # the integrity limit finite but accommodate normal longitudinal growth.
@@ -398,4 +398,7 @@ def restore_manager_graph(data: dict, *, migrate_world: bool = True) -> Developm
     if data['version'] < 19 and hasattr(session, '_world_squads'):
         from football_manager.services.club_support import upgrade_club_support_scouts
         upgrade_club_support_scouts(session._world_squads, session.current_date)
+    if data['version'] < 20 and 'set_piece_orders' not in root:
+        from football_manager.services.match_preparation import empty_orders
+        session.set_piece_orders = empty_orders()
     return session

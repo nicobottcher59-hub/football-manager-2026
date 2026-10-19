@@ -156,6 +156,8 @@ def prematch_read_model(session: DevelopmentSession, admin: UIRosterAdmin, comma
                 'targets':tactical['targets'],
                 'tactics':tactical['tactics'],
                 'studio':tactical['studio'],
+                'set_pieces':tactical['set_pieces'],
+                'match_preparation':tactical['match_preparation'],
             },
             'match_tactics_temporary':True,
             'kit_choices':('default','dark','light','blue','red','purple','yellow','green')}

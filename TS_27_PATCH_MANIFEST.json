@@ -1,0 +1,139 @@
+{
+  "release": "TS-27",
+  "base": "TS-26.1 professional scouts",
+  "save_graph_version": 20,
+  "instructions": "Copy every file into the ROOT of the previously updated TS-26.1 game and replace matching files.",
+  "new_files": [
+    "TS_27_TEST_REPORT.md",
+    "frontend/public/squad/ts27.css",
+    "src/football_manager/fast_simulation/ai_coaching.py",
+    "src/football_manager/services/match_preparation.py",
+    "tests/test_ts_27_match_preparation.py"
+  ],
+  "modified_files": [
+    "frontend/portable/match.css",
+    "frontend/portable/match.js",
+    "frontend/public/squad/embed.html",
+    "frontend/public/squad/squad.js",
+    "src/football_manager/dev_ui/session.py",
+    "src/football_manager/domain/match_snapshot.py",
+    "src/football_manager/fast_simulation/engine.py",
+    "src/football_manager/persistence/manager_career.py",
+    "src/football_manager/persistence/session_codec.py",
+    "src/football_manager/services/match_snapshot_builder.py",
+    "src/football_manager/services/world_matches.py",
+    "src/football_manager/ui_shell/match.py",
+    "src/football_manager/ui_shell/models.py",
+    "src/football_manager/ui_shell/transactions.py",
+    "tests/test_ts_26_1_professional_scouts.py"
+  ],
+  "deleted_files": [],
+  "files": [
+    {
+      "path": "TS_27_TEST_REPORT.md",
+      "sha256": "76dc41585b5229934bc4c92d8ce00c5233f571c7c56e57cdb4a48c971c6c5a86",
+      "bytes": 3964
+    },
+    {
+      "path": "frontend/portable/match.css",
+      "sha256": "f6f33e78896497fbf51186c65b36a5b6c2731480b742e606f9564365f836f2bf",
+      "bytes": 39231
+    },
+    {
+      "path": "frontend/portable/match.js",
+      "sha256": "1aeb324f80b57d7cd38f4b3e8566a93c9c2952223c6446c9feb4e2acccf8f623",
+      "bytes": 36690
+    },
+    {
+      "path": "frontend/public/squad/embed.html",
+      "sha256": "2a81b1751dd734d4eb79c68f73599bccd01821f8bc9c3c57becea7d1a550619f",
+      "bytes": 1058
+    },
+    {
+      "path": "frontend/public/squad/squad.js",
+      "sha256": "0de5544af609b6102d4a247326b86656bb1fc3f5f3f3e6fd20fe2a4fb4bca666",
+      "bytes": 40525
+    },
+    {
+      "path": "frontend/public/squad/ts27.css",
+      "sha256": "c18d1fa7c633008419dc3970e24932e989eb098f0307dde33307aa0a8ba4a809",
+      "bytes": 1603
+    },
+    {
+      "path": "src/football_manager/dev_ui/session.py",
+      "sha256": "6c5a1e92d9b2995e47ca4911653e70c40b0a9faea7a8b606f855c7cbc4271ed4",
+      "bytes": 152758
+    },
+    {
+      "path": "src/football_manager/domain/match_snapshot.py",
+      "sha256": "98bd7f0860c2f8abb813f14ce22e8d197d68815748f5a1795fc5053c4be4e5c8",
+      "bytes": 6303
+    },
+    {
+      "path": "src/football_manager/fast_simulation/ai_coaching.py",
+      "sha256": "cb38142fb77bbb9c1226c9c09b3a63c402ff39feb673e1d3ac2809c1c1c6cefb",
+      "bytes": 3355
+    },
+    {
+      "path": "src/football_manager/fast_simulation/engine.py",
+      "sha256": "e0c0bac865f8c2f4acc6654b7a9126cda2d05b0d73aa24e47ee48af52b93c114",
+      "bytes": 101297
+    },
+    {
+      "path": "src/football_manager/persistence/manager_career.py",
+      "sha256": "05cbed9c2408a64859afada4faa801621f157bfce9d23339430049831c34ab38",
+      "bytes": 16834
+    },
+    {
+      "path": "src/football_manager/persistence/session_codec.py",
+      "sha256": "59f71ae17e385feb2612115a6e14d48bd16f568020e034ef5d1a2b3ab0539b43",
+      "bytes": 23349
+    },
+    {
+      "path": "src/football_manager/services/match_preparation.py",
+      "sha256": "82a257b8b3a70dedb84f7d09aa7b54fab1db52123cade2bd4d35e8779b9ccf39",
+      "bytes": 8189
+    },
+    {
+      "path": "src/football_manager/services/match_snapshot_builder.py",
+      "sha256": "6e3a97fd2b531f08d662bc80e7cf7775095befe7189f391653ec4a031613e9c3",
+      "bytes": 7649
+    },
+    {
+      "path": "src/football_manager/services/world_matches.py",
+      "sha256": "2828b02fbe1e6279c544101c9630197a134b8e9078baf8701ae4e7c1d499449b",
+      "bytes": 15987
+    },
+    {
+      "path": "src/football_manager/ui_shell/match.py",
+      "sha256": "2abdd22bf18afa7e56dd5a8350aba978b700f3da3b8ac92fa96e403b78601507",
+      "bytes": 13517
+    },
+    {
+      "path": "src/football_manager/ui_shell/models.py",
+      "sha256": "dfecfe28fec42f80a2c8b63f7436b4ba32baad0f932b09ca82d4664eb7597472",
+      "bytes": 18169
+    },
+    {
+      "path": "src/football_manager/ui_shell/transactions.py",
+      "sha256": "86e305e864b0cb1964b4e42718ffeb55bdfcb5b93866be733cf182d2c4852795",
+      "bytes": 3510
+    },
+    {
+      "path": "tests/test_ts_26_1_professional_scouts.py",
+      "sha256": "d2baf8b0ff00e6e1d309c603158638021143c1b0c8373b060e90d6d8a25ea08a",
+      "bytes": 14017
+    },
+    {
+      "path": "tests/test_ts_27_match_preparation.py",
+      "sha256": "59f3096ed36e5bfef6571e2920c6724e384bc1c03c9cb6231f34fced7d7f717c",
+      "bytes": 12500
+    }
+  ],
+  "not_included": [
+    ".git",
+    "save databases",
+    "bytecode caches",
+    "complete game distribution"
+  ]
+}

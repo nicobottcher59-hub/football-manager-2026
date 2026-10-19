@@ -200,10 +200,31 @@
       <div class="fm-subs-list">${data.bench.map((p,i)=>`<button type="button" data-bench="${esc(p.id)}" class="fm-bench-row ${benchToSwap===p.id?'active':''}"><span class="fm-sub-no">${i+12}</span>${face(p,'fm-face-bench')}<span class="fm-sub-main"><strong>${esc(p.name)}</strong><small>${esc(p.position)} · ${rating(p.ovr)} OVR · ${rating(p.act)} ACT</small></span><span class="fm-sub-phys"><span>${n(p.condition)}%</span><i><i style="width:${n(p.condition)}%" class="${statusColor(p.condition)}"></i></i></span></button>`).join('')}</div></section>`;
   }
   function setPiecePanel(){
-    return `<section class="fm-panel fm-setpieces"><div class="fm-panel-head"><h2>Set Pieces</h2><span class="fm-future">PLANNED</span></div><div class="fm-setpieces-inner">
-      ${[['Penalties','◎'],['Free kicks','↗'],['Corners (left)','⚑'],['Corners (right)','⚑'],['Captain','◇']].map(([name,icon])=>`<div class="fm-setpiece-row"><span>${icon}</span><div><strong>${name}</strong><small>Not assigned</small></div><i>—</i></div>`).join('')}
-      <p class="fm-caption">The engine has set-piece attributes, but manual taker assignments are not implemented yet. No fake assignments.</p>
+    const entries=data.set_pieces?.roles||[];
+    const labels={captain:'Captain',penalties:'Penalties',free_kicks:'Free kicks',corners_left:'Left corners',corners_right:'Right corners'};
+    const options=[{id:'',name:'Automatic (best available)'},...(data.set_pieces?.players||[])];
+    return `<section class="fm-panel fm-setpieces fm-ts27-pieces"><div class="fm-panel-head"><h2>Captain & set pieces</h2><small>Saved in career</small></div><div class="fm-setpieces-inner">
+      ${entries.map(row=>`<div class="fm-ts27-role"><label><strong>${esc(labels[row.role]||row.role)}</strong>
+        ${selector(options,row.orders[0]||'',`data-set-piece="${esc(row.role)}" data-rank="0" aria-label="First choice for ${esc(labels[row.role])}"`)}
+        </label><small>On pitch: ${esc(row.effective_name||'No eligible player')}${row.fallback?' (automatic backup)':''}</small>
+        <details><summary>Backup order</summary>${[1,2].map(i=>`<label class="fm-ts27-backup">${i===1?'Second choice':'Third choice'} ${selector(options,row.orders[i]||'',`data-set-piece="${esc(row.role)}" data-rank="${i}" aria-label="Priority ${i+1} for ${esc(labels[row.role])}"`)}</label>`).join('')}</details>
+      </div>`).join('')}
+      <p class="fm-caption">Only available players on the pitch can take responsibility. Saved preferences never force unavailable players to play; all missing choices fall back automatically.</p>
     </div></section>`;
+  }
+  function opponentPanel(){
+    const report=data.match_preparation;
+    if(!report?.available)return '';
+    const metricLabels={pressing:'Press',directness:'Direct',possession:'Possession',defensive_depth:'Line'};
+    return `<section class="fm-panel fm-ts27-opponent" aria-label="Next opponent report">
+      <div class="fm-panel-head"><h2>Next opponent · ${esc(report.opponent)}</h2><small>${esc(report.formation)} · ${esc(report.style)}</small></div>
+      <div class="fm-ts27-report">
+        <div class="fm-ts27-metrics">${Object.entries(report.metrics).map(([k,v])=>`<span><small>${esc(metricLabels[k]||k)}</small><b>${Number(v).toFixed(0)}</b></span>`).join('')}</div>
+        <div class="fm-ts27-insights"><strong>Observed tactical tendencies</strong>${report.tendencies.map(s=>`<p>${esc(s)}</p>`).join('')}</div>
+        <div class="fm-ts27-players"><strong>Key players in projected XI</strong><div>${report.key_players.map(p=>`<span>${esc(p.name)} · ${esc(p.position)} · ${Number(p.ovr).toFixed(0)} OVR</span>`).join('')}</div></div>
+        <details><summary>Recent recorded results (${report.recent.length})</summary>${report.recent.map(r=>`<p>${esc(r.date)} · ${esc(r.opponent)} · ${r.goals_for}-${r.goals_against}</p>`).join('')||'<p>No played games recorded yet.</p>'}</details>
+        <p class="fm-caption">${esc(report.disclaimer)}</p>
+      </div></section>`;
   }
   function outsidePanel(){
     const items=data.outside;
@@ -256,14 +277,14 @@
     const transition=data.tactics.fields.filter(f=>f.group==='transition');
     const game=data.tactics.fields.filter(f=>f.group==='game_management');
     const scores=data.tactics.style_scores;
-    return `${window.FMStudio.library(data)}<div class="fm-content-grid fm-tactics-grid"><div class="fm-left">${pitch()}<section class="fm-panel fm-style-panel"><div class="fm-panel-head"><h2>Style Analysis</h2><span class="fm-technical">Python domain calculation</span></div><div class="fm-style-grid">${Object.entries(scores).map(([k,v])=>`<div><small>${short(k)}</small><b>${rating(v)}</b><i><i style="width:${n(v)}%"></i></i></div>`).join('')}</div></section></div>
+    return `${opponentPanel()}${window.FMStudio.library(data)}<div class="fm-content-grid fm-tactics-grid"><div class="fm-left">${pitch()}<section class="fm-panel fm-style-panel"><div class="fm-panel-head"><h2>Style Analysis</h2><span class="fm-technical">Python domain calculation</span></div><div class="fm-style-grid">${Object.entries(scores).map(([k,v])=>`<div><small>${short(k)}</small><b>${rating(v)}</b><i><i style="width:${n(v)}%"></i></i></div>`).join('')}</div></section></div>
       ${selectedSlot?rolePanel():`<section class="fm-panel fm-tactic-controls"><div class="fm-panel-head"><div><h2>Team Tactics</h2><small>${esc(data.tactics.style)} · Tactical familiarity ${rating(data.squad_status.tactical_familiarity)}/100</small></div></div>
       <div class="fm-preset"><label for="fm-preset">Tactical preset</label>${selector([...data.tactics.presets,{id:'custom',name:'Custom (manual edits)'}],data.tactics.preset,`data-change="preset" id="fm-preset" ${data.tactics.preset==='custom'?'':' '}`)}<p>Preset changes replace team instructions and role assignments as in Python.</p></div>
       <div class="fm-control-section"><h3>${phase==='in_possession'?'In possession':'Out of possession'} <span>${mainFields.length} instructions</span></h3><div class="fm-controls-grid">${mainFields.map(fieldControl).join('')}</div></div>
       <details class="fm-expander" open><summary>Transitions <span>${transition.length} parameters</span></summary><div class="fm-controls-grid">${transition.map(fieldControl).join('')}</div></details>
       <details class="fm-expander"><summary>Match management <span>${game.length} parameters</span></summary><div class="fm-controls-grid">${game.map(fieldControl).join('')}</div></details>
       <p class="fm-model-disclaimer">Instructions feed the Python match model. Explicit phase targets override automatic marker positioning, not the other instruction effects. Spatial overlays are estimates, not match telemetry.</p>
-    </section>`}</div>`;
+    </section>`}</div>${setPiecePanel()}`;
   }
   function refreshKeepingTable(){
     const table=$('.rt-table-wrap');
@@ -377,6 +398,9 @@
     const e=event.target;
     if(pickerOpen)return;
     if(screen==='squad' && window.FMRoster.onChange(e, command, refreshKeepingTable))return;
+    if(e.dataset.setPiece){
+      return command({action:'set_piece',role:e.dataset.setPiece,rank:Number(e.dataset.rank),player_id:e.value},'Set-piece order saved.');
+    }
     if(e.dataset.change==='preset'){
       if(e.value==='custom')return;
       return command({action:'preset',id:e.value},'Tactical preset applied in Python.');
