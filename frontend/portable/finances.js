@@ -20,18 +20,18 @@
     <section class="fe-stats" aria-label="Financial summary">
       ${tile('Available transfer funds',compact(state.transfer_available_gbp??state.transfer_budget_gbp),'Agreed club terms reserve guaranteed fees')}
       ${tile('Wage budget / week',compact(budget),'Board-approved ceiling')}
-      ${tile('Committed wages / week',compact(spent),'First team + youth agreements')}
+      ${tile('Committed wages / week',compact(spent),'First team + youth agreements (staff separate)')}
       ${tile('Bank balance',compact(state.cash_gbp),'Actual operating cash',state.cash_gbp<0?'fe-warning':'fe-positive')}
     </section>
     <div class="fe-overview">
       <section class="fe-panel"><div class="fe-section-head"><div><h3>Wage budget</h3><p>Committed weekly wages compared with the board limit</p></div><span class="fe-pill">${Math.round(pct)}% used</span></div>
         <div class="fe-meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct)}" aria-label="Wage budget used"><div style="width:${pct}%"></div></div>
         <div class="fe-two"><div><span>Committed</span><strong>${gbp(spent)} / wk</strong></div><div><span>Room remaining</span><strong class="${state.wage_headroom_weekly_gbp<0?'fe-text-warn':'fe-text-good'}">${gbp(state.wage_headroom_weekly_gbp)} / wk</strong></div></div>
-        <div class="fe-minor">${compact(state.academy_weekly_wages_gbp)} / wk of the total is academy player pay. Youth scouts currently use a separate recruitment allocation.</div>
+        <div class="fe-minor">${compact(state.academy_weekly_wages_gbp)} / wk of the total is academy player pay. Staff: ${compact(state.staff_weekly_wages_gbp||0)} / wk outside the player wage budget. Youth scouts use a separate recruitment allocation.</div>
       </section>
       <section class="fe-panel"><div class="fe-section-head"><div><h3>Operating forecast</h3><p>Recurring monthly estimates, not invented match-by-match receipts</p></div><span class="fe-pill">GBP / month</span></div>
         <div class="fe-flow"><span>Estimated club income</span><strong class="fe-text-good">+${compact(state.monthly_income_gbp)}</strong></div>
-        <div class="fe-flow"><span>Player wages (approx.)</span><strong>-${compact(state.forecast_monthly_wages_gbp)}</strong></div>
+        <div class="fe-flow"><span>Player + staff wages (approx.)</span><strong>-${compact(state.forecast_monthly_wages_gbp)}</strong></div>
         <div class="fe-flow"><span>Other club operations</span><strong>-${compact(state.monthly_operating_costs_gbp)}</strong></div>
         <div class="fe-flow fe-total"><span>Forecast monthly result</span><strong class="${(state.monthly_income_gbp-state.forecast_monthly_wages_gbp-state.monthly_operating_costs_gbp)>=0?'fe-text-good':'fe-text-warn'}">${compact(state.monthly_income_gbp-state.forecast_monthly_wages_gbp-state.monthly_operating_costs_gbp)}</strong></div>
       </section>

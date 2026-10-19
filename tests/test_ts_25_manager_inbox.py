@@ -155,7 +155,7 @@ def test_save_load_keeps_chat_messages_promise_and_relationship(seed, tmp_path):
     conversation(session,p.id,'minutes',promise=True)
     repo=SQLiteSaveRepository(tmp_path/'save.sqlite3')
     saved=save_manager_career(repo,slot_id='career',display_name='TS25',session=session,expected_revision=0)
-    assert MANAGER_STATE_VERSION==17
+    assert MANAGER_STATE_VERSION>=17  # TS-26 adds version 18 without dropping TS-25 data
     loaded=load_manager_career(repo,'career').session
     assert loaded.manager_inbox.relations[p.id].conversations==2
     assert loaded.manager_inbox.promises[0].status=='active'

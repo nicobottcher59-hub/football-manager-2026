@@ -67,6 +67,15 @@ class GameApplication:
             runtime.match_kits = {'home': 'default', 'away': 'default'}
             return {'loaded': True, 'slot': asdict(loaded.metadata),
                     'date': loaded.session.current_date.isoformat()}
+        if action in ('staff.command', 'training.command', 'medical.command'):
+            from football_manager.services.club_support import staff_command, training_command, medical_command
+            tentative = deepcopy(runtime.session)
+            action_handlers = {'staff.command': staff_command,
+                               'training.command': training_command,
+                               'medical.command': medical_command}
+            result = action_handlers[action](tentative, command)
+            runtime.session = tentative
+            return result
         if action == 'inbox.command':
             from football_manager.services.manager_inbox import inbox_command
             tentative = deepcopy(runtime.session)

@@ -105,8 +105,8 @@ def _move_day(session: DevelopmentSession) -> int:
         if upcoming is None or upcoming.match_date != new_day:
             raise RuntimeError("A managed fixture is overdue or was not projected into the calendar")
     # Recovery happens once for every actual elapsed day, not once per click.
-    for player in session.home_club.squad.players:
-        recover_player_between_matches(player, days=1)
+    from football_manager.services.club_support import recover_managed_players
+    recover_managed_players(session, days=1, start_date=session.current_date)
     session.current_date = new_day
     # Re-select/recover the canonical rival when the fixture becomes playable;
     # a previously previewed opponent may have played in the meantime.

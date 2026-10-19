@@ -23,7 +23,7 @@ from football_manager.domain.world_runner import WorldSeasonRunner
 
 from .models import SaveIntegrityError, UnsupportedSaveVersionError
 
-GRAPH_VERSION = 17
+GRAPH_VERSION = 18
 # TS-24.13: a fully populated 92-club career already needs ~286k live
 # graph nodes after its first season (TS-24.12 rejected that save). Keep
 # the integrity limit finite but accommodate normal longitudinal growth.
@@ -66,6 +66,7 @@ _ALLOWED_MODULES = frozenset({
     'football_manager.domain.player_aging',
     'football_manager.domain.dressing_room',
     'football_manager.domain.manager_inbox',
+    'football_manager.domain.club_support',
     'football_manager.domain.player_state',
     'football_manager.domain.positional_familiarity',
     'football_manager.domain.season_cycle',
@@ -311,6 +312,8 @@ def restore_manager_graph(data: dict, *, migrate_world: bool = True) -> Developm
                             bonus_baseline=(0,0,0),bonus_paid=(),buyer_tier_at_signing=0)
                     if data['version'] < 16 and node.get('class') == 'football_manager.domain.football_world:FootballWorld':
                         defaults.update(loan_next_id=1,loans={},free_agents={})
+                    if data['version'] < 18 and node.get('class') == 'football_manager.domain.football_world:FootballWorld':
+                        defaults.update(club_support={})
                     if set(values) - allowed or missing - set(defaults):
                         raise SaveIntegrityError('saved dataclass fields do not match this version')
                 elif cls.__name__ not in {'WorldSeasonRunner', 'WorldCareer', 'SeasonCalendar', 'EnglishCareerTransition', 'FastMatchSimulator'}:
@@ -387,4 +390,7 @@ def restore_manager_graph(data: dict, *, migrate_world: bool = True) -> Developm
     if data['version'] < 17 and 'manager_inbox' not in root:
         from football_manager.services.manager_inbox import create_manager_inbox
         session.manager_inbox = create_manager_inbox(session)
+    if data['version'] < 18 and hasattr(session, '_world_squads'):
+        from football_manager.services.club_support import initialize_club_support
+        initialize_club_support(session._world_squads, session.current_date)
     return session

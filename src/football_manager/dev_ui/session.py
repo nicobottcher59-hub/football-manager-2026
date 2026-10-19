@@ -1231,8 +1231,8 @@ class DevelopmentSession:
             self.match_played = False
             raise RuntimeError("The development season has no remaining managed fixtures.")
         recovery_days = max(0, (next_match.match_date - self.current_date).days)
-        for player in self.home_club.squad.players:
-            recover_player_between_matches(player, days=recovery_days)
+        from football_manager.services.club_support import recover_managed_players
+        recover_managed_players(self, days=recovery_days)
         self._active_match = next_match
         self.current_date = next_match.match_date
         self.update_dressing_room()
@@ -2150,8 +2150,8 @@ class DevelopmentSession:
                 self.match_played = False
                 return played_managed
             recovery_days = max(0, (next_match.match_date-self.current_date).days)
-            for player in self.home_club.squad.players:
-                recover_player_between_matches(player, days=recovery_days)
+            from football_manager.services.club_support import recover_managed_players
+            recover_managed_players(self, days=recovery_days)
             self._active_match = next_match
             self.current_date = next_match.match_date
             self.update_dressing_room()
@@ -2613,8 +2613,8 @@ class DevelopmentSession:
                         self.update_dressing_room()
                         return
                     days = max(0, (next_match.match_date - self.current_date).days)
-                    for player in self.home_club.squad.players:
-                        recover_player_between_matches(player, days=days)
+                    from football_manager.services.club_support import recover_managed_players
+                    recover_managed_players(self, days=days)
                     self._active_match = next_match
                     self.current_date = next_match.match_date
                     self.match_played = False

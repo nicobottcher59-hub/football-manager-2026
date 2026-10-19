@@ -275,6 +275,8 @@ def create_football_world(session, *, migration: bool = False) -> FootballWorld:
     initialize_finances(registry, session.current_date)
     from football_manager.services.transfer_negotiation import initialize_transfer_market
     initialize_transfer_market(registry, session.current_date)
+    from football_manager.services.club_support import initialize_club_support
+    initialize_club_support(registry, session.current_date)
     registry.validate(tiers)
     return registry
 
@@ -349,6 +351,8 @@ def bind_football_world(session) -> None:
         registry.clubs[club_id] = club
         registry.identities[club_id] = identity
         registry.last_recovery[club_id] = start
+    from football_manager.services.club_support import initialize_club_support
+    initialize_club_support(registry, start)
     from football_manager.services.player_development import initialize_world_development
     initialize_world_development(registry, start)
     if registry.youth is None:

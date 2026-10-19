@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
-from datetime import date
+from datetime import date, timedelta
 
 from football_manager.domain.enums import Position
 from football_manager.domain.player_aging import (
@@ -50,6 +50,30 @@ def recover_medical_absences(world, through: date) -> int:
             profile, episode = player.aging, player.aging.active_injury
             if episode is None or episode.return_on != due:
                 raise ValueError('medical follow-up index mismatch')
+            # A risky TS-26 accelerated return may provoke one deterministic
+            # setback. Resolve only on the scheduled return, never on a GET.
+            support = registry.club_support.get(club_id)
+            decision = support.treatments.get(player_id) if support else None
+            if (decision is not None and decision.episode_id == episode.episode_id
+                    and decision.status == 'active' and decision.will_relapse):
+                new_due = due + timedelta(days=decision.relapse_days)
+                if (new_due - episode.started_on).days <= 730:
+                    _checkpoint(world, player)
+                    player.aging = replace(profile, active_injury=replace(episode, return_on=new_due))
+                    world._put(registry.medical_followups, player_id, (club_id, new_due))
+                    # The support object must follow the world's transactional journal.
+                    original = decision.status
+                    world._active_journal.undo_callbacks.setdefault(
+                        ('ts26-medical', id(decision)),
+                        lambda target=decision, old=original: setattr(target, 'status', old))
+                    decision.status = 'relapsed'
+                    continue
+            if decision is not None and decision.episode_id == episode.episode_id:
+                original = decision.status
+                world._active_journal.undo_callbacks.setdefault(
+                    ('ts26-medical', id(decision)),
+                    lambda target=decision, old=original: setattr(target, 'status', old))
+                decision.status = 'completed'
             _checkpoint(world, player)
             player.aging = replace(profile, active_injury=None,
                 medical_history=(*profile.medical_history, episode)[-MAX_MEDICAL_HISTORY:])
@@ -121,6 +145,9 @@ def record_postmatch_health(world, fixture_id, result) -> None:
             player = club.squad.get(player_id)
             if player.original_position is Position.GK and goalkeepers <= 1:
                 continue
+            from football_manager.services.club_support import department_bonus
+            medical_delta = department_bonus(registry.club_support.get(club_id), 'medic', day)
+            duration = max(2, round(duration * (1 - .075 * max(0., medical_delta))))
             register_medical_absence(world, club_id, player_id, day,
                 episode_id=f'{fixture_id}:{player_id}', duration_days=duration,
                 label=label, source='postmatch-assessment-v1')

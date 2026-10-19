@@ -22,6 +22,7 @@ from .market_valuation import MarketQuote
 from .club_economy import ClubFinances, PlayerContract
 from .transfer_negotiation import TransferNegotiation
 from .loan_market import LoanAgreement, FreeAgent
+from .club_support import ClubSupport
 
 
 @dataclass(slots=True)
@@ -101,8 +102,17 @@ class FootballWorld:
     loan_next_id: int = 1
     loans: dict[str, LoanAgreement] = field(default_factory=dict)
     free_agents: dict[str, FreeAgent] = field(default_factory=dict)
+    # TS-26: small club staff, group training, and dated medical choices.
+    club_support: dict[str, ClubSupport] = field(default_factory=dict)
 
     def validate(self, participants: dict[str, int] | None = None) -> None:
+        if self.club_support:
+            if set(self.club_support) != set(self.clubs):
+                raise ValueError('club support registry must cover all clubs')
+            for cid, support in self.club_support.items():
+                if support.club_id != cid:
+                    raise ValueError('staff belongs to a different club')
+                support.validate()
         if type(self.seed) is not int or self.generator_version != 1:
             raise ValueError("unsupported football world")
         if not isinstance(self.created_on, date) or not self.season_label:

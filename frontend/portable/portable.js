@@ -212,6 +212,7 @@
       window.FMInbox?.refresh();
       if(calendarPanel.style.display!=='none')window.FMCalendar?.refresh();
       if(dressingPanel.style.display!=='none')window.FMDressingRoom?.refresh();
+    if(supportPanel.style.display!=='none')window.FMSupport?.refresh();
     if(youthPanel.style.display!=='none')window.FMYouthAcademy?.refresh();
       if(youthPanel.style.display!=='none')window.FMYouthAcademy?.refresh();
       if(financesPanel.style.display!=='none')window.FMFinances?.refresh();
@@ -263,6 +264,9 @@
   const transfersPanel=document.createElement('section');
   transfersPanel.className='fm-transfers-screen';transfersPanel.style.display='none';
   main.insertBefore(transfersPanel,footer);
+  const supportPanel=document.createElement('section');
+  supportPanel.className='fm-club-support-screen';supportPanel.style.display='none';
+  main.insertBefore(supportPanel,footer);
   const inboxPanel=document.createElement('section');
   inboxPanel.className='fm-inbox-screen';inboxPanel.style.display='none';
   main.insertBefore(inboxPanel,footer);
@@ -330,6 +334,7 @@
     const calendar = page === 'Calendar';
     const dressingRoom = page === 'Dressing Room';
     const inbox = page === 'Inbox';
+    const clubSupport = ['Staff','Training','Medical Centre'].includes(page);
     const youthAcademy = page === 'Youth Academy';
     const finances = page === 'Finances';
     const transfers = page === 'Scouting' || negotiationPage;
@@ -343,7 +348,9 @@
       else button.removeAttribute('aria-current');
     });
     dashboard.style.display = home ? '' : 'none';
-    placeholder.style.display = !home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !youthAcademy && !finances && !transfers && !matchPage && !clubPage ? 'flex' : 'none';
+    placeholder.style.display = !home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !clubSupport && !youthAcademy && !finances && !transfers && !matchPage && !clubPage ? 'flex' : 'none';
+    supportPanel.style.display = clubSupport ? 'block' : 'none';
+    if(clubSupport)window.FMSupport?.mount(supportPanel,page==='Staff'?'staff':page==='Training'?'training':'medical');
     dressingPanel.style.display = dressingRoom ? 'block' : 'none';
     inboxPanel.style.display = inbox ? 'block' : 'none';
     if(inbox)window.FMInbox?.mount(inboxPanel,extra.player||null);
@@ -372,6 +379,7 @@
       ? 'Welcome to Northbridge FC. An overview of your club, upcoming fixtures and key information.'
       : squad ? (page==='Squad' ? 'Sortable roster, full player attributes, recorded season statistics and player management.' : 'Formation, individual roles and team tactics backed by the Python development session.')
       : clubPage ? 'Persistent squad, player profiles and recorded club information. Read-only.'
+      : clubSupport ? (page==='Staff'?'Hire coaching, medical and fitness specialists.':page==='Training'?'Configure squad groups and automatic physical protection.':'Injury timelines, recovery treatments and player opinions.')
       : inbox ? 'Live club messages, scouting reports, medical news and player conversations.'
       : youthAcademy ? 'U15 preview, automated U17/U21 leagues and quarterly scouting.'
       : negotiationPage ? 'Dedicated negotiation: guaranteed fees, optional clauses and club replies.'
@@ -382,7 +390,7 @@
       : competitions ? 'Your club competitions, standings, fixtures and confirmed cup brackets.'
       : otherLeagues ? 'Browse other leagues and cups by continent, country and division.'
       : 'This section is planned for a future update.';
-    if (!home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !youthAcademy && !finances && !transfers) $('h2', placeholder).textContent = page;
+    if (!home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !clubSupport && !youthAcademy && !finances && !transfers) $('h2', placeholder).textContent = page;
     window.scrollTo({top:0, behavior:'auto'});
   }
   window.addEventListener('message', event => {
@@ -401,8 +409,10 @@
     refreshProgression();
     if(dashboard.style.display!=='none')refreshHome();
     window.FMInbox?.refresh();
+    if(supportPanel.style.display!=='none')window.FMSupport?.refresh();
     if(calendarPanel.style.display!=='none')window.FMCalendar?.refresh();
     if(dressingPanel.style.display!=='none')window.FMDressingRoom?.refresh();
+    if(supportPanel.style.display!=='none')window.FMSupport?.refresh();
     if(youthPanel.style.display!=='none')window.FMYouthAcademy?.refresh();
     if(financesPanel.style.display!=='none')window.FMFinances?.refresh();
       if(transfersPanel.style.display!=='none')window.FMTransfers?.refresh();
@@ -414,6 +424,7 @@
   });
   window.addEventListener('focus', () => {
     if(dressingPanel.style.display!=='none')window.FMDressingRoom?.refresh();
+    if(supportPanel.style.display!=='none')window.FMSupport?.refresh();
     if(youthPanel.style.display!=='none')window.FMYouthAcademy?.refresh();
     if(financesPanel.style.display!=='none')window.FMFinances?.refresh();
       if(transfersPanel.style.display!=='none')window.FMTransfers?.refresh();

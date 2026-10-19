@@ -326,8 +326,22 @@ def review_finances(world, boundary: date) -> int:
         for cid,account in list(registry.club_finances.items()):
             wages=sum(_month_wage(c,covered_from,period_end) for c in registry.contracts.values() if c.club_id==cid)
             wages+=wage_shares.get(cid,0)
+            from football_manager.services.club_support import active_staff
+            support=registry.club_support.get(cid)
+            staff_monthly=0
+            if support is not None:
+                # Staff contracts expire without charging wages after expiry.
+                staff_monthly=sum(round(m.wage_weekly_gbp * 52 / 365 *
+                                        max(0, (min(period_end, m.contract_until) - max(covered_from, m.hired_on)).days + 1))
+                                  for m in support.members.values() if m.contract_until >= covered_from)
             income=round(account.recurring_income_gbp*covered_days/month_days)
-            costs=round(account.recurring_operations_gbp*covered_days/month_days)
+            # A fraction of legacy overhead already represented unnamed staff.
+            # Replace that allowance with explicit staff pay, not a double charge.
+            nominal_ops=round(account.recurring_operations_gbp*covered_days/month_days)
+            preexisting_staff_allowance = (round(support.baseline_weekly_gbp * 52 / 365 * covered_days)
+                                           if support is not None else 0)
+            costs=nominal_ops-min(round(nominal_ops * .12), preexisting_staff_allowance)
+            wages+=staff_monthly
             new_cash=account.cash_gbp+income-wages-costs
             # Liquid budget cannot be spent if it exceeds current cash.
             new_budget=min(account.transfer_budget_gbp,max(0,int(max(0,new_cash)*.85)))
@@ -341,6 +355,9 @@ def review_finances(world, boundary: date) -> int:
             count+=1
         # Contract extensions take effect on the NEW month, never before
         # paying the period just closed. Managed offers remain the user's call.
+        from football_manager.services.club_support import auto_extend_ai_staff
+        auto_extend_ai_staff(world, _date_plus_months(month, 1),
+                             managed_club_id=(registry.youth.managed_club_id if registry.youth else None))
         auto_renew_ai_contracts(world,_date_plus_months(month,1),
                                 managed_club_id=(registry.youth.managed_club_id if registry.youth else None))
         from football_manager.services.loan_market import review_loan_month
@@ -455,7 +472,12 @@ def financial_outlook(registry, cid: str) -> dict:
     """
     account=registry.club_finances[cid]
     payroll=weekly_payroll(registry,cid)
-    net_month=account.recurring_income_gbp - account.recurring_operations_gbp - round(payroll*52/12)
+    support=registry.club_support.get(cid)
+    staff_weekly=sum(m.wage_weekly_gbp for m in support.members.values() if m.contract_until >= registry.finance_review_on) if support else 0
+    initial_allowance=min(round(account.recurring_operations_gbp * .12),
+                          round(support.baseline_weekly_gbp*52/12)) if support else 0
+    net_month=(account.recurring_income_gbp - account.recurring_operations_gbp + initial_allowance
+               - round((payroll+staff_weekly)*52/12))
     cash=account.cash_gbp
     six_month_projection=cash+6*net_month
     history=account.history[-6:]
@@ -510,6 +532,10 @@ def finances_read_model(session, club_id: str | None = None) -> dict:
                      'age':player.age_on(session.current_date),'ovr':round(player.overall_rating,1),
                      **details,'renewal': renew})
     rows.sort(key=lambda p:(p['expires_on'],p['name']))
+    support=registry.club_support.get(cid)
+    staff_weekly=sum(m.wage_weekly_gbp for m in support.members.values() if m.contract_until>=session.current_date) if support else 0
+    initial_allowance=min(round(account.recurring_operations_gbp*.12),
+                          round(support.baseline_weekly_gbp*52/12)) if support else 0
     return {'schema_version':1,'source':'ts24-2-persistent-club-economy',
             'club_id':cid,'club':registry.clubs[cid].name,'managed':cid==session.home_club.id,
             'tier':registry.identities[cid].tier,'date':session.current_date.isoformat(),
@@ -523,8 +549,10 @@ def finances_read_model(session, club_id: str | None = None) -> dict:
             'weekly_payroll_gbp':payroll,
             'wage_headroom_weekly_gbp':account.wage_budget_weekly_gbp-payroll,
             'monthly_income_gbp':account.recurring_income_gbp,
-            'monthly_operating_costs_gbp':account.recurring_operations_gbp,
-            'forecast_monthly_wages_gbp':round(payroll*52/12),
+            'monthly_operating_costs_gbp':account.recurring_operations_gbp-initial_allowance,
+            'forecast_monthly_wages_gbp':round((payroll+staff_weekly)*52/12),
+            'staff_weekly_wages_gbp':staff_weekly,
+            'staff_baseline_allowance_gbp':initial_allowance,
             'season_income_gbp':account.season_income_gbp,
             'season_wages_gbp':account.season_wages_gbp,
             'season_operations_gbp':account.season_operations_gbp,

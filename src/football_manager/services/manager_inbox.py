@@ -261,6 +261,35 @@ def synchronize_manager_inbox(session) -> None:
             _notice(state, now, 'medical', f'{who} returns to availability',
                     f'The injury recorded for {who} has cleared.', f'injury:{pid}:{now}:off', player_id=pid)
     state.injuries = injuries
+    # A relapse keeps the same injury label; the ordinary injury diff cannot
+    # detect it, so surface the confirmed TS-26 outcome exactly once.
+    support = session._world_squads.club_support.get(session.home_club.id)
+    if support is not None:
+        for pid, decision in support.treatments.items():
+            if pid in players and decision.status == 'relapsed':
+                _notice(state, now, 'medical', f'Rehabilitation setback: {players[pid].full_name}',
+                        'The early-return treatment led to a setback. The medical centre has updated the recovery date.',
+                        f'treatment:relapse:{decision.episode_id}', player_id=pid)
+                rel = state.relations.get(pid)
+                # Only apply consequences once, when creating the notice.
+                if rel is not None and not any(m.source_key == f'treatment:relapse:trust:{decision.episode_id}' for m in state.messages):
+                    rel.trust = max(35., rel.trust - 1.5)
+                    players[pid].state.morale = max(1., players[pid].state.morale - .8)
+                    _notice(state, now, 'conversations', f'{players[pid].full_name} is frustrated',
+                            'The failed accelerated rehabilitation has damaged confidence slightly.',
+                            f'treatment:relapse:trust:{decision.episode_id}', player_id=pid)
+
+    # Manager staff need only occasional expiry reminders, not a weekly chore.
+    # AI clubs extend their existing personnel automatically in the month-end
+    # financial review; the human manager can always renew or release staff.
+    if support is not None:
+        for staff in support.members.values():
+            remaining = (staff.contract_until - now).days
+            if 0 <= remaining <= 120:
+                stage = 14 if remaining <= 14 else 45 if remaining <= 45 else 120
+                _notice(state, now, 'contracts', f'Staff contract expiring: {staff.name}',
+                        f'{staff.name} ({staff.role}) has {remaining} days remaining. Renew in Staff if desired.',
+                        f'staff:expiry:{staff.member_id}:{staff.contract_until}:{stage}')
 
     contracts = {pid: c.expires_on.isoformat() for pid, c in session._world_squads.contracts.items()
                  if pid in players}

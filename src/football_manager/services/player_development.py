@@ -7,6 +7,7 @@ WorldSeasonRunner's journal so failed matches/months roll back in place.
 from __future__ import annotations
 
 from dataclasses import replace
+from football_manager.services.club_support import department_bonus
 from football_manager.services.world_training import (
     initialize_club_training, month_club_fixtures, effective_training_environment,
 )
@@ -88,6 +89,11 @@ def advance_world_development(world, through: date) -> int:
             for club_id, club in registry.clubs.items():
                 environment = effective_training_environment(
                     registry.development_environments[club_id], monthly_match_counts.get(club_id, 0))
+                support = registry.club_support.get(club_id)
+                if support is not None:
+                    coach_delta = 3.0 * department_bonus(support, 'coach', boundary)
+                    environment = replace(environment,
+                        coaching_quality=max(0., min(100., environment.coaching_quality + coach_delta)))
                 mentoring = _mentoring_support(club, boundary)
                 for player in club.squad.players:
                     profile = player.development
@@ -95,7 +101,13 @@ def advance_world_development(world, through: date) -> int:
                         raise ValueError('uninitialized player; register development on import')
                     if boundary <= profile.last_review:
                         continue  # Entrant initialized later than this boundary.
-                    attributes, candidate, aging = review_career(player, boundary, environment, mentoring=mentoring)
+                    player_environment = environment
+                    if support is not None and player.id in support.training_days:
+                        score, days = support.training_days[player.id]
+                        if days:
+                            player_environment = replace(environment, training_quality=max(0., min(100.,
+                                environment.training_quality + max(-2., min(2., score / days)))))
+                    attributes, candidate, aging = review_career(player, boundary, player_environment, mentoring=mentoring)
                     _checkpoint(world, player)
                     # A young professional who sits without minutes loses
                     # match rhythm (ACT), never permanent CA/OVR. Reserve games
@@ -110,6 +122,16 @@ def advance_world_development(world, through: date) -> int:
                         player.state.match_sharpness = max(42., old_sharpness - 2.5)
                     player.attributes, player.development, player.aging = attributes, candidate, aging
                     reviews += 1
+            # Monthly ledger is consumed once and must roll back with the world.
+            for support in registry.club_support.values():
+                if support.training_days:
+                    saved = dict(support.training_days)
+                    def restore_training_ledger(target=support, previous=saved):
+                        target.training_days.clear()
+                        target.training_days.update(previous)
+                    world._active_journal.undo_callbacks.setdefault(
+                        ('ts26-training-month', id(support)), restore_training_ledger)
+                    support.training_days.clear()
             from football_manager.services.player_aging import recover_medical_absences
             recover_medical_absences(world, boundary)
             from football_manager.services.market_valuation import review_market
