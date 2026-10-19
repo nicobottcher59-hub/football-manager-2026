@@ -530,12 +530,13 @@ def transfer_read_model(session) -> dict:
                     'to_club':registry.clubs[d.buyer_id].name,
                     'fee_gbp':d.terms.fixed_gbp}
                    for d in world_deals[:45]]
+    from football_manager.services.professional_scouting import scouting_read_model
     return {'schema_version':1,'source':'ts24-5-autonomous-club-negotiation','date':now.isoformat(),
             'window_open': window_open(now), 'world_transfers':transfer_news,
             'club_id':manager,'club':registry.clubs[manager].name,
             'available_transfer_budget_gbp':_availability(registry,manager,now),
             'transfer_budget_gbp':registry.club_finances[manager].transfer_budget_gbp,
-            'offers':offers,'targets':targets,
+            'offers':offers,'targets':targets,'professional_scouting':scouting_read_model(session),
             'note':'Club offers reserve fees; player consent completes registration and guaranteed payments. Future bonuses remain recorded obligations.',
             'accepted_note':'A club agreement is provisional until the player and agent approve a contract and the transfer is settled.'}
 

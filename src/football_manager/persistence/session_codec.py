@@ -23,7 +23,7 @@ from football_manager.domain.world_runner import WorldSeasonRunner
 
 from .models import SaveIntegrityError, UnsupportedSaveVersionError
 
-GRAPH_VERSION = 18
+GRAPH_VERSION = 19
 # TS-24.13: a fully populated 92-club career already needs ~286k live
 # graph nodes after its first season (TS-24.12 rejected that save). Keep
 # the integrity limit finite but accommodate normal longitudinal growth.
@@ -314,6 +314,8 @@ def restore_manager_graph(data: dict, *, migrate_world: bool = True) -> Developm
                         defaults.update(loan_next_id=1,loans={},free_agents={})
                     if data['version'] < 18 and node.get('class') == 'football_manager.domain.football_world:FootballWorld':
                         defaults.update(club_support={})
+                    if data['version'] < 19 and node.get('class') == 'football_manager.domain.club_support:ClubSupport':
+                        defaults.update(scouting_assignments={}, scouting_reports={})
                     if set(values) - allowed or missing - set(defaults):
                         raise SaveIntegrityError('saved dataclass fields do not match this version')
                 elif cls.__name__ not in {'WorldSeasonRunner', 'WorldCareer', 'SeasonCalendar', 'EnglishCareerTransition', 'FastMatchSimulator'}:
@@ -393,4 +395,7 @@ def restore_manager_graph(data: dict, *, migrate_world: bool = True) -> Developm
     if data['version'] < 18 and hasattr(session, '_world_squads'):
         from football_manager.services.club_support import initialize_club_support
         initialize_club_support(session._world_squads, session.current_date)
+    if data['version'] < 19 and hasattr(session, '_world_squads'):
+        from football_manager.services.club_support import upgrade_club_support_scouts
+        upgrade_club_support_scouts(session._world_squads, session.current_date)
     return session

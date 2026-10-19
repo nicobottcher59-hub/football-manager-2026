@@ -108,6 +108,8 @@ def _move_day(session: DevelopmentSession) -> int:
     from football_manager.services.club_support import recover_managed_players
     recover_managed_players(session, days=1, start_date=session.current_date)
     session.current_date = new_day
+    from football_manager.services.professional_scouting import advance_professional_scouting
+    advance_professional_scouting(session, new_day)
     # Re-select/recover the canonical rival when the fixture becomes playable;
     # a previously previewed opponent may have played in the meantime.
     if session._active_match is not None and session._active_match.match_date <= new_day:

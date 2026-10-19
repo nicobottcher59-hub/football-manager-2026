@@ -3,7 +3,7 @@
 (() => {
   const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const pay=n=>'£'+Number(n||0).toLocaleString('en-GB');
-  const roleNames={coach:'Coaches',medic:'Medical staff',fitness:'Fitness coaches'};
+  const roleNames={coach:'Coaches',medic:'Medical staff',fitness:'Fitness coaches',scout:'Professional scouts'};
   const modes={auto:'Automatic',light:'Light',balanced:'Balanced',intense:'Intense'};
   const groups={starters:'Starters',bench:'Substitutes',rest:'Rest of the squad'};
   const preference={aggressive:'Wants a quicker return',conservative:'Prefers a cautious recovery',neutral:'No strong preference'};
@@ -22,7 +22,7 @@
         `<div class="cs-row-list">${members.map(m=>`<div class="cs-row"><div><strong>${esc(m.name)}</strong><small>Quality ${m.quality}/100 · ${pay(m.wage_weekly_gbp)} / week · Contract to ${esc(m.until)}</small></div><div class="cs-actions"><button type="button" data-cs-action="renew" data-id="${esc(m.id)}">Extend</button><button type="button" class="cs-danger" data-cs-action="release" data-id="${esc(m.id)}">Release</button></div></div>`).join('')||'<p class="cs-muted">No active staff contracts.</p>'}</div>
         ${vacant>0?`<div class="cs-market"><h4>Available candidates</h4>${data.market[role].map(m=>`<div class="cs-row"><div><strong>${esc(m.name)}</strong><small>Quality ${m.quality}/100 · ${pay(m.wage_weekly_gbp)} / week</small></div><button type="button" class="cs-primary" data-cs-action="hire" data-id="${esc(m.id)}">Hire</button></div>`).join('')||'<p class="cs-muted">No candidates left this year.</p>'}</div>`:'<p class="cs-muted">Department is full. Future facilities can expand its capacity.</p>'}`);
     }).join('');
-    host.innerHTML=banner('Coaching & staff','Employ a few specialists. Their effects are deliberately modest.')+summary+sections+`<p class="cs-footer">${esc(data.note)} Releasing active staff incurs a two-week settlement. Hiring is limited by the club cash balance.</p>`;
+    host.innerHTML=banner('Coaching & staff','Coaches, medics, fitness staff and professional scouts. Scouts increase report capacity and speed; player stats remain visible.')+summary+sections+`<p class="cs-footer">${esc(data.note)} Professional scouts produce optional first-team reports in Scouting, independently of youth scouting. Releasing staff incurs a two-week settlement. Hiring requires club cash.</p>`;
   }
   function training(){
     const d=state;

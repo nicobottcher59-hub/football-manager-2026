@@ -48,6 +48,7 @@ POST_COMMANDS = {
     '/api/loans': 'loans.command',
     '/api/inbox': 'inbox.command',
     '/api/staff': 'staff.command',
+    '/api/scouting': 'scouting.command',
     '/api/training': 'training.command',
     '/api/medical': 'medical.command',
 }
@@ -232,6 +233,11 @@ class FootballUIHandler(BaseHTTPRequestHandler):
                     self._json(400, {'error': str(exc)})
                     return
                 self._json(200, payload)
+            return
+        if path == '/api/scouting':
+            from football_manager.services.professional_scouting import scouting_read_model
+            with self.runtime.lock:
+                self._json(200, scouting_read_model(self.runtime.session))
             return
         if path == '/api/staff':
             from football_manager.services.club_support import staff_read_model

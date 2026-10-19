@@ -41,7 +41,7 @@
         ${current.player_id && active().some(p=>p.id===current.player_id)?`<button class="mi-reply" data-player="${esc(current.player_id)}" type="button">${outstanding(current)?'Discuss request':'Talk to this player'}</button>`:''}
         ${outstanding(current) && current.player_id && active().some(p=>p.id===current.player_id)?`<button class="mi-decline" type="button">Decline request</button><p class="mi-deadline">Respond by ${esc(current.decision_due)}; ignoring a request may disappoint the player.</p>`:''}
         ${current.read && !current.requires_reply && !current.resolved?button('Archive notice','mi-resolve'):''}
-        ${current.category==='scouting'?button('Open Youth Academy','mi-route-youth'):''}
+        ${current.category==='scouting'?(current.source_key?.startsWith('professional-scout:')?button('Open Scouting','mi-route-transfers'):button('Open Youth Academy','mi-route-youth')):''}
         ${current.category==='contracts'?button('Open Finances','mi-route-finance'):''}
         ${current.category==='market'?button('Open Scouting','mi-route-transfers'):''}
         ${current.category==='calendar'||current.category==='results'?button('Open Calendar','mi-route-calendar'):''}

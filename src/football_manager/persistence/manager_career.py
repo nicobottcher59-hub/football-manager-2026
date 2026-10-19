@@ -24,7 +24,7 @@ from .models import (
 from .session_codec import capture_manager_graph, restore_manager_graph
 from .sqlite_repository import SQLiteSaveRepository
 
-MANAGER_STATE_VERSION = 18
+MANAGER_STATE_VERSION = 19
 _UI_STATE_VERSION = 1
 
 # Explicit contract for the current disposable session. When a later version

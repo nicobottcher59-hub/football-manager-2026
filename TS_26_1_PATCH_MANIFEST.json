@@ -1,0 +1,118 @@
+{
+  "version": "TS-26.1",
+  "base": "TS-26",
+  "delivery": "copy the content of this ZIP to the project root, overwrite duplicates",
+  "branch": "feat/ts-26-1-professional-scouts",
+  "summary": "feat: TS-26.1 professional scouts and reports",
+  "files": [
+    {
+      "path": "TS_26_1_PATCH_INSTRUCTIONS.txt",
+      "status": "new",
+      "bytes": 1097,
+      "sha256": "2fca66d9e9d15baffa46c7ffb0b4a82ef7612925232e1da097108d5965060160"
+    },
+    {
+      "path": "TS_26_1_TEST_REPORT.md",
+      "status": "new",
+      "bytes": 2051,
+      "sha256": "041055d7bb1947879c31a5706db905a82c9d666d93c8c67e9a42921810164455"
+    },
+    {
+      "path": "docs/TS_26_1_PROFESSIONAL_SCOUTS.md",
+      "status": "new",
+      "bytes": 4044,
+      "sha256": "78899f429327b4cdb04023a2158d4ab902b43dc4adbf8f6a43340142bfb6676b"
+    },
+    {
+      "path": "frontend/portable/club_support.js",
+      "status": "modified",
+      "bytes": 10210,
+      "sha256": "4bde24460d3db0c6199c08c77014eacdbaf16a63423bad3844fd6aa3456324e2"
+    },
+    {
+      "path": "frontend/portable/inbox.js",
+      "status": "modified",
+      "bytes": 13904,
+      "sha256": "d40d27671387a16f4ee2faffaeea5766ec7725f5629a260d4029923c427dc186"
+    },
+    {
+      "path": "frontend/portable/transfers.css",
+      "status": "modified",
+      "bytes": 16403,
+      "sha256": "b6fc46379208ac84f6609b0798de090b7faaf5c09323d899b9e5ad9239ddb8e6"
+    },
+    {
+      "path": "frontend/portable/transfers.js",
+      "status": "modified",
+      "bytes": 47392,
+      "sha256": "586535e77d9ee7b6d53922a054c33eed4e10f2d1fffe825e7d31b70f3258af2e"
+    },
+    {
+      "path": "src/football_manager/domain/club_support.py",
+      "status": "modified",
+      "bytes": 6907,
+      "sha256": "4c2032c3c8cbacee3a7fc6f73fe920165e4f6708ca5781611ba85792ce64f92c"
+    },
+    {
+      "path": "src/football_manager/persistence/manager_career.py",
+      "status": "modified",
+      "bytes": 16701,
+      "sha256": "7531d66486d7e9a501886104edb1557d34ff7c8a0d39622a03d8d0141952538a"
+    },
+    {
+      "path": "src/football_manager/persistence/session_codec.py",
+      "status": "modified",
+      "bytes": 23158,
+      "sha256": "030edb059c0c376f63567ff16e7fd8d2bb17ad5da568440775faf548f636d2f2"
+    },
+    {
+      "path": "src/football_manager/services/club_support.py",
+      "status": "modified",
+      "bytes": 22846,
+      "sha256": "d45c3eca61cdae98b20f135bc2487dc7015f3bf582dcbd8081ec67eefa2024ce"
+    },
+    {
+      "path": "src/football_manager/services/manager_inbox.py",
+      "status": "modified",
+      "bytes": 37852,
+      "sha256": "bc3d5d2eadb4ad136c75407c974fd2a62c69991e6869f56ba505a5df24a590b9"
+    },
+    {
+      "path": "src/football_manager/services/professional_scouting.py",
+      "status": "new",
+      "bytes": 9423,
+      "sha256": "92795eb054063cd4e3389a1126d1123715b5e5b2470ffd6966847df569b3d48c"
+    },
+    {
+      "path": "src/football_manager/services/transfer_negotiation.py",
+      "status": "modified",
+      "bytes": 31142,
+      "sha256": "3885634fe7198cadfa13aa1652fff2d352fc4c580a7e493b62f7381b2f09abea"
+    },
+    {
+      "path": "src/football_manager/ui_shell/application.py",
+      "status": "modified",
+      "bytes": 12892,
+      "sha256": "f0f6dcb11bf8058cc0c118fd88202d30e18cc2ecf2ccd012d78f7824600c60d4"
+    },
+    {
+      "path": "src/football_manager/ui_shell/progression.py",
+      "status": "modified",
+      "bytes": 11833,
+      "sha256": "a78d089b2fce2134ba0e21010883930d0aa331bdf8e7745388b377690626024a"
+    },
+    {
+      "path": "src/football_manager/ui_shell/server.py",
+      "status": "modified",
+      "bytes": 16672,
+      "sha256": "bad0752738b35b4719e6412f80cb3f5dc0e02e4b2c9a578e5b2bc3914bbe6e83"
+    },
+    {
+      "path": "tests/test_ts_26_1_professional_scouts.py",
+      "status": "new",
+      "bytes": 14017,
+      "sha256": "228ec82e2a8a2e28786aa2448e1f03ca245830e6fe8d5a3263205b115b4c2f4b"
+    }
+  ],
+  "delete": []
+}

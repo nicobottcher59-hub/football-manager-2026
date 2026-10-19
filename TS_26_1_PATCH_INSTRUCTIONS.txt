@@ -1,0 +1,23 @@
+TS-26.1 - PARCHE OJEADORES PROFESIONALES
+
+REQUISITO: juego con TS-26 ya aplicado.
+
+INSTALACION
+1. Hace una copia de seguridad de tu carpeta del juego y de tus partidas.
+2. Abri el ZIP de este parche.
+3. Copia TODAS las carpetas y archivos del ZIP al directorio RAIZ de tu juego,
+   manteniendo las rutas internas (src/, frontend/, docs/, tests/).
+4. Acepta REEMPLAZAR los archivos existentes cuando Windows pregunte.
+5. No borres ninguna carpeta, tus partidas guardadas ni el directorio .git.
+6. Ejecuta INICIAR_INTERFAZ_WINDOWS.bat y abri Staff / Scouting.
+
+CAMBIOS PRINCIPALES
+- Cuarto rol del personal: ojeador profesional, con contratos y salarios.
+- Mas ojeadores = mas observaciones simultaneas. Calidad alta = mayor
+  velocidad y, desde calidad 78, dos jugadores por ojeador.
+- Nuevos botones 'Scout player' y pestana 'Scout reports' en Scouting.
+- Informes con evaluaciones de atributos YA VISIBLES y avisos en Inbox.
+- Migracion del guardado de partidas TS-26 v18 a v19.
+- No oculta atributos, GRL ni negociaciones.
+
+No hay archivos que debas borrar. Este ZIP NO incluye el juego entero.

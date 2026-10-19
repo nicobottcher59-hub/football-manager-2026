@@ -22,11 +22,11 @@ def _seed_value(*items: object) -> int:
 
 def staff_capacity_for_tier(initial_tier: int) -> dict[str, int]:
     """Interim slots only; future club facilities can replace these numbers."""
-    return {1: {'coach': 3, 'medic': 2, 'fitness': 2},
-            2: {'coach': 2, 'medic': 2, 'fitness': 2},
-            3: {'coach': 2, 'medic': 1, 'fitness': 2},
-            4: {'coach': 1, 'medic': 1, 'fitness': 1},
-            0: {'coach': 1, 'medic': 1, 'fitness': 1}}[initial_tier].copy()
+    return {1: {'coach': 3, 'medic': 2, 'fitness': 2, 'scout': 3},
+            2: {'coach': 2, 'medic': 2, 'fitness': 2, 'scout': 3},
+            3: {'coach': 2, 'medic': 1, 'fitness': 2, 'scout': 2},
+            4: {'coach': 1, 'medic': 1, 'fitness': 1, 'scout': 1},
+            0: {'coach': 1, 'medic': 1, 'fitness': 1, 'scout': 1}}[initial_tier].copy()
 
 
 def staff_wage(quality: int, tier: int) -> int:
@@ -48,6 +48,27 @@ def initialize_club_support(registry, on_date: date) -> None:
             dept.members[employee.member_id] = employee
         dept.baseline_weekly_gbp = sum(m.wage_weekly_gbp for m in dept.members.values())
         registry.club_support[cid] = dept
+
+
+def upgrade_club_support_scouts(registry, on_date: date) -> None:
+    """TS-26 -> TS-26.1: add only missing professional scout slots/contract.
+
+    Preserve all existing coaches, treatment decisions, training and staff costs.
+    The initial scout is included in the old operating-cost proxy, just like
+    the initial TS-26 employees; extra hired scouts cost additional wages.
+    """
+    for cid, dept in registry.club_support.items():
+        if 'scout' in dept.capacity:
+            continue
+        tier = registry.identities[cid].initial_tier
+        dept.capacity['scout'] = staff_capacity_for_tier(tier)['scout']
+        code = _seed_value(registry.seed, cid, 'scout', 'starter')
+        quality = 48 + code % 28
+        member = StaffMember(f'staff:{cid}:scout:starter', cid, NAMES[code % len(NAMES)],
+                             'scout', quality, staff_wage(quality, tier), on_date,
+                             on_date + timedelta(days=730))
+        dept.members[member.member_id] = member
+        dept.baseline_weekly_gbp += member.wage_weekly_gbp
 
 
 def auto_extend_ai_staff(world, on_date: date, *, managed_club_id: str | None) -> int:
@@ -220,6 +241,9 @@ def staff_command(session, command: dict) -> dict:
         if account.cash_gbp < candidate.wage_weekly_gbp * 8:
             raise ValueError('Club cash is insufficient for this staff contract')
         dept.members[ident] = candidate
+        if candidate.role == 'scout':
+            from football_manager.services.professional_scouting import _rebalance
+            _rebalance(dept, day)
         return {'hired': ident, 'name': candidate.name}
     if action == 'release':
         if ident not in dept.members:
@@ -231,6 +255,9 @@ def staff_command(session, command: dict) -> dict:
         from dataclasses import replace as replace_account
         registry.club_finances[dept.club_id] = replace_account(account, cash_gbp=account.cash_gbp - settlement,
             transfer_budget_gbp=min(account.transfer_budget_gbp, max(0, account.cash_gbp - settlement)))
+        if member.role == 'scout':
+            from football_manager.services.professional_scouting import _rebalance
+            _rebalance(dept, day)
         return {'released': ident, 'settlement_gbp': settlement}
     if action == 'renew':
         member = dept.members.get(ident)

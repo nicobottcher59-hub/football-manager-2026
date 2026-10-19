@@ -637,7 +637,7 @@ def inbox_read_model(session) -> dict:
     records = []
     for m in reversed(state.messages):
         records.append({'id':m.message_id, 'date':m.day.isoformat(), 'category':m.category,
-                        'title':m.title, 'body':m.body, 'player_id':m.player_id,
+                        'title':m.title, 'body':m.body, 'source_key':m.source_key, 'player_id':m.player_id,
                         'read':m.read, 'requires_reply':m.requires_reply, 'resolved':m.resolved,
                         'suggested_topic':_request_topic(m) if m.requires_reply else None,
                         'decision_due':(m.day+timedelta(days=28)).isoformat() if m.requires_reply and not m.resolved else None})

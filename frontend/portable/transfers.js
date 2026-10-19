@@ -14,6 +14,15 @@
   const player=()=>model?.targets?.find(p=>p.id===chosen)||null;
   const deal=()=>model?.offers?.find(d=>d.id===dealId)||null;
   const openDeal=pid=>model?.offers?.find(d=>d.player_id===pid&&['manager_turn','agreed'].includes(d.status))||null;
+  const scoutInfo=()=>model?.professional_scouting||{assignments:[],reports:[],free_slots:0,capacity:0,occupied:0,scout_count:0};
+  const pendingScout=id=>scoutInfo().assignments.find(a=>a.player_id===id);
+  const completedScout=id=>scoutInfo().reports.find(r=>r.player_id===id);
+  const scoutButton=id=>{
+    const active=pendingScout(id),done=completedScout(id);
+    if(active)return `<button class="tr-btn" type="button" data-tr-scout-reports="${esc(id)}">Scouting ${active.progress}%</button>`;
+    if(done)return `<button class="tr-btn" type="button" data-tr-scout-reports="${esc(id)}">View report</button>`;
+    return `<button class="tr-btn" type="button" data-tr-scout-assign="${esc(id)}" ${scoutInfo().free_slots<=0?'disabled':''} title="${scoutInfo().free_slots<=0?'All scouting places are occupied':'Start a professional scouting report'}">Scout player</button>`;
+  };
   const opponent=d=>d.direction==='outgoing'?d.seller:d.buyer;
   const nav=()=>window.FMNavigation;
   const controls=(name,value,note)=>`<div class="tr-stat"><small>${esc(name)}</small><strong>${esc(value)}</strong><span>${esc(note)}</span></div>`;
@@ -31,6 +40,15 @@
        <div class="tr-discussion-status"><strong class="${d.status==='agreed'?'tr-ok':''}">${esc(statuses[d.status]||d.status)}</strong><small>${esc(d.reason||'')}</small></div>
        <button class="tr-btn tr-btn-primary" type="button" data-tr-deal="${esc(d.id)}">Open negotiation \u2192</button></article>`;
   }
+  function scoutingReportsHub(){
+    const s=scoutInfo();
+    const active=s.assignments.map(a=>`<article class="tr-discussion-card tr-scout-card"><div class="tr-discussion-primary"><span class="tr-kicker">IN PROGRESS · ${a.progress}%</span><strong>${esc(a.name)}</strong><small>${esc(a.scout)} · ${a.days_left===null?'Paused until a scout is available':`Approximately ${a.days_left} day(s) remaining`}</small></div><div class="tr-discussion-price"><strong>${a.progress}%</strong><span>Observation completed</span></div><button class="tr-btn" type="button" data-tr-scout-cancel="${esc(a.player_id)}">Cancel</button></article>`).join('');
+    const reports=s.reports.map(r=>`<article class="tr-discussion-card tr-scout-report"><div class="tr-discussion-primary"><span class="tr-kicker">REPORT · ${esc(r.date)}</span><strong>${esc(r.name)}</strong><small>${esc(r.club)} · ${esc(r.position)} · ${r.age} yrs · ${esc(r.scout)}</small><p class="tr-scout-summary">${esc(r.verdict)}</p><small>Strongest visible attributes: ${r.strengths.map(esc).join(', ')}</small></div><div class="tr-discussion-price"><strong>${Number(r.ovr).toFixed(1)} GRL</strong><span>Value at report: ${brief(r.value_gbp)}</span></div><div class="tr-prospect-actions"><button class="tr-btn" type="button" data-tr-profile-scout="${esc(r.player_id)}">Profile</button>${model.targets.some(p=>p.id===r.player_id)&&((new Date(model.date)-new Date(r.date))/86400000)>=30?`<button class="tr-btn" type="button" data-tr-scout-assign="${esc(r.player_id)}" ${s.free_slots<=0?'disabled':''}>Refresh report</button>`:''}</div></article>`).join('');
+    return `<section class="tr-panel tr-scout-hub"><div class="tr-heading-row"><div><h3>Professional scout reports</h3><p>Optional evaluations based on visible player data. Reports arrive as career days pass; more and better scouts cover more players and work faster.</p></div><span class="tr-tag">${s.occupied} / ${s.capacity} active slots · ${s.scout_count} scouts</span></div>
+      <h4>Players being observed</h4>${active||'<div class="tr-empty">No active assignments. Choose Scout player in Player search.</div>'}
+      <h4>Completed reports (${s.reports.length})</h4>${reports||'<div class="tr-empty">Your professional scouts have not delivered a report yet.</div>'}
+      <p class="tr-footnote">Reports are snapshots from the recorded date. GRL, attributes, profiles and negotiations stay available without scouting.</p></section>`;
+  }
   function searchView(){
     const offers=model.offers||[], incoming=offers.filter(d=>d.direction==='incoming');
     const list=selectedFilters(),positions=[...new Set(model.targets.map(p=>p.position))].sort();
@@ -40,17 +58,17 @@
        <header class="tr-hub-hero"><div class="tr-kicker">RECRUITMENT \u00b7 FIRST TEAM</div><h2>Scouting centre</h2><p>Discover players across England, review club offers and start a dedicated negotiation when you are ready.</p>
          <div class="tr-hub-facts"><span>Available budget <b>${brief(model.available_transfer_budget_gbp)}</b></span><span>Active negotiations <b>${offers.filter(d=>d.status==='manager_turn').length}</b></span><span>Offers received <b>${incoming.length}</b></span><span>Window <b>${model.window_open?'Open':'Closed'}</b></span></div></header>
        <nav class="tr-tabs" role="tablist" aria-label="Scouting sections">
-        ${[['players','Player search'],['negotiations',`Negotiations (${offers.length})`],['received',`Offers received (${incoming.length})`],['world',`World transfers (${marketNews.length})`],['loans','Loans & free agents']].map(([id,label])=>`<button type="button" data-tr-tab="${id}" role="tab" aria-selected="${tab===id}">${label}</button>`).join('')}</nav>
-       ${tab==='loans'?loanHub():tab==='world'?`<section class="tr-panel tr-negotiations-list"><div class="tr-heading-row"><div><h3>Recent world transfers</h3><p>Completed purchases between AI-managed clubs. No transfers are created by opening this page.</p></div></div>${marketNews.length?marketNews.map(d=>`<article class="tr-discussion-card"><div class="tr-discussion-primary"><span class="tr-kicker">${esc(d.date)}</span><strong>${esc(d.player)}</strong><small>${esc(d.from_club)} → ${esc(d.to_club)}</small></div><div class="tr-discussion-price"><strong>${brief(d.fee_gbp)}</strong><span>Guaranteed transfer fee</span></div></article>`).join(''):'<div class="tr-empty">No AI transfers recorded yet. Clubs review their squads during the transfer windows.</div>'}</section>`:tab==='players'?`<section class="tr-panel tr-discover"><div class="tr-heading-row"><div><h3>Find your next signing</h3><p>These are estimates, not guaranteed asking prices. Open the player profile or make an offer.</p></div><span class="tr-tag">${list.length} matches</span></div>
+        ${[['players','Player search'],['reports',`Scout reports (${scoutInfo().reports.length})`],['negotiations',`Negotiations (${offers.length})`],['received',`Offers received (${incoming.length})`],['world',`World transfers (${marketNews.length})`],['loans','Loans & free agents']].map(([id,label])=>`<button type="button" data-tr-tab="${id}" role="tab" aria-selected="${tab===id}">${label}</button>`).join('')}</nav>
+       ${tab==='loans'?loanHub():tab==='reports'?scoutingReportsHub():tab==='world'?`<section class="tr-panel tr-negotiations-list"><div class="tr-heading-row"><div><h3>Recent world transfers</h3><p>Completed purchases between AI-managed clubs. No transfers are created by opening this page.</p></div></div>${marketNews.length?marketNews.map(d=>`<article class="tr-discussion-card"><div class="tr-discussion-primary"><span class="tr-kicker">${esc(d.date)}</span><strong>${esc(d.player)}</strong><small>${esc(d.from_club)} → ${esc(d.to_club)}</small></div><div class="tr-discussion-price"><strong>${brief(d.fee_gbp)}</strong><span>Guaranteed transfer fee</span></div></article>`).join(''):'<div class="tr-empty">No AI transfers recorded yet. Clubs review their squads during the transfer windows.</div>'}</section>`:tab==='players'?`<section class="tr-panel tr-discover"><div class="tr-heading-row"><div><h3>Find your next signing</h3><p>These are estimates, not guaranteed asking prices. Open the player profile or make an offer.</p></div><span class="tr-tag">${list.length} matches</span></div>
          <div class="tr-scout-filters"><label><span>Player or club</span><input id="tr-search" type="search" placeholder="Search players and clubs" value="${esc(search)}" autocomplete="off" /></label>
            <label><span>Position</span><select id="tr-position">${[['all','All positions'],...positions.map(x=>[x,x])].map(([a,b])=>opt(a,b,position)).join('')}</select></label>
            <label><span>Minimum GRL</span><select id="tr-min-ovr">${[['','Any level'],['55','55+'],['65','65+'],['70','70+'],['75','75+'],['80','80+'],['85','85+']].map(([a,b])=>opt(a,b,minOvr)).join('')}</select></label>
            <label><span>Maximum age</span><select id="tr-max-age">${[['','Any age'],['18','18'],['21','21'],['24','24'],['29','29'],['34','34']].map(([a,b])=>opt(a,b,maxAge)).join('')}</select></label></div>
          <div class="tr-scout-count">${Math.min(list.length,80)} shown of ${list.length} results \u00b7 Affordable players first, then highest GRL</div>
-         <div class="tr-discover-list">${list.slice(0,80).map(p=>`<article class="tr-prospect"><div class="tr-prospect-badge">${esc(p.position)}</div><div class="tr-prospect-name"><strong>${esc(p.name)}</strong><small>${esc(p.club)} \u00b7 ${p.age} years \u00b7 Contract until ${esc(p.contract_until)}</small></div><div class="tr-prospect-rating"><strong>${p.ovr.toFixed(1)}</strong><small>GRL</small></div><div class="tr-prospect-value"><strong>${brief(p.value_gbp)}</strong><small>Market estimate</small></div><div class="tr-prospect-actions"><button class="tr-btn" type="button" data-tr-profile="${esc(p.id)}">Profile</button><button class="tr-btn tr-btn-primary" type="button" data-tr-player="${esc(p.id)}">${openDeal(p.id)?'Open negotiation':'Make offer'} \u2192</button></div></article>`).join('')}
+         <div class="tr-discover-list">${list.slice(0,80).map(p=>`<article class="tr-prospect"><div class="tr-prospect-badge">${esc(p.position)}</div><div class="tr-prospect-name"><strong>${esc(p.name)}</strong><small>${esc(p.club)} \u00b7 ${p.age} years \u00b7 Contract until ${esc(p.contract_until)}</small></div><div class="tr-prospect-rating"><strong>${p.ovr.toFixed(1)}</strong><small>GRL</small></div><div class="tr-prospect-value"><strong>${brief(p.value_gbp)}</strong><small>Market estimate</small></div><div class="tr-prospect-actions">${scoutButton(p.id)}<button class="tr-btn" type="button" data-tr-profile="${esc(p.id)}">Profile</button><button class="tr-btn tr-btn-primary" type="button" data-tr-player="${esc(p.id)}">${openDeal(p.id)?'Open negotiation':'Make offer'} \u2192</button></div></article>`).join('')}
            ${!list.length?'<div class="tr-empty">No players match those filters.</div>':''}</div>
        </section>`:`<section class="tr-panel tr-negotiations-list"><div class="tr-heading-row"><div><h3>${tab==='received'?'Offers received':'Your negotiations'}</h3><p>Open any discussion to review the offer and its full history.</p></div></div>${shown.length?shown.map(d=>offerEntry(d,tab==='received')).join(''):'<div class="tr-empty">No offers here yet. Browse players to start a negotiation.</div>'}</section>`}
-       <p class="tr-footnote">New bids open during January, July and August. Professional scouting assessments and agent conversations are still planned. Club offers reserve money until player and agent agree personal terms; a completed deal moves the player and money.</p>
+       <p class="tr-footnote">New bids open during January, July and August. Professional scout reports are now available and optional. Knowledge limits remain planned for TS-27. Club offers reserve money until player and agent agree personal terms; a completed deal moves the player and money.</p>
        </div>`;
   }
   const loanPlayer=(p)=>`<span class="tr-loan-person"><strong>${esc(p.name)}</strong><small>${esc(p.position||'?')} · ${Number(p.ovr||0).toFixed(1)} GRL · ${p.age||'?'} yrs</small></span>`;
@@ -195,6 +213,16 @@
     if(terms.fixed_gbp>model.available_transfer_budget_gbp && (!deal()||deal().direction==='outgoing'))throw Error('The guaranteed amount exceeds your available transfer budget');
     return terms;
   }
+  async function postScout(command){
+    if(busy)return;
+    busy=true;host?.setAttribute('aria-busy','true');
+    try{
+      const response=await fetch('/api/scouting',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(command)});
+      const payload=await response.json();if(!response.ok)throw Error(payload.error||`HTTP ${response.status}`);
+      await refresh();
+    }catch(error){window.alert('Scouting: '+String(error.message||error));}
+    finally{busy=false;host?.setAttribute('aria-busy','false');}
+  }
   async function post(command){
     if(busy)return null;
     busy=true;host.setAttribute('aria-busy','true');
@@ -235,6 +263,10 @@
       if(button.dataset.trLoanRecall){if(window.confirm('Recall player from loan?')){if(await postLoan({action:'loan_recall',loan_id:button.dataset.trLoanRecall}))await loadLoans();}return;}
       if(button.dataset.trLoanBuy){if(window.confirm('Exercise the agreed purchase option and sign the player immediately?')){if(await postLoan({action:'loan_buy_option',loan_id:button.dataset.trLoanBuy}))await loadLoans();}return;}
       if(button.dataset.trLoanBuyback){if(window.confirm('Activate the agreed buyback and negotiate an immediate return?')){if(await postLoan({action:'buyback',deal_id:button.dataset.trLoanBuyback}))await loadLoans();}return;}
+      if(button.dataset.trScoutAssign){await postScout({action:'assign',player_id:button.dataset.trScoutAssign});return;}
+      if(button.dataset.trScoutCancel){if(window.confirm('Cancel this scouting observation?'))await postScout({action:'cancel',player_id:button.dataset.trScoutCancel});return;}
+      if(button.dataset.trScoutReports){tab='reports';draw();return;}
+      if(button.dataset.trProfileScout){const id=button.dataset.trProfileScout;const match=model.targets.find(p=>p.id===id);if(match)nav()?.club(match.club_id,id);else window.alert('This player is no longer listed in a professional first team.');return;}
       if(button.dataset.trPlayer){const old=openDeal(button.dataset.trPlayer);
         if(old)nav()?.negotiateDeal(old.id);else nav()?.negotiatePlayer(button.dataset.trPlayer);return;}
       if(button.dataset.trProfile){const p=model.targets.find(x=>x.id===button.dataset.trProfile);if(p)nav()?.club(p.club_id,p.id);return;}
