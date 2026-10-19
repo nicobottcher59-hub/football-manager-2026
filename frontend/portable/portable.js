@@ -282,6 +282,7 @@
   competitionPanel.className='fm-competitions-screen';
   competitionPanel.style.display='none';
   main.insertBefore(competitionPanel,footer);
+  const historyPanel=document.createElement('section');historyPanel.className='fm-history-screen';historyPanel.style.display='none';main.insertBefore(historyPanel,footer);
   const matchFrame=document.createElement('iframe');
   matchFrame.id='fm-match-frame';matchFrame.className='ts22-match-frame';matchFrame.title='Match Center';matchFrame.style.display='none';main.insertBefore(matchFrame,footer);
   const clubFrame=document.createElement('iframe');
@@ -319,6 +320,7 @@
     routeState={page,...extra};
     const hash=page==='Match Center'?'#match/'+encodeURIComponent(extra.fixture||''):
       page==='Club Profile'?'#club/'+encodeURIComponent(extra.club||'')+(extra.player?'/'+encodeURIComponent(extra.player):''):
+      page==='Career History'?'#history/'+encodeURIComponent(extra.entity||'')+'/'+encodeURIComponent(extra.id||''):
       page==='Negotiation'?'#negotiation/'+(extra.deal?'deal/':'player/')+encodeURIComponent(extra.deal||extra.player||''):
       '#page/'+encodeURIComponent(page)+(extra.competition?'/'+encodeURIComponent(extra.competition):'');
     if(record && location.hash!==hash){const depth=(history.state?.fm22?history.state.depth:-1)+1;history.pushState({fm22:true,depth},'',hash);}
@@ -326,7 +328,7 @@
     const negotiationPage=page==='Negotiation';
     document.body.classList.toggle('tr-negotiation-open',negotiationPage);
     document.body.classList.toggle('ts22-match-open',matchPage);
-    matchFrame.style.display=matchPage?'block':'none';clubFrame.style.display=clubPage?'block':'none';routeBack.hidden=!clubPage;
+    matchFrame.style.display=matchPage?'block':'none';clubFrame.style.display=clubPage?'block':'none';routeBack.hidden=!clubPage && page!=='Career History';
     if(matchPage){const src=`match.html?embedded=1&fixture=${encodeURIComponent(extra.fixture||'')}`;loadFrame(matchFrame,src);}
     if(clubPage){const src=`../public/squad/embed.html?view=squad&club=${encodeURIComponent(extra.club||'')}${extra.player?'&player='+encodeURIComponent(extra.player):''}`;loadFrame(clubFrame,src);}
 
@@ -342,6 +344,8 @@
     const competitions = page === 'Competitions';
     const otherLeagues = page === 'Other Leagues';
     const competitionPage = competitions || otherLeagues;
+    const careerPage = page === 'Career History';
+    const clubInfoPage = page === 'Club Info';
     navButtons.forEach(button => {
       const selected = $('span', button)?.textContent.trim() === page;
       button.classList.toggle('is-active', selected);
@@ -349,7 +353,7 @@
       else button.removeAttribute('aria-current');
     });
     dashboard.style.display = home ? '' : 'none';
-    placeholder.style.display = !home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !clubSupport && !youthAcademy && !finances && !transfers && !matchPage && !clubPage ? 'flex' : 'none';
+    placeholder.style.display = !home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !clubSupport && !youthAcademy && !finances && !transfers && !matchPage && !clubPage && !careerPage && !clubInfoPage ? 'flex' : 'none';
     supportPanel.style.display = clubSupport ? 'block' : 'none';
     if(clubSupport)window.FMSupport?.mount(supportPanel,page==='Staff'?'staff':page==='Training'?'training':'medical');
     dressingPanel.style.display = dressingRoom ? 'block' : 'none';
@@ -366,6 +370,27 @@
     calendarPanel.style.display = calendar ? 'block' : 'none';
     if(calendar) window.FMCalendar?.mount(calendarPanel);
     competitionPanel.style.display = competitionPage ? 'block' : 'none';
+    historyPanel.style.display = careerPage || clubInfoPage ? 'block' : 'none';
+    // Never fail silently if an asset was not loaded or the career is unavailable.
+    function showHistory(type,id){
+      if(!type||!id){
+        historyPanel.innerHTML='<section class="ch-card" role="alert"><h3>History unavailable</h3><p>No player or club was selected.</p></section>';
+      }else if(typeof window.FMHistory?.mount !== 'function'){
+        historyPanel.innerHTML='<section class="ch-card" role="alert"><h3>History module failed to load</h3><p>Reload the game page and verify that the latest patch files were copied into the portable folder.</p></section>';
+      }else window.FMHistory.mount(historyPanel,type,id);
+    }
+    if(careerPage)showHistory(extra.entity,extra.id);
+    if(clubInfoPage){
+      if(pythonHome?.club_id)showHistory('club',pythonHome.club_id);
+      else {
+        historyPanel.innerHTML='<div class="ch-loading">Loading your club information…</div>';
+        fetch('/api/squad',{cache:'no-store'}).then(r=>{
+          if(!r.ok)throw Error('Club information request failed');
+          return r.json();
+        }).then(v=>{if(routeState.page==='Club Info')showHistory('club',v.club_id);})
+          .catch(()=>{if(routeState.page==='Club Info')historyPanel.innerHTML='<section class="ch-card" role="alert"><h3>Club information unavailable</h3><p>Could not read the current club from the local game server. Try reloading the page.</p></section>';});
+      }
+    }
     if(competitionPage) window.FMCompetitions?.mount(competitionPanel, otherLeagues ? 'other' : 'mine', extra.competition);
     squadFrame.style.display = squad ? 'block' : 'none';
     if (squad && !fromFrame) {
@@ -379,6 +404,8 @@
     headerSubhead.textContent = home
       ? 'Live results, fixtures and verified football news from your career.'
       : squad ? (page==='Squad' ? 'Sortable roster, full player attributes, recorded season statistics and player management.' : 'Formation, individual roles and team tactics backed by the Python development session.')
+      : careerPage ? 'Permanent player, club and competition archive. Verified career facts only.'
+      : clubInfoPage ? 'Recorded club history. Facilities and institution details arrive in TS-28.4.'
       : clubPage ? 'Persistent squad, player profiles and recorded club information. Read-only.'
       : clubSupport ? (page==='Staff'?'Hire coaching, medical and fitness specialists.':page==='Training'?'Configure squad groups and automatic physical protection.':'Injury timelines, recovery treatments and player opinions.')
       : inbox ? 'Live club messages, scouting reports, medical news and player conversations.'
@@ -533,6 +560,7 @@
 
   window.FMNavigation={
     navigate,club:(id,player)=>navigate('Club Profile',false,{club:id,player}),
+    history:(entity,id)=>navigate('Career History',false,{entity,id}),
     competition:id=>navigate('Competitions',false,{competition:id}),
     match:id=>navigate('Match Center',false,{fixture:id}),back:goBack,
     negotiatePlayer:id=>navigate('Negotiation',false,{player:id}),
@@ -547,7 +575,8 @@
   };
   function readHash(){
     let parts;try{parts=location.hash.slice(1).split('/').map(decodeURIComponent);}catch(_){navigate('Home',false,{},false);return;}
-    if(parts[0]==='match')navigate('Match Center',false,{fixture:parts[1]||''},false);
+    if(parts[0]==='history'&&['player','club','competition'].includes(parts[1])&&parts[2])navigate('Career History',false,{entity:parts[1],id:parts[2]},false);
+    else if(parts[0]==='match')navigate('Match Center',false,{fixture:parts[1]||''},false);
     else if(parts[0]==='club'&&parts[1])navigate('Club Profile',false,{club:parts[1],player:parts[2]},false);
     else if(parts[0]==='negotiation'&&parts[2])navigate('Negotiation',false,
       parts[1]==='deal'?{deal:parts[2]}:{player:parts[2]},false);
@@ -559,6 +588,8 @@
   if(!history.state?.fm22)history.replaceState({fm22:true,depth:0},'',location.href);
   if(location.hash)readHash();
   document.addEventListener('click',event=>{
+    const link=event.target.closest('[data-career-type][data-career-id]');
+    if(link&&['player','club','competition'].includes(link.dataset.careerType)&&link.dataset.careerId){event.preventDefault();event.stopPropagation();window.FMNavigation.history(link.dataset.careerType,link.dataset.careerId);return;}
     const target=event.target.closest('[data-club-id]');if(!target)return;
     event.preventDefault();event.stopPropagation();window.FMNavigation.club(target.dataset.clubId);
   });
@@ -568,6 +599,7 @@
   window.addEventListener('message',event=>{
     if(event.origin!==location.origin||![matchFrame.contentWindow,clubFrame.contentWindow,squadFrame.contentWindow].includes(event.source))return;
     if(event.data?.type==='fm-open-club'&&typeof event.data.clubId==='string')window.FMNavigation.club(event.data.clubId,event.data.playerId);
+    if(event.data?.type==='fm-open-history'&&['player','club','competition'].includes(event.data.entity)&&typeof event.data.id==='string'&&event.data.id)window.FMNavigation.history(event.data.entity,event.data.id);
     if(event.source===clubFrame.contentWindow&&event.data?.type==='fm-open-transfer-offer'
        &&typeof event.data.playerId==='string'&&event.data.playerId.length>0
        &&event.data.clubId===routeState.club){

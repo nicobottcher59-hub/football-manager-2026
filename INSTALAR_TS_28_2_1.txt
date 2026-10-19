@@ -1,0 +1,20 @@
+TS-28.2.1 - PARCHE DE HISTORIAL Y SQUAD
+
+REQUISITO: Debes tener TS-28.2 instalado.
+
+1. Cerrá el juego.
+2. Hacé una copia de seguridad de tu carpeta del proyecto (recomendado).
+3. Descomprimí este ZIP.
+4. Copiá el contenido a la carpeta RAIZ del juego, respetando las subcarpetas frontend/ y tests/.
+5. Cuando Windows pregunte, elegí reemplazar los archivos existentes.
+6. Volvé a iniciar la interfaz. Si la página había quedado abierta, recargala (Ctrl+F5).
+
+Se corrigieron las pantallas vacías Career History y Club Info.
+En Squad, el icono de flecha al lado de cada jugador abre su historial;
+también existe Career history en el panel de detalles del jugador.
+
+No hay archivos que borrar ni migración de partidas. Versión de guardado: v21.
+No incluye el juego completo, partidas guardadas ni .git.
+
+Branch: fix/ts-28-2-1-history-and-squad-links
+Summary: fix: TS-28.2.1 restore career history and squad links

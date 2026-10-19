@@ -200,6 +200,36 @@ class FootballUIHandler(BaseHTTPRequestHandler):
                     return
                 self._json(200, payload)
             return
+        if path.startswith('/api/history/'):
+            parts = path.removeprefix('/api/history/').split('/')
+            query = parse_qs(urlsplit(self.path).query)
+            try:
+                offset = int(query.get('offset', ['0'])[0])
+                if offset < 0 or offset > 100000:
+                    raise ValueError('Invalid history offset')
+                if len(parts) != 2 or not all(parts) or any(len(part)>128 for part in parts):
+                    raise KeyError('Unknown historical profile')
+                from .career_history import (player_career_read_model, club_career_read_model,
+                                             competition_career_read_model)
+                with self.runtime.lock:
+                    if parts[0] == 'player':
+                        payload = player_career_read_model(self.runtime.session, parts[1])
+                    elif parts[0] == 'club':
+                        payload = club_career_read_model(self.runtime.session, parts[1],
+                            season=query.get('season', [None])[0], offset=offset)
+                    elif parts[0] == 'competition':
+                        payload = competition_career_read_model(self.runtime.session, parts[1],
+                            season=query.get('season', [None])[0], offset=offset)
+                    else:
+                        raise KeyError('Unknown historical profile')
+            except KeyError:
+                self._json(404, {'error': 'Career history not found'})
+                return
+            except ValueError as exc:
+                self._json(400, {'error': str(exc)})
+                return
+            self._json(200, payload)
+            return
         if path == '/api/news':
             with self.runtime.lock:
                 self._json(200, home_news_read_model(self.runtime.session))

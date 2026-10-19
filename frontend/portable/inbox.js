@@ -36,6 +36,7 @@
       <div class="mi-grid"><div class="mi-list" aria-label="Messages">${list.map(messageRow).join('')||'<p class="mi-empty">No messages in this category.</p>'}</div>
       <section class="mi-detail" aria-label="Message details">${current?`<span class="mi-eyebrow">${esc(labels[current.category]||current.category)} · ${esc(current.date)}</span>
         <h3>${esc(current.title)}</h3><p>${esc(current.body)}</p><div class="mi-detail-actions">
+        ${current.player_id?`<button type="button" class="mi-reply" data-career-type="player" data-career-id="${esc(current.player_id)}">View player history →</button>`:''}
         ${!current.read?button('Mark as read','mi-read'):''}
         ${current.player_id && active().some(p=>p.id===current.player_id)?`<button class="mi-reply" data-player="${esc(current.player_id)}" type="button">${outstanding(current)?'Discuss request':'Talk to this player'}</button>`:''}
         ${outstanding(current) && current.player_id && active().some(p=>p.id===current.player_id)?`<button class="mi-decline" type="button">Decline request</button><p class="mi-deadline">Respond by ${esc(current.decision_due)}; ignoring a request may disappoint the player.</p>`:''}

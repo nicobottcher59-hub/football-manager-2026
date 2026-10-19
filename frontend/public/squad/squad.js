@@ -256,7 +256,7 @@
       ${activeTab==='role'?`<div class="fm-player-form"><h3>Current role</h3>${selector(slot.roles,slot.role_id,`data-change="role" data-slot-id="${esc(slot.slot_id)}"`)}<p class="fm-caption">All compatible Python role definitions available for this position. Changing a role resets its individual overrides, matching the current sandbox behavior.</p><h3>Alternatives (${slot.roles.length})</h3><div class="fm-role-list">${slot.roles.map(r=>`<button type="button" data-role-id="${esc(r.id)}" class="${r.id===slot.role_id?'active':''}">${esc(r.name)}<span>${r.id===slot.role_id?'Selected':'Choose'}</span></button>`).join('')}</div></div>`:''}
       ${activeTab==='instructions'?`<div class="fm-player-form"><div class="fm-inline"><h3>Individual instructions (${slot.individual.length})</h3><button data-action="reset-individual" class="fm-text-btn">Reset all</button></div><p class="fm-caption">Only selections marked as overrides replace the role's defaults. Marking and pressing targets use the Python domain types.</p><div class="fm-instruction-scroll">${slot.individual.map(item=>`<label class="fm-individual-row"><span>${esc(item.label)} <small>${item.override===null?'Role default':'Custom override'}</small></span>${individualOptions(item)}</label>`).join('')}</div></div>`:''}
       ${activeTab==='attributes'?`<div class="fm-player-form"><h3>Player attributes from Python</h3><div class="fm-attr-scroll">${Object.entries(player.attributes).map(([category,values])=>`<h4>${esc(short(category))}</h4><div class="fm-attrs">${Object.entries(values||{}).filter(([,v])=>typeof v==='number').map(([key,val])=>`<div><span>${esc(short(key))}</span><b>${n(val)}</b></div>`).join('')}</div>`).join('')}</div></div>`:''}
-      <div class="fm-panel-bottom"><button class="fm-secondary" data-action="close-player">${tacticMode==='editor'?'Back to team instructions':'Back to lineup'}</button></div>
+      <div class="fm-panel-bottom"><button type="button" class="fm-secondary" data-open-career-player="${esc(player.id)}">Career history ↗</button><button class="fm-secondary" data-action="close-player">${tacticMode==='editor'?'Back to team instructions':'Back to lineup'}</button></div>
     </section>`;
   }
   function lineupScreen(){
@@ -352,6 +352,12 @@
   root.addEventListener('click',event=>{
     const button=event.target.closest('button');
     if(!button)return;
+    if(button.hasAttribute('data-open-career-player')) {
+      const id=button.dataset.openCareerPlayer;
+      if(parent!==window)parent.postMessage({type:'fm-open-history',entity:'player',id},window.location.origin);
+      else window.location.href='/portable/#history/player/'+encodeURIComponent(id);
+      return;
+    }
     if(button.hasAttribute('data-open-transfer-offer')) {
       // Club profiles are read-only; the parent owns game navigation.
       if(inspectedClub && parent!==window)parent.postMessage({type:'fm-open-transfer-offer',

@@ -1,0 +1,20 @@
+TS-28.2 - PARCHE SOBRE TS-28.1
+
+1. Cerrá el juego.
+2. Hacé una copia de seguridad de la carpeta del juego y de tus partidas.
+3. Descomprimí este ZIP.
+4. Copiá las carpetas src, frontend, tests y los archivos TS_28_2_TEST_REPORT.md / INSTALAR_TS_28_2.txt dentro de la carpeta RAÍZ del juego.
+5. Aceptá reemplazar los archivos que Windows indique.
+6. Ejecutá INICIAR_INTERFAZ_WINDOWS.bat como siempre.
+
+IMPORTANTE:
+- NO necesitás instalar un ZIP completo: este contiene solo archivos nuevos/modificados.
+- Debés tener TS-28.1 instalado antes de copiarlo.
+- Este parche NO incluye ni sobrescribe la carpeta .git ni partidas guardadas.
+- Las partidas SQLite v20 se migran al cargarlas en TS-28.2 (formato v21).
+- Si abrís un guardado en la nueva versión, conservá una copia del anterior.
+
+Branch: feat/ts-28-2-career-history
+Summary: feat: TS-28.2 persistent career histories and linked profiles
+
+Validación: ver TS_28_2_TEST_REPORT.md

@@ -2168,6 +2168,18 @@ class DevelopmentSession:
         if not self.season_finished:
             raise ValueError("finish all matches before beginning the next season")
         report = self._career.begin_next_season()
+        # A title belongs to players still registered with the champion when
+        # the completed season is certified, never to guessed past rosters.
+        registry = self._world_squads
+        for competition_id, club_id in report.champions.items():
+            club = registry.clubs.get(club_id)
+            if club is None:
+                continue
+            for player in club.squad.players:
+                existing = registry.player_honours.get(player.id, ())
+                award = (report.season_label, competition_id, club_id)
+                if award not in existing:
+                    registry.player_honours[player.id] = (*existing, award)
         self._adopt_career_world()
         # Recover over the offseason, without resetting identities or lineups.
         for player in self.home_club.squad.players:

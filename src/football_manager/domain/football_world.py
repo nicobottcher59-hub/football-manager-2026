@@ -74,6 +74,10 @@ class FootballWorld:
     # One small summary per player/season, not a second copy of match events.
     usage: dict[str, PlayerSeasonUsage] = field(default_factory=dict)
     history: dict[str, dict[str, PlayerSeasonUsage]] = field(default_factory=dict)
+    # TS-28.2: only match-verified player-to-club links; no retroactive guessing.
+    player_season_clubs: dict[str, dict[str, tuple[str, ...]]] = field(default_factory=dict)
+    # Trophies awarded to actual registered players at the confirmed season boundary.
+    player_honours: dict[str, tuple[tuple[str, str, str], ...]] = field(default_factory=dict)
     processed_fixtures: dict[str, bool] = field(default_factory=dict)
     tracked_from: date | None = None
     generator_version: int = 1
@@ -195,6 +199,19 @@ class FootballWorld:
             free.validate()
             if pid in self.contracts or any(club.squad.contains(pid) for club in self.clubs.values()):
                 raise ValueError('Free agent still registered or contracted')
+        if not isinstance(self.player_season_clubs, dict) or not isinstance(self.player_honours, dict):
+            raise ValueError('invalid career history ledgers')
+        for season, players in self.player_season_clubs.items():
+            if not isinstance(season, str) or not isinstance(players, dict):
+                raise ValueError('invalid historical season')
+            for pid, clubs in players.items():
+                if not isinstance(pid, str) or not isinstance(clubs, tuple) or any(cid not in self.clubs for cid in clubs):
+                    raise ValueError('invalid historical player-club link')
+        for pid, awards in self.player_honours.items():
+            if not isinstance(pid, str) or not isinstance(awards, tuple) or any(
+                not isinstance(item, tuple) or len(item) != 3 or item[2] not in self.clubs
+                for item in awards):
+                raise ValueError('invalid historical player honour')
         if not isinstance(self.statistics, SeasonStatisticsLedger):
             raise ValueError("invalid statistics ledger")
         self.statistics.validate()

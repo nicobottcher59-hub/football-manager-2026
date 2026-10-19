@@ -55,7 +55,7 @@
       }).join('')||'<p class="dr-muted">Connections are still developing.</p>'}</div>
       <h4>What explains the current picture?</h4><div class="dr-reasons">${p.reasons.map(x=>`<p>${esc(x)}</p>`).join('')}</div>
       <p class="dr-caption">Observed since ${esc(p.observed_since)}. Personality values stay hidden; no OVR or ability change here.</p>
-      <button type="button" class="mi-talk-open" data-dr-talk="${esc(p.id)}">Talk to this player</button>`;
+      <button type="button" class="ch-link" data-career-type="player" data-career-id="${esc(p.id)}">View career history →</button> <button type="button" class="mi-talk-open" data-dr-talk="${esc(p.id)}">Talk to this player</button>`;
   }
   function render() {
     if (!host||!model) return;

@@ -155,7 +155,7 @@ def test_pending_and_reports_survive_sqlite_style_graph_roundtrip(starting):
     scouting_command(session, {'action':'assign','player_id':second})
     advance(session, 2)
     graph = capture_manager_graph(session)
-    assert graph['version'] == GRAPH_VERSION == 20
+    assert graph['version'] == GRAPH_VERSION == 21
     restored = restore_manager_graph(graph)
     info = scouting_read_model(restored)
     assert first in {r['player_id'] for r in info['reports']}
@@ -217,7 +217,7 @@ def test_sqlite_save_and_load_persist_real_scout_reports(starting, tmp_path):
     repository = SQLiteSaveRepository(tmp_path / 'career.sqlite3')
     save_manager_career(repository, slot_id='test-career', display_name='Test career',
                         session=session, expected_revision=0)
-    assert MANAGER_STATE_VERSION == 20
+    assert MANAGER_STATE_VERSION == 21
     restored = load_manager_career(repository, 'test-career').session
     assert pid in restored._world_squads.club_support[restored.home_club.id].scouting_reports
     assert any(m.source_key.startswith('professional-scout:report:') for m in restored.manager_inbox.messages)
@@ -239,7 +239,7 @@ def test_atomic_http_command_does_not_modify_session_on_bad_player(starting):
     with pytest.raises(ValueError):
         app.command('scouting.command', {'action': 'assign', 'player_id': 'missing-player'})
     assert len(scouting_read_model(runtime.session)['assignments']) == 1
-    assert before == 20
+    assert before == GRAPH_VERSION == 21
 
 
 def test_real_http_get_and_post_expose_scouts_without_masking_targets(starting):

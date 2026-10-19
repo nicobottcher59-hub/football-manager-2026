@@ -57,6 +57,17 @@ def record_season_statistics(world, fixture_id, result, lineups) -> bool:
             rating_total=stat.match_rating, clean_sheets=clean,
         )
         world._put(totals, stat.player_id, totals.get(stat.player_id, SeasonPlayerStatistics()).plus(one))
+    # A footballer may represent two different clubs during one season.
+    # Record only clubs for which an actual match appearance was stored.
+    if season not in registry.player_season_clubs:
+        world._put(registry.player_season_clubs, season, {})
+    affiliations = registry.player_season_clubs[season]
+    for stat in result.player_statistics:
+        if stat.minutes <= 0 or stat.club_id not in registry.clubs:
+            continue
+        previous = affiliations.get(stat.player_id, ())
+        if stat.club_id not in previous:
+            world._put(affiliations, stat.player_id, (*previous, stat.club_id))
     world._put(ledger.recorded_fixtures, token, True)
     return True
 

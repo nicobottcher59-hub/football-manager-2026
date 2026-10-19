@@ -26,7 +26,7 @@
   }
   function training(){
     const d=state;
-    const table=d.players.map(p=>`<tr><td><strong>${esc(p.name)}</strong>${p.injured?'<small class="cs-alert">Injured — no training</small>':''}</td><td>${esc(groups[p.group])}</td><td>${p.condition.toFixed(1)}%</td><td>${esc(modes[p.effective])}</td><td>${esc(p.individual_focus)}</td></tr>`).join('');
+    const table=d.players.map(p=>`<tr><td><button type="button" class="ch-link" data-career-type="player" data-career-id="${esc(p.id)}">${esc(p.name)}</button>${p.injured?'<small class="cs-alert">Injured — no training</small>':''}</td><td>${esc(groups[p.group])}</td><td>${p.condition.toFixed(1)}%</td><td>${esc(modes[p.effective])}</td><td>${esc(p.individual_focus)}</td></tr>`).join('');
     host.innerHTML=banner('Training centre','Set the three squad groups once, then let physical protection work automatically.')+
       panel('Training by squad group',`<div class="cs-controls">${Object.entries(groups).map(([group,label])=>`<label>${label}<select data-cs-group="${group}">${optionList(d.policy[group])}</select></label>`).join('')}</div>
         <p class="cs-muted">Squad groups reflect the current starting XI and bench. Individual development focuses remain in player profiles.</p>`)+
@@ -38,7 +38,7 @@
   }
   function medical(){
     const d=state;
-    const cards=d.cases.length?d.cases.map(p=>panel(esc(p.name),
+    const cards=d.cases.length?d.cases.map(p=>panel(`<button type="button" class="ch-link" data-career-type="player" data-career-id="${esc(p.id)}">${esc(p.name)}</button>`,
       `<div class="cs-med-details"><span>${esc(p.injury)}</span><strong>${p.days_left===null?'Recovery date not recorded':p.days_left+' days remaining'}</strong><small>Estimated return: ${esc(p.return_on||'Unknown')}</small></div>
        ${p.treatment?`<p class="cs-note">${esc(p.treatment)} treatment selected · ${esc(p.treatment_status)}</p>`:''}
        ${p.treatment_available?`<div class="cs-med-choice"><p>Player opinion: <strong>${esc(preference[p.preference])}</strong>. You can make one decision for this injury.</p><div class="cs-actions"><button type="button" data-cs-action="conservative" data-player="${esc(p.id)}">Conservative · standard return, no added risk</button><button type="button" class="cs-danger" data-cs-action="aggressive" data-player="${esc(p.id)}">Aggressive · earlier, ~${p.estimated_aggressive_risk_pct}% setback risk</button></div></div>`:''}`,'cs-med-case')).join(''):

@@ -25,3 +25,11 @@
 .ts212-development .ts22-chart-head{flex-wrap:wrap;gap:10px}.ts212-development-facts{display:flex;flex-wrap:wrap;gap:10px 18px;margin:10px 0}.ts212-development-facts span{display:grid;gap:4px}.ts212-development b{color:#b8ecd6}
 .ts212-development select{background:#12344c;color:#e2eef8;border:1px solid #38596c;border-radius:5px;padding:5px;margin:0 8px}
 .ts212-development [role=status]{display:block;margin:8px 0;color:#a9c3d6}.ts212-development table{width:100%;text-align:left;margin:8px 0;border-collapse:collapse}.ts212-development td,.ts212-development th{padding:5px;border-bottom:1px solid #24435b}.ts212-development details{margin:10px 0}.ts212-changes{line-height:1.8}
+
+/* TS-28.2 historical club navigation inside the standalone squad iframe. */
+.ts22-chart-head .ch-link{color:#6cd9ff;background:transparent;border:1px solid #386785;border-radius:6px;padding:6px 11px;cursor:pointer;font:inherit}.ts22-chart-head .ch-link:hover{background:#163951;color:#fff}
+
+/* TS-28.2.1: direct history shortcut for every current squad player. */
+.rt-history-shortcut{flex:none;width:24px;height:27px;padding:0;border:1px solid #285b7e;background:#0c2e47;color:#71d9ff;border-radius:5px;cursor:pointer;font:inherit;font-size:15px}
+.rt-history-shortcut:hover{background:#174562;color:#fff;border-color:#57c2eb}
+.rt-history-shortcut:focus-visible{outline:2px solid #42c9f6;outline-offset:2px}

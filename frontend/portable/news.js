@@ -27,7 +27,7 @@
         <button type="button" class="fm-news-close" aria-label="Close story">×</button></div>
       <h2 id="fm-news-dialog-title">${esc(item.title)}</h2><p>${esc(item.body)}</p>
       <div class="fm-news-dialog-actions"><button type="button" class="fm-news-close">Close</button>
-        ${item.route?'<button type="button" class="fm-news-go">'+(item.route==='Competitions'?'View competition':'Open Scouting')+' →</button>':''}</div></section>`;
+        ${item.player_id?'<button type="button" class="fm-news-player">Player history →</button>':''}${item.club_id?'<button type="button" class="fm-news-club">Club history →</button>':''}${item.competition_id?'<button type="button" class="fm-news-competition">Competition history →</button>':''}${item.route?'<button type="button" class="fm-news-go">'+(item.route==='Competitions'?'View competition':'Open Scouting')+' →</button>':''}</div></section>`;
     backdrop.addEventListener('click', event => { if(event.target === backdrop)closeDialog(); });
     backdrop.querySelectorAll('.fm-news-close').forEach(b=>b.addEventListener('click',closeDialog));
     backdrop.querySelector('.fm-news-go')?.addEventListener('click',()=>{
@@ -36,6 +36,9 @@
         window.FMNavigation?.competition(item.competition_id);
       } else if(item.route === 'Scouting') window.FMNavigation?.navigate('Scouting');
     });
+    for(const [cls,type,id] of [['fm-news-player','player',item.player_id],['fm-news-club','club',item.club_id],['fm-news-competition','competition',item.competition_id]]){
+      backdrop.querySelector('.'+cls)?.addEventListener('click',()=>{closeDialog();window.FMNavigation?.history(type,id);});
+    }
     document.body.append(backdrop);
     document.addEventListener('keydown', onEscape);
     backdrop.querySelector('.fm-news-close').focus();

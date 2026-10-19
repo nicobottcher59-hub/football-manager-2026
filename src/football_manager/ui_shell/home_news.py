@@ -57,11 +57,11 @@ def home_news_read_model(session, limit: int = MAX_STORIES) -> dict[str, Any]:
 
     def add(event_id: str, category: str, title: str, body: str, *,
             when: date | None, priority: int, competition_id: str | None = None,
-            club_id: str | None = None, season: str | None = None):
+            club_id: str | None = None, season: str | None = None, player_id: str | None = None):
         events.append({'id': event_id, 'category': category, 'title': title,
                        'body': body, 'date': when.isoformat() if when else None,
                        'season': season, 'priority': priority,
-                       'competition_id': competition_id, 'club_id': club_id,
+                       'competition_id': competition_id, 'club_id': club_id, 'player_id': player_id,
                        '_sort_on': when.isoformat() if when else (f'{int(season[:4])+1}-06-30' if season else ''),
                        'route': 'Competitions' if competition_id else 'Scouting' if category == 'transfer' else None})
 
@@ -132,7 +132,7 @@ def home_news_read_model(session, limit: int = MAX_STORIES) -> dict[str, Any]:
             f'{label} joins {buyer}',
             f'{seller} transferred {label.lower() if player is None else player} to {buyer} for GBP {fee:,} guaranteed.',
             when=when, priority=82 if involved else 72,
-            club_id=deal.buyer_id)
+            club_id=deal.buyer_id, player_id=deal.player_id)
 
     # Cup title dates are recovered from the final *played* competition result.
     # A champion ID alone is not used to guess an announcement date.
