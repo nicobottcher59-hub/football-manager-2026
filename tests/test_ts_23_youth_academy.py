@@ -119,7 +119,7 @@ def test_v9_save_upgrade_and_v10_roundtrip_do_not_modify_original_players(starti
     original={p.id:(p.identity.birth_date,p.attributes,p.development.potential)
               for c in session._world_squads.clubs.values() for p in c.squad.players}
     graph=capture_manager_graph(session)
-    assert graph['version']==GRAPH_VERSION==16
+    assert graph['version']==GRAPH_VERSION==17
     restored=restore_manager_graph(graph)
     assert restored._world_squads.youth is restored._world.football_world.youth
     assert restored._world_squads.youth.check_unique(restored._world_squads) is None

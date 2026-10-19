@@ -50,7 +50,7 @@ def offer_at_demand(s,deal):
 
 def test_v15_market_base_and_readonly_personal_quotes(starting):
     s=deepcopy(starting);r=s._world_squads
-    assert GRAPH_VERSION==16
+    assert GRAPH_VERSION==17
     t=cheapest_target(s);p=r.clubs[t['club_id']].squad.get(t['id'])
     d=make_agreement(s,p,t['club_id'],s.home_club.id,100_000)
     before=deepcopy(r.transfer_offers)

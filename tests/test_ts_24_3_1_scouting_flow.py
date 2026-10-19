@@ -44,7 +44,7 @@ def test_real_negotiation_history_is_visible_after_offer(world):
     assert discussion['history'][-1]['terms'] == discussion['terms']
     assert all('seller_minimum' not in event for event in discussion['history'])
     assert session._world_squads.clubs[player['club_id']].squad.contains(player['id'])
-    assert GRAPH_VERSION == 16
+    assert GRAPH_VERSION == 17
 
 
 def test_navigation_is_scouting_and_fullscreen_not_transfers_sidebar():
@@ -92,4 +92,4 @@ def test_existing_transfer_economics_and_save_schema_unchanged():
     val = assess_terms(session._world_squads,player,session.home_club.id,
                        TransferTerms(1_000_000),session.current_date)
     assert val['risk_adjusted_gbp'] == val['fixed_gbp'] == val['headline_gbp'] == 1_000_000
-    assert GRAPH_VERSION == 16
+    assert GRAPH_VERSION == 17

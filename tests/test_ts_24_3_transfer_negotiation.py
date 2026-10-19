@@ -45,7 +45,7 @@ def test_initial_transfer_state_and_no_mutations_from_read(starting):
         assert all(p['value_gbp']>0 for p in out['targets'])
         assert not any('potential' in p or 'pa' in p for p in out['targets'])
     assert before==(r.transfer_last_review_on,r.transfer_next_id,r.transfer_offers,r.club_finances)
-    assert GRAPH_VERSION==16
+    assert GRAPH_VERSION==17
     r.validate()
 
 
@@ -164,7 +164,7 @@ def test_transfer_state_roundtrip_and_v13_migration(starting):
     s=deepcopy(starting);p=candidate(s)
     negotiate(s,normal_offer(p,.92))
     graph=capture_manager_graph(s)
-    assert graph['version']==16
+    assert graph['version']==17
     loaded=restore_manager_graph(graph)
     assert loaded._world_squads.transfer_offers==s._world_squads.transfer_offers
     assert loaded._world_squads.transfer_next_id==2
@@ -226,7 +226,7 @@ def test_sqlite_full_career_preserves_transfer_talks(starting,tmp_path):
     repository=SQLiteSaveRepository(tmp_path/'transfer.sqlite3')
     save_manager_career(repository,slot_id='transfer',display_name='Transfer tests',session=s,expected_revision=0)
     loaded=load_manager_career(repository,'transfer').session
-    assert capture_manager_graph(loaded)['version']==16
+    assert capture_manager_graph(loaded)['version']==17
     assert loaded._world_squads.transfer_offers==s._world_squads.transfer_offers
     assert result['deal_id'] in loaded._world_squads.transfer_offers
     assert loaded._world_squads.club_finances==s._world_squads.club_finances

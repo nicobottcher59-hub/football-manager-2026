@@ -101,7 +101,7 @@ def test_sqlite_v16_preserves_ai_loans_and_real_parent_employer(baseline,tmp_pat
     assert deals
     # Refresh ephemeral next-opponent preview after market operations before saving.
     session._prepare_development_opponent()
-    assert set(vars(session))==_REQUIRED_FIELDS and MANAGER_STATE_VERSION==16
+    assert set(vars(session))==_REQUIRED_FIELDS and MANAGER_STATE_VERSION==17
     repo=SQLiteSaveRepository(tmp_path/'ts2412.sqlite3')
     save_manager_career(repo,slot_id='audit',display_name='Audit only',
                         expected_revision=0,session=session)

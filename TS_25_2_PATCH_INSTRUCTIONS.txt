@@ -1,0 +1,19 @@
+TS-25.2 - INBOX VIVO, CONVERSACIONES Y COMPROMISOS (parche incremental)
+Base requerida: TS-25.1 ya instalada en football-manager-2026.
+
+1. Cerrar el juego y respaldar las partidas SQLite y la carpeta actual.
+2. Extraer el ZIP TS-25.2 y copiar TODO SU CONTENIDO dentro de la raiz
+   de football-manager-2026 (donde esta INICIAR_INTERFAZ_WINDOWS.bat).
+3. Aceptar reemplazar los archivos existentes. No eliminar la carpeta .git.
+4. Opcional: desde la raiz ejecutar:
+      python tools/verify_ts252_interactions_package.py
+5. Iniciar el juego y abrir Inbox. Ver mensajes y conversar con los jugadores.
+
+GitHub Desktop, desde la rama que contiene TS-25.1:
+- Current branch > New branch: feat/ts-25-2-living-inbox
+- Summary: feat(manager): complete grounded inbox requests and player commitments
+- Description: TS-25.2 contextual discussions, player-initiated requests, verified promises, live squad/academy/transfer notifications and anti-spam balance. SQLite v17 unchanged.
+- Commit; luego Publish branch / Push origin.
+
+Nota: no hay convocatorias individuales de seleccion, porque el mundo aun no
+simula ese sistema. Ver docs/TS_25_2_LIVING_INBOX.md.

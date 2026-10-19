@@ -105,7 +105,7 @@ def test_old_v10_save_migrates_scouts_without_retroactive_charges(starting):
     session=deepcopy(starting)
     svc.youth_command(session,{'action':'hire_scout','offer_id':svc.scout_market(session._world_squads.youth)[0]['id']})
     graph=capture_manager_graph(session)
-    assert graph['version']==GRAPH_VERSION==16
+    assert graph['version']==GRAPH_VERSION==17
     previous=deepcopy(graph);previous['version']=10
     for node in previous['nodes']:
         if node.get('class')=='football_manager.domain.youth_academy:YouthSystem':

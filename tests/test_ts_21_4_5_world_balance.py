@@ -168,7 +168,7 @@ def test_actual_previous_v8_save_migration_preserves_all_original_players():
         graph=json.load(stream)
     with gzip.open(fixtures/'ts2145_manager_v8_facts.json.gz','rt',encoding='utf-8') as stream:
         facts=json.load(stream)
-    assert graph['version']==8 and GRAPH_VERSION == 16
+    assert graph['version']==8 and GRAPH_VERSION == 17
     restored = restore_manager_graph(graph)
     validate_manager_session(restored)
     registry = restored._world_squads
@@ -182,7 +182,7 @@ def test_actual_previous_v8_save_migration_preserves_all_original_players():
             assert old['potential']==p.development.potential
             assert old['club_id']==cid
         assert registry.development_environments[cid].source == PROXY_SOURCE
-    assert capture_manager_graph(restored)['version'] == 16
+    assert capture_manager_graph(restored)['version'] == 17
     assert restore_manager_graph(capture_manager_graph(restored))._world_squads == restored._world_squads
 
 

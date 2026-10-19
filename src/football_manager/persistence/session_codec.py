@@ -23,7 +23,7 @@ from football_manager.domain.world_runner import WorldSeasonRunner
 
 from .models import SaveIntegrityError, UnsupportedSaveVersionError
 
-GRAPH_VERSION = 16
+GRAPH_VERSION = 17
 # TS-24.13: a fully populated 92-club career already needs ~286k live
 # graph nodes after its first season (TS-24.12 rejected that save). Keep
 # the integrity limit finite but accommodate normal longitudinal growth.
@@ -65,6 +65,7 @@ _ALLOWED_MODULES = frozenset({
     'football_manager.domain.player_development',
     'football_manager.domain.player_aging',
     'football_manager.domain.dressing_room',
+    'football_manager.domain.manager_inbox',
     'football_manager.domain.player_state',
     'football_manager.domain.positional_familiarity',
     'football_manager.domain.season_cycle',
@@ -383,4 +384,7 @@ def restore_manager_graph(data: dict, *, migrate_world: bool = True) -> Developm
     if data['version'] < 14 and hasattr(session, '_world_squads'):
         from football_manager.services.transfer_negotiation import initialize_transfer_market
         initialize_transfer_market(session._world_squads, session.current_date)
+    if data['version'] < 17 and 'manager_inbox' not in root:
+        from football_manager.services.manager_inbox import create_manager_inbox
+        session.manager_inbox = create_manager_inbox(session)
     return session

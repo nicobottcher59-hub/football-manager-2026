@@ -404,7 +404,7 @@ def test_v7_roundtrip_preserves_exposure_focus_and_shared_players(played,tmp_pat
     repo=SQLiteSaveRepository(tmp_path/'v7.sqlite3')
     save_manager_career(repo,slot_id='v7',display_name='Synthetic',session=s,expected_revision=0)
     loaded=load_manager_career(repo,'v7').session
-    assert GRAPH_VERSION==16
+    assert GRAPH_VERSION==17
     assert loaded._world_squads==s._world_squads
     assert loaded.home_club.squad.get(p.id) is loaded._world_squads.clubs[s.home_club.id].squad.get(p.id)
     assert loaded.home_lineup.starting_players[0] is loaded.home_club.squad.get(loaded.home_lineup.starting_players[0].id)

@@ -67,24 +67,36 @@ class GameApplication:
             runtime.match_kits = {'home': 'default', 'away': 'default'}
             return {'loaded': True, 'slot': asdict(loaded.metadata),
                     'date': loaded.session.current_date.isoformat()}
+        if action == 'inbox.command':
+            from football_manager.services.manager_inbox import inbox_command
+            tentative = deepcopy(runtime.session)
+            result = inbox_command(tentative, command)
+            runtime.session = tentative
+            return result
         if action == 'career.balance':
             from football_manager.services.opening_balance import apply_opening_balance
             if runtime.match_commands:
                 raise ValueError('Finish or reset pending match-only tactics before rebalancing')
             tentative = deepcopy(runtime.session)
             result = apply_opening_balance(tentative, command.get('confirmation'))
+            from football_manager.services.manager_inbox import synchronize_manager_inbox
+            synchronize_manager_inbox(tentative)
             runtime.session = tentative
             return result
         if action == 'loans.command':
             from football_manager.services.loan_market import loan_command
             tentative = deepcopy(runtime.session)
             result = loan_command(tentative, command)
+            from football_manager.services.manager_inbox import synchronize_manager_inbox
+            synchronize_manager_inbox(tentative)
             runtime.session = tentative
             return result
         if action == 'transfers.command':
             from football_manager.services.transfer_negotiation import negotiate
             tentative = deepcopy(runtime.session)
             result = negotiate(tentative, command)
+            from football_manager.services.manager_inbox import synchronize_manager_inbox
+            synchronize_manager_inbox(tentative)
             runtime.session = tentative
             return result
         if action == 'finances.command':
@@ -93,12 +105,16 @@ class GameApplication:
                 raise ValueError('Unsupported financial operation')
             tentative = deepcopy(runtime.session)
             result = renew_contract(tentative,command)
+            from football_manager.services.manager_inbox import synchronize_manager_inbox
+            synchronize_manager_inbox(tentative)
             runtime.session = tentative
             return result
         if action == 'youth.command':
             from football_manager.services.youth_academy import youth_command
             tentative = deepcopy(runtime.session)
             result = youth_command(tentative,command)
+            from football_manager.services.manager_inbox import synchronize_manager_inbox
+            synchronize_manager_inbox(tentative)
             runtime.session = tentative
             return result
         if action == 'development.focus':
@@ -133,6 +149,8 @@ class GameApplication:
                 result = self.simulate_until_fn(tentative, self.validate_target(command))
             else:
                 raise ValueError('unsupported progression command')
+            from football_manager.services.manager_inbox import synchronize_manager_inbox
+            synchronize_manager_inbox(tentative)
             runtime.session = tentative
             return result
         raise ValueError('unsupported application command')
@@ -195,6 +213,8 @@ class GameApplication:
             temp.home_lineup, temp.home_tactic = baseline_lineup, baseline_tactic
             temp.tactical_studio = baseline_studio
             temp._sync_effective_tactic_familiarity(home=True)
+            from football_manager.services.manager_inbox import synchronize_manager_inbox
+            synchronize_manager_inbox(temp)
             runtime.session = temp  # Atomic in-memory replacement on successful completion
             runtime.last_match_summary = summary
             runtime.match_commands = []

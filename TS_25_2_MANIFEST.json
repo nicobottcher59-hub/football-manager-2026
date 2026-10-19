@@ -1,0 +1,24 @@
+{
+  "version": "TS-25.2",
+  "title": "Living inbox, actionable player requests and bounded commitments",
+  "base": "TS-25.1",
+  "incremental": true,
+  "save_graph_version": 17,
+  "old_save_graph_version_supported": 16,
+  "finance_model_unchanged": true,
+  "transfer_market_unchanged": true,
+  "autonomous_retirements_unchanged": true,
+  "national_callups_implemented": false,
+  "long_horizon_20_year_validation_completed": false,
+  "sha256": {
+    "TS_25_2_PATCH_INSTRUCTIONS.txt": "88bbf3625454cb6dd4c345422421386c274f135bc0e1b7e0e4e27290a503003f",
+    "TS_25_2_TEST_REPORT.md": "e7a9d9a6bccd78176081edff66d968b2355f5d515957df7151b043789e33c8dc",
+    "docs/TS_25_2_LIVING_INBOX.md": "46b734f566042d8f9e232f9b0c611bf0dd7c589848ca0d554b32fd7996968fae",
+    "frontend/portable/inbox.css": "6dbc12df6f73a72ce8a18fb9a3efda49ef70490c2ef2b893b4c8481d78a4d151",
+    "frontend/portable/inbox.js": "7ae5acd84321f7e00cb2f33f775d7119a951a65d9d7de3233ff18c5fc1104220",
+    "src/football_manager/domain/manager_inbox.py": "24bae7d155202f9e2028457acc90f11911fc6d44cd8ce7f16fe37e30d4518d8d",
+    "src/football_manager/services/manager_inbox.py": "79283a98c691e3b6eb199fcc1bfd7737635d6f87c6877cec8463e1a749f76122",
+    "tests/test_ts_25_2_manager_interactions.py": "24e410700e594ae9c57e715ee6cb2efa70f3a7272b8c38ae150bc08a709fb366",
+    "tools/verify_ts252_interactions_package.py": "8c6db86b62a7f309f5e592a2c62b888c142fe75ee3c9dec1d71fb039a1ccd16c"
+  }
+}

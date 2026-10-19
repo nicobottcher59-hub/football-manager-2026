@@ -1,0 +1,32 @@
+/* TS-25 persistent inbox & manager conversations */
+.fm-inbox-screen{max-width:1230px;margin:0 auto;padding:22px 18px 42px;color:var(--text-primary,#e8edef)}
+.mi-header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin:0 0 20px}
+.mi-header h2{font-size:30px;margin:6px 0}.mi-header p{opacity:.7;max-width:720px}
+.mi-eyebrow{font-size:11px;letter-spacing:.10em;text-transform:uppercase;opacity:.65}
+.mi-pill{padding:9px 15px;border:1px solid #607883;border-radius:22px;white-space:nowrap;font-size:13px}
+.mi-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:12px}
+.mi-toolbar label{display:flex;align-items:center;gap:9px;font-size:13px}
+.mi-toolbar select,.mi-editor select{background:#162730;color:#eef7f6;border:1px solid #47636a;padding:10px;border-radius:7px;max-width:100%}
+.mi-talk-open,.mi-confirm,.mi-reply{background:#238a65;color:white;border:0;border-radius:7px;padding:11px 16px;cursor:pointer}
+.mi-grid{display:grid;grid-template-columns:minmax(260px,1fr) minmax(300px,1.1fr);gap:14px;min-height:410px}
+.mi-list,.mi-detail,.mi-editor{background:#11232c;border:1px solid #38505a;border-radius:12px;padding:15px;overflow:auto}
+.mi-list{max-height:650px}.mi-item{display:flex;flex-direction:column;width:100%;text-align:left;border:1px solid #293e48;background:#172c36;color:#e7eff0;padding:13px;border-radius:8px;margin-bottom:8px;cursor:pointer}
+.mi-item:hover,.mi-item.mi-selected{border-color:#41a986}.mi-item.mi-unread{border-left:4px solid #46a983}.mi-item-top{display:flex;gap:8px;justify-content:space-between}
+.mi-item-top strong{font-size:14px}.mi-item-top small,.mi-item-meta{font-size:11px;opacity:.7}.mi-item-copy{font-size:12px;opacity:.79;margin:6px 0;line-height:1.45}
+.mi-item-meta{display:flex;gap:10px}.mi-item-meta em{color:#a8e1bf;font-style:normal}
+.mi-detail h3{font-size:24px;margin:15px 0}.mi-detail p{line-height:1.65;opacity:.85;white-space:pre-wrap}.mi-detail-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:25px}
+.mi-detail-actions button,.mi-editor-close{cursor:pointer;border:1px solid #466971;border-radius:7px;background:#25444e;color:#f0f8f8;padding:10px 12px}
+.mi-editor{margin-top:15px;padding:20px}.mi-editor[hidden]{display:none}.mi-editor-top{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.mi-editor-controls{display:flex;gap:15px;flex-wrap:wrap;margin:18px 0}.mi-editor-controls label{display:flex;flex-direction:column;gap:8px;font-size:13px;min-width:260px;flex:1}
+.mi-player-info{font-size:13px;line-height:1.6;margin-bottom:15px;opacity:.85}.mi-promise{display:flex;gap:9px;align-items:center;font-size:13px;margin:14px 0}.mi-promise[hidden]{display:none}
+.mi-editor-result{font-size:13px;opacity:.9;margin-top:10px}.mi-empty,.mi-error,.mi-footnote{font-size:13px;line-height:1.6;opacity:.7;padding:20px}.mi-footnote{padding:12px 2px}
+.mi-news-card{min-height:115px;background:#172c36;border:1px solid #314954}
+@media(max-width:780px){.mi-grid{grid-template-columns:1fr}.mi-list{max-height:350px}.mi-header,.mi-toolbar{flex-direction:column;align-items:stretch}}
+
+/* TS-25.2: requested conversations, commitments and inbox actions */
+.mi-decline,.mi-resolve{background:transparent;border:1px solid #82969c;color:#d4e4e7;border-radius:7px;padding:11px 14px;cursor:pointer}
+.mi-decline:hover,.mi-resolve:hover{border-color:#e4bfa8;color:#fff}
+.mi-deadline,.mi-promise-note{font-size:12px;opacity:.75;line-height:1.45;margin:4px 0}
+.mi-detail-actions{flex-wrap:wrap}
+.mi-promise{display:flex;align-items:center;gap:8px;padding-top:8px}
+.mi-promise[hidden],.mi-promise-note[hidden]{display:none}

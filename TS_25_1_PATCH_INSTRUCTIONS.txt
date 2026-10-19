@@ -1,0 +1,18 @@
+TS-25.1 - INBOX REAL Y CONVERSACIONES (parche incremental)
+Base requerida: Football Manager TS-24.13
+
+1. Hacer copia de seguridad de la carpeta del juego y de tus partidas SQLite.
+2. Cerrar el juego.
+3. Extraer este ZIP y copiar EL CONTENIDO directamente dentro de la raiz de football-manager-2026, donde esta INICIAR_INTERFAZ_WINDOWS.bat.
+4. Aceptar reemplazar los archivos existentes. No eliminar ni copiar carpetas .git; el ZIP no las contiene.
+5. Opcional: ejecutar python tools/verify_ts251_inbox_package.py desde la raiz.
+6. Iniciar el juego y abrir la seccion Inbox. Desde Dressing Room se puede hablar con un jugador.
+7. Guardar la partida: los archivos antiguos formato v16 se cargan en v17, pero los nuevos guardados v17 requieren este parche o posterior.
+
+GitHub Desktop (una vez verificado):
+- New branch desde tu rama actual TS-24.13: feat/ts-25-1-inbox-player-interactions
+- Summary: feat(manager): add persistent inbox and bounded player conversations
+- Description: TS-25.1 live inbox, genuine career notifications, contextual player talks, anti-spam safeguards, playing-time promises and SQLite v17 save migration.
+- Commit y Publish branch.
+
+No estan implementadas todavia las convocatorias individuales de selecciones ni todas las conversaciones avanzadas previstas para TS-25. Ver docs/TS_25_1_INBOX_CONVERSACIONES.md.

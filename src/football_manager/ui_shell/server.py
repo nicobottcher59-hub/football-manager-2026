@@ -46,6 +46,7 @@ POST_COMMANDS = {
     '/api/finances': 'finances.command',
     '/api/transfers': 'transfers.command',
     '/api/loans': 'loans.command',
+    '/api/inbox': 'inbox.command',
 }
 
 
@@ -228,6 +229,11 @@ class FootballUIHandler(BaseHTTPRequestHandler):
                     self._json(400, {'error': str(exc)})
                     return
                 self._json(200, payload)
+            return
+        if path == '/api/inbox':
+            from football_manager.services.manager_inbox import inbox_read_model
+            with self.runtime.lock:
+                self._json(200, inbox_read_model(self.runtime.session))
             return
         if path == "/api/dressing-room":
             with self.runtime.lock:

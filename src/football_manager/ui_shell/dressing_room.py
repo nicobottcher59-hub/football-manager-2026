@@ -114,6 +114,6 @@ def dressing_room_read_model(session) -> dict:
             'Relationships progress with actual days and played matches, never with page visits or lineup experiments.',
             'The hierarchy is reviewed weekly. Age alone does not make a player a leader.',
             'Social effects use the existing morale channel only, bounded to +/-2 on its 0-100 scale.',
-            'No meetings, compulsory decisions or manual relationship management.',
+            'The automatic social graph remains independent. Optional manager conversations are available in Inbox.',
         ],
     }

@@ -197,7 +197,7 @@ def test_save_current_version_roundtrip_has_exact_stats_and_deterministic_contin
     session = deepcopy(played[0]); repo = SQLiteSaveRepository(tmp_path/'save.sqlite3')
     save_manager_career(repo, slot_id='ts22', display_name='TS22', session=session, expected_revision=0)
     saved = repo.load('ts22').document
-    assert next(s.version for s in saved.sections if s.name=='manager_state') == GRAPH_VERSION == 16
+    assert next(s.version for s in saved.sections if s.name=='manager_state') == GRAPH_VERSION == 17
     loaded = load_manager_career(repo,'ts22').session
     assert loaded._world_squads.statistics == session._world_squads.statistics
     assert loaded._world_squads.balance_adjustments == session._world_squads.balance_adjustments

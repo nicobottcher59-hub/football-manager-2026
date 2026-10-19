@@ -71,6 +71,8 @@ class SimulationJob:
         working = self.session
         try:
             output = simulate_until(working, self.target, on_day=self._day_finished)
+            from football_manager.services.manager_inbox import synchronize_manager_inbox
+            synchronize_manager_inbox(working)
             # Publish world and final job status in the same critical section:
             # no request can observe the new world while its job is 'running'.
             # Lock order: runtime then job. The polling endpoint releases

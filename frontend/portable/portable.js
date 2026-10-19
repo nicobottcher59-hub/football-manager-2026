@@ -209,6 +209,7 @@
       }
       renderProgression(payload.state);
       if(dashboard.style.display!=='none')refreshHome();
+      window.FMInbox?.refresh();
       if(calendarPanel.style.display!=='none')window.FMCalendar?.refresh();
       if(dressingPanel.style.display!=='none')window.FMDressingRoom?.refresh();
     if(youthPanel.style.display!=='none')window.FMYouthAcademy?.refresh();
@@ -262,6 +263,9 @@
   const transfersPanel=document.createElement('section');
   transfersPanel.className='fm-transfers-screen';transfersPanel.style.display='none';
   main.insertBefore(transfersPanel,footer);
+  const inboxPanel=document.createElement('section');
+  inboxPanel.className='fm-inbox-screen';inboxPanel.style.display='none';
+  main.insertBefore(inboxPanel,footer);
   const financesPanel=document.createElement('section');
   financesPanel.className='fm-finances-screen';financesPanel.style.display='none';
   main.insertBefore(financesPanel,footer);
@@ -325,6 +329,7 @@
     const squad = page === 'Squad' || page === 'Tactics';
     const calendar = page === 'Calendar';
     const dressingRoom = page === 'Dressing Room';
+    const inbox = page === 'Inbox';
     const youthAcademy = page === 'Youth Academy';
     const finances = page === 'Finances';
     const transfers = page === 'Scouting' || negotiationPage;
@@ -338,8 +343,10 @@
       else button.removeAttribute('aria-current');
     });
     dashboard.style.display = home ? '' : 'none';
-    placeholder.style.display = !home && !squad && !calendar && !competitionPage && !dressingRoom && !youthAcademy && !finances && !transfers && !matchPage && !clubPage ? 'flex' : 'none';
+    placeholder.style.display = !home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !youthAcademy && !finances && !transfers && !matchPage && !clubPage ? 'flex' : 'none';
     dressingPanel.style.display = dressingRoom ? 'block' : 'none';
+    inboxPanel.style.display = inbox ? 'block' : 'none';
+    if(inbox)window.FMInbox?.mount(inboxPanel,extra.player||null);
     youthPanel.style.display = youthAcademy ? 'block' : 'none';
     transfersPanel.style.display = transfers ? 'block' : 'none';
     if(transfers)window.FMTransfers?.mount(transfersPanel,{view:negotiationPage?'negotiation':'scouting',
@@ -365,6 +372,7 @@
       ? 'Welcome to Northbridge FC. An overview of your club, upcoming fixtures and key information.'
       : squad ? (page==='Squad' ? 'Sortable roster, full player attributes, recorded season statistics and player management.' : 'Formation, individual roles and team tactics backed by the Python development session.')
       : clubPage ? 'Persistent squad, player profiles and recorded club information. Read-only.'
+      : inbox ? 'Live club messages, scouting reports, medical news and player conversations.'
       : youthAcademy ? 'U15 preview, automated U17/U21 leagues and quarterly scouting.'
       : negotiationPage ? 'Dedicated negotiation: guaranteed fees, optional clauses and club replies.'
       : transfers ? 'Search professional players and manage your club negotiations.'
@@ -374,7 +382,7 @@
       : competitions ? 'Your club competitions, standings, fixtures and confirmed cup brackets.'
       : otherLeagues ? 'Browse other leagues and cups by continent, country and division.'
       : 'This section is planned for a future update.';
-    if (!home && !squad && !calendar && !competitionPage && !dressingRoom && !youthAcademy && !finances && !transfers) $('h2', placeholder).textContent = page;
+    if (!home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !youthAcademy && !finances && !transfers) $('h2', placeholder).textContent = page;
     window.scrollTo({top:0, behavior:'auto'});
   }
   window.addEventListener('message', event => {
@@ -392,6 +400,7 @@
     if(event.origin!==window.location.origin || event.source!==matchFrame.contentWindow || event.data?.type!=='fm-match-world-changed')return;
     refreshProgression();
     if(dashboard.style.display!=='none')refreshHome();
+    window.FMInbox?.refresh();
     if(calendarPanel.style.display!=='none')window.FMCalendar?.refresh();
     if(dressingPanel.style.display!=='none')window.FMDressingRoom?.refresh();
     if(youthPanel.style.display!=='none')window.FMYouthAcademy?.refresh();
@@ -491,58 +500,24 @@
   refreshHome();
   refreshProgression();
   const activityPanel = $('#activity-panel');
-  const originalInboxHtml = activityPanel.innerHTML;
   const inboxButton = $('#activity-inbox');
   const storiesButton = $('#activity-stories');
-  let activityView = 'inbox';
-  function renderActivity(data, view) {
-    activityView = view;
-    inboxButton.classList.toggle('active', view === 'inbox');
-    storiesButton.classList.toggle('active', view === 'stories');
-    inboxButton.setAttribute('aria-selected', String(view === 'inbox'));
-    storiesButton.setAttribute('aria-selected', String(view === 'stories'));
-    activityPanel.setAttribute('aria-labelledby', view === 'inbox' ? 'activity-inbox' : 'activity-stories');
-    if (view === 'inbox') {
-      activityPanel.innerHTML = originalInboxHtml;
-      $$('.notification-row', activityPanel).forEach((button,i) => {
-        const item = data.notifications[i];
-        if (item) button.addEventListener('click', () => showModal({title:item.title,detail:item.details,category:`Inbox • ${item.time} • Demo`}));
-      });
-    } else {
-      activityPanel.innerHTML = '';
-      data.stories.forEach(story => {
-        const button = document.createElement('button');
-        button.className = 'notification-row';
-        button.type = 'button';
-        button.innerHTML = `<span class="notification-icon purple">${svg('news',20)}</span><span class="notification-copy"><strong></strong><span></span></span>${svg('chevron',14)}`;
-        $('strong', button).textContent = story.title;
-        $('.notification-copy span', button).textContent = story.preview;
-        button.addEventListener('click', () => showModal({title:story.title,detail:story.preview,category:story.category}));
-        activityPanel.append(button);
-      });
-    }
+  function activityTab(view){
+    const live = view === 'inbox';
+    inboxButton.classList.toggle('active',live);
+    storiesButton.classList.toggle('active',!live);
+    inboxButton.setAttribute('aria-selected',String(live));
+    storiesButton.setAttribute('aria-selected',String(!live));
+    activityPanel.setAttribute('aria-labelledby',live?'activity-inbox':'activity-stories');
+    if(live)window.FMInbox?.renderHome(activityPanel);
+    else window.FMInbox?.renderNews(activityPanel);
   }
-
-  try {
-    const data = window.FM_PORTABLE_DATA;
-    if (!data || !Array.isArray(data.competitions)) throw new Error('Missing bundled demo data');
-    const items = data.competitions;
-    inboxButton.addEventListener('click', () => renderActivity(data,'inbox'));
-    storiesButton.addEventListener('click', () => renderActivity(data,'stories'));
-    renderActivity(data,'inbox');
-    $('.inbox-card .text-action').addEventListener('click', () => showModal({
-      title:activityView === 'inbox'?'Inbox & Notifications':'Club News', category:'UI preview',
-      detail:'This is an interactive UI-1 preview. Real notifications and generated news will be integrated through the Python event system in a later phase.'
-    }));
-    $('.club-news .text-action').addEventListener('click', () => renderActivity(data,'stories'));
-    $$('.story-card').forEach((button,i) => {
-      const story = data.stories[i];
-      if (story) button.addEventListener('click', () => showModal({title:story.title,detail:story.preview,category:`${story.category} • ${story.time} • Demo story`}));
-    });
-  } catch (error) {
-    console.error('Could not initialize portable demo controls:',error);
-    showModal({title:'Error loading demo information',detail:'The portable demo files may be incomplete. Re-apply the ZIP from the game folder.',category:'Portable UI'});
-  }
+  inboxButton.addEventListener('click',()=>activityTab('inbox'));
+  storiesButton.addEventListener('click',()=>activityTab('stories'));
+  $('.inbox-card .text-action').addEventListener('click',()=>navigate('Inbox'));
+  $('.club-news .text-action').addEventListener('click',()=>navigate('Inbox'));
+  activityTab('inbox');
+  window.FMInbox?.refresh();
 
   window.FMNavigation={
     navigate,club:(id,player)=>navigate('Club Profile',false,{club:id,player}),

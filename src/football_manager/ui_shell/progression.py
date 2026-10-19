@@ -113,6 +113,8 @@ def _move_day(session: DevelopmentSession) -> int:
     if session._active_match is not None and session._active_match.match_date <= new_day:
         session._prepare_development_opponent()
     session.update_dressing_room()
+    from football_manager.services.manager_inbox import synchronize_manager_inbox
+    synchronize_manager_inbox(session)
     session.match_played = False
     return result.matches_played
 
@@ -187,6 +189,8 @@ def simulate_until(
     before = set(session._world.results) if on_day is not None else None
     while True:
         background += _finish_day(session, auto_results)
+        from football_manager.services.manager_inbox import synchronize_manager_inbox
+        synchronize_manager_inbox(session)
         if on_day is not None:
             # A single day may include dozens of background fixtures and one
             # or more managed matches. Every emitted result exists in the world

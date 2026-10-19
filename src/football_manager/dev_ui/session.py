@@ -332,6 +332,8 @@ class DevelopmentSession:
         self.match_played = False
         from football_manager.services.dressing_room import create_dressing_room
         self.dressing_room = create_dressing_room(self.home_club.id, self.home_club.squad.players, self.current_date)
+        from football_manager.services.manager_inbox import create_manager_inbox
+        self.manager_inbox = create_manager_inbox(self)
 
     def update_dressing_room(self) -> None:
         """Advance with the career clock; not called by UI getters/lineup edits."""

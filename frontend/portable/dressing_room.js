@@ -54,7 +54,8 @@
         return q?`<button type="button" data-dr-player="${esc(q.id)}"><span>${esc(q.name)}</span><small>${esc(l.label)}</small></button>`:'';
       }).join('')||'<p class="dr-muted">Connections are still developing.</p>'}</div>
       <h4>What explains the current picture?</h4><div class="dr-reasons">${p.reasons.map(x=>`<p>${esc(x)}</p>`).join('')}</div>
-      <p class="dr-caption">Observed since ${esc(p.observed_since)}. Personality values stay hidden; no OVR or ability change here.</p>`;
+      <p class="dr-caption">Observed since ${esc(p.observed_since)}. Personality values stay hidden; no OVR or ability change here.</p>
+      <button type="button" class="mi-talk-open" data-dr-talk="${esc(p.id)}">Talk to this player</button>`;
   }
   function render() {
     if (!host||!model) return;
@@ -77,6 +78,7 @@
       if(el.tagName.toLowerCase()==='g') el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();}});
     });
     host.querySelector('[data-dr-refresh]')?.addEventListener('click',refresh);
+    host.querySelector('[data-dr-talk]')?.addEventListener('click',()=>window.FMNavigation?.navigate('Inbox',false,{player:selected}));
   }
   async function refresh() {
     if(!host) return;

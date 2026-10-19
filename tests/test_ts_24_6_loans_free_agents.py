@@ -53,7 +53,7 @@ def proposal(p,parent,borrower,months=6,share=50,playing='rotation',option=None)
 
 def test_new_career_has_no_loans_or_free_players(initial):
     r=initial._world_squads
-    assert GRAPH_VERSION==16
+    assert GRAPH_VERSION==17
     assert r.loans=={} and r.free_agents=={} and r.loan_next_id==1
     assert len(r.contracts)>5000
     before=(len(r.contracts),dict(r.club_finances),dict(r.loans))

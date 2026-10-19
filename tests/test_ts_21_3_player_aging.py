@@ -283,7 +283,7 @@ def test_session_has_2024_aging_profiles_and_valid_state(session):
 def test_full_graph_roundtrip_preserves_age_and_medical_data(session):
     s=deepcopy(session);p=next(p for p in s.home_club.squad.players if p.state.injury is None)
     register_medical_absence(s._world,s.home_club.id,p.id,s.current_date,episode_id='saved',duration_days=70,label='Test')
-    graph=capture_manager_graph(s);assert graph['version']==16
+    graph=capture_manager_graph(s);assert graph['version']==17
     loaded=restore_manager_graph(graph);validate_manager_session(loaded)
     assert loaded._world_squads==s._world_squads
     assert loaded.home_lineup.starters[0].player is loaded.home_club.squad.get(loaded.home_lineup.starters[0].player.id)
