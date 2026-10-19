@@ -295,6 +295,33 @@ def install_football_world(session, *, migration: bool = False) -> None:
             player.state.dressing_room_morale = offsets[player.id]
 
 
+
+def _refresh_inactive_club_recovery(registry, on_date: date) -> None:
+    """Keep physical clocks current for clubs outside professional fixtures.
+
+    A non-league club can spend many years without a registered senior match,
+    but its academy continues developing genuine young professionals. A stale
+    ``last_recovery`` date would then precede a graduate's actual birthday,
+    failing world validation and making any subsequent return to the pyramid
+    attempt decades of redundant day-by-day fatigue recovery.
+    """
+    for club_id, identity in registry.identities.items():
+        if identity.tier != 0:
+            continue
+        previous = registry.last_recovery[club_id]
+        if previous > on_date:
+            raise ValueError(f'inactive club recovery clock is ahead of season: {club_id}')
+        elapsed = (on_date - previous).days
+        if not elapsed:
+            continue
+        # Thirty match-free days safely restore even very tired players.
+        # This records elapsed off-season time, not simulated matches, signings
+        # or fabricated footballers; avoid looping through decades of days.
+        for player in registry.clubs[club_id].squad.players:
+            recover_player_between_matches(player, days=min(elapsed, 30))
+        registry.last_recovery[club_id] = on_date
+
+
 def bind_football_world(session) -> None:
     registry = session._world_squads
     world = session._world
@@ -329,6 +356,10 @@ def bind_football_world(session) -> None:
         initialize_youth(registry, session.current_date, session.home_club.id)
     if changing_season:
         from football_manager.services.player_aging import finalize_season_retirements, repair_managed_unavailable
+        # While clubs are in non-league they may not play any senior fixture
+        # for years. Refresh their physical clock BEFORE graduating younger
+        # academy players and before changing who is currently active.
+        _refresh_inactive_club_recovery(registry, start)
         # Align divisions with new membership BEFORE drawing youth fixtures.
         for cid, record in registry.identities.items():
             record.tier = participants.get(cid, 0)

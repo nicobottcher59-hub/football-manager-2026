@@ -61,11 +61,29 @@ def background_score_only():
 
     def light(self, fixture_id):
         registry = self.football_world
+        fixture = self.fixtures[fixture_id]
         self.football_world = None
         try:
-            return original(self, fixture_id)
+            outcome = original(self, fixture_id)
         finally:
             self.football_world = registry
+        # The lightweight scorer intentionally skips detailed injuries,
+        # minutes and physical recovery. But its virtual match STILL advances
+        # the clubs' calendar. Without this test-only clock update, a club that
+        # stays in the professional pyramid for 19 seasons retains its 2026
+        # last_recovery date, and a genuinely developed academy player born
+        # after 2026 triggers a false "born after club registration" error.
+        # The normal detailed match engine already advances this clock.
+        if registry is not None and fixture.match_date is not None:
+            for club_id in (fixture.home_club_id, fixture.away_club_id):
+                if club_id in registry.last_recovery:
+                    previous = registry.last_recovery[club_id]
+                    # Some background fixtures are processed after another
+                    # competition has already moved this club's clock ahead.
+                    # Preserve the latest known date: the scorer must NEVER
+                    # rewind a real registration/recovery clock.
+                    registry.last_recovery[club_id] = max(previous, fixture.match_date)
+        return outcome
 
     WorldSeasonRunner.simulate_fixture = light
     try:

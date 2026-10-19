@@ -1,0 +1,40 @@
+{
+  "version": "TS-24.13",
+  "base": "TS-24.12",
+  "sqlite_migration_needed": false,
+  "finance_model_unchanged": true,
+  "unit_tests": "59 integrated previously; 4 targeted after final test-harness adjustment",
+  "long_horizon_completed_seasons": 18,
+  "long_horizon_target_seasons": 20,
+  "long_horizon_fully_validated": false,
+  "long_horizon_limitation": "Full 20-year accelerated audit not rerun after diagnostic-clock fix",
+  "validation_by_seed": {
+    "6606": "18/20 partial",
+    "7707": "10/10 and 5/5",
+    "8808": "5/5"
+  },
+  "files": 20,
+  "sha256": {
+    "src/football_manager/services/youth_academy.py": "ff7ab42646c96ddae61ca6841af12e349280ed946af7b939c9ed96addccf6dc6",
+    "src/football_manager/services/world_squads.py": "05bbba57e071c147262039e3a6e0eafb94948951ea85fa0b9c594ebbb2e449b5",
+    "src/football_manager/persistence/session_codec.py": "9ca0428c3593358976f36393d83fbbd6b5a8ab6d7e9840c8fb7700ae51d5b03f",
+    "tools/stress_ts248_long_horizon.py": "4701c65068e2b32988d2af033dfdcd1ad0d2523ea4e60394386478c3ab348519",
+    "tests/test_ts_24_13_world_balance.py": "8a330b5c85f39ae951a29904463f842ade2b3cae689433ad43726668cf0e9597",
+    "tests/test_ts_23_youth_academy.py": "76ff30d50ced97c5b9725d5f19b1d5e255f80d95f78dbe6416bc5811d7a27a02",
+    "tools/run_ts2413_validation.py": "56672119cee4c280bca37a87c1514012f27d1759336f3bacee9861f42637c069",
+    "tools/summarize_ts2413_balance.py": "b3256c4ca1cb5634bac9e6c6c41269be331323996463e291d16a440e14d7aac3",
+    "tools/verify_ts2413_world_balance_package.py": "a57f0760701203829374132a1ca5f19d81a15d5c09bef53bec9839ebbefc4fc4",
+    "tools/smoke_ts2413_longitudinal_save.py": "ca1b8669ab9926345155876cfac96775a2bc02cc23ef509b5a427159e3e74f75",
+    "docs/TS_24_13_REEQUILIBRIO_DEPORTIVO.md": "abc0413f2d46365ac658a7d96e6a55658b8d7e01ebfd8a5d69b8ee090c8629da",
+    "TS_24_13_PATCH_INSTRUCTIONS.txt": "58439e09eacf9e703745925711946593878ec943608c16f59d16e50f8c7fc39b",
+    "TS_24_13_TEST_REPORT.md": "225dc40206806ec54819a2bb754f895417a6193829dc1a2a40faca87576ee0c6",
+    "TS_24_13_VALIDATION_REPORT.md": "de9e5feb49b6b7b2bee0bc0f6fde04ff3dbb8965b350302da3b12a6ea3a5398d",
+    "reports/ts2413_seed6606_20y.json": "32047079ad395c33e9ed8a697d0ec7f1356223052f978300d6c17f0c3d8db62c",
+    "reports/ts2413_seed7707_10y.json": "e0edac29f1342b779e563bc778d34e40882c24b9a6b3da025d5665e56e97a208",
+    "reports/ts2413_seed7707_5y.json": "59459056ef14bd922a0c141d53677b68ce603de4f85a62c35b8f8b2bb2a02b31",
+    "reports/ts2413_seed8808_5y.json": "d2edfcc61f5c71d75cb9d57e3a53ded7508120f903babfbb6fa6a4318593e970",
+    "reports/ts2413_detailed_matches.json": "4aac9d4bc2254888a33dd62708434536a4f21f6b042e70733b7979df9b4dde13",
+    "reports/ts2413_save_smoke.json": "df272bc8f765aab635731d56c65f0d5ea22f2723a412720f8addbcf162da17f4"
+  },
+  "save_graph_version": 16
+}

@@ -24,7 +24,11 @@ from football_manager.domain.world_runner import WorldSeasonRunner
 from .models import SaveIntegrityError, UnsupportedSaveVersionError
 
 GRAPH_VERSION = 16
-MAX_NODES = 250_000  # Still bounds the active graph and legacy archives.
+# TS-24.13: a fully populated 92-club career already needs ~286k live
+# graph nodes after its first season (TS-24.12 rejected that save). Keep
+# the integrity limit finite but accommodate normal longitudinal growth.
+# The graph schema/version and all archive decompression guards are unchanged.
+MAX_NODES = 1_000_000
 MAX_ARCHIVED_WORLD_BYTES = 64 * 1024 * 1024
 
 # Only installed, audited game model packages may appear in a save. Never

@@ -145,7 +145,7 @@ def test_readonly_queries_do_not_change_scouters_or_youth_seed(starting):
     fixture_count=sum(f.home_goals is not None for f in session._world_squads.youth.fixtures.values())
     for _ in range(5):
         youth_read_model(session)
-    assert before==14
+    assert before == GRAPH_VERSION  # Match the current save codec, not TS-23
     assert sum(f.home_goals is not None for f in session._world_squads.youth.fixtures.values())==fixture_count
     assert not session._world_squads.youth.candidates
 

@@ -500,6 +500,13 @@ def _academy_promotions(registry, academy: YouthAcademy, on_date: date,
         while promoted < 8 and len(club.squad) < 29:
             plan = squad_plan(club,tactic)
             vacancies = [need for need in plan['vacancies'] if need['layer'] <= 2]
+            # Preserve a natural third goalkeeper where a genuine U21 prospect
+            # has matured. Existing financial distress must not prevent a club
+            # from developing its OWN players. This is optional squad depth,
+            # not a synthetic transfer or a guarantee of XI coverage.
+            natural_keepers = sum(p.primary_position is Position.GK for p in club.squad.players)
+            if natural_keepers == 2:
+                vacancies.append({'layer':3, 'slot_id':'third-keeper', 'position':'GK'})
             # Recruit into tomorrow's vacancy *before* a veteran retires.
             # Only actual requested/deferred retirements qualify, not an
             # age-based arbitrary purge. This also prevents holding 45-year-
@@ -523,6 +530,14 @@ def _academy_promotions(registry, academy: YouthAcademy, on_date: date,
                             and ((candidate.primary_position is Position.GK) ==
                                  (need['position'] == 'GK'))), None)
                 ready = candidate.overall_rating >= youth_ready_ovr
+                # Never stockpile a fourth goalkeeper. An optional third
+                # needs a credible U21 profile, not a newly created reserve.
+                if candidate.primary_position is Position.GK and natural_keepers >= 3:
+                    continue
+                if (candidate.primary_position is Position.GK and natural_keepers == 2
+                        and (fit is None or age < 20 or
+                             candidate.overall_rating < max(25, youth_ready_ovr - 4))):
+                    continue
                 # A developing U19/U20 is promoted early only for a tactical
                 # shortage, or after reaching 20 if the club lacks U23 players.
                 if age < 21 and not ready:
@@ -537,9 +552,10 @@ def _academy_promotions(registry, academy: YouthAcademy, on_date: date,
                     continue
                 # Prioritize starter/backup coverage before age or raw OVR;
                 # flexible players compete for ONE slot, then recompute plan.
-                priority = (120 if fit and fit.get('is_retirement_cover') else
-                            300 if fit and fit['layer']==1 else
-                            180 if fit else 0)
+                priority = (300 if fit and fit['layer']==1 else
+                            210 if fit and fit.get('is_retirement_cover') else
+                            180 if fit and fit['layer']==2 else
+                            60 if fit and fit['layer']==3 else 0)
                 rank = (priority + (15 if age>=21 else 0)
                         + candidate.overall_rating*.40
                         + min(age,21)*.05)
@@ -590,10 +606,28 @@ def _academy_promotions(registry, academy: YouthAcademy, on_date: date,
         room = max(0.0, preview.potential_budget-preview.initial_ovr)
         gain = min(room, max(0.0, rng.gauss(1.0,.45)))
         academy.u15[pid] = replace(preview,initial_ovr=round(preview.initial_ovr+gain,2))
-    # Coherent missing positions: 20 pre-academy players, never 20 strikers.
+    # Keep the normal annual intake size but recruit a *cohort*, not the
+    # permanently truncated tail of POSITION_POOL. The previous tail-index
+    # logic eventually stopped bringing in ANY U15 goalkeepers whenever
+    # mature players vacated fewer than 18 places. Across a long career this
+    # destroyed the only renewable source of home-grown keepers.
+    #
+    # At least two of twenty U15 places are earmarked for goalkeeper
+    # development where available, like the opening academy cohort. These
+    # are genuine age-14 academy entrants who still must progress through
+    # U17/U21 and earn a senior contract; never emergency XI replacements.
     starting_count = len(academy.u15)
-    for idx in range(MAX_U15-starting_count):
-        role = POSITION_POOL[(starting_count+idx)%len(POSITION_POOL)]
+    incoming_count = MAX_U15 - starting_count
+    needed_keep = max(0, 2 - sum(p.position is Position.GK for p in academy.u15.values()))
+    keeper_places = min(needed_keep, incoming_count)
+    # Distribute outfield recruiting across years and clubs without changing
+    # the total number of real academy entrants or creating hidden identities.
+    rotation = stable_seed(registry.seed, academy.club_id, on_date.year, 'academy-cohort') % len(POSITION_POOL)
+    outfield_positions = [p for p in POSITION_POOL if p is not Position.GK]
+    rotation %= len(outfield_positions)
+    for idx in range(incoming_count):
+        role = (Position.GK if idx < keeper_places else
+                outfield_positions[(rotation + idx - keeper_places) % len(outfield_positions)])
         key = f'local-{on_date.year}-{idx}'
         rng = _rng(registry.seed,academy.club_id,key)
         preview = _talent(registry.seed,academy.club_id,key,

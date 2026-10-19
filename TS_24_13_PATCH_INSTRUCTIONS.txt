@@ -1,0 +1,50 @@
+TS-24.13 - REEQUILIBRIO DEPORTIVO (CANTERA + ARQUEROS IA)
+
+BASE OBLIGATORIA: TS-24.12 instalada y funcionando.
+PARTIDAS: SQLite v16, sin migracion ni eliminacion de saves.
+
+INSTALACION
+1. Cerrar el juego y hacer copia de la carpeta y los saves en OneDrive.
+2. Extraer el ZIP incremental sobre la RAIZ del proyecto, donde esta
+   INICIAR_INTERFAZ_WINDOWS.bat, aceptando reemplazo de archivos.
+3. Abrir una consola en la carpeta del juego y ejecutar:
+   python tools/verify_ts2413_world_balance_package.py
+   python -m pytest tests/test_ts_24_13_world_balance.py
+   Para comprobar opcionalmente un guardado tras una temporada completa:
+   python tools/smoke_ts2413_longitudinal_save.py
+4. Abrir el juego, refrescar navegador con Ctrl+F5 si la UI estaba abierta.
+
+QUE CAMBIA
+- Se reponen arqueros U15 naturales sin aumentar los 20 lugares de cantera.
+- Las posiciones de campo se distribuyen durante las distintas temporadas.
+- La IA puede promover un tercer GK U21 real con un nivel adecuado, sin
+  convertir la caja negativa en un bloqueo automatico de la formacion.
+- Los clubes fuera de las ligas reanudan su reloj de recuperacion al
+  comenzar otra temporada; evita registros de juveniles aparentemente
+  nacidos despues de la ultima fecha fisica del club.
+- Guardado SQLite: tope de nodos ampliado, mismo formato v16 sin migracion.
+- No hay jugadores ficticios de emergencia, regalos de dinero o prohibicion
+  de retiros autonomos.
+
+QUE NO CAMBIA
+- Economia, fichajes y cesiones; riesgo de mal rendimiento y quiebra.
+- Manejo manual de la cantera del club controlado por el usuario.
+- Filosofias individuales de clubes reales, pospuestas.
+
+REPRODUCCION DE AUDITORIA
+  python tools/run_ts2413_validation.py --mode quick
+  python tools/run_ts2413_validation.py --mode extended
+  python tools/summarize_ts2413_balance.py --output TS_24_13_VALIDACION_LOCAL.md
+
+IMPORTANTE
+- Las simulaciones largas usan resultados senior acelerados, NO todos
+  los minutos/lesiones del partido 3D/2D o del simulador detallado.
+- Ejecutar la auditoria local con rutas diferentes de los JSON del ZIP
+  para no invalidar los checksums del paquete.
+- Se acepta que existan perdidas, equipos ricos y equipos inferiores.
+- Consultar TS_24_13_VALIDATION_REPORT.md para resultados y limites reales.
+
+GITHUB DESKTOP
+RAMA: feat/ts-24-13-world-squad-balance
+SUMMARY: fix(career): sustain natural goalkeeper pipeline and AI squad depth
+DESCRIPTION: TS-24.13 - 92-club 5/10/20y squad validation, real youth goalkeeper succession, inactive-club clock recovery and SQLite save capacity; finances and retirement autonomy unchanged.
