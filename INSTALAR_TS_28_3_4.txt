@@ -1,0 +1,29 @@
+TS-28.3 + TS-28.4 | PARCHE INCREMENTAL (NO ES EL JUEGO ENTERO)
+
+REQUISITO: TS-28.2.1 instalado y funcionando.
+
+1. Cerrá el juego.
+2. Guardá una copia de tu proyecto y, especialmente, de tus partidas SQLite.
+3. Descomprimí este ZIP.
+4. Copiá las carpetas y archivos extraídos sobre la RAÍZ de tu juego,
+   respetando la estructura de frontend/, src/, tests/, docs/ y tools/.
+5. Si Windows pregunta, aceptá REEMPLAZAR los archivos existentes.
+6. Ejecutá INICIAR_INTERFAZ_WINDOWS.bat y, si estaba abierto el navegador,
+   forzá una recarga con Ctrl+F5.
+
+No hay que eliminar ningún archivo. No se incluyen guardados ni .git.
+La primera vez que guardes desde el juego, la partida pasa del esquema v21
+al v22. Podrás abrir partidas anteriores; no se inventan premios de años previos.
+
+CONTENIDO:
+- Gráficos históricos y cifras de rendimiento de los jugadores.
+- Premios y registros reales al cerrar temporadas, premios de ligas y
+  competiciones europeas y Balón de Oro del universo simulado.
+- Club Info con identidad, plantilla, presupuesto, personal, datos disponibles
+  de entrenamiento, récords y archivos históricos.
+- Las instalaciones gestionables se mantienen para TS-29.
+
+GITHUB DESKTOP
+Branch: feat/ts-28-3-4-awards-club-info
+Summary: feat: TS-28.3/28.4 career awards, progression and club info
+Description: Add persistent OVR/attribute checkpoints, verified seasonal league and continental awards, a simulated-world Golden Ball and all-time records. Complete read-only Club Info with identity, finances, leading players, staff limits and institutional data provenance. Integrate results with linked career profiles and Home news; support v21-to-v22 save migration without fabricating earlier history.

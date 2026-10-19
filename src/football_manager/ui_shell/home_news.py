@@ -171,6 +171,29 @@ def home_news_read_model(session, limit: int = MAX_STORIES) -> dict[str, Any]:
                 when=None, priority=92 if champion == managed else 88,
                 season=report.season_label, club_id=champion)
 
+    # TS-28.3: only immutable *certified* individual awards, from completed
+    # seasons. They have a season, not a fictional calendar announcement day.
+    for report in session.archived_season_reports[-1:]:
+        awards = registry.individual_awards.get(report.season_label, ())
+        for award in awards:
+            if award.category not in ('world_player', 'player'):
+                continue
+            if (award.category == 'player' and
+                    award.competition_id not in ('dev-premier', 'dev-championship',
+                                                  'champions-league', 'europa-league')):
+                continue
+            player = _player_name(registry, award.player_id, award.club_id or '')
+            if not player:
+                continue
+            name = ('Golden Ball (simulated world)' if award.category == 'world_player'
+                    else _competition(world, award.competition_id) + ' Player of the Season')
+            add(f'award:{award.season}:{award.competition_id}:{award.category}', 'award',
+                f'{player} earns {name}',
+                f'{player} received the {name} award for {award.season} based on recorded match performances.',
+                when=None, priority=94 if award.category == 'world_player' else 74,
+                season=award.season, competition_id=(award.competition_id if award.competition_id != 'world' else None),
+                club_id=award.club_id, player_id=award.player_id)
+
     # Within one day titles and confirmed transfers outrank routine results;
     # at most two background match reports per day keep the front page legible.
     events.sort(key=lambda e: (e['_sort_on'], e['priority'], e['id']), reverse=True)

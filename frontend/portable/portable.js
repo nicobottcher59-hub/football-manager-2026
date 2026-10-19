@@ -405,7 +405,7 @@
       ? 'Live results, fixtures and verified football news from your career.'
       : squad ? (page==='Squad' ? 'Sortable roster, full player attributes, recorded season statistics and player management.' : 'Formation, individual roles and team tactics backed by the Python development session.')
       : careerPage ? 'Permanent player, club and competition archive. Verified career facts only.'
-      : clubInfoPage ? 'Recorded club history. Facilities and institution details arrive in TS-28.4.'
+      : clubInfoPage ? 'Club identity, current squad, staffing capacity, records and verified historical results.'
       : clubPage ? 'Persistent squad, player profiles and recorded club information. Read-only.'
       : clubSupport ? (page==='Staff'?'Hire coaching, medical and fitness specialists.':page==='Training'?'Configure squad groups and automatic physical protection.':'Injury timelines, recovery treatments and player opinions.')
       : inbox ? 'Live club messages, scouting reports, medical news and player conversations.'

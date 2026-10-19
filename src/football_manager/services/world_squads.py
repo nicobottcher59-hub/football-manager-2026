@@ -277,6 +277,8 @@ def create_football_world(session, *, migration: bool = False) -> FootballWorld:
     initialize_transfer_market(registry, session.current_date)
     from football_manager.services.club_support import initialize_club_support
     initialize_club_support(registry, session.current_date)
+    from football_manager.services.career_recognition import record_rating_snapshots
+    record_rating_snapshots(registry, session.current_date)
     registry.validate(tiers)
     return registry
 
@@ -384,6 +386,8 @@ def bind_football_world(session) -> None:
         if changing_season:
             rebase_finances_for_new_season(registry,start)
     registry.adopt_season(world.season_label, participants)
+    from football_manager.services.career_recognition import record_rating_snapshots
+    record_rating_snapshots(registry, start)
     registry.statistics.start_season(world.season_label, start, complete=True)
     world.football_world = registry
 

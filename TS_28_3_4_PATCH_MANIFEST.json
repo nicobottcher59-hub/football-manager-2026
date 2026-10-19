@@ -1,0 +1,125 @@
+{
+  "version": "TS-28.3 + TS-28.4",
+  "install_over": "TS-28.2.1",
+  "type": "incremental_overlay",
+  "instructions": "Extract in project root and replace existing files. Back up saves beforehand.",
+  "save_format": "v22; migrates from v21",
+  "files": [
+    {
+      "path": "INSTALAR_TS_28_3_4.txt",
+      "operation": "new",
+      "sha256": "da5f61e1bce0663bd6280dba05dde094a39584d51a8360dd0e9e69870f511b2f"
+    },
+    {
+      "path": "TS_28_3_4_TEST_REPORT.md",
+      "operation": "new",
+      "sha256": "59bd838dc9d7192679f59518b849817bc69b6d4c83351d9f5452e76c9c84e8aa"
+    },
+    {
+      "path": "docs/TS_28_3_4_STATISTICS_AWARDS_CLUB_INFO.md",
+      "operation": "new",
+      "sha256": "c9f834423d630bc229106788639b696cc38a4e4126c62f88fa112d9d1894acbc"
+    },
+    {
+      "path": "frontend/portable/history.css",
+      "operation": "modified",
+      "sha256": "d71540dd11f4a2f068cb5ca070fb8b05ecb4d8d65ce77f725564c7c4adf28649"
+    },
+    {
+      "path": "frontend/portable/history.js",
+      "operation": "modified",
+      "sha256": "b110d004115f2807c18ed32ad4b43017f8c7dec1239c2c25eb8a4433ebebb530"
+    },
+    {
+      "path": "frontend/portable/news.css",
+      "operation": "modified",
+      "sha256": "c7e679b87d17a86c015646cb2cff7ddcb3a62d6a213df1688361e449564e7aad"
+    },
+    {
+      "path": "frontend/portable/news.js",
+      "operation": "modified",
+      "sha256": "cef80b59b74cc449a88e3fa6728f85f27b520cea4276712be57f10ead654c9a0"
+    },
+    {
+      "path": "frontend/portable/portable.js",
+      "operation": "modified",
+      "sha256": "04049dc9c04812887974d9037f4d8829d5b6c69bfc8dd1cca16012ef54723e25"
+    },
+    {
+      "path": "src/football_manager/dev_ui/session.py",
+      "operation": "modified",
+      "sha256": "bef296a118dd396ebf34804e31e11ce53d2c442a95e0c76e6904eec31f9ed104"
+    },
+    {
+      "path": "src/football_manager/domain/career_recognition.py",
+      "operation": "new",
+      "sha256": "caec1726094ac85aaa72e76a0ec254828f2ea5cd5d2667efeedcef55e47b7504"
+    },
+    {
+      "path": "src/football_manager/domain/football_world.py",
+      "operation": "modified",
+      "sha256": "6e30db1bcaea696602329bca22707dceb3e669d9c0263da8147978ffcf71138d"
+    },
+    {
+      "path": "src/football_manager/persistence/manager_career.py",
+      "operation": "modified",
+      "sha256": "9183a0e50e9a9a098662d53b2582169d132294e283408f7f67a6660551d4e3be"
+    },
+    {
+      "path": "src/football_manager/persistence/session_codec.py",
+      "operation": "modified",
+      "sha256": "62cacc7ae174e34b63415aee27b5ed7233dab768bc7987ca6e55d46029d3fcbe"
+    },
+    {
+      "path": "src/football_manager/services/career_recognition.py",
+      "operation": "new",
+      "sha256": "4a052243914b07909bee1fbf803878a15339262dd14896f58c1719e26bba1479"
+    },
+    {
+      "path": "src/football_manager/services/world_squads.py",
+      "operation": "modified",
+      "sha256": "6c1ee95eb8e152842d212be14ebfc7e7f299bf36e63e8c214d7ac6815c2f8f25"
+    },
+    {
+      "path": "src/football_manager/ui_shell/career_history.py",
+      "operation": "modified",
+      "sha256": "bfe483bd5c2af2ac7a5fd9d382c6ea9de7b12c1517c1451136ba5912127a0a28"
+    },
+    {
+      "path": "src/football_manager/ui_shell/home_news.py",
+      "operation": "modified",
+      "sha256": "840dedb761e0cf44fe05d7e8c48495381d616661fa1a03cb0addd69645192c15"
+    },
+    {
+      "path": "tests/test_ts_26_1_professional_scouts.py",
+      "operation": "modified",
+      "sha256": "98b43c128e7ad51f35c2febd1f48bde9a93bd9b4e84f1f385ab6f62fac76e78a"
+    },
+    {
+      "path": "tests/test_ts_27_match_preparation.py",
+      "operation": "modified",
+      "sha256": "f7a6e61ca0a27dd892328de70519f0557e20984549f276ad1a2e7e7304df4400"
+    },
+    {
+      "path": "tests/test_ts_28_1_living_news.py",
+      "operation": "modified",
+      "sha256": "0d563bda69d91a5402224ced68e6a19a47d02f679e21047a92d6e7e187260732"
+    },
+    {
+      "path": "tests/test_ts_28_2_career_history.py",
+      "operation": "modified",
+      "sha256": "d4aec21ef1dc77461e860438203172e4db7b1a643e2bec63e4894d76ace970c1"
+    },
+    {
+      "path": "tests/test_ts_28_3_4_awards_club_info.py",
+      "operation": "new",
+      "sha256": "8e69ed4f812b7f2b91d8a281edea05a4e1361f88c4627830a282821f2375d5b5"
+    },
+    {
+      "path": "tools/ts2834_render_check.py",
+      "operation": "new",
+      "sha256": "e53c9367d8d2edb2cd2b2800f868c565af574eda3a845efef4e1693813e85832"
+    }
+  ],
+  "files_to_delete": []
+}

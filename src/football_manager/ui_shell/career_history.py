@@ -7,6 +7,8 @@ missing historical link is labelled unknown rather than inferred.
 from __future__ import annotations
 
 from football_manager.services.season_statistics import player_statistics
+from football_manager.services.career_recognition import AWARD_LABELS, INDICATOR_LABELS, indicators_for
+from football_manager.domain.season_statistics import SeasonPlayerStatistics
 
 
 def _name(session, club_id):
@@ -91,6 +93,113 @@ def _fixture_rows(session, world, club_id=None, competition_id=None, *, limit=80
             'next_offset': offset+limit if len(selected) > offset+limit else None}
 
 
+def _award_view(session, award):
+    try:
+        player = _player(session, award.player_id)[0]
+        name = player.full_name
+    except KeyError:
+        name = 'Player unavailable'
+    return {'season': award.season, 'category': award.category,
+            'label': AWARD_LABELS.get(award.category, award.category),
+            'competition_id': award.competition_id,
+            'competition': ('Simulated World' if award.competition_id == 'world'
+                            else _competition_name(session._world, award.competition_id)),
+            'player_id': award.player_id, 'player': name, 'club_id': award.club_id,
+            'club': _name(session, award.club_id) if award.club_id else None}
+
+
+def _all_awards(session):
+    registry = session._world_squads
+    return [_award_view(session, award)
+            for season in sorted(registry.individual_awards, reverse=True)
+            for award in registry.individual_awards[season]]
+
+
+def _player_progression(registry, player, status, on_date):
+    from football_manager.services.career_recognition import indicators_for
+    points = [{'season': point.season, 'date': point.on_date.isoformat(),
+               'overall': point.overall, 'indicators': dict(zip(INDICATOR_LABELS, point.indicators)), 'is_current': False}
+              for point in registry.rating_history.get(player.id, ())]
+    # The current point is an observation, not a fictitious historic checkpoint.
+    if status != 'retired' and (not points or points[-1]['date'] < on_date.isoformat()):
+        points.append({'season': registry.season_label, 'date': on_date.isoformat(),
+                       'overall': round(player.overall_rating, 2),
+                       'indicators': dict(indicators_for(player)), 'is_current': True})
+    return points
+
+
+def _records(session, *, club_id=None, competition_id=None):
+    registry = session._world_squads
+    aggregate = {}
+    for season, competitions in registry.statistics.seasons.items():
+        for cid, players in competitions.items():
+            if competition_id and cid != competition_id:
+                continue
+            for pid, stat in players.items():
+                if club_id is not None:
+                    # The season ledger doesn't split a multi-club year into
+                    # per-club rows. Such totals must not be assigned wholesale.
+                    if registry.player_season_clubs.get(season, {}).get(pid) != (club_id,):
+                        continue
+                aggregate[pid] = aggregate.get(pid, SeasonPlayerStatistics()).plus(stat)
+    categories = (('goals','goals'), ('assists','assists'), ('appearances','appearances'))
+    result = {}
+    for label, attr in categories:
+        ordered = sorted(((pid, getattr(stat, attr)) for pid, stat in aggregate.items()
+                          if getattr(stat, attr)), key=lambda item:(-item[1],item[0]))[:5]
+        rows = []
+        for pid, val in ordered:
+            try: name = _player(session, pid)[0].full_name
+            except KeyError: continue
+            rows.append({'player_id':pid, 'player':name,'value':val})
+        result[label] = rows
+    return result
+
+
+def _club_institution(session, club_id):
+    reg = session._world_squads
+    club = reg.clubs.get(club_id)
+    if club is None:
+        return {'registered': False, 'note': 'This visitor has no persistent club profile.'}
+    ident = reg.identities.get(club_id)
+    department = reg.club_support.get(club_id)
+    finances = reg.club_finances.get(club_id)
+    env = reg.development_environments.get(club_id)
+    league = next((cid for cid, e in session._world.leagues.items()
+                   if club_id in e.participant_club_ids), None)
+    player_rows = sorted(club.squad.players, key=lambda p:(-p.overall_rating, p.id))[:7]
+    staff = []
+    if department:
+        for role in ('coach','fitness','medic','scout'):
+            members = [x for x in department.members.values()
+                       if x.role == role and x.contract_until >= session.current_date]
+            staff.append({'role':role, 'count':len(members), 'capacity':department.capacity[role],
+                          'average_quality':round(sum(x.quality for x in members)/len(members),1) if members else None})
+    return {'registered':True, 'country':club.country,
+            'city':getattr(club,'city',None), 'stadium':getattr(club,'stadium',None),
+            'stadium_capacity':getattr(club,'capacity',None),
+            'founded':getattr(club,'founded',None),
+            'current_tier':ident.tier if ident else None,
+            'initial_tier':ident.initial_tier if ident else None,
+            'playing_style':ident.style_key if ident else None,
+            'league_id':league,
+            'league':_competition_name(session._world,league) if league else None,
+            'team_strength':session._world.strengths.get(club_id),
+            'finance':({'cash_gbp':finances.cash_gbp,
+                        'transfer_budget_gbp':finances.transfer_budget_gbp,
+                        'wage_budget_weekly_gbp':finances.wage_budget_weekly_gbp}
+                       if finances else None),
+            'training_environment':({'quality':env.training_quality, 'coaching':env.coaching_quality,
+                                     'source':env.source} if env else None),
+            'facilities':({'source':department.capacity_source,
+                           'staffing_slots':staff} if department else None),
+            'top_players':[{'id':p.id,'name':p.full_name,'position':p.primary_position.value,
+                            'overall':round(p.overall_rating,1)} for p in player_rows],
+            'note': ('This data pack has no verified stadium, city or foundation dates for most fictional clubs. '
+                     'Staffing capacities are provisional; facility construction is planned for TS-29. '
+                     'Team strength is a simulator rating, not a historical reputation score.')}
+
+
 def player_career_read_model(session, player_id):
     registry = session._world_squads
     player, current_club, status = _player(session, player_id)
@@ -124,6 +233,8 @@ def player_career_read_model(session, player_id):
                 'club_id': club, 'club': _name(session, club)}
                for season, competition, club in registry.player_honours.get(player_id, ())]
     return {'source': 'verified-career-ledgers', 'type': 'player', 'id': player_id,
+            'progression': _player_progression(registry, player, status, session.current_date),
+            'awards': [x for x in _all_awards(session) if x['player_id'] == player_id],
             'name': player.full_name, 'status': status,
             'retired_on': (player.aging.retired_on.isoformat() if player.aging and player.aging.retired_on else None),
             'current_club_id': current_club, 'current_club': _name(session, current_club) if current_club else None,
@@ -189,6 +300,9 @@ def club_career_read_model(session, club_id, *, season=None, offset=0):
         except KeyError:
             row['player_name'] = 'Player (profile unavailable)'
     return {'source': 'verified-career-ledgers', 'type': 'club', 'id': club_id,
+            'institution': _club_institution(session,club_id),
+            'records': _records(session,club_id=club_id),
+            'awards': [x for x in _all_awards(session) if x['club_id'] == club_id],
             'name': _name(session, club_id), 'season': selected, 'seasons': rows,
             'trophies': titles, 'transfers': transfers[:80], 'retired_players': retired[:80],
             'fixtures': matches,
@@ -227,6 +341,9 @@ def competition_career_read_model(session, competition_id, *, season=None, offse
                   'club': _name(session, reports[label].champions[competition_id])}
                  for label in available if label in reports and competition_id in reports[label].champions]
     return {'source': 'verified-career-ledgers', 'type': 'competition', 'id': competition_id,
+            'records': _records(session,competition_id=competition_id),
+            'awards': [x for x in _all_awards(session)
+                       if x['competition_id'] == competition_id and x['season'] == chosen],
             'name': _competition_name(world, competition_id), 'season': chosen,
             'available_seasons': available, 'season_complete': chosen in reports,
             'champion_id': champion, 'champion': _name(session, champion) if champion else None,

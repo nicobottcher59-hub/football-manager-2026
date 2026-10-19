@@ -17,3 +17,11 @@
 .ch-pager button{border:1px solid #345c75;border-radius:6px;padding:7px 10px}.ch-pager button:disabled{opacity:.36;cursor:default}
 .ch-loading{padding:50px;text-align:center;color:#b0cbdc}
 @media(max-width:700px){.ch-hero{padding:19px}.ch-hero h2{font-size:21px;max-width:65%}.ch-back{right:13px;top:13px}.ch-card{padding:12px}.ch-card-head{align-items:flex-start;flex-direction:column;gap:6px}}
+
+/* TS-28.3/28.4: development chart, factual club facts and operational details. */
+.ch-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:0 0 8px}
+.ch-fact{padding:12px 14px;background:#102f47;border:1px solid #254a61;border-radius:8px;min-width:0;display:flex;flex-direction:column;gap:7px}
+.ch-fact small{font-size:11px;color:#88b5cc}.ch-fact strong{font-size:14px;color:#eef9ff;overflow-wrap:anywhere}
+.ch-graph-wrap{overflow:auto;background:#0b2337;border:1px solid #244963;border-radius:9px;padding:12px;margin:0 0 15px}
+.ch-graph{display:block;width:100%;min-width:350px;max-height:290px}
+@media(max-width:700px){.ch-facts{grid-template-columns:repeat(2,minmax(0,1fr))}.ch-fact{padding:10px}}

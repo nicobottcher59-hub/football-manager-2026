@@ -4,7 +4,7 @@
 (() => {
   'use strict';
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const labels = {result:'Match result',transfer:'Confirmed transfer',title:'Trophy winner'};
+  const labels = {result:'Match result',transfer:'Confirmed transfer',title:'Trophy winner',award:'Season award'};
   let stories = [], status = 'loading', serial = 0, expanded = false;
   const panel = () => document.getElementById('activity-panel');
   const grid = () => document.querySelector('.club-news .story-grid');

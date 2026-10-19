@@ -2167,7 +2167,10 @@ class DevelopmentSession:
     def begin_next_season(self) -> SeasonReport:
         if not self.season_finished:
             raise ValueError("finish all matches before beginning the next season")
+        from football_manager.services.career_recognition import record_rating_snapshots, award_season
+        completed_world = self._world
         report = self._career.begin_next_season()
+        record_rating_snapshots(self._world_squads, self.current_date, final=True)
         # A title belongs to players still registered with the champion when
         # the completed season is certified, never to guessed past rosters.
         registry = self._world_squads
@@ -2180,6 +2183,7 @@ class DevelopmentSession:
                 award = (report.season_label, competition_id, club_id)
                 if award not in existing:
                     registry.player_honours[player.id] = (*existing, award)
+        award_season(registry, completed_world, report, as_of=self.current_date)
         self._adopt_career_world()
         # Recover over the offseason, without resetting identities or lineups.
         for player in self.home_club.squad.players:

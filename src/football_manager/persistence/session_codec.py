@@ -23,7 +23,7 @@ from football_manager.domain.world_runner import WorldSeasonRunner
 
 from .models import SaveIntegrityError, UnsupportedSaveVersionError
 
-GRAPH_VERSION = 21
+GRAPH_VERSION = 22
 # TS-24.13: a fully populated 92-club career already needs ~286k live
 # graph nodes after its first season (TS-24.12 rejected that save). Keep
 # the integrity limit finite but accommodate normal longitudinal growth.
@@ -67,6 +67,7 @@ _ALLOWED_MODULES = frozenset({
     'football_manager.domain.dressing_room',
     'football_manager.domain.manager_inbox',
     'football_manager.domain.club_support',
+    'football_manager.domain.career_recognition',
     'football_manager.domain.player_state',
     'football_manager.domain.positional_familiarity',
     'football_manager.domain.season_cycle',
@@ -316,6 +317,8 @@ def restore_manager_graph(data: dict, *, migrate_world: bool = True) -> Developm
                         defaults.update(club_support={})
                     if data['version'] < 21 and node.get('class') == 'football_manager.domain.football_world:FootballWorld':
                         defaults.update(player_season_clubs={}, player_honours={})
+                    if data['version'] < 22 and node.get('class') == 'football_manager.domain.football_world:FootballWorld':
+                        defaults.update(rating_history={}, individual_awards={})
                     if data['version'] < 19 and node.get('class') == 'football_manager.domain.club_support:ClubSupport':
                         defaults.update(scouting_assignments={}, scouting_reports={})
                     if set(values) - allowed or missing - set(defaults):
@@ -403,4 +406,7 @@ def restore_manager_graph(data: dict, *, migrate_world: bool = True) -> Developm
     if data['version'] < 20 and 'set_piece_orders' not in root:
         from football_manager.services.match_preparation import empty_orders
         session.set_piece_orders = empty_orders()
+    if data['version'] < 22 and hasattr(session, '_world_squads'):
+        from football_manager.services.career_recognition import record_rating_snapshots
+        record_rating_snapshots(session._world_squads, session.current_date)
     return session

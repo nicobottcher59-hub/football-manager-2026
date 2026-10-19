@@ -23,6 +23,7 @@ from .club_economy import ClubFinances, PlayerContract
 from .transfer_negotiation import TransferNegotiation
 from .loan_market import LoanAgreement, FreeAgent
 from .club_support import ClubSupport
+from .career_recognition import RatingSnapshot, IndividualAward
 
 
 @dataclass(slots=True)
@@ -78,6 +79,9 @@ class FootballWorld:
     player_season_clubs: dict[str, dict[str, tuple[str, ...]]] = field(default_factory=dict)
     # Trophies awarded to actual registered players at the confirmed season boundary.
     player_honours: dict[str, tuple[tuple[str, str, str], ...]] = field(default_factory=dict)
+    # TS-28.3: actual-season OVR/indicator snapshots and immutable individual prizes.
+    rating_history: dict[str, tuple[RatingSnapshot, ...]] = field(default_factory=dict)
+    individual_awards: dict[str, tuple[IndividualAward, ...]] = field(default_factory=dict)
     processed_fixtures: dict[str, bool] = field(default_factory=dict)
     tracked_from: date | None = None
     generator_version: int = 1
@@ -212,6 +216,29 @@ class FootballWorld:
                 not isinstance(item, tuple) or len(item) != 3 or item[2] not in self.clubs
                 for item in awards):
                 raise ValueError('invalid historical player honour')
+        if not isinstance(self.rating_history, dict) or not isinstance(self.individual_awards, dict):
+            raise ValueError('invalid career recognition ledgers')
+        for pid, snapshots in self.rating_history.items():
+            if not isinstance(pid, str) or not isinstance(snapshots, tuple) or len(snapshots) > 80:
+                raise ValueError('invalid player rating history')
+            for i, item in enumerate(snapshots):
+                if not isinstance(item, RatingSnapshot):
+                    raise ValueError('invalid player rating snapshot')
+                item.validate()
+                if i and item.on_date <= snapshots[i-1].on_date:
+                    raise ValueError('rating history must be chronological')
+        for season, awards in self.individual_awards.items():
+            if not isinstance(season, str) or not isinstance(awards, tuple) or len(awards) > 220:
+                raise ValueError('invalid season awards')
+            seen = set()
+            for award in awards:
+                if not isinstance(award, IndividualAward) or award.season != season:
+                    raise ValueError('invalid award certificate')
+                award.validate()
+                key = (award.competition_id, award.category)
+                if key in seen or award.club_id is not None and award.club_id not in self.clubs:
+                    raise ValueError('duplicate/invalid award certificate')
+                seen.add(key)
         if not isinstance(self.statistics, SeasonStatisticsLedger):
             raise ValueError("invalid statistics ledger")
         self.statistics.validate()

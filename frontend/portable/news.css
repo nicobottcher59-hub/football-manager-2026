@@ -21,3 +21,5 @@
 .fm-news-dialog-top .fm-news-close { font-size:22px;line-height:20px;padding:3px 9px; }
 .fm-news-dialog-actions { display:flex;gap:9px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap; }
 @media(max-width:650px){.fm-news-dialog{padding:16px}.story-card.is-featured .story-copy{width:85%;}}
+
+.fm-news-art.fm-news-award{background:radial-gradient(ellipse at 35% 35%,#6d5487,#10243b 80%)}
