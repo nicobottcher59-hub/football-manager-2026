@@ -1,0 +1,36 @@
+FM PROJECT - UI-3.3.1 COMPETITIONS REFINEMENT - INCREMENTAL PATCH
+
+BRANCH (create from accepted UI-3.3):
+  phase-ui-3-3-1-competitions-refinement
+
+COMMIT SUMMARY (after manual acceptance):
+  feat(ui): add bilateral cup brackets and club-only competition tabs
+
+INSTALL:
+1. In GitHub Desktop create the above branch from UI-3.3.
+2. Open the ROOT of your game repository (README.md, src/, frontend/).
+3. Extract the CONTENTS of this ZIP there and replace the files prompted.
+4. Keep all existing folders; do not delete the Python game or apply an older patch.
+5. Stop the old server window (Ctrl+C); run INICIAR_INTERFAZ_WINDOWS.bat.
+6. Open http://127.0.0.1:8765/portable/ and reload with Ctrl+Shift+R.
+7. No Node.js or npm required.
+
+CHECK:
+- Competitions tabs: Premier League, FA Cup, Carabao Cup, Champions League.
+- FA Cup appears even though Northbridge joins later; no invented opponent.
+- Carabao: detail zoom by default, '-' to show more context, up to Whole bracket
+  with BOTH SIDES and Final in the center; '+' to zoom back in.
+- My path focuses the known tie. Full bracket shows both sides at once.
+- Drag empty board space and scroll to browse ties.
+- Right panel always displays every fixture in the selected round.
+- Champions League: League Phase table and undrawn Knockout Stage both work.
+- Pending draws show placeholders, not made-up bracket pairings.
+- Home, Squad, Tactics and Calendar should remain unchanged.
+
+OPTIONAL TEST FROM REPO ROOT:
+  $env:PYTHONPATH='src'; python -m pytest -q tests/test_ui33_competitions.py
+
+LIMITATIONS:
+- Actual future cup draws cannot be shown as fixed matchups until Python draws them.
+- Continue and save persistence remain outside UI-3.3.1.
+- New UI works on the same Python-hosted portable interface.

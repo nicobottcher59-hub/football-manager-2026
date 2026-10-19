@@ -1,0 +1,531 @@
+{
+  "update": "TS-21.2",
+  "python": "3.13.5",
+  "platform": "Linux",
+  "node_npm_required": false,
+  "mandatory": "110 passed in 46.48s",
+  "regression_world_calendar_ts22": "191 passed in 400.29s (0:06:40)",
+  "regression_tactics_social": "163 passed + 1 passed on corrected legacy-v2 assertion rerun",
+  "legacy_v2_corrected_assertion": "1 passed in 8.01s",
+  "regression_transactions_persistence_progression": "51 passed in 1632.97s (0:27:12)",
+  "full_season": {
+    "status": "PASS",
+    "mode": "full_season_rollover",
+    "world_matches": 2959,
+    "managed_matches": 51,
+    "initial_players": 2024,
+    "retained_players": 2068,
+    "players_with_attribute_changes": 601,
+    "identities_and_birthdays_preserved": true,
+    "save_load_and_next_match_equal": true,
+    "all_potential_bounds_valid": true,
+    "graph_nodes": 102261,
+    "date": "2027-08-20",
+    "seconds": 351.743
+  },
+  "cohort": {
+    "status": "PASS",
+    "mode": "isolated_cohort",
+    "players_per_group": 120,
+    "years": 20,
+    "supported": {
+      "yearly": [
+        {
+          "year": 1,
+          "mean_ca": 58.524,
+          "max_ca": 79.905
+        },
+        {
+          "year": 2,
+          "mean_ca": 60.874,
+          "max_ca": 85.485
+        },
+        {
+          "year": 3,
+          "mean_ca": 62.583,
+          "max_ca": 89.14
+        },
+        {
+          "year": 4,
+          "mean_ca": 63.859,
+          "max_ca": 90.713
+        },
+        {
+          "year": 5,
+          "mean_ca": 64.714,
+          "max_ca": 93.378
+        },
+        {
+          "year": 6,
+          "mean_ca": 65.266,
+          "max_ca": 94.602
+        },
+        {
+          "year": 7,
+          "mean_ca": 65.606,
+          "max_ca": 94.602
+        },
+        {
+          "year": 8,
+          "mean_ca": 65.798,
+          "max_ca": 97.427
+        },
+        {
+          "year": 9,
+          "mean_ca": 65.904,
+          "max_ca": 99.062
+        },
+        {
+          "year": 10,
+          "mean_ca": 65.954,
+          "max_ca": 99.062
+        },
+        {
+          "year": 11,
+          "mean_ca": 65.971,
+          "max_ca": 99.062
+        },
+        {
+          "year": 12,
+          "mean_ca": 65.978,
+          "max_ca": 99.062
+        },
+        {
+          "year": 13,
+          "mean_ca": 65.98,
+          "max_ca": 99.062
+        },
+        {
+          "year": 14,
+          "mean_ca": 65.98,
+          "max_ca": 99.062
+        },
+        {
+          "year": 15,
+          "mean_ca": 65.98,
+          "max_ca": 99.062
+        },
+        {
+          "year": 16,
+          "mean_ca": 65.98,
+          "max_ca": 99.062
+        },
+        {
+          "year": 17,
+          "mean_ca": 65.98,
+          "max_ca": 99.062
+        },
+        {
+          "year": 18,
+          "mean_ca": 65.98,
+          "max_ca": 99.062
+        },
+        {
+          "year": 19,
+          "mean_ca": 65.98,
+          "max_ca": 99.062
+        },
+        {
+          "year": 20,
+          "mean_ca": 65.98,
+          "max_ca": 99.062
+        }
+      ],
+      "mean_gain": 9.68,
+      "mean_unreached_potential": 0.574,
+      "pa_preserved": true,
+      "within_potential": true,
+      "bounded_history": true
+    },
+    "low_opportunity": {
+      "yearly": [
+        {
+          "year": 1,
+          "mean_ca": 56.711,
+          "max_ca": 75.978
+        },
+        {
+          "year": 2,
+          "mean_ca": 57.568,
+          "max_ca": 77.662
+        },
+        {
+          "year": 3,
+          "mean_ca": 58.28,
+          "max_ca": 79.128
+        },
+        {
+          "year": 4,
+          "mean_ca": 59.009,
+          "max_ca": 80.672
+        },
+        {
+          "year": 5,
+          "mean_ca": 59.712,
+          "max_ca": 82.319
+        },
+        {
+          "year": 6,
+          "mean_ca": 60.369,
+          "max_ca": 83.562
+        },
+        {
+          "year": 7,
+          "mean_ca": 60.949,
+          "max_ca": 84.475
+        },
+        {
+          "year": 8,
+          "mean_ca": 61.426,
+          "max_ca": 84.864
+        },
+        {
+          "year": 9,
+          "mean_ca": 61.801,
+          "max_ca": 85.124
+        },
+        {
+          "year": 10,
+          "mean_ca": 62.052,
+          "max_ca": 85.124
+        },
+        {
+          "year": 11,
+          "mean_ca": 62.225,
+          "max_ca": 85.994
+        },
+        {
+          "year": 12,
+          "mean_ca": 62.316,
+          "max_ca": 87.986
+        },
+        {
+          "year": 13,
+          "mean_ca": 62.361,
+          "max_ca": 89.861
+        },
+        {
+          "year": 14,
+          "mean_ca": 62.387,
+          "max_ca": 91.371
+        },
+        {
+          "year": 15,
+          "mean_ca": 62.396,
+          "max_ca": 92.178
+        },
+        {
+          "year": 16,
+          "mean_ca": 62.402,
+          "max_ca": 92.74
+        },
+        {
+          "year": 17,
+          "mean_ca": 62.405,
+          "max_ca": 92.975
+        },
+        {
+          "year": 18,
+          "mean_ca": 62.406,
+          "max_ca": 93.048
+        },
+        {
+          "year": 19,
+          "mean_ca": 62.406,
+          "max_ca": 93.048
+        },
+        {
+          "year": 20,
+          "mean_ca": 62.406,
+          "max_ca": 93.048
+        }
+      ],
+      "mean_gain": 6.106,
+      "mean_unreached_potential": 4.149,
+      "pa_preserved": true,
+      "within_potential": true,
+      "bounded_history": true
+    },
+    "seconds": 71.425,
+    "limitation": "Tests growth rules/bounds only. No ageing decline, retirements or Newgens; NOT proof of stable population or global ratings."
+  },
+  "monthly_batches": {
+    "status": "PASS",
+    "mode": "isolated_monthly_batch",
+    "results": [
+      {
+        "players": 2024,
+        "median_seconds": 0.8544,
+        "median_cpu_seconds": 0.8305,
+        "samples": [
+          {
+            "seconds": 1.0878,
+            "cpu_seconds": 0.9722
+          },
+          {
+            "seconds": 0.8544,
+            "cpu_seconds": 0.8305
+          },
+          {
+            "seconds": 0.7394,
+            "cpu_seconds": 0.7369
+          }
+        ]
+      },
+      {
+        "players": 20000,
+        "median_seconds": 13.72,
+        "median_cpu_seconds": 12.2714,
+        "samples": [
+          {
+            "seconds": 11.5947,
+            "cpu_seconds": 10.8261
+          },
+          {
+            "seconds": 13.72,
+            "cpu_seconds": 12.2714
+          },
+          {
+            "seconds": 26.3419,
+            "cpu_seconds": 20.8528
+          }
+        ]
+      }
+    ],
+    "note": "CPU-only development loop; does not claim full-game or save-file scaling."
+  },
+  "performance_comparison": {
+    "base": {
+      "python": "3.13.5",
+      "platform": "Linux",
+      "repeats": 3,
+      "days": 7,
+      "batch_size": 48,
+      "method": "fresh disposable session each repetition; pre-operation garbage collection; GC active during measurement",
+      "source": "/mnt/data/ts22_base",
+      "synthetic_input_sha256": "049b3c5470b730302754d0187ee48ad0c80826b93a13bb74e3bf6f3d24d8523d",
+      "workloads": [
+        {
+          "scenario": "postmatch_continue",
+          "median_seconds": 16.891453,
+          "median_cpu_seconds": 13.285504,
+          "new_results": 42,
+          "digest": "58c0f94fce13af7af03cbd5cd8efbecf99204ba2ad653e3a8acb45f596db9e2e",
+          "samples": [
+            {
+              "seconds": 19.990791,
+              "cpu_seconds": 17.565332,
+              "gc_seconds": 0.110397,
+              "gc_collections": 83,
+              "new_results": 42,
+              "digest": "58c0f94fce13af7af03cbd5cd8efbecf99204ba2ad653e3a8acb45f596db9e2e"
+            },
+            {
+              "seconds": 16.891453,
+              "cpu_seconds": 13.285504,
+              "gc_seconds": 0.226917,
+              "gc_collections": 80,
+              "new_results": 42,
+              "digest": "58c0f94fce13af7af03cbd5cd8efbecf99204ba2ad653e3a8acb45f596db9e2e"
+            },
+            {
+              "seconds": 4.472632,
+              "cpu_seconds": 4.398199,
+              "gc_seconds": 0.058677,
+              "gc_collections": 80,
+              "new_results": 42,
+              "digest": "58c0f94fce13af7af03cbd5cd8efbecf99204ba2ad653e3a8acb45f596db9e2e"
+            }
+          ]
+        },
+        {
+          "scenario": "calendar_days",
+          "median_seconds": 10.774667,
+          "median_cpu_seconds": 10.714407,
+          "new_results": 67,
+          "digest": "faff3b324fdfb42de697f281743d63954735c66f50451473fc9683e54c30af34",
+          "samples": [
+            {
+              "seconds": 6.45519,
+              "cpu_seconds": 6.334357,
+              "gc_seconds": 0.068688,
+              "gc_collections": 84,
+              "new_results": 67,
+              "digest": "faff3b324fdfb42de697f281743d63954735c66f50451473fc9683e54c30af34"
+            },
+            {
+              "seconds": 12.438231,
+              "cpu_seconds": 11.952764,
+              "gc_seconds": 0.119392,
+              "gc_collections": 82,
+              "new_results": 67,
+              "digest": "faff3b324fdfb42de697f281743d63954735c66f50451473fc9683e54c30af34"
+            },
+            {
+              "seconds": 10.774667,
+              "cpu_seconds": 10.714407,
+              "gc_seconds": 0.122117,
+              "gc_collections": 82,
+              "new_results": 67,
+              "digest": "faff3b324fdfb42de697f281743d63954735c66f50451473fc9683e54c30af34"
+            }
+          ]
+        },
+        {
+          "scenario": "fixed_league_batch",
+          "median_seconds": 6.944069,
+          "median_cpu_seconds": 6.055828,
+          "new_results": 48,
+          "digest": "bcefb9f511edb65272356f236dd6c9435fd21d8c849aedffeb102e9167ca1030",
+          "samples": [
+            {
+              "seconds": 6.944069,
+              "cpu_seconds": 6.055828,
+              "gc_seconds": 0.018831,
+              "gc_collections": 10,
+              "new_results": 48,
+              "digest": "bcefb9f511edb65272356f236dd6c9435fd21d8c849aedffeb102e9167ca1030"
+            },
+            {
+              "seconds": 10.985687,
+              "cpu_seconds": 8.464364,
+              "gc_seconds": 0.013804,
+              "gc_collections": 10,
+              "new_results": 48,
+              "digest": "bcefb9f511edb65272356f236dd6c9435fd21d8c849aedffeb102e9167ca1030"
+            },
+            {
+              "seconds": 6.266394,
+              "cpu_seconds": 5.043096,
+              "gc_seconds": 0.031446,
+              "gc_collections": 10,
+              "new_results": 48,
+              "digest": "bcefb9f511edb65272356f236dd6c9435fd21d8c849aedffeb102e9167ca1030"
+            }
+          ]
+        }
+      ]
+    },
+    "new": {
+      "python": "3.13.5",
+      "platform": "Linux",
+      "repeats": 3,
+      "days": 7,
+      "batch_size": 48,
+      "method": "fresh disposable session each repetition; pre-operation garbage collection; GC active during measurement",
+      "source": "/mnt/data/ts212_work",
+      "synthetic_input_sha256": "049b3c5470b730302754d0187ee48ad0c80826b93a13bb74e3bf6f3d24d8523d",
+      "workloads": [
+        {
+          "scenario": "postmatch_continue",
+          "median_seconds": 10.043383,
+          "median_cpu_seconds": 9.98117,
+          "new_results": 42,
+          "digest": "58c0f94fce13af7af03cbd5cd8efbecf99204ba2ad653e3a8acb45f596db9e2e",
+          "samples": [
+            {
+              "seconds": 9.120036,
+              "cpu_seconds": 9.085493,
+              "gc_seconds": 0.125994,
+              "gc_collections": 96,
+              "new_results": 42,
+              "digest": "58c0f94fce13af7af03cbd5cd8efbecf99204ba2ad653e3a8acb45f596db9e2e"
+            },
+            {
+              "seconds": 10.043383,
+              "cpu_seconds": 9.98117,
+              "gc_seconds": 0.205654,
+              "gc_collections": 92,
+              "new_results": 42,
+              "digest": "58c0f94fce13af7af03cbd5cd8efbecf99204ba2ad653e3a8acb45f596db9e2e"
+            },
+            {
+              "seconds": 15.070285,
+              "cpu_seconds": 12.834433,
+              "gc_seconds": 0.171675,
+              "gc_collections": 92,
+              "new_results": 42,
+              "digest": "58c0f94fce13af7af03cbd5cd8efbecf99204ba2ad653e3a8acb45f596db9e2e"
+            }
+          ]
+        },
+        {
+          "scenario": "calendar_days",
+          "median_seconds": 13.251955,
+          "median_cpu_seconds": 10.430031,
+          "new_results": 67,
+          "digest": "faff3b324fdfb42de697f281743d63954735c66f50451473fc9683e54c30af34",
+          "samples": [
+            {
+              "seconds": 15.076777,
+              "cpu_seconds": 14.935661,
+              "gc_seconds": 0.130295,
+              "gc_collections": 96,
+              "new_results": 67,
+              "digest": "faff3b324fdfb42de697f281743d63954735c66f50451473fc9683e54c30af34"
+            },
+            {
+              "seconds": 11.226963,
+              "cpu_seconds": 9.357712,
+              "gc_seconds": 0.091601,
+              "gc_collections": 94,
+              "new_results": 67,
+              "digest": "faff3b324fdfb42de697f281743d63954735c66f50451473fc9683e54c30af34"
+            },
+            {
+              "seconds": 13.251955,
+              "cpu_seconds": 10.430031,
+              "gc_seconds": 0.167253,
+              "gc_collections": 94,
+              "new_results": 67,
+              "digest": "faff3b324fdfb42de697f281743d63954735c66f50451473fc9683e54c30af34"
+            }
+          ]
+        },
+        {
+          "scenario": "fixed_league_batch",
+          "median_seconds": 7.351303,
+          "median_cpu_seconds": 5.887545,
+          "new_results": 48,
+          "digest": "bcefb9f511edb65272356f236dd6c9435fd21d8c849aedffeb102e9167ca1030",
+          "samples": [
+            {
+              "seconds": 7.183651,
+              "cpu_seconds": 5.843558,
+              "gc_seconds": 0.022899,
+              "gc_collections": 14,
+              "new_results": 48,
+              "digest": "bcefb9f511edb65272356f236dd6c9435fd21d8c849aedffeb102e9167ca1030"
+            },
+            {
+              "seconds": 9.015809,
+              "cpu_seconds": 6.075563,
+              "gc_seconds": 0.020931,
+              "gc_collections": 14,
+              "new_results": 48,
+              "digest": "bcefb9f511edb65272356f236dd6c9435fd21d8c849aedffeb102e9167ca1030"
+            },
+            {
+              "seconds": 7.351303,
+              "cpu_seconds": 5.887545,
+              "gc_seconds": 0.03318,
+              "gc_collections": 14,
+              "new_results": 48,
+              "digest": "bcefb9f511edb65272356f236dd6c9435fd21d8c849aedffeb102e9167ca1030"
+            }
+          ]
+        }
+      ]
+    },
+    "warning": "Concurrent environment, wide timing spread; no reliable speedup or no-regression claim."
+  },
+  "browser": {
+    "status": "BLOCKED",
+    "error": "net::ERR_BLOCKED_BY_ADMINISTRATOR before page load",
+    "approved_checks": 0
+  },
+  "native_windows_tested": false,
+  "full_repository_suite_run": false,
+  "regression_tactics_social_initial": "1 failed, 163 passed in 1711.65s (0:28:31)",
+  "regression_tactics_social_unique_validated": 164
+}

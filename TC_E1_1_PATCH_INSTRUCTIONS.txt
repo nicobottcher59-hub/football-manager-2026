@@ -1,0 +1,20 @@
+TC-E1.1 - Initial Season FIFA Reflow
+
+BASE: User supplied football-manager-game.zip with TC-E1 applied.
+BRANCH: technical-checkpoint-stabilization (do not apply to main).
+
+1) Copy EVERYTHING INSIDE this ZIP into the root of your existing repository,
+   the folder containing README.md and INICIAR_INTERFAZ_WINDOWS.bat.
+   Allow merging folders and replacing the existing files.
+2) Close the old Python server completely. Restart with
+   INICIAR_INTERFAZ_WINDOWS.bat and reload Chrome using Ctrl+Shift+R.
+3) Check Calendar in September 2026: the club Premier game that used to be on
+   Saturday 26 September has been reprogrammed; the small FIFA globe remains.
+4) Run tests from PowerShell:
+     python -m pytest -q tests/test_tc_e1_1_initial_season_fifa_reflow.py -ra
+     python -m pytest -q tests/test_tc_e1_international_calendar.py -ra
+
+Result-only career saves from a previous build are not automatically migrated.
+This sandbox starts a fresh DEV world on every server restart. Full manager
+career saving is still not implemented. No `.git` files are part of the patch.
+Do not commit until Windows functional testing is confirmed.

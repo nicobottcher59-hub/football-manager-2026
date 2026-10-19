@@ -1,0 +1,2 @@
+recursive-include frontend/portable *
+recursive-include frontend/public/squad *

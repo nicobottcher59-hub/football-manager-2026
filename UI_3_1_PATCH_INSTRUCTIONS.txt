@@ -1,0 +1,30 @@
+FM PROJECT - UI-3.1 Visual Polish & Live Home
+============================================
+
+BRANCH: phase-ui-3-1-visual-polish-portraits
+BASE: UI-3 Squad Roster / Tactics, with UI-2 and the 404 hotfix already applied.
+
+1. Create the branch FROM your current UI-3 branch/commit in GitHub Desktop.
+2. Extract this ZIP INTO THE ROOT of the EXISTING game repository.
+   Preserve the paths. Overwrite matching files. Do not remove anything else.
+3. Run INICIAR_INTERFAZ_WINDOWS.bat using your existing Python environment.
+   No Node.js, npm, Vite or Internet are required.
+4. In Chrome/Edge press Ctrl+Shift+R, then open Home, Squad and Tactics.
+5. Verify Home starts with Mercer/Ward/Clarke/Foster etc. and real morale,
+   condition, chemistry, form from Python. Substitute a starter in Tactics,
+   go Home and check the new XI. Open a Squad row to inspect familiarities.
+6. Check that the new nationality badges and stable illustrated portraits
+   are visible in roster, expansion, Tactics and Home.
+7. Test formations, positional roles and the two tactical phase previews.
+8. Commit only AFTER your manual Windows test is successful.
+
+KNOWN LIMITATIONS:
+- Session is temporary: no persistence on closing Python.
+- No real daily Continue; clicking explains the limitation (no false date).
+- Premier League table, news, club manager/stadium/club objectives are
+  still explicitly *demo presentation*, not results from the Python world.
+- Fixture opponent is real DEV data; exact kickoff/stadium are not supplied.
+- Portraits are locally generated illustrations (not licensed player photos).
+- Transfers, happiness, market values, contracts, training, player conversations
+  and season-player-ledger stats are not domain features yet.
+- No changes to FastMatchSimulator, career simulation or tactical formulas.

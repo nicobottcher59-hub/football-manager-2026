@@ -1,0 +1,29 @@
+TS-23.2 - U17/U21 formation board and youth avatar pass
+INCREMENTAL UPDATE - not a full game
+
+Required base: TS-23.1 installed. No Node or npm.
+
+1. Stop INICIAR_INTERFAZ_WINDOWS.bat and close the running Python server.
+2. Make a backup of the complete game folder and your full SQLite career save.
+3. Extract this ZIP into the project root (the folder with
+   INICIAR_INTERFAZ_WINDOWS.bat). Preserve folders and replace files.
+4. Run: python tools/verify_ts232_package.py
+5. Run: python -m pytest -ra tests/test_ts_23_2_u17_u21_layout.py
+6. Start with INICIAR_INTERFAZ_WINDOWS.bat, press Ctrl+F5 and open Youth Academy.
+
+WHAT CHANGES
+- U17 and U21 now show a visual formation board above the management list.
+- The list view stays available below, with no change to promotion/release logic.
+- Youth avatars use a more illustrated portrait style instead of plain initials boxes.
+- The right rail (next match, recent results, league table) is preserved.
+
+SAVE / LOGIC
+- No gameplay logic changes in this patch.
+- No schema bump. Full save graph version remains 11.
+- Existing careers remain compatible.
+
+Suggested GitHub Desktop branch:
+feat/ts-23-2-youth-formation-board
+
+Suggested commit summary:
+feat(youth): add visual U17/U21 formation board and avatar pass

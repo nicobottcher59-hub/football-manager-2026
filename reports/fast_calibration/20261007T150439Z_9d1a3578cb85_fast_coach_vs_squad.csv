@@ -1,0 +1,4 @@
+scenario,paired_seeds,matches,weaker_points_per_match,weaker_win_pct,draw_pct,stronger_win_pct,weaker_goal_diff_per_match,weaker_xg_diff_per_match,weaker_shot_diff_per_match,weaker_xg_share_pct
+quality_baseline,500,1000,0.91,23.1,21.7,55.2,-0.865,-0.7755199999999998,-3.598,36.19088319088322
+better_coach,500,1000,1.433,40.2,22.7,37.1,0.024,0.11600000000000005,0.337,51.83736180188172
+wrong_plan,500,1000,0.827,20.1,22.400000000000002,57.49999999999999,-0.982,-0.9133000000000013,-4.034,32.75543034953625

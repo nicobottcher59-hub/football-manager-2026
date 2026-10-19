@@ -1,0 +1,61 @@
+{
+  "patch": "TS-19.1 Formation Expansion",
+  "base": "TS-18.4 source plus reviewed TS-18.5 and consolidated TS-18.6 integrated",
+  "created_utc": "2026-10-15T13:09:22.443631+00:00",
+  "branch": "feat/ts-19-1-formation-expansion",
+  "summary": "feat(tactics): expand 28 formations and connect live tactical boards",
+  "formations_total": 28,
+  "new_formations": 24,
+  "production_sports_logic_changed": false,
+  "full_pytest": {
+    "passed": 1100,
+    "failed": 0,
+    "duration_seconds": 352.5
+  },
+  "files": {
+    "src/football_manager/dev_ui/formations.py": {
+      "sha256": "8f0cf86953a65d994b066b9db61208e1d63a98f9ca1394ee8d782011816426b8",
+      "size_bytes": 7246
+    },
+    "src/football_manager/dev_ui/session.py": {
+      "sha256": "d11d7d1812b300b066ed4d0a8f9a55e19d47d69082d75dece7f490cb4fac284f",
+      "size_bytes": 144751
+    },
+    "src/football_manager/dev_ui/app.py": {
+      "sha256": "3bf7f57c00cd1803305c1c2845027d7044674f1b91a5e2f0fa1d4931735963af",
+      "size_bytes": 87816
+    },
+    "src/football_manager/ui_shell/models.py": {
+      "sha256": "b6616eca7e7aec6ff0553234ec1536e24192f432bf2d048ee8c6f61881e4385f",
+      "size_bytes": 16052
+    },
+    "frontend/public/squad/board.js": {
+      "sha256": "85a5cc3f18ebba8c7cd26546d38156cb54d7604b195dc47946c1a61b5367700d",
+      "size_bytes": 6857
+    },
+    "frontend/public/squad/squad.js": {
+      "sha256": "099cd1d77c9360da3a87bee1dec3be87a772195403609a25df0f0b45846fc5e5",
+      "size_bytes": 28102
+    },
+    "frontend/public/squad/squad.css": {
+      "sha256": "56ad7e075dbe3172a2f59f414dbcbd781a527ad5971b0e98aeeade05d1a1f9ee",
+      "size_bytes": 23485
+    },
+    "tests/test_ts_19_1_formation_expansion.py": {
+      "sha256": "a31b28afc1baac240c8fa21bfe9613ebbf60a753ca53b0e74617534a4790fa4d",
+      "size_bytes": 10235
+    },
+    "docs/TS_19_1_FORMATION_EXPANSION.md": {
+      "sha256": "42010561072f79d066c583a3c56a7b4c1469eafb5d21fc03e6cce2ea7173d5fa",
+      "size_bytes": 5130
+    },
+    "TS_19_1_PATCH_INSTRUCTIONS.txt": {
+      "sha256": "7e2345647a133bc1d3192142b10fb87878d8707095404ae6431b09b68b0ecb3c",
+      "size_bytes": 2223
+    },
+    "TS_19_1_TEST_REPORT.md": {
+      "sha256": "546f25d9a8e29f917078b4dc4e97a6a25c8ae570f0cc949bbecbc206ae23cafd",
+      "size_bytes": 1872
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "version": "TS-24.9",
+  "base": "TS-24.8",
+  "save_graph_version": 16,
+  "files": 18,
+  "sha256": {
+    "src/football_manager/dev_ui/session.py": "4859b3b3bbc578e7ca55528f977d64655cd7ce91ae838dee24a4f445d58c7176",
+    "src/football_manager/services/ai_squad_planning.py": "33474b50d01560f395469f051d92aa6c06b75b71f0f2186fd3921db56097d4ed",
+    "src/football_manager/services/ai_transfer_market.py": "edc7d2084e495eb2995856301b5cbee1f167300f5773f72c76dc42bd8349a321",
+    "src/football_manager/services/loan_market.py": "882523185ad17d4ed8befe47b62ad1059a3ccd1c76f350d1cfeebc05125ed912",
+    "src/football_manager/services/player_aging.py": "79f117a96e85f136f62e9ba1da64eafd15fcada731872bd7d23a5909076de5b0",
+    "src/football_manager/services/club_economy.py": "cf87fd18b21ff25503417fe1cefe7118d59fe3cf0eb07805de409ec15dcf9653",
+    "tests/test_ts_24_9_calibration.py": "ba51919c3e399bf19332aa453062ee53a1f7862fdad3b80d81533a1f3eb4780a",
+    "tools/stress_ts249_multiseed.py": "da69b72f18238a548100efc58174f8d824cf17fab938197a195201e5cc0073fc",
+    "tools/audit_ts249_real_match_minutes.py": "82b710cbcc00cb73084d078fa1822c8293546be1ef6c6c77dccf079d274fe81b",
+    "tools/summarize_ts249_calibration.py": "94ae11a56edbe3a2f501fea14a304ca646a4c07d137732bca0a4382ce0b7586a",
+    "tools/verify_ts249_calibration_package.py": "73596dc8523f12f7bf4f6af8d5083be5810a6a0e32bc29f5f56374c1c71ac5e2",
+    "docs/TS_24_9_CALIBRACION_VALIDACION.md": "a59db9076e69a0cc33790f149818b77b963d595724dab95ff0d4b29c022a6620",
+    "reports/ts249_multi_seed.json": "138616414d614739b6998230d6b87e59e3742432c2d47ca71dcd586915697703",
+    "reports/ts249_long_horizon.json": "ebabf4e62a51eb0b1f1f21e0ef310ddccad762a9faec3ccd7af08bf8549c76fd",
+    "reports/ts249_real_minutes.json": "004ce660d0ade751178e927c342a58a8dec18a67948f4d95d5dac070d80d07c4",
+    "TS_24_9_LONG_HORIZON_REPORT.md": "40791ca7969bdbadc144581029480e94983fb750fbb58d5417f84dea40147364",
+    "TS_24_9_TEST_REPORT.md": "e422e49daa633c0901b778ca714e45be8b2a1f142800e9a52e07e9cbb78a0361",
+    "TS_24_9_PATCH_INSTRUCTIONS.txt": "f7ae30d3f58057601f4dda4e79ef06e1ccb777e535e1213f23262a9e9db642e0"
+  }
+}

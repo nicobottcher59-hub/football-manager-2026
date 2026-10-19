@@ -1,0 +1,6 @@
+{
+  "sha256": {
+    "src/football_manager/fast_simulation/engine.py": "c44996a1addd16128cf499c6e566911ed468aa13a1b09c9b94e5efa32ed7e0bd",
+    "tests/test_ts_18_5_opposition_ai_reliability.py": "a10df20925da323a1ef4efeb6385aff5231e1c6e9a5a681b8744de67650a5791"
+  }
+}

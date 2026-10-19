@@ -1,0 +1,33 @@
+{
+  "id": "TS-05",
+  "requires": "TS-04",
+  "branch": "perf/ts-05-world-progression-heap",
+  "commit_summary": "perf(world): accelerate fixture progression without changing results",
+  "instructions": "Apply to an already integrated repository at the required prior patch. Keep the original folder structure.",
+  "files": [
+    {
+      "path": "src/football_manager/domain/world_runner.py",
+      "action": "modify",
+      "sha256": "70aab1f2c4ec7d905bc67c85cd1f425d6803ab67fcd63238feb77b112f791fb2",
+      "expected_base_sha256": "3381c5940f5db31c85c01d78b39bd641c02d69859a75350e615ffe5a12c415f2"
+    },
+    {
+      "path": "tests/test_ts_05_world_progression_performance.py",
+      "action": "add",
+      "sha256": "2521d591bcc97ad2dd09dceb3fb9413bcf8bb1555695ab47ece7e7cef6a9fe88",
+      "expected_base_sha256": null
+    },
+    {
+      "path": "tools/benchmark_world_progression.py",
+      "action": "add",
+      "sha256": "1a00e0d701c4cb467deddc7000ef7de87f59643e6204a7e2c1e71a8e9b5b4663",
+      "expected_base_sha256": null
+    },
+    {
+      "path": "docs/TS_05_WORLD_PROGRESS_PERFORMANCE.md",
+      "action": "add",
+      "sha256": "b138a20b3a8b6e651ec6d6022423cf2409c0ecdda779e17532ebbafc3cc213fd",
+      "expected_base_sha256": null
+    }
+  ]
+}

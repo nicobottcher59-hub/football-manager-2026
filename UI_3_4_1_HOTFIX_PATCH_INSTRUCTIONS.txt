@@ -1,0 +1,17 @@
+FM Project UI-3.4.1 HOTFIX — Only your club results + in-game confirmation
+
+BASE REQUIRED: UI-3.4.1 Calendar Live Simulation Progress.
+This zip is not the whole game; it contains ONLY files modified for this hotfix.
+
+Windows / GitHub Desktop:
+1. STAY on phase-ui-3-4-1-calendar-simulation-progress if UI-3.4.1 has not been committed yet. Otherwise branch from its completed commit before applying.
+2. CLOSE the running Python server (Ctrl+C) and leave the game folder intact.
+3. Extract this ZIP directly into your project root, preserving the paths and replacing existing files.
+4. Run INICIAR_INTERFAZ_WINDOWS.bat, reload Chrome with Ctrl+Shift+R.
+5. In Calendar choose any valid future date (including an empty day), click Simulate to this date.
+6. A custom FM confirmation dialog appears: Cancel / Escape do nothing; Start simulation begins actual Python world progression.
+7. Observe only your club results in Simulating your season, with genuine Python days/progress, and other clubs simulated invisibly in the background.
+8. Return to Calendar and verify date, results and standings.
+
+No npm/Node.js, no match simulation formula changes, no persistence changes.
+Never commit until Windows manual acceptance.

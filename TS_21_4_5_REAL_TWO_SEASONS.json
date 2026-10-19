@@ -1,0 +1,36 @@
+{
+  "mode": "season",
+  "seasons": [
+    {
+      "season": "2026/27",
+      "fixtures": 2959,
+      "managed_matches": 51,
+      "completed_medical_episodes": 866,
+      "active_medical_episodes": 7,
+      "retired_this_transition": 33,
+      "total_retired": 33,
+      "active_players": 2035,
+      "registered_clubs": 94,
+      "smallest_squad": 21,
+      "deferred_retirements": 2
+    },
+    {
+      "season": "2027/28",
+      "fixtures": 2959,
+      "managed_matches": 48,
+      "completed_medical_episodes": 1758,
+      "active_medical_episodes": 3,
+      "retired_this_transition": 31,
+      "total_retired": 64,
+      "active_players": 2048,
+      "registered_clubs": 96,
+      "smallest_squad": 20,
+      "deferred_retirements": 5
+    }
+  ],
+  "next_date": "2028-08-27",
+  "seconds": 189.823,
+  "identities_birthdays_potential_preserved": true,
+  "sqlite_load_next_match_identical": true,
+  "limitation": "Existing external entrants can add clubs/players at rollover. No Newgens, no constant-population claim."
+}

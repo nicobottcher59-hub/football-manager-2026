@@ -1,0 +1,629 @@
+{
+  "package": "TS-22-Squad-Match-Presentation",
+  "test_suites": [
+    {
+      "name": "TS-22 + regresion de interfaz/API",
+      "passed": 115,
+      "skipped": 0,
+      "seconds": 210.54
+    },
+    {
+      "name": "TS-19 y TS-20",
+      "passed": 123,
+      "skipped": 2,
+      "seconds": 369.13
+    },
+    {
+      "name": "Mundo, calendario, transacciones y guardados",
+      "passed": 183,
+      "skipped": 0,
+      "seconds": 491.57
+    },
+    {
+      "name": "TS-22 en instalacion limpia sin Node en PATH",
+      "passed": 71,
+      "skipped": 0,
+      "seconds": 41.01
+    }
+  ],
+  "browser": {
+    "checks": [
+      {
+        "check": "Home defaults to next-match competition",
+        "passed": true
+      },
+      {
+        "check": "Home cup tab stays in Home",
+        "passed": true
+      },
+      {
+        "check": "Unknown FA draw remains pending, not a made-up bracket",
+        "passed": true
+      },
+      {
+        "check": "Home refresh keeps selected competition",
+        "passed": true
+      },
+      {
+        "check": "Champions league phase is a compact table",
+        "passed": true
+      },
+      {
+        "check": "Explicit View competition opens full centre",
+        "passed": true
+      },
+      {
+        "check": "Generic rival Squad has 22 real players",
+        "passed": true
+      },
+      {
+        "check": "Both general and role radars render",
+        "passed": true
+      },
+      {
+        "check": "Player-name click does not open management controls",
+        "passed": true
+      },
+      {
+        "check": "Rival contextual actions are explicitly disabled",
+        "passed": true
+      },
+      {
+        "check": "Rival shirt numbers cannot be edited",
+        "passed": true
+      },
+      {
+        "check": "Inspecting a role does not alter the managed tactic",
+        "passed": true
+      },
+      {
+        "check": "Missing stadium/capacity not invented",
+        "passed": true
+      },
+      {
+        "check": "Season and competition filters available",
+        "passed": true
+      },
+      {
+        "check": "Untracked xA is not a fake statistic",
+        "passed": true
+      },
+      {
+        "check": "Match rating separate from current GRL",
+        "passed": true
+      },
+      {
+        "check": "Unplayed competition can be selected",
+        "passed": true
+      },
+      {
+        "check": "Tactics highlights current GRL",
+        "passed": true
+      },
+      {
+        "check": "Match Center uses one browser tab",
+        "passed": true
+      },
+      {
+        "check": "Match occupies full application screen",
+        "passed": true
+      },
+      {
+        "check": "22 starters and 14 bench players show GRL and condition",
+        "passed": true
+      },
+      {
+        "check": "GET /api/match",
+        "passed": true
+      },
+      {
+        "check": "Displayed match rating matches Python",
+        "passed": true
+      },
+      {
+        "check": "GET /api/match",
+        "passed": true
+      },
+      {
+        "check": "GET /api/match",
+        "passed": true
+      },
+      {
+        "check": "Returning from a club keeps match-only formation",
+        "passed": true
+      },
+      {
+        "check": "GET /api/match",
+        "passed": true
+      },
+      {
+        "check": "Refresh keeps match preparation within the running session",
+        "passed": true
+      },
+      {
+        "check": "GET /api/match",
+        "passed": true
+      },
+      {
+        "check": "Refresh keeps intended players",
+        "passed": true
+      },
+      {
+        "check": "Quick Sim retry does not duplicate statistics",
+        "passed": true
+      },
+      {
+        "check": "Match-only tactic does not replace usual formation",
+        "passed": true
+      },
+      {
+        "check": "Refreshing result is read-only",
+        "passed": true
+      },
+      {
+        "check": "Result Continue returns to career shell",
+        "passed": true
+      },
+      {
+        "check": "GET /api/squad",
+        "passed": true
+      },
+      {
+        "check": "Played match appears in season totals",
+        "passed": true
+      },
+      {
+        "check": "Old DEV stats-unavailable banner removed",
+        "passed": true
+      },
+      {
+        "check": "Actual player row present in updated season stats",
+        "passed": true
+      },
+      {
+        "check": "Stats sorting remains available",
+        "passed": true
+      },
+      {
+        "check": "GET /api/home-competition",
+        "passed": true
+      },
+      {
+        "check": "Re-entering Home defaults to the actual next competition",
+        "passed": true
+      },
+      {
+        "check": "Calendar opponent link opens the correct club",
+        "passed": true
+      },
+      {
+        "check": "Profile radars work at a smaller viewport",
+        "passed": true
+      },
+      {
+        "check": "No browser JavaScript exceptions",
+        "passed": true
+      },
+      {
+        "check": "No failing application HTTP requests",
+        "passed": true
+      }
+    ],
+    "passed": 45,
+    "javascript_errors": [],
+    "failed_requests": []
+  },
+  "fresh_environment": {
+    "python": "3.13.5",
+    "node": null,
+    "npm": null
+  },
+  "fresh_integrity_detects_tampering": true,
+  "browser_scope": "45 checks passed in the working build before final packaging; fresh-install browser rerun blocked by environment URL policy before loading the application",
+  "fresh_browser_rerun": {
+    "environment": {
+      "python": "3.13.5",
+      "node": null,
+      "npm": null
+    },
+    "checks": [
+      {
+        "name": "integrity",
+        "returncode": 0,
+        "command": [
+          "/opt/pyvenv/bin/python",
+          "tools/verify_ts22_package.py"
+        ]
+      },
+      {
+        "name": "compile",
+        "returncode": 0,
+        "command": [
+          "/opt/pyvenv/bin/python",
+          "-m",
+          "compileall",
+          "-q",
+          "src",
+          "tools",
+          "tests/test_ts_22_presentation.py"
+        ]
+      },
+      {
+        "name": "required",
+        "returncode": 0,
+        "command": [
+          "/opt/pyvenv/bin/python",
+          "-m",
+          "pytest",
+          "-ra",
+          "--tb=short",
+          "tests/test_ts_22_presentation.py"
+        ]
+      },
+      {
+        "name": "browser",
+        "returncode": 1,
+        "command": [
+          "/opt/pyvenv/bin/python",
+          "tools/validate_ts22_browser.py",
+          "--browser",
+          "/usr/bin/chromium",
+          "--port",
+          "8772",
+          "--output",
+          "/mnt/data/ts22_evidence/fresh_browser_results.json"
+        ]
+      }
+    ],
+    "initial_browser_launch": {
+      "returncode": 1,
+      "reason": "Optional Playwright bundled browser absent; use the installed /usr/bin/chromium explicitly. No application checks ran in the failed launch."
+    },
+    "browser_previous_attempts": [
+      {
+        "returncode": 1,
+        "reason": "Chromium policy blocked random local port 41075 before loading application; retrying the same localhost development port used for the prior passing browser run."
+      }
+    ],
+    "integrity_detects_tampering": true,
+    "final_integrity_payload_files": 41,
+    "final_browser_status": "blocked_before_application_load_by_environment_URL_policy; not a passing rerun"
+  },
+  "javascript_syntax": {
+    "tool": "Node internal syntax check only; not a runtime or user test dependency",
+    "files": [
+      {
+        "path": "frontend/portable/calendar.js",
+        "returncode": 0,
+        "stderr": ""
+      },
+      {
+        "path": "frontend/portable/competitions.js",
+        "returncode": 0,
+        "stderr": ""
+      },
+      {
+        "path": "frontend/portable/home_competition.js",
+        "returncode": 0,
+        "stderr": ""
+      },
+      {
+        "path": "frontend/portable/match.js",
+        "returncode": 0,
+        "stderr": ""
+      },
+      {
+        "path": "frontend/portable/portable.js",
+        "returncode": 0,
+        "stderr": ""
+      },
+      {
+        "path": "frontend/portable/world_squads.js",
+        "returncode": 0,
+        "stderr": ""
+      },
+      {
+        "path": "frontend/public/squad/balance.js",
+        "returncode": 0,
+        "stderr": ""
+      },
+      {
+        "path": "frontend/public/squad/presentation.js",
+        "returncode": 0,
+        "stderr": ""
+      },
+      {
+        "path": "frontend/public/squad/roster.js",
+        "returncode": 0,
+        "stderr": ""
+      },
+      {
+        "path": "frontend/public/squad/squad.js",
+        "returncode": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  "benchmark": {
+    "controlled_comparison": [
+      {
+        "scenario": "postmatch_continue",
+        "baseline_seconds": 2.605183,
+        "ts22_seconds": 2.549357,
+        "baseline_cpu_seconds": 2.598578,
+        "ts22_cpu_seconds": 2.546462,
+        "same_sports_outcome": true,
+        "matches": 42
+      },
+      {
+        "scenario": "calendar_days",
+        "baseline_seconds": 5.20667,
+        "ts22_seconds": 4.0766,
+        "baseline_cpu_seconds": 5.20585,
+        "ts22_cpu_seconds": 4.076431,
+        "same_sports_outcome": true,
+        "matches": 67
+      },
+      {
+        "scenario": "fixed_league_batch",
+        "baseline_seconds": 2.265816,
+        "ts22_seconds": 2.295685,
+        "baseline_cpu_seconds": 2.265753,
+        "ts22_cpu_seconds": 2.29563,
+        "same_sports_outcome": true,
+        "matches": 48
+      }
+    ],
+    "base": {
+      "python": "3.13.5",
+      "platform": "Linux",
+      "repeats": 3,
+      "days": 7,
+      "batch_size": 48,
+      "method": "fresh disposable session each repetition; pre-operation garbage collection; GC active during measurement",
+      "source": "/mnt/data/ts22_base/football-manager-game",
+      "synthetic_input_sha256": "e8341d2db48cba4d30ecc6aeb5aca1d0fbcd5a45e8f2e1ef731229eab79e61a3",
+      "workloads": [
+        {
+          "scenario": "postmatch_continue",
+          "median_seconds": 2.605183,
+          "median_cpu_seconds": 2.598578,
+          "new_results": 42,
+          "digest": "d2e038094f24f7147e431200efdc51e9bca866715dc2d8022c4e204a53ffc284",
+          "samples": [
+            {
+              "seconds": 2.437298,
+              "cpu_seconds": 2.437,
+              "gc_seconds": 0.03871,
+              "gc_collections": 84,
+              "new_results": 42,
+              "digest": "d2e038094f24f7147e431200efdc51e9bca866715dc2d8022c4e204a53ffc284"
+            },
+            {
+              "seconds": 2.605183,
+              "cpu_seconds": 2.598578,
+              "gc_seconds": 0.040643,
+              "gc_collections": 80,
+              "new_results": 42,
+              "digest": "d2e038094f24f7147e431200efdc51e9bca866715dc2d8022c4e204a53ffc284"
+            },
+            {
+              "seconds": 4.487665,
+              "cpu_seconds": 4.485455,
+              "gc_seconds": 0.05717,
+              "gc_collections": 80,
+              "new_results": 42,
+              "digest": "d2e038094f24f7147e431200efdc51e9bca866715dc2d8022c4e204a53ffc284"
+            }
+          ]
+        },
+        {
+          "scenario": "calendar_days",
+          "median_seconds": 5.20667,
+          "median_cpu_seconds": 5.20585,
+          "new_results": 67,
+          "digest": "9484852095f99a98fccfbbdd6694ce1bd42059622600df65422276499ab4e9b0",
+          "samples": [
+            {
+              "seconds": 6.475263,
+              "cpu_seconds": 6.466433,
+              "gc_seconds": 0.068516,
+              "gc_collections": 83,
+              "new_results": 67,
+              "digest": "9484852095f99a98fccfbbdd6694ce1bd42059622600df65422276499ab4e9b0"
+            },
+            {
+              "seconds": 4.347041,
+              "cpu_seconds": 4.346859,
+              "gc_seconds": 0.043443,
+              "gc_collections": 81,
+              "new_results": 67,
+              "digest": "9484852095f99a98fccfbbdd6694ce1bd42059622600df65422276499ab4e9b0"
+            },
+            {
+              "seconds": 5.20667,
+              "cpu_seconds": 5.20585,
+              "gc_seconds": 0.162211,
+              "gc_collections": 81,
+              "new_results": 67,
+              "digest": "9484852095f99a98fccfbbdd6694ce1bd42059622600df65422276499ab4e9b0"
+            }
+          ]
+        },
+        {
+          "scenario": "fixed_league_batch",
+          "median_seconds": 2.265816,
+          "median_cpu_seconds": 2.265753,
+          "new_results": 48,
+          "digest": "b8382cbe44b6ec887eda11dd7e5b49c63619dd6b021940a17b6d2200f9ebb4c3",
+          "samples": [
+            {
+              "seconds": 2.265816,
+              "cpu_seconds": 2.265753,
+              "gc_seconds": 0.004617,
+              "gc_collections": 10,
+              "new_results": 48,
+              "digest": "b8382cbe44b6ec887eda11dd7e5b49c63619dd6b021940a17b6d2200f9ebb4c3"
+            },
+            {
+              "seconds": 2.228455,
+              "cpu_seconds": 2.228411,
+              "gc_seconds": 0.005647,
+              "gc_collections": 10,
+              "new_results": 48,
+              "digest": "b8382cbe44b6ec887eda11dd7e5b49c63619dd6b021940a17b6d2200f9ebb4c3"
+            },
+            {
+              "seconds": 2.595801,
+              "cpu_seconds": 2.595739,
+              "gc_seconds": 0.005249,
+              "gc_collections": 10,
+              "new_results": 48,
+              "digest": "b8382cbe44b6ec887eda11dd7e5b49c63619dd6b021940a17b6d2200f9ebb4c3"
+            }
+          ]
+        }
+      ]
+    },
+    "ts22": {
+      "python": "3.13.5",
+      "platform": "Linux",
+      "repeats": 3,
+      "days": 7,
+      "batch_size": 48,
+      "method": "fresh disposable session each repetition; pre-operation garbage collection; GC active during measurement",
+      "source": "/mnt/data/ts22_work/football-manager-game",
+      "synthetic_input_sha256": "e8341d2db48cba4d30ecc6aeb5aca1d0fbcd5a45e8f2e1ef731229eab79e61a3",
+      "workloads": [
+        {
+          "scenario": "postmatch_continue",
+          "median_seconds": 2.549357,
+          "median_cpu_seconds": 2.546462,
+          "new_results": 42,
+          "digest": "d2e038094f24f7147e431200efdc51e9bca866715dc2d8022c4e204a53ffc284",
+          "samples": [
+            {
+              "seconds": 2.54151,
+              "cpu_seconds": 2.541377,
+              "gc_seconds": 0.036276,
+              "gc_collections": 84,
+              "new_results": 42,
+              "digest": "d2e038094f24f7147e431200efdc51e9bca866715dc2d8022c4e204a53ffc284"
+            },
+            {
+              "seconds": 2.549357,
+              "cpu_seconds": 2.546462,
+              "gc_seconds": 0.038941,
+              "gc_collections": 80,
+              "new_results": 42,
+              "digest": "d2e038094f24f7147e431200efdc51e9bca866715dc2d8022c4e204a53ffc284"
+            },
+            {
+              "seconds": 3.357152,
+              "cpu_seconds": 3.345679,
+              "gc_seconds": 0.055952,
+              "gc_collections": 80,
+              "new_results": 42,
+              "digest": "d2e038094f24f7147e431200efdc51e9bca866715dc2d8022c4e204a53ffc284"
+            }
+          ]
+        },
+        {
+          "scenario": "calendar_days",
+          "median_seconds": 4.0766,
+          "median_cpu_seconds": 4.076431,
+          "new_results": 67,
+          "digest": "9484852095f99a98fccfbbdd6694ce1bd42059622600df65422276499ab4e9b0",
+          "samples": [
+            {
+              "seconds": 4.0766,
+              "cpu_seconds": 4.076431,
+              "gc_seconds": 0.042993,
+              "gc_collections": 84,
+              "new_results": 67,
+              "digest": "9484852095f99a98fccfbbdd6694ce1bd42059622600df65422276499ab4e9b0"
+            },
+            {
+              "seconds": 4.027128,
+              "cpu_seconds": 4.026911,
+              "gc_seconds": 0.039439,
+              "gc_collections": 82,
+              "new_results": 67,
+              "digest": "9484852095f99a98fccfbbdd6694ce1bd42059622600df65422276499ab4e9b0"
+            },
+            {
+              "seconds": 5.743905,
+              "cpu_seconds": 5.740759,
+              "gc_seconds": 0.071211,
+              "gc_collections": 82,
+              "new_results": 67,
+              "digest": "9484852095f99a98fccfbbdd6694ce1bd42059622600df65422276499ab4e9b0"
+            }
+          ]
+        },
+        {
+          "scenario": "fixed_league_batch",
+          "median_seconds": 2.295685,
+          "median_cpu_seconds": 2.29563,
+          "new_results": 48,
+          "digest": "b8382cbe44b6ec887eda11dd7e5b49c63619dd6b021940a17b6d2200f9ebb4c3",
+          "samples": [
+            {
+              "seconds": 2.330054,
+              "cpu_seconds": 2.329991,
+              "gc_seconds": 0.006643,
+              "gc_collections": 10,
+              "new_results": 48,
+              "digest": "b8382cbe44b6ec887eda11dd7e5b49c63619dd6b021940a17b6d2200f9ebb4c3"
+            },
+            {
+              "seconds": 2.232731,
+              "cpu_seconds": 2.229992,
+              "gc_seconds": 0.005331,
+              "gc_collections": 10,
+              "new_results": 48,
+              "digest": "b8382cbe44b6ec887eda11dd7e5b49c63619dd6b021940a17b6d2200f9ebb4c3"
+            },
+            {
+              "seconds": 2.295685,
+              "cpu_seconds": 2.29563,
+              "gc_seconds": 0.00644,
+              "gc_collections": 10,
+              "new_results": 48,
+              "digest": "b8382cbe44b6ec887eda11dd7e5b49c63619dd6b021940a17b6d2200f9ebb4c3"
+            }
+          ]
+        }
+      ]
+    },
+    "initial_comparison_with_irregular_timings": [
+      {
+        "scenario": "postmatch_continue",
+        "baseline_seconds": 2.53924,
+        "ts22_seconds": 3.264102,
+        "same_sports_outcome": true,
+        "matches": 42
+      },
+      {
+        "scenario": "calendar_days",
+        "baseline_seconds": 3.807846,
+        "ts22_seconds": 16.156888,
+        "same_sports_outcome": true,
+        "matches": 67
+      },
+      {
+        "scenario": "fixed_league_batch",
+        "baseline_seconds": 2.685955,
+        "ts22_seconds": 3.052473,
+        "same_sports_outcome": true,
+        "matches": 48
+      }
+    ]
+  },
+  "notes": [
+    "Suites overlap: do not sum them as distinct tests.",
+    "No native Windows run; no full repository suite.",
+    "Benchmark uses the same v5 input, no Northbridge rebalancing, and leaves garbage collection enabled during operations.",
+    "No GitHub Actions jobs or repository writes were performed."
+  ]
+}

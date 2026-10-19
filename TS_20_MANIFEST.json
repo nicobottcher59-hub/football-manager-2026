@@ -1,0 +1,302 @@
+{
+  "release": "TS-20 Player DNA & Dressing Room",
+  "requires": "TS-19 Tactical Studio 2.0",
+  "manager_career_version": 4,
+  "description": "Incremental managed-club social update. Runtime does not require Node.",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 23667,
+      "sha256": "d21c95616cc49032bf530faf9717bbdc5a55bf85e6028b89876c56a41fe67187",
+      "action": "replace",
+      "base_sha256": "b43ff7b9a98592101afa4616248084fc1b2277a9021121c9e8e94edba910c056"
+    },
+    {
+      "path": "README_DEV.md",
+      "bytes": 33979,
+      "sha256": "25cc54797a865d47aa7fd7799a00276dbd4b3d98128202ae902736c95507c27c",
+      "action": "replace",
+      "base_sha256": "933e45bed77abacca14ab181a393d2592d55d73f5fe2533d1dc31f365d0173d6"
+    },
+    {
+      "path": "TS_20_INSTRUCTIONS.txt",
+      "bytes": 4001,
+      "sha256": "0dc9615cc51ead9d67c7ce9bd4da9469d2effc0ead85d85eb73bed5ffb074f7e",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "TS_20_TEST_REPORT.md",
+      "bytes": 6522,
+      "sha256": "97c0e99213de98e2819a33d5254f5eb2f0f03ec75382c0cc1bf6e399abe8e917",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/TS_20_PLAYER_DNA_DRESSING_ROOM.md",
+      "bytes": 8227,
+      "sha256": "f073970699334eb894eab9d2a03cc735c08186e831a2fd6454806d62e5970330",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "frontend/portable/dressing_room.css",
+      "bytes": 8521,
+      "sha256": "eb505827b12d7b9a3418fff1dd2839c2708b6e531d13322b15ec11555f06dbc0",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "frontend/portable/dressing_room.js",
+      "bytes": 10393,
+      "sha256": "f256bef0b8cfa1eb4115eb826289900a5fef7c226e2f59cdc1928644340fe6a8",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "frontend/portable/index.html",
+      "bytes": 44181,
+      "sha256": "a045b48fd9854585764c4e968e5135e9021d629847b1f3d68a4991d81f1d5c0a",
+      "action": "replace",
+      "base_sha256": "7a201ffbf9bd25c536f8affbaa1fde3f08994b33f1ee170eeb152e65e61368c6"
+    },
+    {
+      "path": "frontend/portable/portable.js",
+      "bytes": 30664,
+      "sha256": "39ae4a7068de46c430332cc905b1e580165c3bfb6463244bbdd87a82e931f5b3",
+      "action": "replace",
+      "base_sha256": "86383b560757a1d909204616a2b154d4ddde622d196b766afc2d81025d955291"
+    },
+    {
+      "path": "reports/ts20/baseline.log",
+      "bytes": 1393,
+      "sha256": "0a40c15146fb5a44a63f0d472396e87b6543ed40e2c9e38e4987e48ef582d0f6",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "reports/ts20/browser_results.json",
+      "bytes": 1239,
+      "sha256": "d6e270c63a4fd386a22989cd10bb24a0997bd29ded640c69e4f1ff16172609b4",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "reports/ts20/clean_install.log",
+      "bytes": 180,
+      "sha256": "f560226a3a36a1adba100ad090b447cb60bc4c18959de59cbef0c8213ed1ac43",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "reports/ts20/full_regression.log",
+      "bytes": 1473,
+      "sha256": "2cbe7b637f29ebeb6282a7182548173d53e287f6cfb965b8be0fefddee39ef0d",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "reports/ts20/full_result.json",
+      "bytes": 107,
+      "sha256": "13ac0aefdeb628b7d7739dba4bdc024445b508fe2e2bb1904b845ba42b8dca76",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "reports/ts20/specific.log",
+      "bytes": 180,
+      "sha256": "616a412d74fa9d9afbce25e7390de31e276e9fee1467209e466fde045a7cba6d",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "reports/ts20/stress.json",
+      "bytes": 742,
+      "sha256": "d650856cd0c9331792f0ea602fc6cb31f5da142233c501dd6ca1f7490c254f49",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "reports/ts20/without_node.log",
+      "bytes": 398,
+      "sha256": "d2744c7d733a389486c7921a81cdfde502f1662ea39e42aa44c74eeeabe08231",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "src/football_manager/data/player_loader.py",
+      "bytes": 2635,
+      "sha256": "5529990500729a023a4a34d8852f457ef0577cce2ee062057de183341a622bb4",
+      "action": "replace",
+      "base_sha256": "8951ada1f752a742e12e1cb3fc28619e12eab89e362b694dc4c56a8a219ba367"
+    },
+    {
+      "path": "src/football_manager/dev_ui/session.py",
+      "bytes": 144425,
+      "sha256": "af330a3ca4f740bcb8432b0f0c24081c8bcca4377dfe972cebcca18aa999bb8e",
+      "action": "replace",
+      "base_sha256": "4a6041959cebaeb6cce24ed8b9f8b4458fcdfe0c226bf09ac425c8b288c63fe1"
+    },
+    {
+      "path": "src/football_manager/domain/dressing_room.py",
+      "bytes": 8640,
+      "sha256": "a9e6501eb713acb51c92ad1177a4e5f9266a35b158820fbe13447736cd3893ef",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "src/football_manager/domain/personality.py",
+      "bytes": 1413,
+      "sha256": "6710600b6578908feeda9b458ccc6bd888d34826dc3f5deba062fdefd55744e2",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "src/football_manager/domain/player.py",
+      "bytes": 5181,
+      "sha256": "84f15fc6ffe6bb81f1ca80c6eded50d2181cf89ab391229a64d2859c1631f627",
+      "action": "replace",
+      "base_sha256": "e3d5273c2f450c574152fa521f63fa9311b9bb0ba777dc7ecbd2e68270efc5cd"
+    },
+    {
+      "path": "src/football_manager/domain/player_ratings.py",
+      "bytes": 17336,
+      "sha256": "80ec22ae035325d0778ed6543ebae5cc7a17e4910ff01049d04e3442efcef53e",
+      "action": "replace",
+      "base_sha256": "fe1916390d48aac7942008edf067346489cfc416bc4959d610846825755c728a"
+    },
+    {
+      "path": "src/football_manager/domain/player_state.py",
+      "bytes": 2652,
+      "sha256": "32d98d1d536a5100cff77c2413b4b579bfd6152840efbd5261a3c4f0272a3b49",
+      "action": "replace",
+      "base_sha256": "6e0c1cbb848dcb0307f6e5e6d71eab3053e4c0def7d4d8539ee5b281b53bbf58"
+    },
+    {
+      "path": "src/football_manager/domain/squad.py",
+      "bytes": 1720,
+      "sha256": "b4d4fa702c69d0cd32d7e7b9b46f1f0fcb731c51b9216be9173835c37b5c7042",
+      "action": "replace",
+      "base_sha256": "fa721c34decf99f6a3cdc45006f31dedc54464bda3f0c2bb4ceb25017055d762"
+    },
+    {
+      "path": "src/football_manager/persistence/manager_career.py",
+      "bytes": 13218,
+      "sha256": "f4f1460876f9a413ee25e5b8d758e15f59d4e7cb422370855226b5663e95ada4",
+      "action": "replace",
+      "base_sha256": "be6d446bdb403ed2f0eb4ff9e8eb4a5c4b5a418bebcf7de97778d50d64815d14"
+    },
+    {
+      "path": "src/football_manager/persistence/session_codec.py",
+      "bytes": 15627,
+      "sha256": "4a3d19ff307e3765f012a5db712dedfa1819eb9065a10c681e3ee60f4c452db2",
+      "action": "replace",
+      "base_sha256": "e5dbf0f67dd89375e1b05481f1dd6b05be4cc106142b144ee26c86f1bfa09510"
+    },
+    {
+      "path": "src/football_manager/services/dressing_room.py",
+      "bytes": 18925,
+      "sha256": "edb80fb04e8c6469c4e54562af47615b74d9836b21b92b035bdeb30b83ee3991",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "src/football_manager/services/match_snapshot_builder.py",
+      "bytes": 7242,
+      "sha256": "ee670da4d4cf3bcda8095a9d6e3609e5e72c21b6232a2cd910d5719adc0577e9",
+      "action": "replace",
+      "base_sha256": "e7a936f256501f65baed5add5770cfb7421244e08f031f683ecd4efddb1c4f3c"
+    },
+    {
+      "path": "src/football_manager/ui_shell/dressing_room.py",
+      "bytes": 6529,
+      "sha256": "6d5888e28bc22c41879e1b95fbd4ed1dd3aa658d6440f8118c46e9a60d84a18f",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "src/football_manager/ui_shell/models.py",
+      "bytes": 16842,
+      "sha256": "5df9e379eff4b7c8165d8b71cfcac6540a4936dfebed0da2c43c3da4f70cc25d",
+      "action": "replace",
+      "base_sha256": "cd954d05e3453b2d4d07c1f7b3b2d4e99d6aa3e31a3396254e4743fc54310169"
+    },
+    {
+      "path": "src/football_manager/ui_shell/progression.py",
+      "bytes": 9717,
+      "sha256": "2835fd447c94dc581529a0f3b7c5e1fc371fd4334e5689f574b5ffb1bb6c6d2a",
+      "action": "replace",
+      "base_sha256": "63dea6ea11dfefdfe4792e5764a114acb5483e6aeda90dc7eee8ceba92057009"
+    },
+    {
+      "path": "src/football_manager/ui_shell/server.py",
+      "bytes": 10531,
+      "sha256": "69dc63f8d19cfb0996c98be54fb2f5c63eb6eae5b39771e975788fcd24071e50",
+      "action": "replace",
+      "base_sha256": "61d8359fc29842a43dbbaec7ecba428dc9b13bf95009c8dd86ad5944cbaaf380"
+    },
+    {
+      "path": "tests/fixtures/ts20/manager_v3_with_studio.json.gz",
+      "bytes": 137072,
+      "sha256": "49d2c5cbde47240880b6e1a38b23f5cf9b15de0ee3f02a9517369b969348cf51",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/test_ts_17_4_long_career_persistence.py",
+      "bytes": 2918,
+      "sha256": "fc238c05972da299a73d2c13a4685646272d057d89a418ccbfd502b7c0b77e33",
+      "action": "replace",
+      "base_sha256": "a5356416766d6f409b4c747accd822c62dc00269d7092cd4724a19213282dc27"
+    },
+    {
+      "path": "tests/test_ts_19_tactical_studio.py",
+      "bytes": 13786,
+      "sha256": "202836708e6b8005e8eeb363e295caded58b6d8cbb823e753ef552e386d3636b",
+      "action": "replace",
+      "base_sha256": "2406ac1e0a08afca9bbf17bab595f3437848aa6679d2be8f422063c9db0efe54"
+    },
+    {
+      "path": "tests/test_ts_20_dressing_room.py",
+      "bytes": 16344,
+      "sha256": "83cf98249d278051ff7483b8caf3ed765815deb60e11d99b3270e94a49d26087",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/test_ts_20_frontend.py",
+      "bytes": 3339,
+      "sha256": "49736da936d602ad603d78e128fc273feddd10625d3a4f3063bfd3b8df311694",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/test_ts_20_integration.py",
+      "bytes": 9294,
+      "sha256": "3d2663dbdad679ced3e00b75aeb08b430623e5603625f5099bdee6a10798f2de",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "tools/validate_ts20_browser.py",
+      "bytes": 13543,
+      "sha256": "fa26355337d9962132608bb324f533fb13b80f72a6078d2fd45020767a6fbcf8",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "tools/validate_ts20_stress.py",
+      "bytes": 4647,
+      "sha256": "fcb45f50de44d3b58f418e057d49229f4881fc0b5b65b23bb07dbf5a44c4f62d",
+      "action": "add",
+      "base_sha256": null
+    },
+    {
+      "path": "tools/verify_ts20_package.py",
+      "bytes": 2035,
+      "sha256": "ed8d4f81ceef347d6221e451c3d26b0cc17fcdb343f48644b3181f12ec042bbc",
+      "action": "add",
+      "base_sha256": null
+    }
+  ]
+}

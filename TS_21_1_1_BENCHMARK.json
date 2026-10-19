@@ -1,0 +1,84 @@
+{
+  "package": "TS-21.1.1",
+  "environment": {
+    "platform": "Linux",
+    "python": "3.13.5",
+    "node_available": false,
+    "repetitions": 3,
+    "concurrent_test_load": false
+  },
+  "baseline": "Original uploaded ZIP + TS-19 LM/RM goalkeeper hotfix + TS-21.1",
+  "same_synthetic_input": true,
+  "synthetic_input_sha256": "92847876d010342c2e08e1d0b417c844ff42ba04736f6fb060a789f453b2bba9",
+  "workloads": [
+    {
+      "scenario": "postmatch_continue",
+      "before_seconds": [
+        2.266911,
+        2.018199,
+        2.084123
+      ],
+      "after_seconds": [
+        1.364842,
+        1.369179,
+        1.306866
+      ],
+      "median_before": 2.084123,
+      "median_after": 1.364842,
+      "reduction_percent": 34.51,
+      "new_results_before": 39,
+      "new_results_after": 39,
+      "same_result_and_player_state_digest": true,
+      "digest_before": "c455b48e433f7eed890fe0ae9660f49c0596a8d4bfeb0925000707071c113b63",
+      "digest_after": "c455b48e433f7eed890fe0ae9660f49c0596a8d4bfeb0925000707071c113b63"
+    },
+    {
+      "scenario": "calendar_days",
+      "before_seconds": [
+        14.595019,
+        15.032542,
+        15.04498
+      ],
+      "after_seconds": [
+        9.936756,
+        10.408909,
+        9.717592
+      ],
+      "median_before": 15.032542,
+      "median_after": 9.936756,
+      "reduction_percent": 33.9,
+      "new_results_before": 334,
+      "new_results_after": 332,
+      "same_result_and_player_state_digest": false,
+      "digest_before": "065f70433044ade337aed096a9467b2f6d7ec1d550da14aae13849bdb089a841",
+      "digest_after": "63be9b27754186d35c797fef0e799e3f2c74dca27c80c61c34c7a8cd5c759e22"
+    },
+    {
+      "scenario": "fixed_league_batch",
+      "before_seconds": [
+        5.834825,
+        5.848864,
+        5.666079
+      ],
+      "after_seconds": [
+        3.548849,
+        3.43064,
+        3.82628
+      ],
+      "median_before": 5.834825,
+      "median_after": 3.548849,
+      "reduction_percent": 39.18,
+      "new_results_before": 128,
+      "new_results_after": 128,
+      "same_result_and_player_state_digest": true,
+      "digest_before": "e8d089d8fc2ff924c930932d3a3b44831ce300620185206746cc9e70782b9f8d",
+      "digest_after": "e8d089d8fc2ff924c930932d3a3b44831ce300620185206746cc9e70782b9f8d"
+    }
+  ],
+  "caveats": [
+    "Times are measured in this Linux environment, not on the user Windows PC.",
+    "28-day schedule work changes from 334 to 332 results because future fixture dates are repaired; not a bit-identical workload.",
+    "Post-match Continue and the fixed 128-match batch have identical results and player-state digests.",
+    "Production careers retain persistent squads and full match simulation; no league-count reduction."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "patch": "TS-18.1",
+  "base": "TS-17.4",
+  "branch": "fix/ts-18-1-player-state-learning",
+  "summary": "fix(players): apply gradual form confidence and tactical learning after matches",
+  "files": [
+    {
+      "path": "src/football_manager/services/player_match_progression.py",
+      "sha256": "740701e651be2389f0bcdf0b1b5b81cb3e6d00d29cfc35bd53c1d89a2552fe44"
+    },
+    {
+      "path": "src/football_manager/dev_ui/session.py",
+      "sha256": "caf26aa6ca7ec7481b7a6e92ca40ad0ffc046c5084cdd7773743beb81dd6b377"
+    },
+    {
+      "path": "tests/test_ts_18_1_player_state_learning.py",
+      "sha256": "afe52548f95ed225fecb4c62a6ded557ff7f91bbbc231dbc0495f4acd2d5480d"
+    },
+    {
+      "path": "docs/TS_18_1_PLAYER_STATE_LEARNING.md",
+      "sha256": "bcf61ca32fc98825f7753969d06c9596c25c513ddc13813de04b54fbec0c2fa5"
+    },
+    {
+      "path": "TS_18_1_PATCH_INSTRUCTIONS.txt",
+      "sha256": "d0d896ba4fa0f892f332c1072d63e7470c4550dd796e1c06a8843d40d343e94b"
+    }
+  ]
+}

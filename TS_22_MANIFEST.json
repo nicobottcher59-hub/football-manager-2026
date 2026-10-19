@@ -1,0 +1,240 @@
+{
+  "manifest_version": 1,
+  "package": "TS-22-Squad-Match-Presentation",
+  "base": "TS-21.1.1",
+  "runtime": "Python >=3.11 and existing portable frontend; Node/npm not required",
+  "file_count": 45,
+  "files": [
+    {
+      "path": "TS_22_README.txt",
+      "bytes": 2383,
+      "sha256": "fde940451ed42c922e805d00d54f129e657086d7d3ef7eebed626933b2c86a3d"
+    },
+    {
+      "path": "TS_22_TEST_REPORT.md",
+      "bytes": 13001,
+      "sha256": "9d7a2c750a7604c71e01cda0b6ab1f4aefe55f5b11f4efc0690518f7262a75ae"
+    },
+    {
+      "path": "TS_22_VALIDATION.json",
+      "bytes": 18456,
+      "sha256": "c3b18946e27a21e09b6be11d02856155379daffe2da60822f4394e799ed0157b"
+    },
+    {
+      "path": "frontend/portable/calendar.js",
+      "bytes": 16485,
+      "sha256": "82fbf3076761f903b2a9de92409c992ac6258d4f010f55f5f3ee465c8c216b92"
+    },
+    {
+      "path": "frontend/portable/competitions.js",
+      "bytes": 39148,
+      "sha256": "002cf2296865959053a5d7571b46933211b11f76815278666b936736bbd3506d"
+    },
+    {
+      "path": "frontend/portable/home_competition.js",
+      "bytes": 4149,
+      "sha256": "2eaddd9a930c35471d38282bcc0a01630d23f7513b5b821a530f7f72d2c5dccb"
+    },
+    {
+      "path": "frontend/portable/index.html",
+      "bytes": 44373,
+      "sha256": "99fe2f4411ffdd33f6de589846cfb67d6e19ad7d31322528c691ae123df970e1"
+    },
+    {
+      "path": "frontend/portable/match.css",
+      "bytes": 38705,
+      "sha256": "9225c1c6bddeb6f14714aa31a65f8eda778643c470706092ef994b39b0d08856"
+    },
+    {
+      "path": "frontend/portable/match.html",
+      "bytes": 485,
+      "sha256": "d356a1d1182049d9fb8c674f7262a053a5b5c25aa46dbb9cabe08880a82fc803"
+    },
+    {
+      "path": "frontend/portable/match.js",
+      "bytes": 35261,
+      "sha256": "74c965276a3541795536230f9eebd5786035d0984721a827249a5d1487e946dc"
+    },
+    {
+      "path": "frontend/portable/portable.js",
+      "bytes": 31497,
+      "sha256": "0b4208c69c74ab86a2d4f9e421a59aff77b13662c6285813c11bb3b907254587"
+    },
+    {
+      "path": "frontend/portable/presentation.css",
+      "bytes": 2244,
+      "sha256": "e7c90a8f3d22682295f18a803a8ef34cb8bb8c310a34bc01ec5a7d53bde69ea0"
+    },
+    {
+      "path": "frontend/portable/world_squads.js",
+      "bytes": 5434,
+      "sha256": "39017d8df2f624d987de50256adfbbceca099252ac49637ec2bd8464dfc0bd0c"
+    },
+    {
+      "path": "frontend/public/squad/balance.js",
+      "bytes": 1597,
+      "sha256": "dd4fbfd7c6f5b798a0fc5cc6654f347edf0daf7ed9958c881e38fc266ff51956"
+    },
+    {
+      "path": "frontend/public/squad/embed.html",
+      "bytes": 1016,
+      "sha256": "0bd7c83e777193937844c2832404d619b87eb5c62770396c55f08ba1679bc520"
+    },
+    {
+      "path": "frontend/public/squad/presentation.css",
+      "bytes": 3245,
+      "sha256": "24de18ed0394c223b433d6c316058b6e6f65e5302c8e6b116e66a03368299bea"
+    },
+    {
+      "path": "frontend/public/squad/presentation.js",
+      "bytes": 6854,
+      "sha256": "23fb0806218cfb5d721a8a40a6c6ab9b7bb36db60857969abba344f35c67a5f2"
+    },
+    {
+      "path": "frontend/public/squad/roster.js",
+      "bytes": 20438,
+      "sha256": "fdcf297d648c76f8f6aa7f1fef8bd414cd18785312957d30ad38a7d5bdacc53a"
+    },
+    {
+      "path": "frontend/public/squad/squad.js",
+      "bytes": 37435,
+      "sha256": "862105a78938af1f7baa85d4ccaccb09a3df7c6f32316c5b12d64895d5172c35"
+    },
+    {
+      "path": "src/football_manager/dev_ui/session.py",
+      "bytes": 147133,
+      "sha256": "0a4d44c822afe22ef9dff6ff59043975b313ce864329d7002c1b7a80c6acb842"
+    },
+    {
+      "path": "src/football_manager/domain/football_world.py",
+      "bytes": 7997,
+      "sha256": "ce1709d7c2476cf0bf46d29e6c4d70e60d264532006dedc8e7aaaa798932a4e0"
+    },
+    {
+      "path": "src/football_manager/domain/season_statistics.py",
+      "bytes": 5401,
+      "sha256": "9cdebc9a3b101438e1cae80ea51150d10004ade04e912672fbb36413e3baad3e"
+    },
+    {
+      "path": "src/football_manager/persistence/manager_career.py",
+      "bytes": 15341,
+      "sha256": "43339361853bd0d3f80490471a2ffa4630d1c2900a05dcf9438a2ce15b7ccca0"
+    },
+    {
+      "path": "src/football_manager/persistence/session_codec.py",
+      "bytes": 16561,
+      "sha256": "a1efe3a5d41bc6e9216b40a59ad118f6333bceb9539f925c638da14810bf970f"
+    },
+    {
+      "path": "src/football_manager/services/opening_balance.py",
+      "bytes": 2811,
+      "sha256": "35b51bfc4eac3341b9ada4daa568f8e45d7e7158650b81de321119de35f3116d"
+    },
+    {
+      "path": "src/football_manager/services/season_statistics.py",
+      "bytes": 6950,
+      "sha256": "f3b24ba1431abea567d0608b1885f34b1ceda56319d0c748d8dde0e3c828a60f"
+    },
+    {
+      "path": "src/football_manager/services/world_matches.py",
+      "bytes": 10062,
+      "sha256": "542197b06127e41d497f288f024a9d2ff5c1bff18a84e1d18c33390d15f568b5"
+    },
+    {
+      "path": "src/football_manager/services/world_squads.py",
+      "bytes": 17575,
+      "sha256": "8b591010bd88fc6640f53b73232a767d365465f10dd2bfd912d01ffef1b06c91"
+    },
+    {
+      "path": "src/football_manager/ui_shell/application.py",
+      "bytes": 9383,
+      "sha256": "d77b5868a8944768348d1971cf452b9e75a39718cb894cc210f86ac50e0077df"
+    },
+    {
+      "path": "src/football_manager/ui_shell/calendar.py",
+      "bytes": 6387,
+      "sha256": "6964c85ac3304f628911cddda62847cc82da3eb67086ad42f60e7b92815aec96"
+    },
+    {
+      "path": "src/football_manager/ui_shell/club_profiles.py",
+      "bytes": 4870,
+      "sha256": "08896863ba08876fb461f51a3cbe0d4490372c53f785863c7d8073b2c0dd8d39"
+    },
+    {
+      "path": "src/football_manager/ui_shell/home_competition.py",
+      "bytes": 3773,
+      "sha256": "0f0a2a496f3b91e584cdff3c6bdc1b0ec62f6fce33f04e660dff0e915a8f10a0"
+    },
+    {
+      "path": "src/football_manager/ui_shell/match.py",
+      "bytes": 12838,
+      "sha256": "c460fe6e5abef32e55aed003a9d008082fead1c94b17d6dd1b658bdee389f8fc"
+    },
+    {
+      "path": "src/football_manager/ui_shell/models.py",
+      "bytes": 17311,
+      "sha256": "b85ae282a5aff497ab28584fbee25c6a84250f8ff53145a9425209badc70d525"
+    },
+    {
+      "path": "src/football_manager/ui_shell/player_profiles.py",
+      "bytes": 3913,
+      "sha256": "229506246354c07e9040863291b6bd20fad16736063936fa75e7eb2f5089ac5c"
+    },
+    {
+      "path": "src/football_manager/ui_shell/server.py",
+      "bytes": 13471,
+      "sha256": "038e8abfc91880597b92377d2ac1cfc8dadc8c524b958ac43259f31221bdf5d6"
+    },
+    {
+      "path": "tests/test_ts_22_presentation.py",
+      "bytes": 23573,
+      "sha256": "eb401377fc324be8a601ccbf4cab98a0c4aa4b868a1d47b126c398991fa5a9bd"
+    },
+    {
+      "path": "tests/test_ui31_visual_live_home.py",
+      "bytes": 4538,
+      "sha256": "3dc53ed146c2814cfb732773fbc0a8bf605ba669e70097443e6f730c621fab17"
+    },
+    {
+      "path": "tests/test_ui332_competition_explorer.py",
+      "bytes": 5469,
+      "sha256": "9ba8e5890350fc7266a5260302d8638e19bf5cb7691b3b0390b71d2244fe07d7"
+    },
+    {
+      "path": "tests/test_ui35_matchday.py",
+      "bytes": 7481,
+      "sha256": "41631be020d7968ca1814ab6f5a7fc73c95ac421acde97c64b0d088e1ed49eee"
+    },
+    {
+      "path": "tests/test_ui3_roster.py",
+      "bytes": 6590,
+      "sha256": "01c21e76cfd2ecdb31a4f91e2484216814c291f0465d8ad036e8fe9e841d77db"
+    },
+    {
+      "path": "tools/benchmark_ts22.py",
+      "bytes": 6489,
+      "sha256": "1574547ebc9f6c0c14d949453d65a600b048c9ae96fca34d6239d961acb177cb"
+    },
+    {
+      "path": "tools/validate_ts22_browser.py",
+      "bytes": 12870,
+      "sha256": "013b42d64734fb6d4ede67d682430324db7b2bbf31320d3fec88f297d4113f07"
+    },
+    {
+      "path": "tools/verify_ts22_package.py",
+      "bytes": 3456,
+      "sha256": "a17f4817ef7b74e2119a1407d3f8ea03cf2c5b919bcc99cdd07c162db4437c1c"
+    }
+  ],
+  "base_dependencies": {
+    "TS_21_1_1_PERFORMANCE_CALENDAR_MANIFEST.json": "0425d34ea22b7a86d15163abffe54149db94694a6d5cca1e87627cfb0a183d63",
+    "tests/fixtures/ts2111_manager_v5_before.sqlite3.gz": "84b938afa9620ed026b3ba5a090902a65990461ad39af2449cfd391a46d32987",
+    "src/football_manager/domain/player_ratings.py": "be53b954614538c0d955d3e6a3831b31c48bc11d0b2a3c4ab99f1070ec79f247",
+    "src/football_manager/domain/calendar_planner.py": "f3ab4ba10701f6c8bc1ff643c8698a119f215cc7e8f5a5123c5eb8830fa02b21",
+    "src/football_manager/services/calendar_stabilization.py": "2e1b0fb7d2e4ff122c803301c4512472a2b97aee2c26b97f4c9f60b5ca0bd516",
+    "src/football_manager/ui_shell/progression.py": "cc7a0b755b586b695615f921acc536b45a2e90805d34068410dd52417037d12b",
+    "src/football_manager/domain/roles.py": "f7a4ccd7a8a1db63fd8fdb2a0c40bf128d79eae7390c5d81d8c75c588fa99db7",
+    "frontend/public/squad/studio.js": "ea9eb3632325b693f2785cb170476a76e28c0425beae9498deccb1f578203846",
+    "INICIAR_INTERFAZ_WINDOWS.bat": "35f7991838a49d6a173c95b9b8bfe6bdc1dd3898abcf38f29ada1e3ce40837c7"
+  }
+}

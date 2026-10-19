@@ -1,0 +1,38 @@
+TS-23.1 - Youth Academy UI, paid scouts and poachable prospects
+INCREMENTAL UPDATE - not a full game
+
+Required base: TS-23 Youth Academy & Newgens installed. No Node or npm.
+
+1. Stop INICIAR_INTERFAZ_WINDOWS.bat and close the running Python server.
+2. Make a backup of the complete game folder and your full SQLite career save.
+3. Extract this ZIP into the project root (the folder with
+   INICIAR_INTERFAZ_WINDOWS.bat). Preserve folders and replace files.
+4. Run: python tools/verify_ts231_academy_package.py
+5. Run: python -m pytest -ra tests/test_ts_23_1_academy_polish.py
+6. Start with INICIAR_INTERFAZ_WINDOWS.bat, press Ctrl+F5 and open Youth Academy.
+
+NEW CAREERS: Youth scouts start EMPTY. You can hire up to 3 scouts from
+an offer list with a signing fee and monthly wages. The recruitment allocation
+is provisional and separate from the as-yet-unimplemented club finance system.
+
+EXISTING TS-23 SAVES: the original three scouts are preserved as legacy free
+staff with £0 monthly wage. No scouting expenses are backdated. You may end
+those agreements or continue using them. The new youth allocation starts at
+£500,000 and is replenished annually in amounts defined by club division.
+
+Following a discovered prospect does not reserve or sign them. From 30 days
+after discovery, AI clubs can sometimes sign unsigned candidates. They enter
+the AI's real U17 roster with the same persistent player ID. A short record
+of lost prospects remains visible.
+
+The complete SQLite career save upgrades to version 11 when saved. Loading
+alone does not overwrite the previous save file. Keep your original backup.
+Use the full SQLite save, not the results-only JSON export.
+
+Suggested GitHub Desktop branch:
+feat/ts-23-1-academy-redesign-and-scout-market
+
+Suggested commit summary:
+feat(youth): redesign academy and introduce paid scouting with poaching
+
+This ZIP intentionally includes no saved careers or personal credentials.

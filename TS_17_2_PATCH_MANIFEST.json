@@ -1,0 +1,23 @@
+{
+  "stage": "17_2",
+  "branch": "fix/ts-17-2-club-scoped-player-identity",
+  "summary": "fix(match): resolve event and statistics players by club and ID",
+  "base": "previous TS-17 patch",
+  "files": [
+    {
+      "path": "src/football_manager/ui_shell/match.py",
+      "sha256": "affdb603fe80d40e94e77d4584263ab093bd840d65f3836c6d5dd037461f7168",
+      "bytes": 11395
+    },
+    {
+      "path": "src/football_manager/fast_simulation/models.py",
+      "sha256": "29a5fedff6da0b8442311f54f7a2244d03603bde3d3c7948464e2b58cb711cd7",
+      "bytes": 13526
+    },
+    {
+      "path": "tests/test_ts_17_2_club_scoped_player_identity.py",
+      "sha256": "c5029b9380a0ec1d04c24d876421cda47eb6f5cee9ebf1f992f5471e98c7d88c",
+      "bytes": 2225
+    }
+  ]
+}

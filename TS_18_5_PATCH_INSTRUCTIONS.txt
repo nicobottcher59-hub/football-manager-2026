@@ -1,0 +1,10 @@
+TS-18.5 - OPPOSITION AI RELIABILITY (INCREMENTAL PATCH)
+BASE: main with TS-18.4 integrated.
+BRANCH: fix/ts-18-5-opposition-ai-reliability
+SUMMARY: fix(ai): guard incomplete extra-time tactical assignments
+SCOPE: Only avoids selecting an incompletely assigned player for an existing extra-time substitution. Does not add AI tactics, decisions or regulatory-time substitutions.
+VALIDATION: 7 TS-18.5 checks passed; 42 targeted tests including TS-18.3, TS-18.4, TS-13 passed. Full regression was initiated but not finished in the available runtime; DO NOT MERGE without Windows full-suite check.
+INSTALL: Create branch from updated main, extract files preserving paths, execute focused and complete suite; commit and merge only if validated.
+FOCUSED: python -m pytest -ra tests/test_ts_18_5_opposition_ai_reliability.py
+RELATED: python -m pytest -ra tests/test_ts_18_5_opposition_ai_reliability.py tests/test_ts_18_4_match_engine_consistency.py tests/test_ts_18_3_tactical_logic_instructions.py tests/test_ts_13_tactical_consumer_coverage.py
+FULL: python -m pytest -ra

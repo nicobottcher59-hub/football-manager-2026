@@ -1,0 +1,28 @@
+TS-14 - PERSISTENCE ARCHITECTURE (SQLite opt-in)
+
+PRERREQUISITO: integrar TS-13 en main antes de aplicar este parche.
+
+BRANCH
+feat/ts-14-sqlite-persistence-foundation
+
+COMMIT SUMMARY
+feat(persistence): add versioned SQLite save repository and identity contracts
+
+APLICACION
+1) Desde main actualizado con TS-13, crear la branch anterior.
+2) Extraer el ZIP en la raiz de football-manager-game, manteniendo sus rutas.
+3) Ejecutar desde PowerShell:
+   python -m pytest -ra tests/test_ts_14_persistence_architecture.py
+   python -m pytest -ra
+4) Si los tests pasan, commit, push y merge a main.
+
+CAMBIOS
+- Nueva capa src/football_manager/persistence/ basada en sqlite3 de Python.
+- Versionado del esquema/documentos, transacciones, revisiones y checksum.
+- Identidades compuestas y relaciones con claves foraneas.
+- Adaptador opcional para guardar/cargar SOLO el WorldCareer de resultados.
+- Tests y documentacion, sin dependencias nuevas y sin alterar la interfaz.
+
+IMPORTANTE: TS-14 no activa Guardar/Cargar desde el juego y no guarda
+DevelopmentSession, jugadores, tacticas ni economia. Eso queda para TS-15.
+Los guardados JSON actuales permanecen compatibles.

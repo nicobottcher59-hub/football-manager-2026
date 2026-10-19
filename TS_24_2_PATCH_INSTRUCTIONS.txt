@@ -1,0 +1,68 @@
+TS-24.2 - PROFESSIONAL CONTRACTS AND CLUB FINANCES
+INCREMENTAL UPDATE - NOT THE FULL GAME
+
+Required base: TS-24.1 Player Market Valuation installed.
+Python-only runtime; Node/npm is not needed to install or play.
+
+1. Close the game AND its Python server.
+2. Back up the complete project and your FULL SQLite career save.
+3. Extract this ZIP into the existing project folder containing
+   INICIAR_INTERFAZ_WINDOWS.bat. Preserve folders and replace files.
+4. Verify the incremental package:
+   python tools/verify_ts242_economy_package.py
+5. Test the economy and contract code:
+   python -m pytest -ra tests/test_ts_24_2_contracts_finances.py
+   (the full-save tests can take longer than unit tests.)
+6. Optional read-only financial calibration:
+   python tools/audit_ts242_economy.py
+7. Run INICIAR_INTERFAZ_WINDOWS.bat, refresh the browser with Ctrl+F5.
+8. Open Finances: view transfer budget, bank cash, wage budget, committed
+   payroll, individual professional contracts, renewal offers and monthly
+   history. Contract details also appear in Squad and club/player views.
+
+WHAT CHANGES
+- One actual persisted professional salary and contract per registered
+  first-team player, plus lower youth agreements in U17/U21.
+- Actual club wage ceiling, reserved transfer allocation, monthly recurring
+  simulated revenue, other operating costs, cash and payroll ledger for all
+  92 clubs, using the SAME formulas for manager and AI.
+- Signed weekly wage is FIXED until a renewal or a new agreement. Changes in
+  OVR, ACT or temporary fitness DO NOT automatically change the wage.
+- Manager may offer a renewal from Finances: 1 to 5 years (restricted for
+  veterans), salary demand and board ceiling apply. Invalid offers fail
+  without changing the saved contract or cash.
+- AI clubs independently renew expiring deals within their own wage limits.
+- Monthly wages/receipts debit/credit operating cash exactly once, with
+  pro-rated initial month, and complete history for existing wage changes.
+- New careers begin with coherent contracts/budgets; compatible TS-24.1
+  careers get a no-retroactive-charge finance register at migration.
+- Promotion from U17/U21 to the first team creates a pro deal and retains
+  the same player ID; youth retirement/release removes old contract records.
+- Budget and recurring simulated revenue adapt on new season promotion and
+  relegation. No fabricated ticket receipts or completed transfers are added.
+
+NOT IMPLEMENTED IN TS-24.2
+- Buying or selling professional players; loan agreements; agents and their
+  negotiated clauses; player consent to changing club.
+- Real match-day gate receipts / television payments / actual costs by
+  category. Initial revenues are transparent fiction calibrated to this
+  simulator's opening world and will be upgraded in later finance work.
+- Free-agent and contract expiry departures. Expired contracts use visibly
+  flagged *paid interim retention*, not a silent salary cut or unpaid labor.
+- Moving the transfer budget into wages manually (future update).
+- Youth scouting allocation is still separate from club operating cash.
+
+SAVE AND COMPATIBILITY
+- Full SQLite manager save graph becomes version 13; TS-24.1 v12 compatible
+  careers migrate on load. Loading does NOT overwrite the old file; the
+  change to v13 is persisted when the user saves.
+- Older app releases may not understand a v13 save. KEEP YOUR BACKUP.
+- This ZIP does NOT ship personal save files.
+
+GITHUB DESKTOP BRANCH
+feat/ts-24-2-contracts-and-finances
+
+COMMIT SUMMARY
+feat(economy): add persistent contracts, weekly wages and club budgets
+
+See TS_24_2_TEST_REPORT.md for verification and limitations.

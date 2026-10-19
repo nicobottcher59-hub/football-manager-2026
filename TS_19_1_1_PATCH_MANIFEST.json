@@ -1,0 +1,69 @@
+{
+  "patch_id": "TS-19.1.1",
+  "title": "Formation UI Refinement",
+  "format": "incremental / extract at project root / no game engine changes",
+  "requires": "TS-19.1 Formation Expansion already integrated",
+  "created_at": "2026-10-15",
+  "test_results": {
+    "pytest_full": "1105 passed, 0 failed (354.80 seconds)",
+    "geometry": "1120 collision-free pitch cases",
+    "windows_visual": "pending"
+  },
+  "files": [
+    {
+      "path": "src/football_manager/ui_shell/models.py",
+      "size_bytes": 16521,
+      "sha256": "0970b7c657096769c55dca87acde8b8720555038dad7b90f1733e872b2b6403b"
+    },
+    {
+      "path": "frontend/public/squad/embed.html",
+      "size_bytes": 789,
+      "sha256": "beded0da418aa7028800d717c1ea8f9d8f93edc81fef2726d16635c30c33439e"
+    },
+    {
+      "path": "frontend/public/squad/squad.js",
+      "size_bytes": 36293,
+      "sha256": "11ec64be891fe4607e747f19bff1f906680b10dfc362e9b1ec8075e7e6ec5aff"
+    },
+    {
+      "path": "frontend/public/squad/squad.css",
+      "size_bytes": 31997,
+      "sha256": "bea2749df10c17a6806d9ae5db43bde068e5b545e5f11bd488d445a20b449287"
+    },
+    {
+      "path": "frontend/public/squad/formation_layout.js",
+      "size_bytes": 5652,
+      "sha256": "6afe16a30d2a88352d01676ddb6c8b1e670791391f756af79b08c4be412cff2b"
+    },
+    {
+      "path": "tests/test_ts_19_1_1_formation_ui_refinement.py",
+      "size_bytes": 4380,
+      "sha256": "46058f60e8c2230bdb2d74d4d1eaa1d973251144c7270fc15249494d56a6d843"
+    },
+    {
+      "path": "tests/ui/test_formation_layout.cjs",
+      "size_bytes": 2816,
+      "sha256": "2e037dd08ad09f2688e0045e4811ee52149a8424e1b69b2dbd7d42f1512d9a4a"
+    },
+    {
+      "path": "tests/ui/test_formation_picker.cjs",
+      "size_bytes": 3432,
+      "sha256": "3a9783e58a2b608b75130b9088b81aa322c97f0c177b559e65f5e65e8dfc5b2c"
+    },
+    {
+      "path": "docs/TS_19_1_1_FORMATION_UI_REFINEMENT.md",
+      "size_bytes": 3820,
+      "sha256": "50a2f209f743ad2fd7628774cd2d0b2660a646a1907704196dc54d2fdcee93cd"
+    },
+    {
+      "path": "TS_19_1_1_PATCH_INSTRUCTIONS.txt",
+      "size_bytes": 1546,
+      "sha256": "d091a94d4500c50131d82168f181459aa8e7048c979b286bd784acd5836d7a8c"
+    },
+    {
+      "path": "TS_19_1_1_TEST_REPORT.md",
+      "size_bytes": 1834,
+      "sha256": "ec482f48fb9401a4282a6d1b0a705d2fbeb9c95166e6f2dfd7ae03883ccea5f7"
+    }
+  ]
+}

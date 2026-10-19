@@ -1,0 +1,20 @@
+TS-23 — Youth Academy & Newgens — ZIP incremental
+
+BASE: tener TS-21.4/21.5 instalada y cerrados el juego y el servidor Python.
+No es un juego completo; NO reemplaza la base original.
+
+1. Hacer copia de seguridad de la carpeta del juego y de los guardados SQLite.
+2. Extraer el contenido completo de TS-23-Canteras-y-Ojeadores.zip en la
+   misma carpeta donde se encuentra INICIAR_INTERFAZ_WINDOWS.bat.
+3. Reemplazar los archivos existentes manteniendo las subcarpetas.
+4. Verificar con: python tools/verify_ts23_youth_package.py
+5. Probar con: python -m pytest -ra tests/test_ts_23_youth_academy.py
+6. Iniciar con INICIAR_INTERFAZ_WINDOWS.bat y recargar (Ctrl+F5).
+7. Abrir Squad -> Youth Academy o el acceso directo Youth Academy.
+8. Guardar con el SQLite completo para actualizar a save version 10.
+
+No requiere Node ni npm, ni descarga de paquetes JavaScript.
+No contiene partidas guardadas ni secretos personales.
+
+Rama sugerida: feat/ts-23-youth-academy-quarterly-scouting
+Commit sugerido: feat(youth): add academies, youth leagues and quarterly scouting

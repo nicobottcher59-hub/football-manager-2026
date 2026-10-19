@@ -1,0 +1,30 @@
+FM PROJECT - UI-3.5 MATCHDAY PRE/POST MATCH PATCH
+
+BASE VERSION: UI-3.4.1 with Hotfix Club Results + Custom Confirm applied.
+BRANCH (GitHub Desktop): phase-ui-3-5-matchday-pre-post-match
+
+1. In GitHub Desktop, create the branch above FROM your validated UI-3.4.1 branch.
+2. Close any running FM Project Python server (Ctrl+C) before copying.
+3. Extract every file in this ZIP to the ROOT OF YOUR EXISTING GAME REPOSITORY,
+   keeping the folders (frontend/portable, src/football_manager, docs, tests).
+   Confirm replacement of existing files. This is NOT the full game.
+4. Start INICIAR_INTERFAZ_WINDOWS.bat and refresh the main UI with Ctrl+Shift+R.
+5. On a club match day, click Go to Match to open the new sidebar-free browser tab.
+   Check the actual lineup, numbered shirts, rivals, bench and unavailable players.
+6. Optionally edit Match Tactics / Kit Settings for this match. Click Quick Sim.
+   The post-match view displays the real score, stats and event timeline.
+   Click Continue in its top right to return to the main game.
+7. In the main Tactics/Squad pages, check your usual lineup/tactics were preserved.
+8. Only commit when you confirm it works on your Windows machine.
+
+LIMITATIONS:
+- Python DEV state is temporary: closing the server loses the session.
+- Immersive mode is intentionally disabled.
+- The FastMatchSimulator has no in-match injury event generator, tackle counts,
+  or in-play missed penalty events, so these are NOT invented in the UI.
+- Display-only referee names, shirt numbers/colors, weather, manager labels
+  are fictional/provisional; they do NOT modify the engine.
+- No Node.js or npm installation required.
+
+COMMIT SUMMARY (after testing):
+feat(ui): add separate pre-match screen and FastSim match report

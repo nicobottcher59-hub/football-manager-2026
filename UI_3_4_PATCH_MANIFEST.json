@@ -1,0 +1,75 @@
+{
+  "patch": "UI-3.4 Daily Continue & Calendar Auto-Sim",
+  "base": "UI-3.3.2 + Hotfix 2",
+  "incremental": true,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "988b3f54272dd52e2fc25032e3667d3bfadc79a0639d78284358acc6c58d38c4"
+    },
+    {
+      "path": "README_DEV.md",
+      "sha256": "1c454273374934d719b26c92feac6c330c87f7c747bab0ade1f64fe9ca4f40fe"
+    },
+    {
+      "path": "UI_3_4_PATCH_INSTRUCTIONS.txt",
+      "sha256": "f5cdbb3565fa616d2f34f798ea374076bb808a3f7298ee6261539359efebd9a7"
+    },
+    {
+      "path": "docs/CURRENT_STATUS.md",
+      "sha256": "db7be3c90fc9877590992f732fe7e4a2d9a61dd22610747c5627ccfaa419e342"
+    },
+    {
+      "path": "docs/PHASE_UI_3_4_DAILY_CONTINUE.md",
+      "sha256": "645d1eeba73f02d1324556297251a81b4103f0995d61cd98a7f0fed7fbb9b955"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "sha256": "cb79cc0faad4f609e282b026e8f9d32688931bf5da7c627baf1712f4587c6a5f"
+    },
+    {
+      "path": "docs/TECHNICAL_PREFLIGHT_UI_3_4.md",
+      "sha256": "e245c50dbb1847d6ae2ae9461a01f1f014ec7b6dbee7692ac43f95c2ba8e547a"
+    },
+    {
+      "path": "frontend/portable/calendar.css",
+      "sha256": "4e24fde1d9ec8a40208d0c69fe2d5555fae4f9422f2f77d116f2f8934c3442a0"
+    },
+    {
+      "path": "frontend/portable/calendar.js",
+      "sha256": "5bebaf01475955dd510289075acac3ed0c6f9e0758ec8a3554737ec5085d38fd"
+    },
+    {
+      "path": "frontend/portable/index.html",
+      "sha256": "5b67faeef62006457a85072af3633f2d299c8d3c82e41dd60424d06179e2c6b6"
+    },
+    {
+      "path": "frontend/portable/portable.js",
+      "sha256": "f9def3def9078dd2b8119025263f128e12f5445d63ebb1cea1660bcaaff9c9b7"
+    },
+    {
+      "path": "frontend/portable/styles.css",
+      "sha256": "57fb6f9ef5f1364759fa687a8d510c1acc2e1092dd276b2b844012c03a57d238"
+    },
+    {
+      "path": "src/football_manager/ui_shell/calendar.py",
+      "sha256": "fa044d3efbe40c2bdb9915d5993c4ce4aeeea786d3e02e74c406e3bd65907d0a"
+    },
+    {
+      "path": "src/football_manager/ui_shell/progression.py",
+      "sha256": "484335328054aebdce41c7a777f9fe17b7ee8756922ea3d8a182f3158e0b8be2"
+    },
+    {
+      "path": "src/football_manager/ui_shell/server.py",
+      "sha256": "0562568ee1bb00a934cc27d318dd4b1428e5fb96aea9daf14aa0a48b2d015e47"
+    },
+    {
+      "path": "tests/test_ui31_visual_live_home.py",
+      "sha256": "df3c5ccf07e093c2af05008b164a72bf4fb6be6c1a971ec8853412ae9d771df7"
+    },
+    {
+      "path": "tests/test_ui34_daily_progression.py",
+      "sha256": "02a2dbf66aa9f845aa8ee36495f4c1335b2f5faa57e4cd7319017d0446118208"
+    }
+  ]
+}

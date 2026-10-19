@@ -1,0 +1,16 @@
+{
+  "patch": "TS-18.6",
+  "contents": "original regression stress + expanded validation",
+  "base": "TS-18.5 REVISADO",
+  "status": "validation_partial",
+  "sha256": {
+    "TS_18_6_EXTENSION_MANIFEST.json": "a8c7e2ea82d1f4d4b7699ac1cf390da6ed5dbb2d01256530ccbd7a4c3f57d433",
+    "TS_18_6_PATCH_INSTRUCTIONS.txt": "9a50a3e38a67d9fe147597960f878fac557cccf40e1ac86642b9131c12895949",
+    "TS_18_6_PATCH_MANIFEST.json": "b49da4fa1e714d1d7ccac4461c4ab890cdeaa0f6f5c6d1255bc1e6286285335b",
+    "TS_18_6_UNIFIED_README.txt": "a9987e587ce570f24dbbc1c7cb2f63b714c4dc4f1f1d62c8dd8b66fe86303e4a",
+    "TS_18_6_VALIDATION_REPORT.md": "eef0c2256f4d0752f3cbc632af96baf57d53ac1cff58c6bcef98714ad55b2035",
+    "TS_18_6_WINDOWS_VALIDATION.ps1": "052f79f1ee80509e4dc85dc6e6a00bff953bad421facb29b876816b0cdf478c0",
+    "tests/test_ts_18_6_football_regression_stress.py": "a7f30540e09ef977bd45c71d7d43bd2954da374dd57a9f42ddcd904955b33bd5",
+    "tests/test_ts_18_6_spatial_seeded_regression.py": "28bc411fd95c9f865e1b008c0d2b15f36e25741b7b683b96e2ad4b8d9a9d0b7e"
+  }
+}

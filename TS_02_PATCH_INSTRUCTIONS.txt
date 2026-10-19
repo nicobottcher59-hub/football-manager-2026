@@ -1,0 +1,16 @@
+FOOTBALL MANAGER GAME — TS-02 CALENDAR SCHEDULING CORRECTIONS
+
+BRANCH: fix/ts-02-calendar-scheduling
+SUMMARY: fix(calendar): correct fixture priorities and knockout chronology
+
+BASE: TS-01 applied and committed on main. Do not apply directly to the original
+Oct 13 source snapshot; patches are incremental.
+
+1. Create BRANCH from the current main containing TS-01.
+2. Extract this ZIP at the root of football-manager-game, replacing files.
+3. Run (PowerShell, no Node.js required):
+   python -m pytest -q -ra tests/test_ts_02_calendar_scheduling.py tests/test_ts_01_atomic_world_operations.py
+4. Review changed files and COMMIT with SUMMARY, then push.
+5. If you also plan to apply TS-03 and TS-04, commit TS-02 before switching branches.
+
+This patch does not change the frontend/UX, save schema or match model.

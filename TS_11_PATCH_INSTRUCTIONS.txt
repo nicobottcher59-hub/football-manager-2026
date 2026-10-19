@@ -1,0 +1,28 @@
+TS-11 — SESSION & APPLICATION RELIABILITY
+
+Requires: TS-09 applied and integrated (which requires TS-08 and TS-07.1).
+
+GitHub Desktop branch: fix/ts-11-session-application-reliability
+Commit Summary: fix(session): make UI edits and simulation jobs atomic
+
+1. From main including TS-09, create the branch above.
+2. Extract this ZIP into the football-manager-game project root; preserve paths.
+3. Run focused tests (Python only, Node.js is not required):
+
+   python -m pytest -ra tests/test_ts_11_session_application_reliability.py
+
+4. Run legacy UI integration tests:
+
+   python -m pytest -ra tests/test_ui_shell_squad.py tests/test_ui3_roster.py tests/test_ui35_matchday.py tests/test_ui341_calendar_progress.py
+
+5. Run the entire Python regression before committing:
+
+   python -m pytest -ra
+
+6. Manual check: open the existing game, change tactics and a shirt number;
+   in the next Match screen, adjust and reset match-only tactics, quick-sim
+   once; run a Calendar auto-simulation and inspect the final standings.
+7. If all checks pass, commit, push, and merge to main.
+
+No gameplay/UX/serialization change. This patch does NOT add full career saving.
+Details and limitations: docs/TS_11_SESSION_APPLICATION_RELIABILITY.md

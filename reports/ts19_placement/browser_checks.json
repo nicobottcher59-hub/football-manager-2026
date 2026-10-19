@@ -1,0 +1,47 @@
+{
+  "count": 32,
+  "checks": [
+    "eleven accessible studio markers",
+    "text legend identifies red yellow green and estimate",
+    "rendered heatmap actually contains red yellow and green pixels",
+    "heatmap remains a single canvas",
+    "drag preview redraws heatmap without posting",
+    "release opens zonal choices without modifying Python",
+    "central attacking drop offers only ST SS AM",
+    "no defender or goalkeeper can be selected upstairs",
+    "cancel restores original marker and complete tactic",
+    "Escape also cancels without mutation",
+    "one confirmed command commits both position and location",
+    "the applied token displays the selected football position",
+    "role panel is filtered to the same zone",
+    "role panel sends the active phase for backend validation",
+    "defensive midfield range offers adjacent positions",
+    "defending phase edit does not move attacking phase",
+    "keyboard placement uses the same confirmation",
+    "keyboard confirmation commits the one percent step",
+    "target-only undo still restores prior anchors",
+    "Escape cancels keyboard draft before chooser",
+    "rejected confirmed placement restores Python truth",
+    "right wing drop cannot choose a left sided position",
+    "keeper stays keeper without offering outfield roles",
+    "vulnerability mode still paints same pitch",
+    "laboratory retains its inline opponent control",
+    "chooser fits viewport 1100",
+    "chooser fits viewport 1550",
+    "chooser fits viewport 1920",
+    "TS-20 social data is untouched",
+    "lineup still has eleven cards and no studio overlay",
+    "lineup cards retain a uniform size",
+    "no JavaScript runtime errors"
+  ],
+  "commands": 8,
+  "expected_rejections": [
+    "controlled transport rejection"
+  ],
+  "runtime_errors": [],
+  "heatmap_pixels": {
+    "red": 2781,
+    "yellow": 7911,
+    "green": 9801
+  }
+}

@@ -1,0 +1,18 @@
+TS-17.1 - Football Manager Game
+
+REQUIRES: commit + merge of the immediately preceding patch.
+BRANCH: fix/ts-17-1-multiseason-scheduling
+GITHUB DESKTOP SUMMARY: fix(calendar): resolve multi-season fixture congestion and tie chronology
+
+SCOPE: Full-season search for rescheduled generated league fixtures; feasibility checks before choosing cup or UEFA slots; chronological home/away legs. Does not move official fixtures or change UX.
+
+INSTALL:
+1. On updated main, create the branch shown above.
+2. Extract this ZIP into the football-manager-game repository ROOT, preserving paths.
+3. Run the targeted tests from PowerShell:
+   python -m pytest -ra tests/test_ts_17_1_multiseason_scheduling.py
+4. If green, run full regression:
+   python -m pytest -ra
+   Expected suite on this exact version: 880 passed, 0 failed.
+5. Commit with the Summary above and merge into main before the next patch.
+   No local Node.js is required.

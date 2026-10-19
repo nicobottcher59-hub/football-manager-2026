@@ -1,0 +1,32 @@
+TS-18.1 - PLAYER STATE & LEARNING (GRADUAL POST-MATCH UPDATES)
+
+Prerequisite: main with TS-17.1, TS-17.2, TS-17.3 and TS-17.4 integrated.
+Do not apply this patch to an earlier version: files are incremental.
+
+BRANCH
+fix/ts-18-1-player-state-learning
+
+SUMMARY
+fix(players): apply gradual form confidence and tactical learning after matches
+
+INSTALL
+1. Create the new branch from up-to-date main in GitHub Desktop.
+2. Extract the patch ZIP INTO the project root, maintaining subdirectories.
+3. Run the focused test command below, then run the full suite.
+4. If all tests pass, commit using the Summary above, publish/merge to main.
+
+FOCUSED TESTS (PowerShell)
+python -m pytest -ra tests/test_ts_18_1_player_state_learning.py
+
+FULL REGRESSION
+python -m pytest -ra
+
+MANUAL CHECK (OPTIONAL)
+Simulate a match, review a player's form and confidence before/after.
+One poor match must not cause a sharp collapse: no more than 2 form or
+1.25 confidence points over 90 minutes. Try repeated games, then save,
+reload and verify the state persists. Existing morale remains governed by
+the existing result-driven logic.
+
+Only the existing post-match integration and tests have been changed.
+No UX, ACT/OVR formula, match algorithm, training or new tactical options.

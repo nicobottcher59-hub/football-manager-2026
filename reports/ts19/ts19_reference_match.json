@@ -1,0 +1,72 @@
+{
+  "goals": [
+    1,
+    5
+  ],
+  "shots": [
+    7,
+    22
+  ],
+  "statistics": [
+    {
+      "possession_pct": 50.0,
+      "passes_attempted": 504,
+      "passes_completed": 403,
+      "shots": 7,
+      "shots_on_target": 2,
+      "xg": 0.42,
+      "goals": 1,
+      "saves": 4,
+      "fouls": 14,
+      "yellow_cards": 3,
+      "red_cards": 0,
+      "corners": 1
+    },
+    {
+      "possession_pct": 50.0,
+      "passes_attempted": 449,
+      "passes_completed": 360,
+      "shots": 22,
+      "shots_on_target": 9,
+      "xg": 2.56,
+      "goals": 5,
+      "saves": 1,
+      "fouls": 14,
+      "yellow_cards": 3,
+      "red_cards": 0,
+      "corners": 5
+    }
+  ],
+  "scorers": [
+    {
+      "minute": 8,
+      "club": "away",
+      "player": "away-st"
+    },
+    {
+      "minute": 16,
+      "club": "home",
+      "player": "home-lcm"
+    },
+    {
+      "minute": 17,
+      "club": "away",
+      "player": "away-st"
+    },
+    {
+      "minute": 31,
+      "club": "away",
+      "player": "away-cm"
+    },
+    {
+      "minute": 33,
+      "club": "away",
+      "player": "away-lw"
+    },
+    {
+      "minute": 57,
+      "club": "away",
+      "player": "away-lw"
+    }
+  ]
+}

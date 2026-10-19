@@ -1,0 +1,63 @@
+TS-24.5 - Autonomous English Transfer Market and Formation-Aware Squad Planning
+INCREMENTAL PATCH - NOT THE FULL GAME
+
+REQUIRED BASE: TS-24.4 installed, including all earlier incremental updates.
+No Node, npm, internet connection or JavaScript build step is required.
+
+WINDOWS INSTALLATION
+1. Close INICIAR_INTERFAZ_WINDOWS.bat and the Python game server.
+2. Back up your entire project directory and the complete SQLite career save.
+3. Extract this ZIP DIRECTLY into the project root (the folder containing
+   INICIAR_INTERFAZ_WINDOWS.bat). Preserve relative paths and overwrite files.
+   The ZIP contains no football-manager-game wrapper folder.
+4. Run from the project folder:
+   python tools/verify_ts245_ai_market_package.py
+5. Optional with pytest installed:
+   python -m pytest -q tests/test_ts_24_5_ai_squad_market.py
+6. Run INICIAR_INTERFAZ_WINDOWS.bat and force-refresh the browser (Ctrl+F5).
+
+WHAT CHANGES
+- All English clubs use the existing main tactical formation to plan two
+  complete elevens (starters and backups) plus a third GK when feasible.
+- A versatile player cannot simultaneously fill two places in the planner.
+- Shortages take priority over upgrading strong positions. AI clubs can sell
+  backups when doing so will not remove needed starting coverage; low-depth
+  goalkeeper sales are protected.
+- AI-managed clubs buy and sell professionals between themselves in open
+  windows, subject to transfer budget, cash, wage budget and player consent.
+- Your managed club is NEVER bought from or sold to autonomously. Other clubs
+  can submit offers for your players, but you retain the decision.
+- AI trades preserve contracts, accounts, player IDs and career history.
+- World transfer news appears under Scouting -> World transfers. Tactical
+  squad-coverage summaries appear in Other Leagues -> club details.
+- A cached opposing lineup is refreshed after an AI transfer changes its squad.
+
+TRY IT IN GAME
+1. Load your career; use Calendar to simulate from late August to September.
+2. Go to Scouting -> World transfers: inspect the completed rival deals.
+3. Go to Other Leagues -> choose a club: inspect starters/backup/goalkeeper
+   squad coverage and any outstanding needs.
+4. Continue through January for the next window and compare roster balances.
+5. If a rival makes you an offer, review it under Scouting -> Offers received;
+   no automatic sale happens to your club.
+
+LIMITATIONS
+- Initial transfer windows: January, July and August. This is a simplified
+  English market calendar; detailed division-specific registration deadlines
+  are planned separately.
+- AI-to-AI transfers currently use a guaranteed up-front fee and agreed
+  professional wages. User-initiated deals retain optional bonus and sell-on
+  clauses. No instalments.
+- A third goalkeeper is a TARGET, not a guaranteed free signing; the AI will
+  not strip another club of its only reserve GK just to fill that target.
+- Loans, free agents, exercised buyback options, broader world scouting and
+  complete 5/10/20-season sporting balance remain future stages.
+
+SAVES
+- Graph and SQLite save format remain VERSION 15. No schema migration.
+- Existing TS-24.4 full-career saves are compatible. Take backups anyway.
+- Completed autonomous transfers persist in the regular SQLite career save.
+
+GITHUB DESKTOP
+BRANCH: feat/ts-24-5-ai-squad-planning-market
+SUMMARY: feat(transfers): add formation-aware autonomous AI market with squad depth protection

@@ -1,0 +1,39 @@
+{
+  "id": "TS-11",
+  "scope": "Session, squad UI edits, temporary match commands, async simulation job atomicity",
+  "requires": "TS-09",
+  "branch": "fix/ts-11-session-application-reliability",
+  "commit_summary": "fix(session): make UI edits and simulation jobs atomic",
+  "files": [
+    {
+      "path": "src/football_manager/ui_shell/transactions.py",
+      "action": "add",
+      "sha256": "86946a1552fde5977e9004599b6cb36aa20ceb8e2d1eb26396033790463a0227",
+      "expected_base_sha256": null
+    },
+    {
+      "path": "src/football_manager/ui_shell/server.py",
+      "action": "modify",
+      "sha256": "4529b720500bc15a6bf390a7f7a727f2624b35ea91a32fd32449d69478cef457",
+      "expected_base_sha256": "d1cfb7984b04b26e1b58d72ac75943d009146181e62c3df5dfe57d0487726b05"
+    },
+    {
+      "path": "src/football_manager/ui_shell/simulation_jobs.py",
+      "action": "modify",
+      "sha256": "ad75c97af42b856dfd14e7d35b965ec3a6cd12148f7501602a9ab48b7ce1b2b9",
+      "expected_base_sha256": "d6a4ef28386034b94f479f4e83ab3a2a2e8995ef52773240010734064b7326bc"
+    },
+    {
+      "path": "tests/test_ts_11_session_application_reliability.py",
+      "action": "add",
+      "sha256": "b4de7a952a522c6afe3b1e6494d07e534649d393686990f2a2defbbc0435cce1",
+      "expected_base_sha256": null
+    },
+    {
+      "path": "docs/TS_11_SESSION_APPLICATION_RELIABILITY.md",
+      "action": "add",
+      "sha256": "2b5521b634b17054166a903139af5317a16239403d66356a883ed7e83b4d96b8",
+      "expected_base_sha256": null
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+TS-24.11 — PRESTAMOS AUTONOMOS Y CONSECUENCIAS DE GESTION
+Base obligatoria: TS-24.10
+SQLite: v16, sin migracion de esquema.
+
+INSTALACION
+1. Cerrar el juego y crear respaldo de la carpeta y partida SQLite.
+2. Extraer el ZIP en la raiz del proyecto junto a INICIAR_INTERFAZ_WINDOWS.bat.
+3. Ejecutar: python tools/verify_ts2411_ai_loans_package.py
+4. Reiniciar el juego y refrescar la interfaz con Ctrl+F5.
+
+GITHUB DESKTOP
+BRANCH: feat/ts-24-11-autonomous-loans-promise-accountability
+SUMMARY: feat(career): add autonomous AI loans and evidence-based playing-time accountability
+
+El sistema NO introduce ideologias de fichajes. No hay 20 temporadas certificadas
+ni pruebas nativas de Windows en esta entrega.

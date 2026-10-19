@@ -1,0 +1,27 @@
+{
+  "patch": "TC-E0 synthetic world scalability (diagnostics only)",
+  "base": "UI-3.5.1",
+  "source_or_ui_files_modified": false,
+  "files": {
+    "TC_E0_SCALABILITY_PATCH_INSTRUCTIONS.txt": {
+      "sha256": "2862e68077dff3555f3456332ac229447846d037e0bd06f349bed63cd0a7c5f7",
+      "size": 1039
+    },
+    "docs/TECHNICAL_CHECKPOINT_WORLD_SCALABILITY.md": {
+      "sha256": "ee4272295e326c6220148bbdc207399c250c12ec43744024281e5b6424ee9732",
+      "size": 8744
+    },
+    "reports/world_scalability_diagnostic.json": {
+      "sha256": "dd51896d9838790288e0993e87a1b757eb6e57626e760adf75618df61410d9e4",
+      "size": 10672
+    },
+    "tests/test_world_scalability_diagnostic.py": {
+      "sha256": "b8fabb020e6b5b8c8fa8d700813cafddf1558ff005952c26518a27b92438bde2",
+      "size": 3006
+    },
+    "tools/stress_world_calendar.py": {
+      "sha256": "b96a1c0b0ccdb3473ee439f738089bd37041c0cfd27237ae5572f9b56647a2db",
+      "size": 18113
+    }
+  }
+}

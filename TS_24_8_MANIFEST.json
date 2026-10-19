@@ -1,0 +1,24 @@
+{
+  "version": "TS-24.8",
+  "base": "TS-24.7",
+  "save_graph_version": 16,
+  "files": 16,
+  "sha256": {
+    "README.md": "54654331f0f406c9d394e9844c36cf1a11c7b0f56930001ffa05be12fe64196c",
+    "src/football_manager/services/ai_squad_planning.py": "cc65204fdfdc4abf23a2d1d13becab4eef0a2729afac7c5a6792d120612a6792",
+    "src/football_manager/services/ai_transfer_market.py": "e0dfe9cfba165b835c47d2c860567a13188f892b849ab6fe598813ed0336f570",
+    "src/football_manager/services/club_economy.py": "1a049fda9089a61cd50139d1515718041250a2a97c8f16f9ebd2109484495e95",
+    "src/football_manager/services/loan_market.py": "238b58e0130281a4d627d75cc69195c35c7f734f78080c3f17fa7ed66569de0d",
+    "src/football_manager/services/world_matches.py": "451fbf268aa9636d19a1232596d304116ed2f5dbda1c4f6565efbd3349335111",
+    "src/football_manager/services/youth_academy.py": "3a63abdfc110befd3be2ab23d30819499185a4f49236f72ead61f1e60b42cf3c",
+    "tests/test_ts_24_8_structural_balance.py": "bf604b68927795cce5f1664f3640e00c1afa0507b5c3902e7c603aa77d3720f4",
+    "tools/stress_ts248_long_horizon.py": "34f9dfd9807c542f7a0aba44c8b232203b7200745e1286b4d2615927046a0997",
+    "tools/summarize_ts248_long_horizon.py": "fb8c177bf088a1566aa2ac1fb33e3f1aed575ba61d4fc0e5cb4e3df2ac0608a6",
+    "tools/verify_ts248_balance_package.py": "4fbc0b59f2fc014f72a5b8e98c45868292d61b196d40e393f26c0665158ea937",
+    "docs/TS_24_8_REEQUILIBRIO_ESTRUCTURAL.md": "b1873a681dc4912796a60342cfce3e70660586f0e8ac47fad16d14ae9c1c31c0",
+    "reports/ts248_long_horizon.json": "e756ffc59872b5cc7bfe409a59322241c6bf9f339fc3c5fdcb2db113c8a1acc2",
+    "TS_24_8_LONG_HORIZON_REPORT.md": "4f5a0a766ca0978f323d323e0d30b063dd824f1771c0da6eceb84a242ab9beca",
+    "TS_24_8_TEST_REPORT.md": "e0b75fb08b6da3761f9b1c89957d102e0a1fafdfdc0009b1785029e5c0b33d34",
+    "TS_24_8_PATCH_INSTRUCTIONS.txt": "7f07c7b0b8fef45fb74c885990a3a02a0854fe8242d11431cbdcdbd345b05cfb"
+  }
+}

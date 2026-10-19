@@ -1,0 +1,23 @@
+{
+  "stage": "17_3",
+  "branch": "test/ts-17-3-stress-rule-contracts",
+  "summary": "test(calendar): enforce synthetic blackout constraints in stress runs",
+  "base": "previous TS-17 patch",
+  "files": [
+    {
+      "path": "tools/stress_world_calendar.py",
+      "sha256": "3475675440596f2ef1958f99497b72d808e95c1527b353d9d0116f99679675e2",
+      "bytes": 20419
+    },
+    {
+      "path": "tests/test_world_scalability_diagnostic.py",
+      "sha256": "2745eed8b1eb90647dd89b5669259b938844db5d8e0250ede6a381bd869604de",
+      "bytes": 2992
+    },
+    {
+      "path": "tests/test_ts_17_3_stress_rule_contracts.py",
+      "sha256": "630d60356d75497306ab2d9442c3321753074528f22bf55bd54dedb7d03fa7b0",
+      "bytes": 2342
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+TS-19 - Seleccion por zona y mapa de cobertura
+============================================
+
+BASE
+Requiere TS-19 Tactical Studio 2.0. No requiere TS-20.
+Tambien es compatible con una instalacion que ya tenga TS-20: no reemplaza
+modulos de vestuario, personalidad, desarrollo, moral ni sus datos.
+No aplicar sobre TS-19.1.1 sin el Tactical Studio completo.
+
+INSTALACION
+1. Cerrar el servidor/juego. Conservar un respaldo o commit del proyecto.
+2. Extraer en la raiz del repositorio, conservando las rutas y reemplazando
+   exclusivamente los archivos incluidos. No reemplazar la carpeta src entera.
+3. Verificar: python tools/verify_ts19_placement_package.py
+4. Reiniciar INICIAR_INTERFAZ_WINDOWS.bat y recargar con Ctrl + F5.
+5. Entrar en Tactics -> Edit team tactics.
+
+FUNCIONAMIENTO
+- Arrastrar una ficha y soltarla abre un selector pequeno con los puestos
+  compatibles con esa zona. Elegir un puesto aplica ubicacion y posicion juntos.
+- Cancelar o Escape devuelve la ficha y no cambia la tactica en Python.
+- Cerca de los limites se ofrecen puestos vecinos; se respeta izquierda/derecha.
+- El arquero sigue siendo arquero: no se convierte a jugadores de campo en GK.
+- Tambien se filtra Position in this zone en el panel individual.
+- El puesto futbolistico y el rol son comunes a ambas fases; las ubicaciones
+  se editan por separado. La ubicacion de la otra fase se conserva.
+- Al cambiar de familia posicional se usa el rol compatible habitual. OVR/ACT
+  y familiaridad responden a las reglas existentes, no a formulas nuevas.
+- Undo conserva movimientos que no cambian de puesto. Cambiar puesto/rol limpia
+  esa cadena, como las otras ediciones tacticas; no es un deshacer global.
+- Las tacticas previamente guardadas no se reclasifican automaticamente.
+
+COBERTURA
+Rojo = baja, naranja = intermedia baja, amarillo = media, verde = alta.
+El mapa se suaviza y recalcula mientras arrastras. No se cambiaron la formula,
+los porcentajes, el motor ni los otros modos (Vulnerabilities y Laboratory).
+Es una estimacion de ocupacion tactica, no un registro de acciones de partido.
+
+PRUEBAS (NO HACE FALTA NODE)
+python -m pytest -ra tests/test_ts_19_placement_heatmap.py
+Referencia sin Node: 42 passed, 1 skipped.
+La omision es una comparacion opcional JavaScript/Python; no impide usar el juego.
+
+Regresion completa:
+python -m pytest -ra
+
+Validacion opcional de navegador (solo entorno de desarrollo con Playwright y
+Chromium; no instalar dependencias adicionales para jugar):
+python tools/validate_ts19_placement_browser.py
+
+GUARDADO
+No se cambia la version del guardado. Guardar la carrera sigue siendo necesario
+para conservar los cambios. El ZIP no incluye bases de datos ni partidas.
+
+GITHUB DESKTOP
+BRANCH: fix/ts-19-placement-and-heatmap
+SUMMARY: fix(tactics): constrain drop position choices and add readable coverage heatmap
+
+El informe y los registros incluidos distinguen las pruebas ejecutadas en Linux
+de la comprobacion visual nativa pendiente en Windows.

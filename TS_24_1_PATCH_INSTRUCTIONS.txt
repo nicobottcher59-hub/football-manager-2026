@@ -1,0 +1,52 @@
+TS-24.1 - MARKET VALUES & BALANCED ASKING PRICE FOUNDATION
+INCREMENTAL UPDATE - NOT THE FULL GAME
+
+Required base: TS-23.2.1 installed (TS-23.1 and earlier included).
+Python only. No Node/npm needed to install or play.
+
+1. Close the game AND Python server.
+2. Back up the complete project and the full SQLite career save.
+3. Extract this ZIP directly into the project root containing
+   INICIAR_INTERFAZ_WINDOWS.bat. Preserve folder paths; replace existing files.
+4. Verify integrity:
+   python tools/verify_ts241_market_package.py
+5. Run focused pricing tests:
+   python -m pytest -ra tests/test_ts_24_1_market_valuation.py
+6. Optionally run the read-only economy audit:
+   python tools/audit_ts241_market.py
+7. Start INICIAR_INTERFAZ_WINDOWS.bat, refresh with Ctrl+F5.
+8. Open Squad > General > Market value. Expand a player to see the estimate date.
+   Also inspect a rival club's Squad: the same valuation policy applies.
+
+WHAT CHANGES
+- Progressive, continuously interpolated OVR-to-GBP price curve.
+- Perceived potential premium for promising youngsters, without exposing PA.
+- Age, positional demand, smoothed form, long-term medical record adjustment.
+- Read-only estimates for all professional and U17/U21 registered players.
+- Identical valuation formulas for user and AI; no buying/selling advantage.
+- Monthly market price snapshots persisted in a full SQLite manager save.
+- Seller asking band pure model with genuine contract/context inputs available
+  for use by the future transfer negotiations engine.
+
+WHAT IS NOT IMPLEMENTED HERE
+- Live bids, purchases, sales, agent talks, wages or actual player contracts.
+- Financial budgets for professional transfers.
+- Actual contract durations: none are fabricated in your current career.
+- Exact PA display (still hidden), or U15 transfers (not eligible).
+- No change to OVR/ACT, fatigue, TS-21 development or TS-23 academy simulation.
+
+FULL SAVE
+- Complete manager save becomes version 12; existing compatible v11 and older
+  saves migrate when loaded. Migration does not modify player attributes/PA.
+- Loading never overwrites the existing save. Save normally to persist v12.
+- Use the full SQLite save, not results-only JSON.
+- Your old app version may not read a new v12 save: KEEP THE BACKUP.
+- No automatic saving is added.
+
+GITHUB DESKTOP BRANCH
+feat/ts-24-1-market-value-foundation
+
+SUMMARY
+feat(market): add symmetric monthly player valuations and asking bands
+
+See TS_24_1_TEST_REPORT.md for test evidence, scope and limitations.

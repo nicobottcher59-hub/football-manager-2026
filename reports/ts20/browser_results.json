@@ -1,0 +1,28 @@
+{
+  "passed": 21,
+  "checks": [
+    "sidebar opens the integrated Dressing Room page",
+    "all eighteen registered players appear in four hierarchy tiers",
+    "screen is non-blocking and informational",
+    "selecting a player shows the correct profile",
+    "network reflects the selected player",
+    "relationship network is keyboard accessible",
+    "viewing/selecting/refreshing never advances social state",
+    "UI interactions do not change player morale or state",
+    "existing Squad route remains available",
+    "Tactics keeps its existing editor route",
+    "live page follows actual dates after managed matches",
+    "hierarchy changes from real progression",
+    "actual playing time is displayed",
+    "save/load preserves visible relationships and hierarchy",
+    "player-controlled text is safely escaped",
+    "new page has no horizontal overflow at 1280px",
+    "new page has no horizontal overflow at 1024px",
+    "new page has no horizontal overflow at 800px",
+    "failed fetch does not present stale career data as current",
+    "recoverable fetch errors have a working retry",
+    "no uncaught browser errors"
+  ],
+  "browser_errors": [],
+  "transport": "in-process Python bridge (loopback navigation blocked)"
+}

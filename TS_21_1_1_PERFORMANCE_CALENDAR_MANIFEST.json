@@ -1,0 +1,110 @@
+{
+  "package": "TS-21.1.1-Performance-Calendar",
+  "manifest_version": 1,
+  "file_count": 21,
+  "base_required": "TS-21.1 English World, on TS-20 and TS-19 LM/RM goalkeeper hotfix",
+  "node_required": false,
+  "manager_save_version": 5,
+  "files": [
+    {
+      "path": "TS_21_1_1_BENCHMARK.json",
+      "bytes": 2725,
+      "sha256": "077d518f77a2785d85f242572e9e3275d41858105455235d03ce052174b5ada3"
+    },
+    {
+      "path": "TS_21_1_1_README.txt",
+      "bytes": 2533,
+      "sha256": "c5d2ce3b5c5eb1706bc5cf4e071863bb9fa26d00b112900693a561eb4bdee2b6"
+    },
+    {
+      "path": "TS_21_1_1_TEST_REPORT.md",
+      "bytes": 9693,
+      "sha256": "4abb92df9bb0d459fb29384b5dcb17f5e9699ba92aedc2fcd2c110905821cf5a"
+    },
+    {
+      "path": "src/football_manager/dev_ui/session.py",
+      "bytes": 147068,
+      "sha256": "5f9f6b6ec7347389d46a97bc32e37000b73f2f500d072fdb4a2cca5883547f7f"
+    },
+    {
+      "path": "src/football_manager/domain/calendar_planner.py",
+      "bytes": 10167,
+      "sha256": "f3ab4ba10701f6c8bc1ff643c8698a119f215cc7e8f5a5123c5eb8830fa02b21"
+    },
+    {
+      "path": "src/football_manager/domain/career.py",
+      "bytes": 12677,
+      "sha256": "30113b4a00edd3975224d36d7e4bc4b8baee668bcc75b28a6333d91727fa51cb"
+    },
+    {
+      "path": "src/football_manager/domain/player_ratings.py",
+      "bytes": 19032,
+      "sha256": "be53b954614538c0d955d3e6a3831b31c48bc11d0b2a3c4ab99f1070ec79f247"
+    },
+    {
+      "path": "src/football_manager/domain/positional_familiarity.py",
+      "bytes": 12281,
+      "sha256": "979d5449d3b7b2b302bf410727d591f73b418ffd64e3ed98119a945da89efaa2"
+    },
+    {
+      "path": "src/football_manager/domain/world_runner.py",
+      "bytes": 54936,
+      "sha256": "54af234859a0f1744c69eb52e18b64104e8249ddfc9c4fd24a096aa6145117d5"
+    },
+    {
+      "path": "src/football_manager/persistence/manager_career.py",
+      "bytes": 15338,
+      "sha256": "0a37ed13237a3729b1323948fdefeca4c009daf9fd401a20eef2f26768db960f"
+    },
+    {
+      "path": "src/football_manager/services/calendar_stabilization.py",
+      "bytes": 2247,
+      "sha256": "2e1b0fb7d2e4ff122c803301c4512472a2b97aee2c26b97f4c9f60b5ca0bd516"
+    },
+    {
+      "path": "src/football_manager/services/world_squads.py",
+      "bytes": 16985,
+      "sha256": "3640d16377bfb696d4a2b8c2d31eb0d9575fb511fedfe448a4ea4c42022c34c3"
+    },
+    {
+      "path": "src/football_manager/ui_shell/progression.py",
+      "bytes": 10079,
+      "sha256": "cc7a0b755b586b695615f921acc536b45a2e90805d34068410dd52417037d12b"
+    },
+    {
+      "path": "tests/fixtures/ts2111_manager_v5_before.sqlite3.gz",
+      "bytes": 1000768,
+      "sha256": "84b938afa9620ed026b3ba5a090902a65990461ad39af2449cfd391a46d32987"
+    },
+    {
+      "path": "tests/test_ts_21_1_1_performance_calendar.py",
+      "bytes": 17396,
+      "sha256": "56ba6498b1f3da82b89879d7f12e6305c6e1f2f449a8c3b9e2c5a7f722446aa7"
+    },
+    {
+      "path": "tests/ts2111_reference.py",
+      "bytes": 6339,
+      "sha256": "c27413e3dd5403c1c7fa79bc447cc66182005ef847eb2b8ade5f3f82ecfd40b3"
+    },
+    {
+      "path": "tools/benchmark_ts2111.py",
+      "bytes": 5069,
+      "sha256": "043054f609b2f81f96767587bc2827b0056f12c2e3d56d7d0d634b5d22fded40"
+    },
+    {
+      "path": "tools/check_ts2111_calendar.py",
+      "bytes": 1119,
+      "sha256": "b776cd03a08bfee4f0bccfa871983d0e15a1404e3d63b84eca9759c1e5ef931c"
+    },
+    {
+      "path": "tools/check_ts2111_long_calendar.py",
+      "bytes": 2057,
+      "sha256": "ce7ba73226bee9b7098246e6930593ccce694438cab450c771e31b6c3b3a6a9e"
+    },
+    {
+      "path": "tools/verify_ts2111_performance_calendar_package.py",
+      "bytes": 3015,
+      "sha256": "1299bde9e59f5bebfe8438c6c7de06d4c1878cf9e8da070ab1fabe847d90af9e"
+    }
+  ]
+}

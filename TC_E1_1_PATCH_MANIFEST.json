@@ -1,0 +1,73 @@
+{
+  "patch_id": "TC-E1.1",
+  "base": "football-manager-game.zip uploaded 2026-10-09",
+  "change_type": "incremental",
+  "files": [
+    {
+      "path": "docs/ROADMAP.md",
+      "change": "modified",
+      "previous_sha256": "efbd1e24db52f3ea9cb1f1b0f208d954ba23e2dd23bbdb20831fa4381f1959cf",
+      "sha256": "9299e8985d0c8df43c58036993dffa98b0808f6c2e1758c6f8b8d8f66785efae",
+      "size_bytes": 32701
+    },
+    {
+      "path": "docs/TC_E1_1_INITIAL_SEASON_REFLOW.md",
+      "change": "added",
+      "previous_sha256": null,
+      "sha256": "3b62a5f0fbc66812b2c44157e69452f2c238e51f0abc25dc226d3bc16b9f9280",
+      "size_bytes": 3382
+    },
+    {
+      "path": "docs/TECHNICAL_CHECKPOINT_INTERNATIONAL_CALENDAR.md",
+      "change": "modified",
+      "previous_sha256": "f12f37c1174f58dfd2865ea3033f055e0753b9fe0b8699042d2d7428d3739637",
+      "sha256": "eb5dac9410a3522429ae12e0aa29155c519e3953e5be234ed313ca769f052377",
+      "size_bytes": 7379
+    },
+    {
+      "path": "src/football_manager/dev_ui/session.py",
+      "change": "modified",
+      "previous_sha256": "a10d16a4d68d4a9623046484233be4d584e484e835a4d2761b6f93a52360f343",
+      "sha256": "bde33f01108c1c9228c9122ff518194f3d6bde6acd6e869c7245a16ac4af2962",
+      "size_bytes": 141088
+    },
+    {
+      "path": "src/football_manager/domain/calendar.py",
+      "change": "modified",
+      "previous_sha256": "7114fff861629b08c8cd793e1e2f267b115179e861b29731c059ffe48ce83da3",
+      "sha256": "f7b2464dc0e4af1c7de814f066146b95fe6164b306bae366d3299c2b0d99e42d",
+      "size_bytes": 33140
+    },
+    {
+      "path": "src/football_manager/domain/world_runner.py",
+      "change": "modified",
+      "previous_sha256": "14b591233b0205ae7afa8ee06d96dfe2001dba24bb03b627a4dcc315911e3f51",
+      "sha256": "ee606eb9a016a2f35e02b8024879733b0dadc11548ab46d0cb1a923d112a2785",
+      "size_bytes": 35840
+    },
+    {
+      "path": "src/football_manager/ui_shell/calendar.py",
+      "change": "modified",
+      "previous_sha256": "77edf7549f8e0d36fe7177c3e61f074ac5aa9299a2d32ea017935b7b4866dbf7",
+      "sha256": "8000263a876f3bac1a3d654922ebc492dd2f3d2fc72148f6269b2a9386cf7a16",
+      "size_bytes": 6305
+    },
+    {
+      "path": "tests/test_tc_e1_1_initial_season_fifa_reflow.py",
+      "change": "added",
+      "previous_sha256": null,
+      "sha256": "e5137c9137502dc98097076a7e1153a4872a1f879b8da4d03d4ba3011f709943",
+      "size_bytes": 5985
+    }
+  ],
+  "validation": {
+    "tc_e1_1_new_tests": "6 passed",
+    "tc_e1_tests": "17 passed",
+    "calendar_view_tests_except_http": "4 passed",
+    "matchday_selected_tests": "7 passed",
+    "world_selected_tests": "3 passed",
+    "full_season": "2959 / 2959; 0 FIFA/48h conflicts",
+    "next_season": "2027/28 generated; 2562 fixtures; 0 FIFA/48h conflicts",
+    "full_regression": "not certified: long-running legacy HTTP and managed match suites exceed time limit"
+  }
+}

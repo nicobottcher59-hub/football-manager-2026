@@ -1,0 +1,27 @@
+{
+  "id": "TS-12",
+  "scope": "Fast simulator chronology: second yellow/red, active players, minute attribution, manpower, shootouts",
+  "requires": "TS-11",
+  "branch": "fix/ts-12-fast-match-discipline-consistency",
+  "commit_summary": "fix(match): enforce dismissals and coherent discipline statistics",
+  "files": [
+    {
+      "path": "src/football_manager/fast_simulation/engine.py",
+      "action": "modify",
+      "sha256": "914d13b715b4736c5b6fa1b54a26bb75cf49264634d43f6749174dac9b0615c5",
+      "expected_base_sha256": "75818d8a75c99e0a988b607d40a3bcc238dbc2fcc3ce55ec9587d8ae1f4f659e"
+    },
+    {
+      "path": "tests/test_ts_12_fast_match_discipline.py",
+      "action": "add",
+      "sha256": "6954a75d3fab9d03aa553608f8cad66c9b755c99c3c5c77cc5af7f6c46c03546",
+      "expected_base_sha256": null
+    },
+    {
+      "path": "docs/TS_12_FAST_MATCH_DISCIPLINE_CONSISTENCY.md",
+      "action": "add",
+      "sha256": "ce63e8c39106867af1b70f9c5d7f868ecab4777fa1ddfdf91342fc2f61aa3ae1",
+      "expected_base_sha256": null
+    }
+  ]
+}

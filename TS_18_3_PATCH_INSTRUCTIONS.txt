@@ -1,0 +1,35 @@
+TS-18.3 - TACTICAL LOGIC & INSTRUCTIONS
+
+PREREQUISITE
+main includes TS-17.1 to TS-17.4, TS-18.1 and TS-18.2.
+This ZIP is an INCREMENTAL patch, not a standalone game.
+
+BRANCH
+fix/ts-18-3-tactical-logic-instructions
+
+SUMMARY
+fix(tactics): apply leading risk only on score advantage and reconcile late controls
+
+INSTALL
+1. In GitHub Desktop, create the branch above from updated main.
+2. Extract this ZIP at the repository root, retaining the directory tree.
+3. Run the focused tests and full suite from a Windows PowerShell terminal.
+4. Commit using the summary above and merge after tests succeed.
+
+FOCUSED TESTS
+python -m pytest -ra tests/test_ts_18_3_tactical_logic_instructions.py
+python -m pytest -ra tests/test_ts_13_tactical_consumer_coverage.py tests/test_ts_12_fast_match_discipline.py tests/test_tactics.py
+
+FULL SUITE
+python -m pytest -ra
+
+WHAT CHANGES
+- Existing risk_when_leading only contributes after an actual lead and resets when tied.
+- Extra-time risk reflects actual game score, preserving previous period events.
+- Time wasting also filters late opportunities created by the opposing urgency setting.
+- Fast-sim tactical coverage catalogue now classifies leading risk as score-dependent.
+- No new tactical fields, roles, formulations of OVR/ACT or UX modifications.
+- Individual instructions intentionally marked not_modelled remain pending.
+
+DETAILS
+docs/TS_18_3_TACTICAL_LOGIC_INSTRUCTIONS.md

@@ -1,0 +1,12 @@
+{
+  "patch": "04",
+  "base": "ts03-checkpoint",
+  "paths": {
+    "TS_04_PATCH_INSTRUCTIONS.txt": "fe67110cf53abc1422823a812d9fc1a36bee62aaf2370669f7a1e96caa33ab7d",
+    "docs/TS_04_MANAGED_MATCH_UNIT_OF_WORK.md": "53650a704be16bd676767e2cbaaf654adddfb6f18b35f3a48d553aea51abe207",
+    "src/football_manager/dev_ui/session.py": "0b10e20ca1b3d005e0b51b88817bf6b5740dc36abf6f4a91f06c77f1f90397cd",
+    "src/football_manager/domain/world_runner.py": "3381c5940f5db31c85c01d78b39bd641c02d69859a75350e615ffe5a12c415f2",
+    "src/football_manager/services/managed_match_transaction.py": "8e629e435615f39f6f5e92bd0983fce9681dbf82573821b61e04964766532f16",
+    "tests/test_ts_04_managed_match_transactions.py": "f52ec1cbababe0053e39088ec8a53396a0bcf207a7df19f936b19e883c971ef4"
+  }
+}

@@ -1,0 +1,23 @@
+FM PROJECT - TC-E2.1 Premier fixture day/time template
+
+TARGET BRANCH: technical-checkpoint-stabilization
+REQUIRES: TC-E1 + TC-E1.1 already installed.
+
+1. Close the running Python server before applying.
+2. Extract the CONTENTS of this ZIP into your repository root (the directory with README.md), preserving folder paths.
+3. Allow Windows to merge directories and replace matching files.
+4. Run tests:
+   python -m pytest -q tests/test_tc_e2_1_premier_official_slots.py -ra
+   python -m pytest -q tests/test_tc_e1_1_initial_season_fifa_reflow.py -ra
+   python -m pytest -q tests/test_phase6_5_official_premier_schedule.py -ra
+5. Launch INICIAR_INTERFAZ_WINDOWS.bat; press Ctrl+Shift+R in Chrome.
+6. Open Calendar for Aug 2026. Expect PL Fri 21 / Sat 22 / Sun 23 / Mon 24.
+   Northbridge's first game is now Fri 21 Aug, not Sat 15 Aug.
+
+PLAYED FIXTURE GUARANTEE: WorldSeasonRunner never reprograms PLAYED fixtures.
+The current DEV session restarts from scratch when Python restarts. Existing
+result-only JSON world archives are NOT automatically migrated to the new dates.
+FUTURE DATES are generated projections, not official published schedules.
+
+This patch does not fix the TC-E2.2 staged/cup registration rollback defect.
+Do not merge/commit until tested on your Windows.

@@ -1,0 +1,17 @@
+TS-24.10 — AUTONOMÍA DEL RETIRO Y DIAGNÓSTICO FINANCIERO
+Base: TS-24.9 (obligatoria)
+Formato SQLite: v16 (sin migración)
+
+INSTALACIÓN
+1. Cerrar el juego. Respaldar el proyecto y la partida SQLite.
+2. Extraer el ZIP en la carpeta de INICIAR_INTERFAZ_WINDOWS.bat, conservando rutas.
+3. Ejecutar:
+   python tools/verify_ts2410_player_autonomy_package.py
+4. Abrir el juego y usar Ctrl+F5 en la interfaz web.
+
+BRANCH: feat/ts-24-10-player-retirement-autonomy
+SUMMARY: fix(career): honor player retirement decisions independently of squad depth
+
+ATENCIÓN: el retiro ya no se aplaza por necesidades del equipo. Es posible que un
+club quede temporalmente con menos de dos arqueros o sin suplente natural.
+La simulación acelerada a 5 años no reemplaza 20 años de partidos reales.

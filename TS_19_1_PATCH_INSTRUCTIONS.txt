@@ -1,0 +1,45 @@
+TS-19.1 — Formation Expansion | Incremental patch
+
+BASE REQUIRED
+  Project with TS-18.5 reviewed and TS-18.6 integrated (latest TS-18 branch).
+  The original supplied source ZIP was at TS-18.4; the TS-18.5/18.6 patches
+  were included when running integration regression tests, but their code is
+  deliberately NOT duplicated in this ZIP.
+
+INSTALLATION (WINDOWS)
+  1. Create GitHub Desktop branch: feat/ts-19-1-formation-expansion
+  2. Extract the ZIP directly into the repository root, keeping all paths.
+  3. Let files replace their existing versions where requested.
+  4. Run: python -m pytest -ra tests/test_ts_19_1_formation_expansion.py
+  5. Run: python -m pytest -ra
+  6. Start INICIAR_INTERFAZ_WINDOWS.bat (no npm needed).
+  7. Open Tactics -> Formation: 28 options must be available immediately.
+     Test 4-3-3 (2 DM), 4-4-2 (2 DM), 4-2-4, 4-5-1 (2 AM + RM/LM),
+     and 5-2-2-1 (2 central AM) in both tactical phases.
+  8. Commit and merge only after local acceptance/regression.
+
+GITHUB DESKTOP
+  BRANCH: feat/ts-19-1-formation-expansion
+  SUMMARY: feat(tactics): expand 28 formations and connect live tactical boards
+
+FILES
+  src/football_manager/dev_ui/formations.py   [new]
+  src/football_manager/dev_ui/session.py      [modified]
+  src/football_manager/dev_ui/app.py          [modified]
+  src/football_manager/ui_shell/models.py     [modified]
+  frontend/public/squad/board.js              [modified]
+  frontend/public/squad/squad.js              [modified]
+  frontend/public/squad/squad.css             [modified]
+  tests/test_ts_19_1_formation_expansion.py   [new]
+  docs/TS_19_1_FORMATION_EXPANSION.md         [new]
+  TS_19_1_PATCH_INSTRUCTIONS.txt              [new]
+  TS_19_1_PATCH_MANIFEST.json                 [new]
+  TS_19_1_TEST_REPORT.md                     [new]
+
+NOTES
+  - Original four form IDs and initial XI remain unchanged.
+  - RW/LW currently stand in for the display-only RM/LM midfield spots;
+    rating, role and familiarity rules are NOT altered.
+  - React frontend/src is an older illustrative dashboard; the live match/tactic
+    interface launched with the Windows BAT uses frontend/public/squad.
+  - TS-19.2 free positional editor and TS-19.3 custom tactic library NOT included.

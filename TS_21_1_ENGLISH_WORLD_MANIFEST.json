@@ -1,0 +1,146 @@
+{
+  "package": "TS-21.1-English-World",
+  "manifest_version": 1,
+  "description": "Persistent English squads with distinct formations, instructions and player roles",
+  "requires_base": "football-manager-game.zip + TS-19-LM-RM-Arquero-Fijo.zip (TS-20 included)",
+  "python_minimum": "3.11",
+  "node_required": false,
+  "save_graph_version": 5,
+  "files": [
+    {
+      "path": "TS_21_1_INSTRUCTIONS.txt",
+      "bytes": 3004,
+      "sha256": "21beb3824e298d1f0484dda3e2cce72b513622dc28f5d6fb1cf33a7a6f37383f"
+    },
+    {
+      "path": "TS_21_1_TEST_REPORT.md",
+      "bytes": 12971,
+      "sha256": "60f238736b06196deb856791abe61e0d14113bdd82935a876b890ed8607793b8"
+    },
+    {
+      "path": "frontend/portable/competitions.js",
+      "bytes": 38490,
+      "sha256": "220eef091b7c5ac6a0c008c924a217864427c41e35d769cc01e885b0406d8a25"
+    },
+    {
+      "path": "frontend/portable/index.html",
+      "bytes": 44275,
+      "sha256": "eb5b0153654c64e79c92aa6d0113393086d511d0993fc9e280211773e6ddcd7b"
+    },
+    {
+      "path": "frontend/portable/world_squads.css",
+      "bytes": 2579,
+      "sha256": "241a6c17a321f87dfbab37667b2f87c3d92ad40838ba5a475c19f8c0ea15e93d"
+    },
+    {
+      "path": "frontend/portable/world_squads.js",
+      "bytes": 5344,
+      "sha256": "46e9063e5ea9508ec96ac8297e284dd67177abaf5129248e9c7ebde868ef4008"
+    },
+    {
+      "path": "src/football_manager/data/english_players.py",
+      "bytes": 19351,
+      "sha256": "c8d7735996ee1bac75b4f46996c466f8966f7f41f8f7489abf7f8060bcd4ee95"
+    },
+    {
+      "path": "src/football_manager/dev_ui/session.py",
+      "bytes": 146934,
+      "sha256": "823a17aaca5efdd2254d938838e5928622b368b9ab7d63210a38326ea0f3d350"
+    },
+    {
+      "path": "src/football_manager/domain/football_world.py",
+      "bytes": 7499,
+      "sha256": "157d64cd00fecd33599236ef7a891551a7ac48753adda719486ca9d0ce3f2d4a"
+    },
+    {
+      "path": "src/football_manager/domain/world_runner.py",
+      "bytes": 55625,
+      "sha256": "b629f7d8acd90b96066a57a47abdf5dd0cf172e4c9d5a4bcd3489407d4759108"
+    },
+    {
+      "path": "src/football_manager/persistence/manager_career.py",
+      "bytes": 15107,
+      "sha256": "3f763cbae5da134e9731541dfb62f5b1dd8344fee87d7824b83541282b56706c"
+    },
+    {
+      "path": "src/football_manager/persistence/session_codec.py",
+      "bytes": 15995,
+      "sha256": "6d6e8c859f3243b93cede86c0b610c80cee7b4945f19fe90f40d5cc11fc7924a"
+    },
+    {
+      "path": "src/football_manager/services/managed_match_transaction.py",
+      "bytes": 2084,
+      "sha256": "d060c5fe7527fed6f635d13c3a84f9c9b1193e3bc46fc92723965ac578be2c33"
+    },
+    {
+      "path": "src/football_manager/services/world_matches.py",
+      "bytes": 9912,
+      "sha256": "851126767f0ec706ce3501312a72ef7828682ec6e97a8ec3d92d2bc0c89076ed"
+    },
+    {
+      "path": "src/football_manager/services/world_squads.py",
+      "bytes": 15802,
+      "sha256": "c690d445cba8d0786d5080920c475eef0b6e406970222ec908e2442618dd7cdc"
+    },
+    {
+      "path": "src/football_manager/ui_shell/progression.py",
+      "bytes": 10005,
+      "sha256": "e5047accfd3b1df7de3c6769dca3be75e978307d2a27af6386eebfbea923959c"
+    },
+    {
+      "path": "src/football_manager/ui_shell/server.py",
+      "bytes": 11234,
+      "sha256": "6599b9b32aa8c8e431c79ba3ab5ea91e634d56522a52df9bb76cdb189e0ba6a9"
+    },
+    {
+      "path": "src/football_manager/ui_shell/world_squads.py",
+      "bytes": 7574,
+      "sha256": "861c29f57bae32d002e16484616e89b8543bdc540c55dbf5986ef415688c18a5"
+    },
+    {
+      "path": "tests/fixtures/ts21_manager_v4.sqlite3.gz",
+      "bytes": 160531,
+      "sha256": "16aa67228f1894a0ed3fd734f3039ac2f2591a622b968fda4fb8c2b29dab5e62"
+    },
+    {
+      "path": "tests/test_phase6_7_full_season_integration.py",
+      "bytes": 11867,
+      "sha256": "cb12eb0a41362b17f2724fa1e817ce6a502448525022b048548fb4a09402f8f6"
+    },
+    {
+      "path": "tests/test_ts_18_5_opposition_ai_reliability.py",
+      "bytes": 4563,
+      "sha256": "1fc73274c35964d2daf0ea554298f3b0c2aa0d9a430bec034d583911a9e5283d"
+    },
+    {
+      "path": "tests/test_ts_19_placement_heatmap.py",
+      "bytes": 14330,
+      "sha256": "469da0a54e9338a7495685237c41b4066aeea84d04f896cf3c402341c1eaf81b"
+    },
+    {
+      "path": "tests/test_ts_20_dressing_room.py",
+      "bytes": 16388,
+      "sha256": "082e519694b4faae299464b350fce47dcb78a8f3cea07ce80c068353332e9d9c"
+    },
+    {
+      "path": "tests/test_ts_20_integration.py",
+      "bytes": 9379,
+      "sha256": "37791526c42b6f6ac97014ebea908a8ce02ac1387376f020a206007988413b6a"
+    },
+    {
+      "path": "tests/test_ts_21_english_world.py",
+      "bytes": 21997,
+      "sha256": "131b77b5d68a7cdc970208e1b0681106e9e4b9763a666c82dd5aa6ad579f7190"
+    },
+    {
+      "path": "tools/check_ts21_full_season.py",
+      "bytes": 3355,
+      "sha256": "77f4d87f006711ae64c7daee5b29557bb222734407d7335260775d37544d83c7"
+    },
+    {
+      "path": "tools/verify_ts21_english_world_package.py",
+      "bytes": 2036,
+      "sha256": "185f0f18d1a028e4497a3f0ec6eb397b4814fa798996ebba6ba35b4717722e3f"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "patch": "TS-18.6",
+  "base": "TS-18.5 REVISADO",
+  "status": "validation_partial",
+  "sha256": {
+    "tests/test_ts_18_6_football_regression_stress.py": "a7f30540e09ef977bd45c71d7d43bd2954da374dd57a9f42ddcd904955b33bd5",
+    "TS_18_6_PATCH_INSTRUCTIONS.txt": "9a50a3e38a67d9fe147597960f878fac557cccf40e1ac86642b9131c12895949"
+  }
+}

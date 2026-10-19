@@ -1,0 +1,25 @@
+TS-13 — TACTICAL CONSUMER COVERAGE
+
+REQUISITO: main integrado y validado hasta TS-12.
+
+BRANCH (GitHub Desktop):
+fix/ts-13-tactical-consumer-coverage
+
+COMMIT SUMMARY:
+fix(tactics): connect match management controls and audit fast-sim coverage
+
+PASOS:
+1. Crear la branch desde main (con TS-12 ya mergeado).
+2. Extraer este ZIP en la raiz de football-manager-game, preservando rutas.
+3. En PowerShell, ejecutar:
+   python -m pytest -ra tests/test_ts_13_tactical_consumer_coverage.py
+   python -m pytest -ra tests/test_ts_12_fast_match_discipline.py tests/test_phase5_11b_fast_match_simulator.py tests/test_tactics.py
+   python tools/audit_tactical_consumers.py
+   python -m pytest -ra
+4. Comprobar cero fallos en los tests y que el inventario enumere 59 controles.
+5. Hacer commit, publicar y mergear en main una vez validado.
+
+No hace falta instalar Node.js. No se modifica la UX ni el guardado.
+Atencion: los partidos con instrucciones activadas pueden cambiar resultados
+porque ahora tres controles tienen efectos concretos. Las instrucciones
+no modeladas siguen declaradas y se muestran en el informe de auditoria.

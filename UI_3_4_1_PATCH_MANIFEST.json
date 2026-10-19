@@ -1,0 +1,71 @@
+{
+  "patch": "UI-3.4.1 Calendar Live Simulation Progress",
+  "base": "UI-3.4 Daily Continue & Calendar Autosim",
+  "incremental": true,
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "14acbcb8a0bc2c71810367cfbf2a0f092cb039a7b162108b0dda635ebef383fc"
+    },
+    {
+      "path": "README_DEV.md",
+      "sha256": "d9c359dff157ee564ee7ad7a576965634b1dc9839570ff70a9357a914e738637"
+    },
+    {
+      "path": "UI_3_4_1_PATCH_INSTRUCTIONS.txt",
+      "sha256": "f181257463ffa5c36a956df17a1ea4db1aa9434f39913e31a3ced97f5ceea91e"
+    },
+    {
+      "path": "docs/CURRENT_STATUS.md",
+      "sha256": "43201f94bbe7155c135f9a756e8791697fd42ee3936bc366e654aec32ca64cd5"
+    },
+    {
+      "path": "docs/PHASE_UI_3_4_1_CALENDAR_PROGRESS.md",
+      "sha256": "2e575d000f2e2a4e26b892719a52e0a20f08b8572002c319d990d2482a0876d5"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "sha256": "be5ad90cdc8ba7bf7c75e3e03e9c74b2874b59a43a705834b470b6aa118e5cc0"
+    },
+    {
+      "path": "frontend/portable/calendar.css",
+      "sha256": "4666beb49c98436184bd60df8fb78ec2c752316864f477df642cc7f37308afea"
+    },
+    {
+      "path": "frontend/portable/calendar.js",
+      "sha256": "8ddfdbf67347394422db35bea81e0dfdfefacd611ba4544edd1af88ca653b5cb"
+    },
+    {
+      "path": "frontend/portable/index.html",
+      "sha256": "de0068e6bbd96ba63c7f4afea04c9f771b9c8256554178e8a4bf986f56cc4e1f"
+    },
+    {
+      "path": "frontend/portable/portable.js",
+      "sha256": "7471944f4cc6f8e62a8774c971f0d248b2c69de8a7513502bba675b79da75c12"
+    },
+    {
+      "path": "frontend/portable/simulation.css",
+      "sha256": "6f2f741d64ac751a42b05197b2caf528529e29d2a86749d1343e79db00f462d4"
+    },
+    {
+      "path": "frontend/portable/simulation.js",
+      "sha256": "786272d616bf1e9b8de2b81a1efc70c2b1725e134b7604bc98151c023a33f715"
+    },
+    {
+      "path": "src/football_manager/ui_shell/progression.py",
+      "sha256": "84ede64ce845dd87a0a322d5d08a3ed461eba314b0b53c06336716684aafe3b7"
+    },
+    {
+      "path": "src/football_manager/ui_shell/server.py",
+      "sha256": "2391c58108788e0562eb82c726198d2d4326dd1c774db15f114773cead5b11e0"
+    },
+    {
+      "path": "src/football_manager/ui_shell/simulation_jobs.py",
+      "sha256": "1665b50983feeb45d3db8df3c33714a14afb51dc87deb0dc706f4e7eb9b90e57"
+    },
+    {
+      "path": "tests/test_ui341_calendar_progress.py",
+      "sha256": "f90529c3deac1caf874cb301402a22867d47bb0292c8a2986c8fa61d03ce3de3"
+    }
+  ]
+}

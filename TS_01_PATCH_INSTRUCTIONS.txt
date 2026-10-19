@@ -1,0 +1,49 @@
+FOOTBALL MANAGER GAME - TS-01 ATOMIC WORLD OPERATIONS
+
+BRANCH (create in GitHub Desktop):
+  fix/ts-01-atomic-world-operations
+
+COMMIT SUMMARY:
+  fix(world): roll back failed registration and match progression
+
+PATCH BASE:
+  football-manager-game.zip snapshot exported on 13 Oct 2026, followed by
+  committed TS-00 and TS-00.1 patches. Do not apply on a divergent version
+  of world_runner.py without reviewing the diff first.
+
+INSTALLATION:
+  1. Commit or safely store other pending changes. Create the new branch FROM
+     the current tested TS-00.1 checkpoint (do not branch from the old ZIP).
+  2. Unzip this patch INTO the repository root, where pyproject.toml is.
+     Keep folder paths and allow replacement of the two existing Python files.
+     There is no outer football-manager-game/ folder in this ZIP.
+  3. Check changes in GitHub Desktop before committing.
+  4. Quick Windows validation (Node.js is NOT required):
+
+     python -m pytest -q -ra tests/test_ts_01_atomic_world_operations.py tests/test_world_scalability_diagnostic.py
+
+  5. Full validation (longer; run before closing TS-01):
+
+     python -m compileall -q src tests tools
+     python -m pytest -q -ra
+
+     Python 3.14 on Windows: the TS-00.1 UTF-8 tests fix should already be
+     present. If other legacy tests still use locale-dependent read_text(),
+     re-run with python -X utf8 -m pytest -q -ra and report the failure.
+
+  6. Expect ZERO 'FAILED', ZERO 'ERROR' and ZERO 'XFAIL' from the included
+     rollback test. Commit using the SUMMARY above, push, and verify the Python
+     CI workflow jobs. JavaScript checks are handled by GitHub Actions, not by
+     installing Node.js locally.
+
+FILES INCLUDED:
+  src/football_manager/domain/world_runner.py  (updated)
+  tests/test_world_scalability_diagnostic.py   (existing xfail becomes a normal test)
+  tests/test_ts_01_atomic_world_operations.py (new regression/fault injection tests)
+  docs/TS_01_ATOMIC_WORLD_OPERATIONS.md        (new scope/limits document)
+  TS_01_PATCH_INSTRUCTIONS.txt                 (this guide)
+  TS_01_PATCH_MANIFEST.json                    (SHA-256 hashes)
+
+NOT INCLUDED:
+  TS-02 realistic calendar scheduling corrections, session-wide transactional
+  quick simulation, new gameplay, save-game redesign, frontend/UX modifications.

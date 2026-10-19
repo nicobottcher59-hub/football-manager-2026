@@ -1,0 +1,12 @@
+/* TS-22: preserve the shell; full match view is a route in the same tab. */
+.ts22-club-link{border:0;padding:0;background:none;color:inherit;font:inherit;text-align:inherit;cursor:pointer}.ts22-club-link:hover,[data-club-id]:hover{color:#61d3ff;text-decoration:underline}.ts22-club-link:focus-visible,[data-club-id]:focus-visible{outline:2px solid #58d8ff;outline-offset:3px}
+.ts22-match-frame{width:100%;height:100vh;border:0;display:block;background:#071c2e}.ts22-club-frame{width:100%;height:calc(100vh - 140px);border:0;min-height:600px}
+body.ts22-match-open .sidebar,body.ts22-match-open .app-header,body.ts22-match-open .app-footer{display:none}body.ts22-match-open .app-shell{display:block}body.ts22-match-open .main-content{padding:0;margin:0;width:100%;max-width:none}
+.ts22-route-back{border:1px solid #2b5b79;border-radius:6px;background:#09263e;color:#c9e9fc;padding:6px 12px;cursor:pointer;margin-bottom:7px}
+.ts22-home-cup{padding:18px 14px;display:grid;gap:13px}.ts22-home-cup>strong{font-size:13px;color:#7edee9}.ts22-home-tie{border:1px solid #28516c;border-radius:8px;padding:12px;display:grid;gap:11px;background:#0a2439}
+.ts22-home-tie>small,.ts22-leg>small{color:#93b8ce;font-size:11px}.ts22-tie-teams{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;text-align:center;font-size:13px}.ts22-leg{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px;font-size:12px;border-top:1px solid #214159;padding-top:8px}.ts22-leg small{flex-basis:100%}
+.ts22-home-status{font-size:12px;color:#abc7db;padding:8px 14px;line-height:1.6}.league-card .table-note button{font-size:12px;color:#65d5fc}.league-card .competition-tabs{overflow:auto}.league-card .row-club .ts22-club-link{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:inherit}
+.cmp-bilateral-score.ts22-tie-details{background:none;color:inherit;border:0;cursor:pointer;font:inherit}.cmp-bilateral-tie .ts22-club-link{max-width:100%;font:inherit;overflow:hidden;text-overflow:ellipsis}
+[data-club-id]{cursor:pointer}.ts22-home-rating small{font-size:7px;display:block}
+
+.ts22-bracket-club{display:flex;align-items:center;gap:6px;width:100%}.cmp-team-cell>.ts22-club-link{display:inline-flex;align-items:center;gap:7px}

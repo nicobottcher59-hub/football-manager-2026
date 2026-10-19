@@ -1,0 +1,47 @@
+TS-24.3 - Club Negotiations: Guaranteed fees, bonuses, sell-ons and buybacks
+INCREMENTAL PATCH - NOT THE COMPLETE GAME
+
+REQUIRED BASE: TS-24.2.1 (Squad contracts/collapse hotfix) installed.
+No Node, npm, internet, or build step is needed to play.
+
+INSTALLATION ON WINDOWS
+1. Stop the Python game server; close the running browser tab.
+2. Backup the entire project and your complete SQLite career save.
+3. Extract this ZIP DIRECTLY into the project ROOT containing
+   INICIAR_INTERFAZ_WINDOWS.bat. Preserve directories and overwrite files.
+4. In that directory run:
+   python tools/verify_ts243_transfers_package.py
+5. Optionally run regression tests:
+   python -m pytest -q tests/test_ts_24_3_transfer_negotiation.py
+6. Start INICIAR_INTERFAZ_WINDOWS.bat, press Ctrl+F5, open Transfers.
+
+FEATURES
+- Search for registered first-team players at other clubs and submit bids.
+- Seller AI accepts, counters with guaranteed money, or rejects.
+- Incoming AI offers arrive periodically as calendar months progress.
+- The same economic valuation works on both sides; only buyer/seller
+  financial capacity, player importance and contract context differ.
+- 100% of the guaranteed transfer fee is payable at final settlement,
+  with NO fee installments. The amount is reserved only when clubs agree.
+- Up to THREE separate conditional bonuses: appearances, goals, assists,
+  and next-season promotion. Unlikely achievements are priced far below face.
+- Choose EITHER a share of total future sale or future sale PROFIT.
+- Seller buyback option with a negotiated price and expiration date.
+- Agreements in principle, counteroffers, rejections and deadlines are saved.
+- Finances shows available transfer funds after pending-club reservations.
+
+ESSENTIAL SCOPE LIMITATION
+This is the CLUB-TO-CLUB negotiation stage only. DO NOT interpret 'Agreed'
+as a completed transfer. The player stays at the current club, no cash is
+paid, no conditional bonus is triggered, and no sell-on or buyback is executed
+UNTIL later player consent, registration and actual settlement are implemented
+(TS-24.4 and later). Accepted club terms expire in 45 calendar days without
+completion, releasing the earmarked guaranteed budget automatically.
+
+Older compatible SQLite careers are upgraded on load in memory (graph v14),
+without retroactive transfer events. The SQLite file changes only on Save.
+Keep a backup because previous versions may not read the updated save.
+
+GITHUB DESKTOP
+BRANCH: feat/ts-24-3-club-negotiations
+SUMMARY: feat(transfers): add symmetric club bids, counters and conditional clauses

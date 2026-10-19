@@ -1,0 +1,25 @@
+TS-09 - CALENDAR & WORLD INVARIANTS
+
+Requires: TS-08 applied and merged/committed over TS-07.1.
+
+GitHub Desktop branch: fix/ts-09-calendar-world-invariants
+Commit Summary: fix(calendar): validate world timing and round chronology on save
+
+1. From main including TS-08, create the branch above.
+2. Extract this ZIP into the football-manager-game project root (preserve paths).
+3. Run focused tests (no Node.js needed):
+
+   python -m pytest -ra tests/test_ts_09_calendar_world_invariants.py tests/test_ts_08_score_persistence_contracts.py tests/test_ts_02_calendar_scheduling.py tests/test_tc_e1_international_calendar.py
+
+4. Run the whole Python regression, preferably before committing:
+
+   python -m pytest -ra
+
+5. Optional manual smoke test: open the game through the existing .bat launcher,
+   advance days, quick-sim one game, then inspect Calendar and Competitions.
+6. If all tests pass, commit with the summary above, push and merge to main.
+
+No database migration, no schema update, no change to UX or simulation mechanics.
+Previously accepted but genuinely inconsistent world archives will now fail
+validation rather than silently load or overwrite valid saves.
+More detail: docs/TS_09_CALENDAR_WORLD_INVARIANTS.md.

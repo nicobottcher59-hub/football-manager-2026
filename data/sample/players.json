@@ -1,0 +1,218 @@
+[
+  {
+    "identity": {
+      "id": "player_0001",
+      "first_name": "Mateo",
+      "last_name": "Suarez",
+      "birth_date": "2002-05-17",
+      "nationality": "Argentina",
+      "dominant_foot": "right"
+    },
+    "attributes": {
+      "technical": {
+        "passing": 78,
+        "technique": 82,
+        "finishing": 84,
+        "first_touch": 80,
+        "dribbling": 76,
+        "crossing": 63,
+        "tackling": 31,
+        "heading": 79,
+        "long_shots": 72,
+        "shot_power": 81,
+        "marking": 28,
+        "set_pieces": 61,
+        "penalties": 78
+      },
+      "mental": {
+        "vision": 74,
+        "decisions": 76,
+        "anticipation": 81,
+        "concentration": 68,
+        "composure": 83,
+        "positioning": 52,
+        "off_the_ball": 84,
+        "teamwork": 75,
+        "work_rate": 71,
+        "aggression": 62,
+        "bravery": 77,
+        "creativity": 72,
+        "tactical_intelligence": 77
+      },
+      "physical": {
+        "pace": 79,
+        "acceleration": 80,
+        "strength": 70,
+        "stamina": 75,
+        "agility": 78,
+        "balance": 73,
+        "jumping_reach": 76,
+        "natural_fitness": 79
+      }
+    },
+    "positions": {
+      "ST": 94,
+      "LW": 67,
+      "RW": 48
+    },
+    "original_position": "ST",
+    "primary_position": "ST",
+    "state": {
+      "fitness": 96,
+      "fatigue": 8,
+      "form": 61,
+      "morale": 58,
+      "confidence": 63,
+      "match_sharpness": 78,
+      "injury": null,
+      "suspended_matches": 0
+    }
+  },
+  {
+    "identity": {
+      "id": "player_0002",
+      "first_name": "Tomas",
+      "last_name": "Ferreyra",
+      "birth_date": "2004-11-09",
+      "nationality": "Argentina",
+      "dominant_foot": "left"
+    },
+    "attributes": {
+      "technical": {
+        "passing": 82,
+        "technique": 85,
+        "finishing": 69,
+        "first_touch": 83,
+        "dribbling": 84,
+        "crossing": 78,
+        "tackling": 42,
+        "heading": 51,
+        "long_shots": 77,
+        "shot_power": 73,
+        "marking": 38,
+        "set_pieces": 75,
+        "penalties": 67
+      },
+      "mental": {
+        "vision": 84,
+        "decisions": 73,
+        "anticipation": 76,
+        "concentration": 64,
+        "composure": 72,
+        "positioning": 46,
+        "off_the_ball": 79,
+        "teamwork": 80,
+        "work_rate": 77,
+        "aggression": 55,
+        "bravery": 60,
+        "creativity": 86,
+        "tactical_intelligence": 79
+      },
+      "physical": {
+        "pace": 84,
+        "acceleration": 87,
+        "strength": 58,
+        "stamina": 79,
+        "agility": 86,
+        "balance": 76,
+        "jumping_reach": 49,
+        "natural_fitness": 82
+      }
+    },
+    "positions": {
+      "LW": 95,
+      "RW": 82,
+      "AM": 72,
+      "ST": 41
+    },
+    "original_position": "LW",
+    "primary_position": "LW",
+    "state": {
+      "fitness": 91,
+      "fatigue": 14,
+      "form": 68,
+      "morale": 65,
+      "confidence": 70,
+      "match_sharpness": 83,
+      "injury": null,
+      "suspended_matches": 0
+    }
+  },
+  {
+    "identity": {
+      "id": "player_0003",
+      "first_name": "Lautaro",
+      "last_name": "Rios",
+      "birth_date": "2001-02-14",
+      "nationality": "Argentina",
+      "dominant_foot": "right"
+    },
+    "attributes": {
+      "technical": {
+        "passing": 58,
+        "technique": 55,
+        "finishing": 18,
+        "first_touch": 56,
+        "dribbling": 24,
+        "crossing": 20,
+        "tackling": 22,
+        "heading": 28,
+        "long_shots": 19,
+        "shot_power": 64,
+        "marking": 21,
+        "set_pieces": 23,
+        "penalties": 31
+      },
+      "mental": {
+        "vision": 62,
+        "decisions": 78,
+        "anticipation": 81,
+        "concentration": 83,
+        "composure": 79,
+        "positioning": 82,
+        "off_the_ball": 20,
+        "teamwork": 76,
+        "work_rate": 69,
+        "aggression": 54,
+        "bravery": 84,
+        "creativity": 45,
+        "tactical_intelligence": 80
+      },
+      "physical": {
+        "pace": 52,
+        "acceleration": 56,
+        "strength": 76,
+        "stamina": 68,
+        "agility": 63,
+        "balance": 74,
+        "jumping_reach": 82,
+        "natural_fitness": 75
+      },
+      "goalkeeping": {
+        "reflexes": 86,
+        "handling": 82,
+        "one_on_ones": 84,
+        "aerial_reach": 81,
+        "command_of_area": 78,
+        "kicking": 72,
+        "throwing": 75,
+        "goalkeeper_positioning": 83
+      }
+    },
+    "positions": {
+      "GK": 97
+    },
+    "original_position": "GK",
+    "primary_position": "GK",
+    "state": {
+      "fitness": 97,
+      "fatigue": 5,
+      "form": 64,
+      "morale": 62,
+      "confidence": 67,
+      "match_sharpness": 81,
+      "injury": null,
+      "suspended_matches": 0
+    }
+  }
+]

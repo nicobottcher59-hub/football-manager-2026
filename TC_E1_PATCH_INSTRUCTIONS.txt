@@ -1,0 +1,26 @@
+TC-E1 — INTERNATIONAL CALENDAR FOUNDATION
+
+Apply to your current technical-checkpoint-stabilization branch, after TC-E0.
+This ZIP contains ONLY files added/modified for TC-E1. Extract the file and
+folder CONTENTS directly at the repository root (where README.md lives).
+Overwrite matching files; do not nest an extra folder.
+
+The portable UI still runs with INICIAR_INTERFAZ_WINDOWS.bat; no Node/npm.
+Close and restart the Python server, then refresh Chrome with Ctrl+Shift+R.
+
+Tests:
+  python -m pytest -q tests/test_tc_e1_international_calendar.py -ra
+  python tools/stress_world_calendar.py --single --leagues 8 --staged 1 --cup-proxy --postponements 2 --year 2028 --master-calendar
+
+Optional slower stress test:
+  python tools/stress_world_calendar.py --single --leagues 24 --staged 3 --cup-proxy --postponements 4 --year 2027 --master-calendar
+
+Calendar UI: navigate to September 2026; a subtle globe should appear on FIFA
+window dates. This is an informational overlay, not a new match or event.
+
+Important: Existing seeded 2026/27 fixtures are NOT retroactively changed.
+The normal-fixture-first/FIFA-second reflow applies to newly generated future
+seasons. No national-team matches or automatic player call-ups are added yet.
+Known TC-E0 staged registration rollback issue is still open.
+
+See docs/TECHNICAL_CHECKPOINT_INTERNATIONAL_CALENDAR.md for details.

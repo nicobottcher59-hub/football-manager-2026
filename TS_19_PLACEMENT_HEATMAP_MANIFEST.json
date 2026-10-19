@@ -1,0 +1,134 @@
+{
+  "patch": "TS-19 Placement and Coverage Heatmap",
+  "base": "TS-19 Tactical Studio 2.0",
+  "requires_ts20": false,
+  "save_schema_change": false,
+  "files": [
+    {
+      "path": "TS_19_PLACEMENT_HEATMAP_INSTRUCTIONS.txt",
+      "size": 2970,
+      "sha256": "0a113c114b3aa7135957aa697c78f982999c98c470ca110e6d653f01efbf500e",
+      "previous_sha256": null
+    },
+    {
+      "path": "TS_19_PLACEMENT_HEATMAP_TEST_REPORT.md",
+      "size": 5272,
+      "sha256": "f1e455a485c6b3cfcbcca2d765f99fa0d7f15da61bd1f51ac20e1cd23da12edc",
+      "previous_sha256": null
+    },
+    {
+      "path": "docs/TS_19_TACTICAL_STUDIO.md",
+      "size": 13014,
+      "sha256": "304b1a351372be319aae8dc9d56ec513687eab23d360d8b0d1b1095028045131",
+      "previous_sha256": "148c332b8e39a584329a933548a4b86b2f430ee6e84276e1756aaf2d626bfd68"
+    },
+    {
+      "path": "frontend/public/squad/squad.js",
+      "size": 36561,
+      "sha256": "20ca74c9f698a47ccf835e3d3ccd037694662d448ba1a76bd9c896f0b44ebf26",
+      "previous_sha256": "10c4a0a75582ea169449432b33f19ba7e26db77851a08a84db5302549c0ae88d"
+    },
+    {
+      "path": "frontend/public/squad/studio.css",
+      "size": 15119,
+      "sha256": "905408921f7bea94763c07fcf1da7e85dea7bf7290d5750a0370663d2fa03483",
+      "previous_sha256": "5d06cb74ca36cc68b34387b96b3899df794f3041db97bfd6df72e5182dcf7743"
+    },
+    {
+      "path": "frontend/public/squad/studio.js",
+      "size": 30170,
+      "sha256": "97e7f12e65290050acb2006c772826fd0bc496c210c1f493345b04b26bee9ca4",
+      "previous_sha256": "c41c39a28a4323fb7d865af691d85ee37d46362f83ee9904fc9ea6987009b307"
+    },
+    {
+      "path": "reports/ts19_placement/browser_checks.json",
+      "size": 1889,
+      "sha256": "715f9bc50b64e93a77c530013573a0ea41417f227ec04cf847f1bda2a7e8cf7f",
+      "previous_sha256": null
+    },
+    {
+      "path": "reports/ts19_placement/catalogue.json",
+      "size": 8460,
+      "sha256": "21f7294cc17f27239efc70417d439714a8866d85481837982d5bdb1ce0cfbde4",
+      "previous_sha256": null
+    },
+    {
+      "path": "reports/ts19_placement/full_regression.log",
+      "size": 1553,
+      "sha256": "eabae92bc51a86c28388e45cee6c6c3a1545c7a2951f59dc8224e39741083f8a",
+      "previous_sha256": null
+    },
+    {
+      "path": "reports/ts19_placement/full_regression_result.json",
+      "size": 108,
+      "sha256": "e2df17aeee00e3241a4b9484852b9469d807b2115f002a4747a7976550b048fe",
+      "previous_sha256": null
+    },
+    {
+      "path": "reports/ts19_placement/no_node.log",
+      "size": 318,
+      "sha256": "2f6d38a144127a61c57094e7ae8f95d671674ae7aa4a8f1ef48c7d5e14100d18",
+      "previous_sha256": null
+    },
+    {
+      "path": "reports/ts19_placement/specific.log",
+      "size": 99,
+      "sha256": "f3d0b19c0000f2c732f11b075d004b965057461d4d95cbcabf2d7848585d0452",
+      "previous_sha256": null
+    },
+    {
+      "path": "reports/ts19_placement/studio_regression_checks.json",
+      "size": 2188,
+      "sha256": "9654858607b88690872a373607053e111d82edadfdeb35ae422212e3fc01876e",
+      "previous_sha256": null
+    },
+    {
+      "path": "reports/ts19_placement/ts19_only.log",
+      "size": 181,
+      "sha256": "189564bd8a2a9e1acea20fe250a4696526f04ce6d2edc3cc9ccd09d98ef0ad8b",
+      "previous_sha256": null
+    },
+    {
+      "path": "src/football_manager/domain/tactical_position_zones.py",
+      "size": 3014,
+      "sha256": "4ddf1cb51061a2473028c6747fccbfa78d9db28431b521431c023a3ae2c92e11",
+      "previous_sha256": null
+    },
+    {
+      "path": "src/football_manager/services/tactical_studio.py",
+      "size": 15587,
+      "sha256": "ef00e7d25c8a0e071db2f3d0bc578b09ff3001212563d34cd00f1e3b87a4c233",
+      "previous_sha256": "f873073f640b4dfe1052ec14a9a17fb6b4563eadb226499dd15de62fd6cf25e2"
+    },
+    {
+      "path": "tests/test_ts_19_placement_heatmap.py",
+      "size": 11590,
+      "sha256": "22c2d84bc09da6895741a66970eb300bdaaf5bcbaaa2f72522a38f1a7733df31",
+      "previous_sha256": null
+    },
+    {
+      "path": "tools/validate_ts19_browser.py",
+      "size": 16462,
+      "sha256": "e6b26933cb20f855402a754acccc5397ffa71f24dd6842cf58c19360bce9d570",
+      "previous_sha256": "65e956750382493b853708b42ac2e9758c52c44a3a2628ef5941640516a987bb"
+    },
+    {
+      "path": "tools/validate_ts19_placement_browser.py",
+      "size": 12166,
+      "sha256": "52b9ddb3a3c7c5071b0fb6a57d5932e73d9b1d04cbaebc194f194cc93d48cba6",
+      "previous_sha256": null
+    },
+    {
+      "path": "tools/validate_ts19_placement_catalogue.py",
+      "size": 2485,
+      "sha256": "a90a978fcd7d735bda1bdf6f04a78db52ace544382587c2308cb4c514eabc3f0",
+      "previous_sha256": null
+    },
+    {
+      "path": "tools/verify_ts19_placement_package.py",
+      "size": 1187,
+      "sha256": "1aa48e03c333b8c7b1415372370877229b7762dbd02b4118d1a616e9f54b2af1",
+      "previous_sha256": null
+    }
+  ]
+}

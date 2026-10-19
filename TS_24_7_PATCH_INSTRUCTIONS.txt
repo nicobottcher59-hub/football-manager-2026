@@ -1,0 +1,51 @@
+TS-24.7 — Balance de largo plazo (auditoría y estabilidad)
+PARCHE INCREMENTAL: necesitás el proyecto COMPLETO con TS-24.6 instalado.
+
+INSTALACIÓN EN WINDOWS
+1. Cerrá el juego y el servidor local (INICIAR_INTERFAZ_WINDOWS.bat).
+2. Hacé una copia completa de la carpeta y un backup de tu partida SQLite.
+3. Extraé el ZIP EN LA RAÍZ del proyecto, donde está
+   INICIAR_INTERFAZ_WINDOWS.bat, manteniendo las carpetas src/, tests/,
+   tools/ y reports/. Aceptá reemplazar los archivos incluidos.
+4. Desde esa carpeta, ejecutá:
+       python tools/verify_ts247_balance_package.py
+5. Si tenés pytest instalado, ejecutá las pruebas nuevas:
+       python -m pytest -q tests/test_ts_24_7_long_horizon.py
+6. Reiniciá INICIAR_INTERFAZ_WINDOWS.bat y recargá el navegador con Ctrl + F5.
+
+CAMBIOS EN EL JUEGO
+- Corrección del cierre de temporada al incorporar clubes ascendidos
+  desde National League (cuentas financieras y contratos nuevos).
+- Actualización cronológica de jugadores libres fichados después de meses
+  sin equipo; no se inventan minutos ni se adelanta el reloj global.
+- Mayor protección al evaluar retiros que quitarían cobertura titular.
+- Los clubes de la IA pueden promover juveniles sub-23 hasta una referencia
+  de cuatro por equipo si hay cupo y candidatos, sin superar 29 jugadores
+  profesionales por esa vía. La decisión del equipo humano sigue siendo suya.
+- Ningún rediseño visual, inyección automática de dinero ni cambio en la
+  estructura del guardado: sigue en versión 16, sin migración nueva.
+
+AUDITORÍA DE 5, 10 Y 20 TEMPORADAS (OPCIONAL, EXIGENTE EN CÓMPUTO)
+    python tools/stress_ts247_long_horizon.py --seasons 20 --output reports/ts247_long_horizon.json
+    python tools/summarize_ts247_long_horizon.py --input reports/ts247_long_horizon.json --output TS_24_7_LONG_HORIZON_REPORT.md
+
+El JSON y el informe de la ejecución realizada se incluyen en el ZIP.
+El estrés ejecuta calendarios, cambios de temporada, mercado, finanzas,
+canteras y resultados generados. ÚNICAMENTE dentro del script de auditoría,
+los partidos senior se resuelven por el marcador de fondo ya existente y no
+por el FastMatchSimulator táctico completo. Por eso no mide minutos senior,
+lesiones, fatiga ni desarrollo derivado de partidos. No equivale a jugar
+20 temporadas reales. Ninguna partida guardada del usuario se abre o modifica.
+
+ATENCIÓN: La auditoría describe desequilibrios de suplentes y tendencias
+financieras; un recorrido sin errores de código NO equivale a tener el
+mercado plenamente calibrado. Revisá TS_24_7_LONG_HORIZON_REPORT.md.
+
+GITHUB DESKTOP
+BRANCH
+    feat/ts-24-7-long-horizon-balance
+SUMMARY
+    test(career): stress 5-10-20 year balance and protect squad continuity
+
+Si el ZIP completo original todavía contiene TS-24.6 sin commit, confirmá
+TS-24.6 primero y creá luego la rama TS-24.7. No se modificó Git en tu PC.

@@ -1,0 +1,16 @@
+TS-06 -- CAREER TRANSITION BOUNDARY
+
+Requires: TS-05 already applied and committed.
+GitHub Desktop branch: refactor/ts-06-career-transition-boundary
+Commit Summary: refactor(career): decouple season transitions from English rules
+
+1. Create this branch from main after the preceding patch is integrated.
+2. Extract the ZIP into the football-manager-game repository root, keeping directories.
+3. Replace modified files; added files should be created in their listed directories.
+4. Run from the root directory in PowerShell (Node.js is not required):
+   python -m pytest -q -ra tests/test_ts_06_career_transition_boundary.py tests/test_phase6_7_full_season_integration.py
+5. If tests pass, commit and push the branch, then merge into main.
+6. Only then create the next patch branch.
+
+After TS-07, run the complete regression: python -m pytest -q -ra
+Do not combine several uncommitted patches in one branch.

@@ -1,0 +1,78 @@
+TS-20 - Player DNA & Dressing Room
+=================================
+
+Base requerida: TS-19 - Tactical Studio 2.0 integrado.
+Paquete incremental: copiar su contenido en la raíz del repositorio respetando
+las carpetas. No es el juego completo. No incluye los futuros retoques de TS-19.
+
+ANTES DE INSTALAR
+1. Cerrar el servidor y el juego.
+2. Respaldar el repositorio y las partidas guardadas, incluida la base SQLite.
+3. Crear la rama feat/ts-20-player-dna-dressing-room.
+4. Extraer aquí el contenido del ZIP y reemplazar los archivos correspondientes.
+
+COMPATIBILIDAD DE PARTIDAS
+Se leen las carreras de versiones 1, 2, 3 y 4. Al guardar se escribe versión 4.
+La versión anterior del código no puede cargar esos nuevos guardados; para volver
+atrás hay que restaurar también el respaldo previo de las partidas.
+Las carreras anteriores empiezan con un vestuario neutral desde la fecha
+cargada. No se inventan amistades ni historiales de participación pasados.
+No hay autoguardado nuevo: guardar la carrera con el sistema existente.
+
+VERIFICAR INSTALACIÓN
+  python tools/verify_ts20_package.py
+
+PRUEBAS ESPECÍFICAS
+  python -m pytest -ra tests/test_ts_20_dressing_room.py tests/test_ts_20_integration.py tests/test_ts_20_frontend.py
+
+Sin Node.js: referencia 73 passed, 1 skipped. Con Node.js: 74 passed.
+La omisión es una comprobación opcional de sintaxis JavaScript.
+No hace falta instalar Node para ejecutar el juego ni para las otras pruebas.
+
+REGRESIÓN COMPLETA
+  python -m pytest -ra
+
+Consultar TS_20_TEST_REPORT.md para el resultado real en Linux. Los tests Node
+opcionales de parches anteriores también pueden omitirse en Windows sin Node.
+No comparar solamente el número de passed: revisar failed, skipped y sus causas.
+
+USO
+Abrir INICIAR_INTERFAZ_WINDOWS.bat, actualizar el navegador con Ctrl+F5 y entrar
+en Dressing Room desde el menú izquierdo. No es necesario cambiar Lineup ni
+Edit Tactics. La pantalla es informativa y puede ignorarse sin bloquear la carrera.
+
+La integración y las relaciones evolucionan al pasar los días. La jerarquía se
+revisa semanalmente con cambios graduales: liderazgo, participación real,
+permanencia, integración y relaciones. Ser veterano no garantiza ser líder.
+Cambiar una alineación o abrir/refrescar la pantalla NO hace avanzar el sistema.
+
+Cada jugador tiene un único contexto social de moral, limitado a +/-2 puntos
+sobre 100. No son +/-2 puntos de OVR o ACT. No se suman penalizaciones sociales
+independientes a confianza, química y atributos. No hay reuniones obligatorias.
+
+Los valores de personalidad se guardan pero no se exponen numéricamente al
+frontend. La propensión a lesiones queda almacenada para el futuro sistema
+médico: no se generan lesiones nuevas en esta actualización. La mentoría natural
+facilita la integración, no la progresión de atributos reservada para TS-21.
+
+Altas y bajas reales del plantel se detectan al reconciliar la plantilla con el
+estado del vestuario. Marcar Transfer List o Loan List no equivale a completar
+una venta/cesión. No se implementa un nuevo mercado de pases en TS-20.
+
+COMPROBACIÓN VISUAL EN WINDOWS
+Revisar la nueva sección, seleccionar un jugador, observar sus vínculos, avanzar
+varias semanas, guardar y cargar. La evolución es gradual: un día no necesariamente
+cambia de nivel a un jugador. Verificar también el acceso a Tactics y Squad.
+El informe distingue pruebas en navegador de la validación nativa en Windows,
+que no se ejecutó en el entorno de desarrollo.
+
+GITHUB DESKTOP
+BRANCH: feat/ts-20-player-dna-dressing-room
+SUMMARY: feat(players): add automatic dressing room hierarchy and bounded social morale
+
+VALIDACIONES ADICIONALES OPCIONALES
+  python tools/validate_ts20_stress.py --output reports/ts20/local_stress.json
+  python tools/validate_ts20_browser.py --output reports/ts20/local_browser
+
+La segunda requiere Playwright Python y Chromium en la máquina de validación.
+No son dependencias del juego, y no hace falta instalarlas para utilizar TS-20.

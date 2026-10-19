@@ -1,0 +1,46 @@
+/* UI-3.1 Visual polish. Preserve UI-3 layout/zoom; improve depth and clarity. */
+:root { --text: #f4f9ff; --muted: #93a9bd; --border: #244860; --panel: #0c2436; }
+.app-shell { background: radial-gradient(ellipse at 58% -12%,#1d3758 0%,#0b2034 32%,#061320 65%,#040e19 100%); }
+.main-content { position:relative; }
+.main-content::before { content:"";position:absolute;inset:0 0 auto;height:420px;pointer-events:none;background:radial-gradient(ellipse at 63% 0,#1771a015,transparent 65%); }
+.panel { background:linear-gradient(145deg,#102b40 0%,#0b2134 52%,#071727 100%);border-color:#34546a85;box-shadow:0 10px 30px #0005,inset 0 1px 0 #c7eeff13; }
+.panel:hover { border-color:#4775948c; }
+.section-heading h2 { color:#fff;text-shadow:0 1px 8px #0007; }
+.card-kicker,.hero-fact small,.notification-meta small,.notification-copy>span { color:#94aabe; }
+.nav-item:not(.is-active) { color:#afc3d7; }
+.nav-item.is-active { box-shadow:inset 3px 0 0 #33caff,0 7px 20px #0005; }
+.sidebar { background:linear-gradient(165deg,#071927,#061320 58%,#0b2035 100%); }
+.continue-button { background:linear-gradient(145deg,#1899fc,#0968d5);box-shadow:0 0 0 1px #52beff4d,0 8px 21px #0066db44,inset 0 1px 0 #f4fcff55; }
+.continue-button:disabled { opacity:.72; }
+.hero-card::after { background:linear-gradient(90deg,#061526f7 0%,#07182ad3 30%,#0a24418c 61%,#04152630 100%),linear-gradient(0deg,#041527f0 0%,transparent 54%); }
+.hero-card { border-color:#35597a;box-shadow:0 17px 36px #0006,inset 0 1px #ffffff24; }
+.next-match { border-color:#216a73;box-shadow:inset 0 1px #8ef7e311,0 13px 28px #0004; }
+.hero-highlights strong { color:#f5fcff; }
+.fm-home-no-form { font-size:11px!important;color:#8fbcce!important;max-width:135px;line-height:1.25; }
+.mini-metrics .metric-tile { background:linear-gradient(150deg,#14344a,#0a2135);border:1px solid #294c62;box-shadow:0 3px 9px #0002,inset 0 1px #ffffff0b; }
+.metric-detail strong { color:#f0faff; }
+.metric-bottom>span { color:#c4fbe0;font-weight:800;font-variant-numeric:tabular-nums; }
+.formation-strip { background:linear-gradient(95deg,#0b3041,#0a2035); }
+.pitch { background:#092c29;border-color:#287666;box-shadow:inset 0 0 46px #02171c,0 10px 24px #0008; }
+.pitch-grass { opacity:.84;background:radial-gradient(ellipse at 50% 35%,#155849 0%,transparent 72%),repeating-linear-gradient(0deg,#0d3e34 0px,#0d3e34 44px,#10392f 45px,#10392f 90px); }
+.fm-home-live-player { width:85px;filter:drop-shadow(0 5px 8px #001b21cc); }
+.fm-home-live-player .player-photo { width:44px;height:49px; }
+.fm-home-live-player .fm-face-home { width:44px;height:49px;border-radius:9px 9px 5px 5px;box-shadow:0 2px 6px #0008; }
+.fm-home-live-player .pitch-name { min-width:57px;max-width:80px;min-height:17px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;text-align:center;padding:2px 7px;background:linear-gradient(#173a51,#081c2d);border:1px solid #2f6276;border-radius:5px 5px 0 0;font-size:10px;font-weight:760; }
+.fm-home-live-player .pitch-position { min-width:57px;max-width:80px;text-align:center;color:#82c9db;background:#061929db;font-size:9px;padding:1px 4px;border-radius:0 0 5px 5px; }
+.fm-home-live-player .ovr-tag { top:17px;right:-17px;min-width:32px;height:19px;background:linear-gradient(135deg,#62d6a4,#aff766);color:#092b1c;border-color:#baffbe;font-size:11px; }
+.fm-face { display:inline-grid;place-items:center;overflow:hidden;flex-shrink:0;border:1px solid #5292a77d;background:linear-gradient(160deg,#143a54,#071d2e);box-shadow:inset 0 1px #c5efff25,0 5px 14px #0007; }
+.fm-face svg { display:block;width:100%;height:100%; }
+.fm-opponent-badge { width:74px;height:84px;margin:auto;display:grid;place-items:center;clip-path:polygon(50% 0,93% 15%,93% 62%,50% 100%,7% 62%,7% 15%);background:linear-gradient(145deg,#d94c68,#5e1c35);font-size:24px;font-weight:900;letter-spacing:1px;color:#fff;border-radius:5px;text-shadow:0 2px #0008;filter:drop-shadow(0 5px 12px #0006); }
+.match-bottom>span { color:#b6d0e0; }
+.action-green { background:linear-gradient(135deg,#0e957d,#16be8d);color:#05251b; }
+.competition-tab.selected,.activity-tabs button.active { background:linear-gradient(130deg,#187cd8,#09509a);color:#fff; }
+.competition-tab:not(.selected),.activity-tabs button:not(.active) { color:#849db6; }
+.inbox-card,.club-news { box-shadow:0 9px 23px #0005; }
+.notification-row:hover,.story-card:hover { filter:brightness(1.1); }
+@media(prefers-reduced-motion:reduce){.notification-row,.panel,.story-card{transition:none!important}}
+/* Consistent color tiers also on the XI cards. */
+.fm-home-live-player .ovr-tag.fm-grade-top{background:linear-gradient(#8aef8c,#54d178);border-color:#a9ffbd;color:#073b28}
+.fm-home-live-player .ovr-tag.fm-grade-good{background:linear-gradient(#6be6d9,#34b7ae);border-color:#a6fff1;color:#053b39}
+.fm-home-live-player .ovr-tag.fm-grade-mid{background:linear-gradient(#f6d488,#dda742);border-color:#ffe0a1;color:#493116}
+.fm-home-live-player .ovr-tag.fm-grade-low{background:linear-gradient(#a8b9c9,#7f93a8);border-color:#dbe4ea;color:#25394e}

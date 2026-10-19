@@ -1,0 +1,81 @@
+{
+  "patch": "TC-E2.1",
+  "requires": "E1.1 International Calendar initial-season reflow (technical-checkpoint-stabilization branch)",
+  "modifies_engine": true,
+  "files": [
+    {
+      "path": "docs/TC_E2_1_PREMIER_CALENDAR_TEMPLATE.md",
+      "action": "add",
+      "sha256": "31f77dc9039783c64646624fc0b1daf7247af7e002e949fcce54316adf163b5b",
+      "bytes": 4203
+    },
+    {
+      "path": "src/football_manager/data/__init__.py",
+      "action": "modify",
+      "sha256": "06d70f9b9a37f739d82f57c4fd049015f8c396d23c33ef7bf425082afe75cf95",
+      "bytes": 1435
+    },
+    {
+      "path": "src/football_manager/data/future_seasons.py",
+      "action": "modify",
+      "sha256": "9c0cdedd1108a9509533119afcbe4b68db1e2d5f3b7c00222ff308d3c8b565c2",
+      "bytes": 6414
+    },
+    {
+      "path": "src/football_manager/data/premier_calendar.py",
+      "action": "add",
+      "sha256": "4a38c31bd5403429adf91fbb2e3a4e9e6578ba5974dec99e4e41c55c97bc39fd",
+      "bytes": 5703
+    },
+    {
+      "path": "src/football_manager/dev_ui/session.py",
+      "action": "modify",
+      "sha256": "b4b2b5bc218d9059b3f504191a8478857702c25e7918801fde3aa959aaff418e",
+      "bytes": 140783
+    },
+    {
+      "path": "tests/test_phase6_7_full_season_integration.py",
+      "action": "modify",
+      "sha256": "fcaf7a6119476defe6321ff7fe4e3c06d1c5b7aadc3afef2481d9adb0644863f",
+      "bytes": 11598
+    },
+    {
+      "path": "tests/test_tc_e1_1_initial_season_fifa_reflow.py",
+      "action": "modify",
+      "sha256": "bbb689065d0bf5057c7105841e993abab2b3dca42f98fe2a8edfc61a37a7d7f8",
+      "bytes": 5682
+    },
+    {
+      "path": "tests/test_tc_e1_international_calendar.py",
+      "action": "modify",
+      "sha256": "358e77b3ee6e5023f560f042be0bd4cbfd7ad6585a96c22515c59bd87b14af06",
+      "bytes": 12867
+    },
+    {
+      "path": "tests/test_tc_e2_1_premier_official_slots.py",
+      "action": "add",
+      "sha256": "ce0402ac3db056fa81a111274d54e644cc2ff736a4f92b1d53cb45ef1806de8e",
+      "bytes": 5378
+    },
+    {
+      "path": "tests/test_ui32_calendar.py",
+      "action": "modify",
+      "sha256": "649a8832944fa2492ff6002e6ab781139b355d85dfe4ee9e956c56a11f7a9727",
+      "bytes": 6325
+    },
+    {
+      "path": "tests/test_ui341_calendar_progress.py",
+      "action": "modify",
+      "sha256": "80d8ca8522ad48eea33820f53acf2a82262e72861e2b61565fad275b5e53553a",
+      "bytes": 8366
+    },
+    {
+      "path": "tests/test_ui34_daily_progression.py",
+      "action": "modify",
+      "sha256": "7c412dd8634623aff56e186391e0c35770dc9bc07616c0b1f63c8d8a9d1af2e0",
+      "bytes": 8635
+    }
+  ],
+  "count": 12,
+  "notes": "Use existing official 2026/27 Premier League date slots with fictional pairings; later years project weekday pattern; FIFA and cup/UEFA move only unplayed conflicts."
+}

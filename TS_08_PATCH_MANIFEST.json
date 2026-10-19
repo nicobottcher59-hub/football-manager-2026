@@ -1,0 +1,57 @@
+{
+  "id": "TS-08",
+  "scope": "Score, match outcome and results-only career archive integrity",
+  "requires": "TS-07.1",
+  "branch": "fix/ts-08-score-persistence-contracts",
+  "commit_summary": "fix(persistence): validate scores and career archives before saving",
+  "files": [
+    {
+      "path": "src/football_manager/domain/score_validation.py",
+      "action": "add",
+      "sha256": "eb4d11b665daa4c60e5060835d5e4a39a6c34dbee0a71ae6ecd4e1b20bd08977",
+      "expected_base_sha256": null
+    },
+    {
+      "path": "src/football_manager/domain/world_runner.py",
+      "action": "modify",
+      "sha256": "6ba8bbf748b246354ed5baa3dab5b3c25423afb53465f2921b9e037c1ed17b0c",
+      "expected_base_sha256": "db0e9de15b2c0fe78a2bdad37274272b7e2c37eac9762b0d0c90fd0006e4f1b1"
+    },
+    {
+      "path": "src/football_manager/domain/league.py",
+      "action": "modify",
+      "sha256": "8de6eadaca7d31c888d22b81525deb419ef6ecce2acf188576568883cab348b2",
+      "expected_base_sha256": "08f6ece6f3f15f63250b80877c0475303a2e25c051be7fd04ff4cd929468aa56"
+    },
+    {
+      "path": "src/football_manager/domain/knockout.py",
+      "action": "modify",
+      "sha256": "63691ff13d2a0c27352b5c781e9004ff3636e4deb3eb70a208fcbc35f3b0dbfc",
+      "expected_base_sha256": "61e793e60f8401e4f1b1483effc825b6755b9ef411735fe7e13fdfafbff2921d"
+    },
+    {
+      "path": "src/football_manager/domain/career.py",
+      "action": "modify",
+      "sha256": "4b937b9ffcc68af632b3cd2fda2f249fcbb3f4b60e5bc7afe4f2a48cc49c5f7e",
+      "expected_base_sha256": "5de2682d9a603aea823c0729c95330d667f5fc6c02f8eecdb2c9b24d24fe8c85"
+    },
+    {
+      "path": "src/football_manager/fast_simulation/models.py",
+      "action": "modify",
+      "sha256": "e60ed2f96fd5e09ed700f498e4da286ec82c04e06a20b96ead0d7e010b53062e",
+      "expected_base_sha256": "5e17dfdefb65a933e912db946953ed71c9b9cfe94092d08c5b761d2705a35f6c"
+    },
+    {
+      "path": "tests/test_ts_08_score_persistence_contracts.py",
+      "action": "add",
+      "sha256": "bcef7d014063a1b1e659825d642d587bf7eebc7bd7354874b7556c62501855ad",
+      "expected_base_sha256": null
+    },
+    {
+      "path": "docs/TS_08_SCORE_PERSISTENCE_CONTRACTS.md",
+      "action": "add",
+      "sha256": "f3f26bd364645e47ebbfcd11145b1eae198e6e1888ce21855df404088a7a7a41",
+      "expected_base_sha256": null
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "base": "TS-21.3",
+  "files": {
+    "TS_21_4_5_COHORT_20Y.json": "315d80ab6b97131c6245e439ec9a9e15641773a52e3cadd20b911d201afa2676",
+    "TS_21_4_5_README.txt": "18a4b2fc1f3fa4d39fb8a8c3154b5f5f79cb7b99ab89f4634883eb8d1010d36f",
+    "TS_21_4_5_REAL_TWO_SEASONS.json": "14c3ef45626a8d649ffa37651cdf5ba6fdb9dcbec9d9af7f7d1c68d8119d0483",
+    "TS_21_4_5_TEST_REPORT.md": "3392a3d1be9dd17a2ff401e30f6482f05b80830d4cc59dcda4ab5e6c3fafeb1c",
+    "src/football_manager/calibration/__init__.py": "aa22e6113a98df508c96d0f1dd0263669f6ea8593bf7fd232ac7acfd494392c7",
+    "src/football_manager/calibration/world_balance.py": "44b238b083bb30d8aa955bd712a27477ae58de6c39e0562cb7b19b144587ba9c",
+    "src/football_manager/persistence/manager_career.py": "d50c0d8684d9d1d1269f4587c1f7f072ff07d0027c67d5764869104ba1d4d8d1",
+    "src/football_manager/persistence/session_codec.py": "bd2c9cebfe09c776db066868f88c256e5c48b7c044c231dabad91977a0b8e5c7",
+    "src/football_manager/services/player_development.py": "01d562f3bae9e494f075898b140bbd7ce45d397774a03b1d820c5bcfbb03d600",
+    "src/football_manager/services/world_training.py": "cd4869a7c3cace37ef930a3a01ff371e5bbbabaf2384ae294a4899f75be04125",
+    "tests/fixtures/ts2145_manager_v8.json.gz": "3d01a67a324c651dd5f1e1a3908ed4f468dd0b4ca6da33208460fca9b7b057cf",
+    "tests/fixtures/ts2145_manager_v8_facts.json.gz": "3fb7f1b461b0186115cb77b047bf0afa8bed6312521d663aa3c93acdd37859c4",
+    "tests/test_ts_21_2_player_development.py": "819821af56a588799f5729671dfcce13e3a630bafd7f559999e7e49e777b58b5",
+    "tests/test_ts_21_3_player_aging.py": "517beb855d90b6f61b932018300148aa851e3be413e41190a91767b0c63b01de",
+    "tests/test_ts_21_4_5_world_balance.py": "60f8ecfe4ffa3d127d9dd46346dfe2b8df208bffd8685441af1f349591bc4a5c",
+    "tests/test_ts_22_presentation.py": "35eee2ff13056f255aead09917871f42511dbe07e7fd058f8e8b3e0030a1ba19",
+    "tools/validate_ts2145_world_balance.py": "362a91820f4ef8ea464331577d7c6c51d12e67de4d771fa119dfc9e0230a8c65",
+    "tools/verify_ts2145_package.py": "0942e3a389da333986a8b184cfbba739e7323774584b1a1fb7c66eeebbda04ef"
+  },
+  "name": "TS-21.4+21.5 Global Training and World Balance",
+  "requires_node": false,
+  "target_save_version": 9
+}

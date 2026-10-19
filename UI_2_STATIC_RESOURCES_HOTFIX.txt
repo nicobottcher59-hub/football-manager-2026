@@ -1,0 +1,28 @@
+FM PROJECT - HOTFIX UI-2: estilos y scripts faltantes (404)
+
+CAUSA
+El servidor Python entregaba el HTML portable en /, pero el navegador
+resolvia los enlaces relativos CSS/JS como /styles.css, /portable.js,
+/data/demo.js, etc. Esas rutas no existen en el servidor UI-2.
+
+SOLUCION
+El servidor ahora redirige / a /portable/. Los archivos del frontend
+se cargan con su ruta correcta. No se modifican motor, datos ni tacticas.
+
+INSTALACION (Windows)
+1. Trabaja en tu branch UI-2, creada desde UI-1 ya cerrada.
+2. Cierra la ventana del servidor de FM Project (Ctrl+C).
+3. Extrae el contenido de este ZIP encima de la raiz del repositorio,
+   donde estan README.md, src/, tests/ y frontend/.
+4. Acepta reemplazar los archivos incluidos; no borres carpetas.
+5. Doble clic en INICIAR_INTERFAZ_WINDOWS.bat (no cambia).
+6. Abre http://127.0.0.1:8765/ ; deberia pasar a /portable/.
+7. Si Chrome muestra una pagina vieja, usa Ctrl+Shift+R.
+8. Verifica Home, Squad y Tactics.
+
+NO SE NECESITAN NODE.JS NI NPM.
+
+VALIDACION AUTOMATICA OPCIONAL
+python -m pytest -q tests/test_ui_shell_squad.py
+
+No commitees UI-2 hasta confirmar en Windows que las vistas funcionen.

@@ -1,0 +1,46 @@
+FOOTBALL MANAGER GAME - TS-00 QUALITY BASELINE & REGRESSION CLEANUP
+
+BRANCH (create in GitHub Desktop):
+  test/ts-00-quality-baseline
+
+COMMIT SUMMARY:
+  test: stabilize regressions and establish quality baseline
+
+PATCH BASE:
+  ZIP exported from branch technical-checkpoint-stabilization on 13 Oct 2026.
+  Applies only if the target files have not changed incompatibly since export.
+
+INSTALLATION:
+  1. Commit or safely store any unrelated changes first.
+  2. Create the branch above from your CURRENT tested checkpoint branch.
+  3. Extract this patch ZIP INTO THE REPOSITORY ROOT (where pyproject.toml is).
+     Preserve all paths and allow replacement of the two existing test files.
+     The ZIP has no extra wrapping 'football-manager-game' directory.
+  4. Review the changed files in GitHub Desktop; this patch changes NO runtime
+     source, gameplay, calendar data or interface assets.
+  5. From your repository root, run:
+
+     python -m compileall -q src tests tools
+     python -m pytest -q -ra
+     node tests/ui/test_board.cjs
+
+     Note: Node is needed for the last command and the JS job on GitHub.
+     The current known xfail in world registration is expected until TS-01;
+     no FAILED or ERROR test is acceptable.
+
+  6. Commit using the exact SUMMARY above and push the branch.
+  7. Check the GitHub Actions 'Quality baseline' workflow; it runs Python
+     tests on Linux + Windows and JS smoke tests on Node 22.
+
+CONTENTS:
+  tests/test_ui35_matchday.py                 (replaced: one-day progression assertion)
+  tests/test_phase6_0_development_ui.py       (replaced: next managed match logic)
+  tests/test_ts_00_regression_baseline.py     (new: deterministic two-match replay)
+  .github/workflows/quality-baseline.yml     (new: continuous integration)
+  docs/TS_00_QUALITY_BASELINE.md             (new: scope and acceptance)
+  TS_00_PATCH_INSTRUCTIONS.txt               (new: this guide)
+  TS_00_PATCH_MANIFEST.json                  (new: SHA-256 manifest)
+
+NOT INCLUDED:
+  TS-01 atomic scheduling and rollback, TC-E2.2 calendar repairs,
+  TS frontend dependency lock and production build validation, gameplay/UX changes.

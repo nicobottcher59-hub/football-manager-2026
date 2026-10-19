@@ -1,0 +1,18 @@
+TS-17.3 - Football Manager Game
+
+REQUIRES: commit + merge of the immediately preceding patch.
+BRANCH: test/ts-17-3-stress-rule-contracts
+GITHUB DESKTOP SUMMARY: test(calendar): enforce synthetic blackout constraints in stress runs
+
+SCOPE: Represent synthetic blackout periods as test-only InternationalCalendar override events; enforce them in leagues, cups, UEFA and postponements; fail stress on hard-window violations. Synthetic windows are NOT official FIFA dates.
+
+INSTALL:
+1. On updated main, create the branch shown above.
+2. Extract this ZIP into the football-manager-game repository ROOT, preserving paths.
+3. Run the targeted tests from PowerShell:
+   python -m pytest -ra tests/test_ts_17_3_stress_rule_contracts.py tests/test_world_scalability_diagnostic.py
+4. If green, run full regression:
+   python -m pytest -ra
+   Expected suite on this exact version: 886 passed, 0 failed.
+5. Commit with the Summary above and merge into main before the next patch.
+   No local Node.js is required.

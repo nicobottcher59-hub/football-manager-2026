@@ -1,0 +1,21 @@
+{
+  "matches": 1000,
+  "failures": 0,
+  "elapsed_seconds": 22.511,
+  "checks": {
+    "ordinary_matches": 500,
+    "goals": 3062,
+    "substitutions": 508,
+    "regulation": 746,
+    "deterministic_repeats": 20,
+    "planned_matches": 500,
+    "penalties": 140,
+    "applied_plans": 777,
+    "extra_time_plan_checks": 125,
+    "red_cards": 378,
+    "skipped_plans": 348,
+    "extra_time": 114
+  },
+  "input_snapshot_unchanged": true,
+  "scope": "Snapshot stress only; not a claim of real-world tactical calibration or long-career aging."
+}

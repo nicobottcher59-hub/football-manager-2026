@@ -1,0 +1,75 @@
+{
+  "patch": "TS-19 chooser LM/RM and fixed goalkeeper",
+  "base": "football-manager-game.zip with TS-19 placement / heatmap and TS-20",
+  "schema_change": false,
+  "requires_node": false,
+  "engine_position_codes_changed": false,
+  "files": [
+    {
+      "path": "frontend/public/squad/squad.js",
+      "size": 36573,
+      "sha256": "09cc5aeb5cf0998cf63c69da627e45c1594823b76c8ae97b78aa11c6c0e9b8e7",
+      "previous_sha256": "20ca74c9f698a47ccf835e3d3ccd037694662d448ba1a76bd9c896f0b44ebf26"
+    },
+    {
+      "path": "frontend/public/squad/studio.js",
+      "size": 31409,
+      "sha256": "ea9eb3632325b693f2785cb170476a76e28c0425beae9498deccb1f578203846",
+      "previous_sha256": "97e7f12e65290050acb2006c772826fd0bc496c210c1f493345b04b26bee9ca4"
+    },
+    {
+      "path": "frontend/public/squad/studio.css",
+      "size": 15152,
+      "sha256": "d6fd84b0471f53c47caaaa91edacf54f9d93b6f46aa4d91b7aee0722bc847172",
+      "previous_sha256": "905408921f7bea94763c07fcf1da7e85dea7bf7290d5750a0370663d2fa03483"
+    },
+    {
+      "path": "src/football_manager/domain/tactical_position_zones.py",
+      "size": 3504,
+      "sha256": "b0e869dbab50fae8ef4324fc6a2fca909c65aa6879ce3fec3743b3e28e6d68c2",
+      "previous_sha256": "4ddf1cb51061a2473028c6747fccbfa78d9db28431b521431c023a3ae2c92e11"
+    },
+    {
+      "path": "src/football_manager/services/tactical_studio.py",
+      "size": 16161,
+      "sha256": "c49582d9bec21400d810e97b0e4b4af00f3d1cae5112ef4e31c8cd9d1a10e3a8",
+      "previous_sha256": "ef00e7d25c8a0e071db2f3d0bc578b09ff3001212563d34cd00f1e3b87a4c233"
+    },
+    {
+      "path": "tests/test_ts_19_placement_heatmap.py",
+      "size": 14245,
+      "sha256": "544f38b50d48524cdb48a58edbbd9bcaf1a7d35ceffaff7f2cfe2dc92f1da099",
+      "previous_sha256": "22c2d84bc09da6895741a66970eb300bdaaf5bcbaaa2f72522a38f1a7733df31"
+    },
+    {
+      "path": "tests/test_ts_19_tactical_studio.py",
+      "size": 13984,
+      "sha256": "3903870e6ec7806db3d2075f8ff0252401859198714e52d99f95ce1782e6e743",
+      "previous_sha256": "3c2c5ed45f8636dd2b2e513581dc55510ad9d5edeab7faaa0ed887f97d0e94c8"
+    },
+    {
+      "path": "tools/validate_ts19_placement_browser.py",
+      "size": 14596,
+      "sha256": "29e0545e1ac277577616eb81df18a6a077892faf68aa000c020ff735cb55e11a",
+      "previous_sha256": "52b9ddb3a3c7c5071b0fb6a57d5932e73d9b1d04cbaebc194f194cc93d48cba6"
+    },
+    {
+      "path": "tools/verify_ts19_lmrm_gk_package.py",
+      "size": 1292,
+      "sha256": "63c38fc1d597940792edf4f938d5a4a965fe28ccffe7f34cc8a54875e8e892e7",
+      "previous_sha256": null
+    },
+    {
+      "path": "TS_19_LMRM_GK_INSTRUCTIONS.txt",
+      "size": 2466,
+      "sha256": "2517e401acc176f058ed0854dacef6b18438cae46c7f6bb95d3d140abe73f40b",
+      "previous_sha256": null
+    },
+    {
+      "path": "TS_19_LMRM_GK_TEST_REPORT.md",
+      "size": 3698,
+      "sha256": "8a394a2393cae8c806a402686cfd8905d30fc09d604c060e3ef1af5ee6310437",
+      "previous_sha256": null
+    }
+  ]
+}

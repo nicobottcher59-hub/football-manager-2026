@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "football-manager-game"
+version = "0.0.1"
+description = "Personal football management simulation project"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+]
+
+[project.scripts]
+football-manager = "football_manager.main:main"
+football-manager-dev-ui = "football_manager.dev_ui.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.setuptools.package-data]
+"football_manager.data" = ["official/**/*.csv", "official/**/*.json", "official/**/*.slots"]

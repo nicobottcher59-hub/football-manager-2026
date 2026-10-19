@@ -1,0 +1,18 @@
+{
+  "patch": "UI-3.4.1 hotfix — own results + integrated calendar confirmation",
+  "apply_on_top_of": "FM_Project_UI-3_4_1_Calendar_Live_Simulation_Progress_PATCH.zip",
+  "engine_unchanged": true,
+  "frontend_dependencies_added": false,
+  "branch": "phase-ui-3-4-1-calendar-simulation-progress",
+  "files": {
+    "frontend/portable/calendar.js": "7ef643cad181273b138ae6123183a03a639c857445404a532f8ac0bcf885e589",
+    "frontend/portable/simulation.js": "ca1ca3f922b2ef84255373f1b85a1533d9b6467e0ddd397a323cef33400c2a80",
+    "frontend/portable/simulation.css": "993560bd9bf6f2df73eabc292d69b4010eafbc1fb3066c05fff00fa966578e10",
+    "tests/test_ui3411_calendar_club_results_modal.py": "fc6c4227da928764df78eeb1b2c14640a47a8865c7a154530779a68a1c188882",
+    "README.md": "83e532a79a42a895ef91dcfb340c8ad98dc815682e09f1378cc8343c22dc0c06",
+    "README_DEV.md": "f112f3b12d07e3ebf91d618bb0a236191cfe6a36bb3ee3908fd02a66a43726bf",
+    "docs/CURRENT_STATUS.md": "3da2a783506427aacfb86376665592e19b19c614fe9165a674b6b999c37632ab",
+    "docs/ROADMAP.md": "be2ea8d62deca4c8dd9652c2feffe7c91caacb4e6f6959f3d6eae9d9334b0741",
+    "docs/PHASE_UI_3_4_1_CALENDAR_PROGRESS.md": "66da323c1b20ec9016d3ca8bdd65326d7e41b3d13e0a08ad323878e3e620d225"
+  }
+}

@@ -1,0 +1,22 @@
+FM Project - UI-3.3.2 - Competition Explorer & FA Cup
+
+REQUIRES: accepted UI-3.3.1 repository with its previous patches already applied.
+Do NOT delete any files from your existing game.
+
+1. GitHub Desktop: create branch phase-ui-3-3-2-competition-explorer from the completed UI-3.3.1 branch.
+2. Close the current Python UI console (Ctrl+C).
+3. Extract ALL CONTENTS of this ZIP over the root of your game repository (the folder with README.md).
+   Keep subfolder paths; approve replacement of same-named files.
+4. Double-click INICIAR_INTERFAZ_WINDOWS.bat.
+5. In Chrome press Ctrl+Shift+R.
+6. Test My competitions -> FA Cup before Northbridge's cup draw, Other leagues -> Championship,
+   National / England / third division -> League One, International / Europe -> Europa & Conference,
+   and Carabao Cup bilateral bracket +/- zoom & right panel.
+7. Do not commit until you confirm it works in Windows.
+
+Only changed/new source files are included; not the entire game.
+No Node.js/npm required. WorldRunner, FastMatchSimulator and Continue unchanged.
+
+Proposed GitHub Desktop Summary (after user acceptance):
+feat(ui): add filtered competition explorer and restore FA Cup access
+Documentation: docs/PHASE_UI_3_3_2_COMPETITION_EXPLORER.md

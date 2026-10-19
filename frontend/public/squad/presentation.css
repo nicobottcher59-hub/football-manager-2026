@@ -1,0 +1,27 @@
+/* TS-22 adds small components to the existing visual language. */
+.ts22-graphics{grid-column:1/-1;padding:16px;min-width:0}
+.ts22-chart-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;color:#e5f6ff}
+.ts22-chart-head>strong{margin-right:auto}.ts22-chart-head label{display:flex;align-items:center;gap:7px;font-size:12px;color:#98bdd6}
+.ts22-chart-head select{background:#0c2e47;border:1px solid #315d7c;color:#e6f7ff;border-radius:6px;padding:7px;max-width:210px}
+.ts22-charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.ts22-charts section{max-width:430px;width:100%;margin:auto}
+.ts22-charts h3{font-size:13px;text-align:center;color:#a9d5e8;margin:14px 0 0}.ts22-radar{width:100%;max-height:310px;display:block;overflow:visible}
+.ts22-radar-grid{stroke:#31526a;stroke-width:1;fill:none}.ts22-radar-area{fill:#28c9ca35;stroke:#43d8d6;stroke-width:2;pointer-events:none}
+.ts22-radar text{fill:#a9c9df;font-size:10px}.ts22-radar .ts22-radar-value{fill:#ecfbff;font-weight:800;font-size:11px}
+.ts22-chart-values{font-size:11px;color:#9bbbd1;margin-top:12px}.ts22-chart-values div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px 16px}
+.ts22-history-note{font-size:11px;color:#91b2c7;border-top:1px solid #245273;margin:14px 0 0;padding-top:12px}
+.ts22-player-cell{display:flex;align-items:center;gap:6px}.ts22-player-cell .rt-player-trigger{min-width:0;flex:1}.ts22-more{flex:none;width:26px;height:27px;padding:0;border:1px solid #285b7e;background:#0c2e47;color:#71d9ff;border-radius:5px;cursor:pointer}
+.ts22-club-overview{margin:0 0 16px;padding:18px}.ts22-club-facts{display:flex;flex-wrap:wrap;gap:24px;margin:18px 0}.ts22-club-facts span{display:grid;gap:5px}.ts22-club-facts small{font-size:11px;color:#8fb6d0}.ts22-club-facts b{font-size:13px}
+.ts22-club-recent{display:flex;flex-direction:column;gap:9px;font-size:12px;margin:15px 0}.ts22-club-recent small{color:#8fb6d0;margin-right:8px}.ts22-club-link{padding:0;border:0;background:none;color:inherit;font:inherit;cursor:pointer}.ts22-club-link:hover{text-decoration:underline;color:#65d8ff}
+.ts22-club-tactics{font-size:12px;color:#b4d4e8;line-height:1.7}.ts22-role-list{display:flex;gap:8px;flex-wrap:wrap}.ts22-role-list span{border:1px solid #264c65;background:#0b243a;padding:5px 8px;border-radius:5px}
+.ts22-readonly-actions{display:flex;gap:8px;flex-wrap:wrap}.ts22-readonly-actions button{padding:10px;border:1px solid #2e536c;border-radius:7px;background:#0c2e47;color:#adc5d8;opacity:.7}
+.ts22-balance{margin:12px 0;padding:12px 16px;border:1px solid #65563b;border-radius:8px;background:#322b20;font-size:12px;color:#edddb8}.ts22-balance button{background:#193b50;color:#e9f8ff;border:1px solid #477085;border-radius:5px;padding:6px 10px;margin-left:10px}
+.rt-condition .rt-bar>span{background:#21c99c}.rt-condition.is-tired .rt-bar>span{background:#edb145}.rt-condition.is-exhausted .rt-bar>span{background:#ed607a}
+@media(max-width:800px){.ts22-charts{grid-template-columns:1fr}.ts22-chart-values div{grid-template-columns:1fr 1fr}.rt-overview{flex-wrap:wrap}.rt-totals{max-width:100%}.rt-totals>div{padding:8px 10px;min-width:65px}}
+
+.rt-player-trigger .rt-open-icon[hidden]{display:none}.ts22-more{flex-shrink:0}
+
+/* TS-21.2: small development panel inside the existing player details. */
+.ts212-development{margin-top:14px;padding:12px;border:1px solid #28526c;border-radius:8px;background:#0c263c;font-size:12px;color:#c3d9e9}
+.ts212-development .ts22-chart-head{flex-wrap:wrap;gap:10px}.ts212-development-facts{display:flex;flex-wrap:wrap;gap:10px 18px;margin:10px 0}.ts212-development-facts span{display:grid;gap:4px}.ts212-development b{color:#b8ecd6}
+.ts212-development select{background:#12344c;color:#e2eef8;border:1px solid #38596c;border-radius:5px;padding:5px;margin:0 8px}
+.ts212-development [role=status]{display:block;margin:8px 0;color:#a9c3d6}.ts212-development table{width:100%;text-align:left;margin:8px 0;border-collapse:collapse}.ts212-development td,.ts212-development th{padding:5px;border-bottom:1px solid #24435b}.ts212-development details{margin:10px 0}.ts212-changes{line-height:1.8}

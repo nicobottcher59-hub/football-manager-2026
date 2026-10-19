@@ -1,0 +1,84 @@
+'use strict';
+/* TS-24.2: live Python-backed club budget and professional agreements. */
+(() => {
+  let host=null,state=null,loading=false;
+  let query='',expiringOnly=false;
+  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const gbp=v=>`${Number(v)<0?'-':''}£${Math.abs(Number(v)||0).toLocaleString('en-GB',{maximumFractionDigits:0})}`;
+  const compact=n=>{const v=Number(n)||0;return Math.abs(v)>=1e6?`${v<0?'-':''}£${(Math.abs(v)/1e6).toFixed(1).replace(/\.0$/,'')}M`:
+                           Math.abs(v)>=1e3?`${v<0?'-':''}£${(Math.abs(v)/1e3).toFixed(1).replace(/\.0$/,'')}K`:gbp(v);};
+  const shortDate=s=>{if(!s)return '—';const [y,m,d]=s.split('-');return `${d}/${m}/${y}`;};
+  const tile=(label,value,note,accent='')=>`<div class="fe-stat ${accent}"><span>${esc(label)}</span><strong>${esc(value)}</strong><small>${esc(note)}</small></div>`;
+  function draw(){
+    if(!host||!state)return;
+    const spent=state.weekly_payroll_gbp,budget=state.wage_budget_weekly_gbp;
+    const pct=Math.max(0,Math.min(100,100*spent/Math.max(1,budget)));
+    const months=state.history||[];
+    const filtered=(state.contracts||[]).filter(p=>(!expiringOnly||(new Date(p.expires_on+'T00:00:00')-new Date(state.date+'T00:00:00'))/(24*3600*1000) <= 365)
+      && `${p.name} ${p.position}`.toLowerCase().includes(query.toLowerCase()));
+    host.innerHTML=`<section class="fe-heading"><div><span class="fe-eyebrow">CLUB OPERATIONS · TS-24.2</span><h2>Finances & contracts</h2><p>${esc(state.club)} · ${esc(state.date)} · persistent Python economy</p></div><span class="fe-tier">English tier ${esc(state.tier)}</span></section>
+    <section class="fe-stats" aria-label="Financial summary">
+      ${tile('Available transfer funds',compact(state.transfer_available_gbp??state.transfer_budget_gbp),'Agreed club terms reserve guaranteed fees')}
+      ${tile('Wage budget / week',compact(budget),'Board-approved ceiling')}
+      ${tile('Committed wages / week',compact(spent),'First team + youth agreements')}
+      ${tile('Bank balance',compact(state.cash_gbp),'Actual operating cash',state.cash_gbp<0?'fe-warning':'fe-positive')}
+    </section>
+    <div class="fe-overview">
+      <section class="fe-panel"><div class="fe-section-head"><div><h3>Wage budget</h3><p>Committed weekly wages compared with the board limit</p></div><span class="fe-pill">${Math.round(pct)}% used</span></div>
+        <div class="fe-meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct)}" aria-label="Wage budget used"><div style="width:${pct}%"></div></div>
+        <div class="fe-two"><div><span>Committed</span><strong>${gbp(spent)} / wk</strong></div><div><span>Room remaining</span><strong class="${state.wage_headroom_weekly_gbp<0?'fe-text-warn':'fe-text-good'}">${gbp(state.wage_headroom_weekly_gbp)} / wk</strong></div></div>
+        <div class="fe-minor">${compact(state.academy_weekly_wages_gbp)} / wk of the total is academy player pay. Youth scouts currently use a separate recruitment allocation.</div>
+      </section>
+      <section class="fe-panel"><div class="fe-section-head"><div><h3>Operating forecast</h3><p>Recurring monthly estimates, not invented match-by-match receipts</p></div><span class="fe-pill">GBP / month</span></div>
+        <div class="fe-flow"><span>Estimated club income</span><strong class="fe-text-good">+${compact(state.monthly_income_gbp)}</strong></div>
+        <div class="fe-flow"><span>Player wages (approx.)</span><strong>-${compact(state.forecast_monthly_wages_gbp)}</strong></div>
+        <div class="fe-flow"><span>Other club operations</span><strong>-${compact(state.monthly_operating_costs_gbp)}</strong></div>
+        <div class="fe-flow fe-total"><span>Forecast monthly result</span><strong class="${(state.monthly_income_gbp-state.forecast_monthly_wages_gbp-state.monthly_operating_costs_gbp)>=0?'fe-text-good':'fe-text-warn'}">${compact(state.monthly_income_gbp-state.forecast_monthly_wages_gbp-state.monthly_operating_costs_gbp)}</strong></div>
+      </section>
+    </div>
+    <section class="fe-panel"><div class="fe-section-head"><div><h3>Professional contracts <span class="fe-muted">(${state.contracts.length})</span></h3><p>Renew a deal using the player's current salary expectation; wages change only on a new agreement.</p></div><span class="fe-pill">Manager decisions</span></div>
+      <div class="fe-toolbar"><input id="fe-player-search" type="search" value="${esc(query)}" placeholder="Search name or position" aria-label="Search contracts"/><label><input type="checkbox" id="fe-expiring" ${expiringOnly?'checked':''}/> Expiring within 12 months</label></div>
+      <div class="fe-table-wrap"><table class="fe-table"><thead><tr><th>Player</th><th>Pos</th><th>OVR</th><th>Signed wage</th><th>Until</th><th>Role</th><th>Renewal offer</th></tr></thead><tbody>${filtered.map(p=>{
+        const max=p.renewal?.maximum_years||2;
+        const years=Array.from({length:max},(_,i)=>`<option value="${i+1}" ${i===1?'selected':''}>${i+1} year${i===0?'':'s'}</option>`).join('');
+        return `<tr><td><strong>${esc(p.name)}</strong><small>${p.age} years old</small></td><td>${esc(p.position)}</td><td><span class="fe-rating">${Number(p.ovr).toFixed(1)}</span></td><td>${gbp(p.weekly_wage_gbp)} / wk</td><td><span class="${p.status==='out_of_contract_retained'?'fe-text-warn':''}">${shortDate(p.expires_on)}</span>${p.status==='out_of_contract_retained'?'<small>Paid interim retention</small>':''}</td><td><span class="fe-role">${esc(p.role)}</span></td><td>${p.renewal?`<form class="fe-renew" data-player="${esc(p.player_id)}"><label><span class="fe-sr-only">Weekly offer to ${esc(p.name)}</span><input type="number" step="100" min="75" max="1500000" required name="wage" value="${p.renewal.minimum_weekly_gbp}" aria-label="Weekly wage offer"/></label><select name="years" aria-label="Contract years">${years}</select><button type="submit">Renew</button><small>Expected: ${gbp(p.renewal.minimum_weekly_gbp)}/wk</small></form>`:'<span class="fe-muted">Renewal cooling-off period</span>'}</td></tr>`;
+      }).join('')}</tbody></table>${filtered.length?'':'<p class="fe-empty">No players match these filters.</p>'}</div>
+    </section>
+    <section class="fe-panel"><div class="fe-section-head"><div><h3>Monthly club ledger</h3><p>Recorded on the first of each month, with real saved cash movements</p></div><span class="fe-pill">${months.length} entries shown</span></div>
+      ${months.length?`<div class="fe-table-wrap"><table class="fe-table fe-ledger"><thead><tr><th>Period</th><th>Income</th><th>Wages</th><th>Operations</th><th>Net</th><th>Closing balance</th></tr></thead><tbody>${months.map(m=>`<tr><td>${esc(m.period)}</td><td class="fe-text-good">${compact(m.income_gbp)}</td><td>${compact(m.wages_gbp)}</td><td>${compact(m.operations_gbp)}</td><td class="${m.net_gbp>=0?'fe-text-good':'fe-text-warn'}">${compact(m.net_gbp)}</td><td>${compact(m.closing_cash_gbp)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="fe-empty">Your first payroll and income statement will be recorded at the next monthly review.</p>'}
+    </section>
+    <p class="fe-caveat">${esc(state.note)} ${esc(state.contracts_note)} Club offers can be negotiated under Transfers; player movement still awaits personal terms.</p>`;
+    host.setAttribute('aria-busy',String(loading));
+  }
+  async function refresh(){
+    if(!host)return;
+    try{const response=await fetch('/api/finances',{cache:'no-store'});if(!response.ok)throw Error(`HTTP ${response.status}`);state=await response.json();draw();}
+    catch(error){host.innerHTML=`<section class="fe-panel"><h3>Financial data unavailable</h3><p>${esc(error.message)}</p><button type="button" data-fe-refresh="1">Retry</button></section>`;}
+  }
+  async function onSubmit(event){
+    const form=event.target.closest('.fe-renew');if(!form)return;
+    event.preventDefault();if(loading)return;
+    const player=state.contracts.find(p=>p.player_id===form.dataset.player);
+    if(!player)return;
+    const weekly=Number(form.elements.wage.value), years=Number(form.elements.years.value);
+    if(!Number.isSafeInteger(weekly)||!Number.isSafeInteger(years))return;
+    if(!window.confirm(`Offer ${player.name} ${gbp(weekly)} per week for ${years} year(s)? This changes the club wage commitment.`))return;
+    loading=true;host.setAttribute('aria-busy','true');
+    try{
+      const res=await fetch('/api/finances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'renew',player_id:player.player_id,weekly_wage_gbp:weekly,years})});
+      const result=await res.json();if(!res.ok)throw Error(result.error||`HTTP ${res.status}`);
+      await refresh();
+    }catch(error){window.alert(`Contract negotiation: ${error.message}`);}
+    finally{loading=false;host?.setAttribute('aria-busy','false');}
+  }
+  function mount(element){
+    if(host!==element){host=element;host.addEventListener('submit',onSubmit);
+      host.addEventListener('click',event=>{if(event.target.closest('[data-fe-refresh]'))refresh();});
+      host.addEventListener('input',event=>{if(event.target.id==='fe-player-search'){query=event.target.value;const caret=event.target.selectionStart;draw();const input=host.querySelector('#fe-player-search');input?.focus();if(caret!==null)input?.setSelectionRange(caret,caret);}});
+      host.addEventListener('change',event=>{if(event.target.id==='fe-expiring'){expiringOnly=event.target.checked;draw();}});
+    }
+    host.innerHTML='<section class="fe-panel">Loading finances...</section>';
+    refresh();
+  }
+  window.FMFinances=Object.freeze({mount,refresh});
+})();

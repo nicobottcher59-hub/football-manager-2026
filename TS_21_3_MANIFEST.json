@@ -1,0 +1,166 @@
+{
+  "manifest_version": 1,
+  "package": "TS-21.3-Envejecimiento-Lesiones-y-Retiro",
+  "base": "TS-21.2-Desarrollo-Global-y-Potencial",
+  "file_count": 31,
+  "files": [
+    {
+      "path": "TS_21_3_README.txt",
+      "bytes": 3584,
+      "sha256": "799b6d22dadd604edd719a28514d70dae82c812aae46b47c3be6e11081daa786"
+    },
+    {
+      "path": "TS_21_3_TEST_REPORT.md",
+      "bytes": 12667,
+      "sha256": "56e1692234a13cdf146d621971ae7f22ebae999b81d91e5baf3768041969223d"
+    },
+    {
+      "path": "TS_21_3_VALIDATION.json",
+      "bytes": 11536,
+      "sha256": "b5e4d0c964c66fa2ac9292fc22155df1f17e2d4b172b5acb60900865d551a3ec"
+    },
+    {
+      "path": "frontend/portable/match.js",
+      "bytes": 35580,
+      "sha256": "b22f19b640eb80ea8c0fd2934bd3488e1a1f8134b26bf311554134844c2aa182"
+    },
+    {
+      "path": "frontend/public/squad/presentation.js",
+      "bytes": 9540,
+      "sha256": "21870cf243589b157a58f45d80435694e37b7ed602e76be22012f5ed529b43ea"
+    },
+    {
+      "path": "src/football_manager/data/player_loader.py",
+      "bytes": 3943,
+      "sha256": "29e4f1229827207264ec5ff8b440721b706b08f6dc8ab79db8dedf734caf92ed"
+    },
+    {
+      "path": "src/football_manager/dev_ui/session.py",
+      "bytes": 147932,
+      "sha256": "a86e9f328c9bdb2abe278cadcc6de263c4e0717436384476492b937e37072619"
+    },
+    {
+      "path": "src/football_manager/domain/football_world.py",
+      "bytes": 10765,
+      "sha256": "35e1e6bdc583b84ad9ff98e26dcc56e2986a2ab284dc45122a56e88e249bdd0e"
+    },
+    {
+      "path": "src/football_manager/domain/player.py",
+      "bytes": 5681,
+      "sha256": "f54b8f567b69b3bd639b4ab8525d1bf95ce17aa4fb324591607979d1cfe0744f"
+    },
+    {
+      "path": "src/football_manager/domain/player_aging.py",
+      "bytes": 18761,
+      "sha256": "84985b8907d6aeef3ef1e974ef5e2eac68ebb3eb005a5adeb06b629f136747ae"
+    },
+    {
+      "path": "src/football_manager/domain/player_development.py",
+      "bytes": 21850,
+      "sha256": "a39d574974bc44e95c325974f803044b5dd9287b1c8c400566182e90a12cf5e8"
+    },
+    {
+      "path": "src/football_manager/persistence/manager_career.py",
+      "bytes": 16405,
+      "sha256": "7240af286a1ff729773c91980f41234eb96ba3e2f3eb1778be83ba0d1f3e0dee"
+    },
+    {
+      "path": "src/football_manager/persistence/session_codec.py",
+      "bytes": 17914,
+      "sha256": "9a51acd1dc97b737ad21d159f045b8fdc0f0bad0ee6b93482bb8585fb9d5b77b"
+    },
+    {
+      "path": "src/football_manager/services/player_aging.py",
+      "bytes": 12298,
+      "sha256": "e8ce8671116ea95fbdae5ed86a1f841d806af618d34e0edce0a00fa9320cf45f"
+    },
+    {
+      "path": "src/football_manager/services/player_development.py",
+      "bytes": 11948,
+      "sha256": "17d72586bb81d28605073f5e5f73f450d48bf9bc2fc40a9e0fd7d02c98ea704d"
+    },
+    {
+      "path": "src/football_manager/services/world_matches.py",
+      "bytes": 10505,
+      "sha256": "724dc3fdacd4e135bd5b4bfbd5a50030b416b36a2fa2c696405cea9ef909b9f7"
+    },
+    {
+      "path": "src/football_manager/services/world_squads.py",
+      "bytes": 18920,
+      "sha256": "be9a40354742242409073b4b10ae6aa80aff01b5fa08de4f3a1ca790952d0cd4"
+    },
+    {
+      "path": "src/football_manager/ui_shell/club_profiles.py",
+      "bytes": 5163,
+      "sha256": "596b5244aabbf9aebcbf22ec0e0eb87532dbd44aaa9586f50a0198f7bd9812f1"
+    },
+    {
+      "path": "src/football_manager/ui_shell/match.py",
+      "bytes": 13397,
+      "sha256": "feca1a2473025d3ae9deb146aff46794b9a765cd8fce70f0727984f52c40fbd3"
+    },
+    {
+      "path": "src/football_manager/ui_shell/models.py",
+      "bytes": 17446,
+      "sha256": "82e78e84c5a9058816a4744289179193aab2918aa06100b7da9e1b43d9c8b416"
+    },
+    {
+      "path": "src/football_manager/ui_shell/player_profiles.py",
+      "bytes": 4282,
+      "sha256": "208fae7f9c7a81ef856c364186727c95b1e2a2ae0f4e24214bbf4555a384278d"
+    },
+    {
+      "path": "src/football_manager/ui_shell/progression.py",
+      "bytes": 10209,
+      "sha256": "30cb4b68c0a3cb67c0aae3348ea5c23821d1330d41a5cd23b0c608b6feb5231c"
+    },
+    {
+      "path": "tests/fixtures/ts213_manager_v7.json.gz",
+      "bytes": 1179565,
+      "sha256": "434e26cb09c7f756b1f450fa5cea0a2fc6cf966763da223b57902b79e3232342"
+    },
+    {
+      "path": "tests/fixtures/ts213_manager_v7_facts.json.gz",
+      "bytes": 236680,
+      "sha256": "b7c7d6b5778ea09a656845381ed5901ea971771dfee87c8076f363a0783b8337"
+    },
+    {
+      "path": "tests/test_ts_21_2_player_development.py",
+      "bytes": 27959,
+      "sha256": "18fd912752e355aae333b002fac5f85550e88077027612a2b74a027f8ec1ff0c"
+    },
+    {
+      "path": "tests/test_ts_21_3_player_aging.py",
+      "bytes": 22882,
+      "sha256": "19e0a438a1ec0e7e9745f0ca0fca385167efc8db41be2b767c8e9425c7c2cd0d"
+    },
+    {
+      "path": "tests/test_ts_22_presentation.py",
+      "bytes": 23586,
+      "sha256": "630bb1a70a795ac21245981815afd7ef825529ec5ef44eb1d10464bb6d404c80"
+    },
+    {
+      "path": "tests/test_ui35_matchday.py",
+      "bytes": 7663,
+      "sha256": "904748aba6373e72285e8574ed2debbffeb792bb9e247c43b8500efa02e97c1a"
+    },
+    {
+      "path": "tools/validate_ts213_careers.py",
+      "bytes": 8934,
+      "sha256": "61dbe2ad17f9c026ce61ae46951bc726df5818a0c28c83acdfa7437f1800f70c"
+    },
+    {
+      "path": "tools/verify_ts213_aging_package.py",
+      "bytes": 3468,
+      "sha256": "549f0a60021f8aac67a567fdf3df9683a67cf211d2362a5f9df657805fc04ce3"
+    }
+  ],
+  "base_dependencies": {
+    "TS_21_2_MANIFEST.json": "b5dbccfb4387788035a84c7185677556662754e024ad230c92a1b5a62d83072f",
+    "src/football_manager/domain/world_runner.py": "8d0b5c4897aa91d533139dea573da0ba37ca2a0b03cadb8e55a69bbe63f86a16",
+    "src/football_manager/domain/attributes.py": "8414a1bfcb55783f12caa6ec0637b8140d0a579d01bfbdc7997fa345f3f62521",
+    "src/football_manager/domain/player_ratings.py": "be53b954614538c0d955d3e6a3831b31c48bc11d0b2a3c4ab99f1070ec79f247",
+    "src/football_manager/domain/conditioning.py": "e8b82a92e275e0104a1f64cb7cac4638a92e9ba6ca6299ef17f4bcf892e36b9b",
+    "src/football_manager/domain/roles.py": "f7a4ccd7a8a1db63fd8fdb2a0c40bf128d79eae7390c5d81d8c75c588fa99db7"
+  }
+}

@@ -1,0 +1,2 @@
+scenario,matches,mean_elapsed_seconds,goals_per_match,shots_per_match,shots_on_target_per_match,xg_per_match,goals_minus_xg_per_match,goals_per_xg,shot_conversion_pct,pass_completion_pct,fouls_per_match,yellow_cards_per_match,red_cards_per_match,corners_per_match,home_possession_pct,home_win_pct,draw_pct,away_win_pct,home_points_per_match,home_xg_diff_per_match
+equal,1,0.09226900001522154,0.0,0.0,0.0,0.0,0.0,0.0,0.0,62.5,0.0,0.0,0.0,0.0,30.434782608695656,0.0,100.0,0.0,1.0,0.0

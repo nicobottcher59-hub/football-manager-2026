@@ -1,0 +1,28 @@
+{
+  "patch": "TS-18.4",
+  "base": "TS-18.3",
+  "branch": "fix/ts-18-4-match-engine-consistency",
+  "summary": "fix(match): reconcile defensive ratings and preserve goalkeeper and penalty continuity",
+  "files": [
+    {
+      "path": "src/football_manager/fast_simulation/engine.py",
+      "sha256": "6170fde35924df19d01891b7ba77e2e81159354a4b3be0fe05c888f7a1520730"
+    },
+    {
+      "path": "src/football_manager/simulation/flow.py",
+      "sha256": "f05930ffbc2c930dffc74e93dfe14e267780b3d71b5a9b10614b56292e0f41a7"
+    },
+    {
+      "path": "tests/test_ts_18_4_match_engine_consistency.py",
+      "sha256": "f713b3e3162c7c22ee35b5f44ab306d69dba9d227b5d682cee4a9d87033a8748"
+    },
+    {
+      "path": "docs/TS_18_4_MATCH_ENGINE_CONSISTENCY.md",
+      "sha256": "fb735392f492a56e3b8ffa85260d6ef9be4580a3cc635582e91031a536f4cda4"
+    },
+    {
+      "path": "TS_18_4_PATCH_INSTRUCTIONS.txt",
+      "sha256": "b4b0ec3013b7ead1a315cf5b4f94feb416c5c47cf5214472f3f2a34b560011c9"
+    }
+  ]
+}

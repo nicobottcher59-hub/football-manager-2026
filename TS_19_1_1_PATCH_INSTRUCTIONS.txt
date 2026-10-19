@@ -1,0 +1,36 @@
+TS-19.1.1 - Formation UI Refinement
+===================================
+
+PREREQUISITE
+Use the project with TS-19.1 (28 formations) already merged. This archive
+is an INCREMENTAL patch; it does not contain the full game or prior patches.
+
+INSTALL ON WINDOWS
+1. Make a backup of the project folder.
+2. Create branch: feat/ts-19-1-1-formation-ui-refinement
+3. Extract this ZIP into the ROOT of the project, keeping directory paths,
+   and replace only the files mentioned by the ZIP.
+4. Do NOT apply a separate frontend update. The frontend files and Python
+   preview data are included in this same patch.
+5. Start the game with INICIAR_INTERFAZ_WINDOWS.bat, open Tactics, and follow
+   the visual acceptance steps in docs/TS_19_1_1_FORMATION_UI_REFINEMENT.md.
+
+RUN TESTS
+  python -m pytest -ra tests/test_ts_19_1_1_formation_ui_refinement.py
+  python -m pytest -ra tests/test_ts_19_1_formation_expansion.py
+  python -m pytest -ra
+
+The Node-only checks run within pytest when Node is installed:
+  node tests/ui/test_board.cjs
+
+GITHUB DESKTOP
+BRANCH: feat/ts-19-1-1-formation-ui-refinement
+SUMMARY: fix(ui): unify formation cards and add visual formation picker
+
+SCOPE
+Visual interface only: fixed card sizing and pitch placement, search / filter
+/ preview / confirm modal, and read-only UI previews in /api/squad.
+No changes to match engines, OVR/ACT, roles or tactical rules. The established
+Python formation command is still used when the user confirms a choice.
+
+A complete GUI visual check is required on Windows before committing and merging.

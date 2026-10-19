@@ -1,0 +1,16 @@
+FOOTBALL MANAGER GAME — TS-04 MANAGED MATCH UNIT OF WORK
+
+BRANCH: refactor/ts-04-managed-match-transactions
+SUMMARY: refactor(session): make managed match updates atomic
+
+BASE: TS-03 (plus TS-02, TS-01 and TS-00) already committed. Apply in order.
+
+1. Create the branch on the commit containing TS-03.
+2. Unzip into the repository root, preserve folder paths and overwrite existing files.
+3. Run without Node.js:
+   python -m pytest -q -ra tests/test_ts_04_managed_match_transactions.py tests/test_ts_03_world_integrity.py
+4. Full regression before merging:
+   python -m pytest -q -ra
+5. Commit with SUMMARY, push, and let GitHub Actions run cross-platform checks.
+
+No UX changes, no new mechanics and no save-schema migrations.

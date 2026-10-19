@@ -1,0 +1,28 @@
+TS-16 - APPLICATION ARCHITECTURE (base TS-15)
+
+REQUISITO: TS-15 integrado en main antes de aplicar este parche.
+
+BRANCH: refactor/ts-16-application-boundaries
+SUMMARY: refactor(app): separate UI application services and package static assets
+
+INSTALACION
+1. Crear la branch desde main con TS-15 ya mergeado.
+2. Extraer este ZIP dentro de football-manager-game conservando las rutas.
+3. Ejecutar:
+   python -m pytest -ra tests/test_ts_16_application_architecture.py
+   python -m pytest -ra tests/test_ts_15_career_save_reliability.py tests/test_ts_11_session_application_reliability.py
+   python -m pytest -ra
+4. Probar manualmente que /portable/, /api/squad y /api/career/saves
+   respondan igual que antes. Opcional: guardar y cargar un slot de prueba.
+5. Commit, push y merge a main SOLO si todas las pruebas pasan en Windows.
+
+CAMBIOS
+- Comandos de aplicacion separados de HTTP (sin nuevos endpoints).
+- Estado de sesion UIRuntime independiente de server.py.
+- Raiz del frontend configurable y proteccion contra traversal.
+- Recursos portable/squad incluidos al construir el wheel sin duplicar
+  los archivos fuente ni instalar Node.js.
+- Pruebas nuevas de contratos HTTP y de servicios directos.
+
+NO CAMBIA: UX, simulacion, SQLite save format, gameplay, recursos originales.
+MAYOR DETALLE: docs/TS_16_APPLICATION_ARCHITECTURE.md

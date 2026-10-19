@@ -1,0 +1,51 @@
+TS-24.3.1 - Scouting + Dedicated Negotiation Flow
+INCREMENTAL PATCH - NOT THE COMPLETE GAME
+
+REQUIRED BASE: TS-24.3 Club Negotiations installed.
+No Node, npm, internet, or build step is required to run the game.
+
+INSTALLATION ON WINDOWS
+1. Close INICIAR_INTERFAZ_WINDOWS.bat, the Python game server and browser tab.
+2. Back up the game directory and your complete SQLite career save.
+3. Extract the ZIP DIRECTLY into the game root that contains
+   INICIAR_INTERFAZ_WINDOWS.bat. Preserve paths and overwrite files.
+4. In PowerShell, from that directory, run:
+   python tools/verify_ts2431_scouting_package.py
+5. Optional directed tests:
+   python -m pytest -q tests/test_ts_24_3_1_scouting_flow.py
+6. Launch INICIAR_INTERFAZ_WINDOWS.bat, reload with Ctrl+F5.
+7. Open Scouting, search for a player and select Make offer.
+8. Alternatively use Other Leagues, open a club and expand a player
+   card; select Make transfer offer.
+
+WHAT IS NEW
+- The Transfers sidebar button is removed; Scouting is now the hub for
+  first-team player searches, club negotiations and received bids.
+- Clicking a player opens a separate full-width, in-game negotiation page
+  styled like the match preparation screen, not a new browser tab.
+- Negotiation pages have Back navigation and show the persistent, real
+  conversation history (initial offers and counteroffers).
+- Performance bonuses start EMPTY. Add bonus adds one valid clause;
+  up to three distinct bonuses are allowed. Remove removes a bonus.
+- Sell-on and buyback options are also OFF by default and fully optional.
+- Club profile players offer direct Make transfer offer entry.
+- Existing live negotiations can be reopened rather than duplicated.
+- Search no longer groups many players at the same approx. 38% budget
+  valuation. It prioritizes affordable players by OVR, then others.
+- Previous #page/Transfers browser links redirect to Scouting.
+
+WHAT IS NOT NEW
+The TS-24.3 club negotiation economics and acceptance rules are unchanged.
+Club acceptance is still only an in-principle agreement, awaiting
+player consent, registration, and settlement in TS-24.4. No cash transfers,
+player movement, sell-on pay-outs or bonus liquidation occur yet.
+This update does NOT add professional scouting reports or agents.
+
+SAVE COMPATIBILITY
+The save graph remains VERSION 14. No migration required from TS-24.3.
+The existing offer events already persist; TS-24.3.1 only makes their
+history visible via the /api/transfers read model.
+
+GITHUB DESKTOP
+BRANCH: feat/ts-24-3-1-scouting-negotiation-flow
+SUMMARY: feat(transfers): move scouting entry and add dedicated negotiation flow

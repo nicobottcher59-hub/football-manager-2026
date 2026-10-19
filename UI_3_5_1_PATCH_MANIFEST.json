@@ -1,0 +1,68 @@
+{
+  "phase": "UI-3.5.1",
+  "based_on": "UI-3.5 Pre-Match & Post-Match",
+  "branch": "phase-ui-3-5-1-matchday-refinement",
+  "changes": [
+    {
+      "path": "README.md",
+      "status": "modified",
+      "sha256": "3920ad1657ebd66240b3da64ec5d6810484a1e9f36c10d5b5c7592786aa2eb31",
+      "bytes": 22807
+    },
+    {
+      "path": "README_DEV.md",
+      "status": "modified",
+      "sha256": "01605787a9fcb0dca1fc8f133e07bc1a97bea4ee179885945048e969d505b988",
+      "bytes": 33119
+    },
+    {
+      "path": "docs/CURRENT_STATUS.md",
+      "status": "modified",
+      "sha256": "8de4ec8fd434f1bf21c11a9e2b65843fde1232cf3a24cb8e996522258e8bf144",
+      "bytes": 43294
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "status": "modified",
+      "sha256": "b2ce93ace08ff8e330be5e13b7e95cd97b034079a32e0328e6598a4653862947",
+      "bytes": 31992
+    },
+    {
+      "path": "docs/PHASE_UI_3_5_MATCHDAY.md",
+      "status": "modified",
+      "sha256": "15dd5cbfba5e3afb85148c283a931e911ac0a3e380e160790f8fdfd6a34783fd",
+      "bytes": 5931
+    },
+    {
+      "path": "docs/PHASE_UI_3_5_1_MATCHDAY_REFINEMENT.md",
+      "status": "new",
+      "sha256": "43b97f03c72418cc4da92d9445d1c1d4dfb89ee64c8639df90863e871100c669",
+      "bytes": 3372
+    },
+    {
+      "path": "frontend/portable/match.js",
+      "status": "modified",
+      "sha256": "fdab0eea8d07fa2fe4106534138317f28c386a53d8eb7e3d7c51d31b402885b5",
+      "bytes": 29107
+    },
+    {
+      "path": "frontend/portable/match.css",
+      "status": "modified",
+      "sha256": "285405c85725c1de5de313e7192a9a819c64754b8600fd9d32053fd0576eb32c",
+      "bytes": 35166
+    },
+    {
+      "path": "tests/test_ui351_matchday_refinements.py",
+      "status": "new",
+      "sha256": "9df8b78e1f90c5e7a74fe69376a70a40b316c89486911629474178a3f7bb0d3b",
+      "bytes": 3224
+    },
+    {
+      "path": "UI_3_5_1_PATCH_INSTRUCTIONS.txt",
+      "status": "new",
+      "sha256": "740b199a72d52c7618c6be01e386079d05a3ecb2b8ac72d22e2b3e324d7cf400",
+      "bytes": 1298
+    }
+  ],
+  "notes": "All files retain repository-relative paths. Manifest does not list itself."
+}

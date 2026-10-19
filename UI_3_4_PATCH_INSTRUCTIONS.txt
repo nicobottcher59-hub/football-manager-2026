@@ -1,0 +1,29 @@
+FM Project UI-3.4 -- DAILY CONTINUE + CALENDAR AUTO-SIM
+
+This is an INCREMENTAL patch, not the entire game.
+REQUIRES: repository updated through UI-3.3.2 HOTFIX 2.
+
+1. In GitHub Desktop create a NEW branch from the updated UI-3.3.2 branch:
+   phase-ui-3-4-daily-continue-calendar-sim
+2. Close the Python server / browser tab from the old session.
+3. Copy all folders/files from this ZIP into the REPOSITORY ROOT.
+   Keep the directory layout and replace matching files.
+4. Double-click INICIAR_INTERFAZ_WINDOWS.bat (no Node.js/npm).
+5. Hard-refresh Chrome: Ctrl+Shift+R.
+6. On opening day (15 Aug 2026), header says Go to Match; its match screen
+   has NOT been implemented. In Calendar, choose the same date and click
+   Simulate to this date to resolve that match automatically.
+7. After auto-sim, Continue advances one day per click. Pick a future day in
+   Calendar to simulate through it INCLUDING your club's matches.
+8. Check Calendar, Home and Competitions updated with real scores/standings.
+
+LIMITATIONS: this is a DEV-only temporary session. Closing the Python server
+loses all game progress and tactical/player changes. No full save/load; no
+season transition UI; no manager-intervention events yet. The match screen
+will be designed later with the user. Do not treat this as a persistent career.
+
+TESTS: PYTHONPATH=src python -m pytest -q tests/test_ui34_daily_progression.py
+DOCUMENTATION: docs/PHASE_UI_3_4_DAILY_CONTINUE.md
+
+Commit (ONLY after Windows validation):
+feat(ui): integrate daily Continue and calendar auto-simulation

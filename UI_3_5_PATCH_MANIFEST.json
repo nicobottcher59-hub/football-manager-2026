@@ -1,0 +1,93 @@
+{
+  "phase": "UI-3.5",
+  "base": "UI-3.4.1 Hotfix Club Results Custom Confirm",
+  "branch": "phase-ui-3-5-matchday-pre-post-match",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "23d8ac60b399ea57513404e2ff1f48d826f35c7103d0b0fa62a82eee52b0c3b5",
+      "status": "modified"
+    },
+    {
+      "path": "README_DEV.md",
+      "sha256": "620057e39582408072bf2bc9d8ae8fd99a443aad625cdfa2985fb3e7d84763ff",
+      "status": "modified"
+    },
+    {
+      "path": "UI_3_5_PATCH_INSTRUCTIONS.txt",
+      "sha256": "1fbe840604f6aafde3d0fda2ba36212a916298fef7c0b587c523fed7efbbb195",
+      "status": "new"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "sha256": "c82b55b5697648ad90a71a13e0886c1fa7e6cd5e6386e9dd16d85e0f883dc60c",
+      "status": "modified"
+    },
+    {
+      "path": "docs/CURRENT_STATUS.md",
+      "sha256": "eba48a8e4b6860daff226ce5454ebdfa63206e341c7d9c0de30ddc8f8d1ba805",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PHASE_UI_3_5_MATCHDAY.md",
+      "sha256": "0b71b392294672570ab5fb20264b23116fe53c6672a336836fec188f98c97f71",
+      "status": "new"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "sha256": "c0e11efb162dc42fa8d50f6b358301574c366bf6c10d921f604368172dacdd50",
+      "status": "modified"
+    },
+    {
+      "path": "frontend/portable/index.html",
+      "sha256": "7a201ffbf9bd25c536f8affbaa1fde3f08994b33f1ee170eeb152e65e61368c6",
+      "status": "modified"
+    },
+    {
+      "path": "frontend/portable/match.css",
+      "sha256": "f20a698b4a5e4409353eaee9a9e79dac12bdd1e29f973c5da4999749648f0dfd",
+      "status": "new"
+    },
+    {
+      "path": "frontend/portable/match.html",
+      "sha256": "a9b2ad433a22a68aff943289abf3b7a5ddcb51a93fec51cd9ecebeeebcf6809c",
+      "status": "new"
+    },
+    {
+      "path": "frontend/portable/match.js",
+      "sha256": "2ba53a78f0d6f772b89accce8bc098e852fca5f5f0c2c0355aac25e07c72420f",
+      "status": "new"
+    },
+    {
+      "path": "frontend/portable/portable.js",
+      "sha256": "4e691db78391dbc4699035f4c33721251fa621c09644483601d56e35acac01fb",
+      "status": "modified"
+    },
+    {
+      "path": "src/football_manager/ui_shell/match.py",
+      "sha256": "34dd565edac2fa4eb3d2e85bd4860eaf83ec40e326f1d70892c60c9dc57c8c77",
+      "status": "new"
+    },
+    {
+      "path": "src/football_manager/ui_shell/progression.py",
+      "sha256": "0dafcb6cd4f238ca45bc842cbb47c731cd43ee5847d0d0233cbc403efbf2f3d3",
+      "status": "modified"
+    },
+    {
+      "path": "src/football_manager/ui_shell/server.py",
+      "sha256": "92a17948c8bc616836d6ac9725c9e74f9de208e9646a8e002e3cf97a9174225b",
+      "status": "modified"
+    },
+    {
+      "path": "tests/test_ui34_daily_progression.py",
+      "sha256": "00389e92c414cee3c43050fc0e072e9dfb5ff933f1353cf63c4d238233eb5b14",
+      "status": "modified"
+    },
+    {
+      "path": "tests/test_ui35_matchday.py",
+      "sha256": "0ef2b35d21977aa5957f5c746f4b7b93edea7dfc18bf8cfa352d3c63199a7423",
+      "status": "new"
+    }
+  ],
+  "notes": "Incremental only; merge preserving repository-relative paths; no binary dependencies."
+}

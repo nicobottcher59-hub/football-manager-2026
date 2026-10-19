@@ -1,0 +1,381 @@
+matchweek,kickoff,home_club_id,home_name,away_club_id,away_name
+1,2026-08-21T20:00:00+01:00,arsenal,Arsenal,coventry-city,Coventry City
+1,2026-08-22T12:30:00+01:00,hull-city,Hull City,manchester-united,Manchester United
+1,2026-08-22T15:00:00+01:00,everton,Everton,crystal-palace,Crystal Palace
+1,2026-08-22T15:00:00+01:00,ipswich-town,Ipswich Town,sunderland,Sunderland
+1,2026-08-22T15:00:00+01:00,nottingham-forest,Nottingham Forest,leeds-united,Leeds United
+1,2026-08-22T17:30:00+01:00,brentford,Brentford,tottenham-hotspur,Tottenham Hotspur
+1,2026-08-23T14:00:00+01:00,brighton-hove-albion,Brighton & Hove Albion,aston-villa,Aston Villa
+1,2026-08-23T14:00:00+01:00,manchester-city,Manchester City,afc-bournemouth,AFC Bournemouth
+1,2026-08-23T16:30:00+01:00,newcastle-united,Newcastle United,liverpool,Liverpool
+1,2026-08-24T20:00:00+01:00,fulham,Fulham,chelsea,Chelsea
+2,2026-08-28T20:00:00+01:00,crystal-palace,Crystal Palace,manchester-city,Manchester City
+2,2026-08-29T12:30:00+01:00,liverpool,Liverpool,nottingham-forest,Nottingham Forest
+2,2026-08-29T15:00:00+01:00,afc-bournemouth,AFC Bournemouth,everton,Everton
+2,2026-08-29T15:00:00+01:00,coventry-city,Coventry City,hull-city,Hull City
+2,2026-08-29T17:30:00+01:00,tottenham-hotspur,Tottenham Hotspur,newcastle-united,Newcastle United
+2,2026-08-30T14:00:00+01:00,chelsea,Chelsea,brighton-hove-albion,Brighton & Hove Albion
+2,2026-08-30T14:00:00+01:00,leeds-united,Leeds United,brentford,Brentford
+2,2026-08-30T14:00:00+01:00,sunderland,Sunderland,fulham,Fulham
+2,2026-08-30T16:30:00+01:00,manchester-united,Manchester United,ipswich-town,Ipswich Town
+2,2026-08-31T20:00:00+01:00,aston-villa,Aston Villa,arsenal,Arsenal
+3,2026-09-04T20:00:00+01:00,ipswich-town,Ipswich Town,liverpool,Liverpool
+3,2026-09-05T12:30:00+01:00,newcastle-united,Newcastle United,afc-bournemouth,AFC Bournemouth
+3,2026-09-05T15:00:00+01:00,brentford,Brentford,sunderland,Sunderland
+3,2026-09-05T15:00:00+01:00,brighton-hove-albion,Brighton & Hove Albion,leeds-united,Leeds United
+3,2026-09-05T15:00:00+01:00,fulham,Fulham,crystal-palace,Crystal Palace
+3,2026-09-05T15:00:00+01:00,manchester-city,Manchester City,coventry-city,Coventry City
+3,2026-09-05T15:00:00+01:00,nottingham-forest,Nottingham Forest,tottenham-hotspur,Tottenham Hotspur
+3,2026-09-05T17:30:00+01:00,hull-city,Hull City,aston-villa,Aston Villa
+3,2026-09-06T14:00:00+01:00,everton,Everton,manchester-united,Manchester United
+3,2026-09-06T16:30:00+01:00,arsenal,Arsenal,chelsea,Chelsea
+4,2026-09-12T15:00:00+01:00,afc-bournemouth,AFC Bournemouth,brentford,Brentford
+4,2026-09-12T15:00:00+01:00,aston-villa,Aston Villa,nottingham-forest,Nottingham Forest
+4,2026-09-12T15:00:00+01:00,chelsea,Chelsea,hull-city,Hull City
+4,2026-09-12T15:00:00+01:00,crystal-palace,Crystal Palace,ipswich-town,Ipswich Town
+4,2026-09-12T15:00:00+01:00,liverpool,Liverpool,fulham,Fulham
+4,2026-09-12T17:30:00+01:00,tottenham-hotspur,Tottenham Hotspur,everton,Everton
+4,2026-09-12T20:00:00+01:00,sunderland,Sunderland,arsenal,Arsenal
+4,2026-09-13T14:00:00+01:00,coventry-city,Coventry City,brighton-hove-albion,Brighton & Hove Albion
+4,2026-09-13T16:30:00+01:00,manchester-united,Manchester United,manchester-city,Manchester City
+4,2026-09-14T20:00:00+01:00,leeds-united,Leeds United,newcastle-united,Newcastle United
+5,2026-09-18T20:00:00+01:00,brentford,Brentford,chelsea,Chelsea
+5,2026-09-19T12:30:00+01:00,tottenham-hotspur,Tottenham Hotspur,aston-villa,Aston Villa
+5,2026-09-19T15:00:00+01:00,brighton-hove-albion,Brighton & Hove Albion,arsenal,Arsenal
+5,2026-09-19T15:00:00+01:00,everton,Everton,ipswich-town,Ipswich Town
+5,2026-09-19T15:00:00+01:00,newcastle-united,Newcastle United,hull-city,Hull City
+5,2026-09-19T17:30:00+01:00,nottingham-forest,Nottingham Forest,coventry-city,Coventry City
+5,2026-09-20T14:00:00+01:00,afc-bournemouth,AFC Bournemouth,liverpool,Liverpool
+5,2026-09-20T14:00:00+01:00,leeds-united,Leeds United,crystal-palace,Crystal Palace
+5,2026-09-20T14:00:00+01:00,manchester-city,Manchester City,sunderland,Sunderland
+5,2026-09-20T16:30:00+01:00,fulham,Fulham,manchester-united,Manchester United
+6,2026-10-10T12:30:00+01:00,arsenal,Arsenal,leeds-united,Leeds United
+6,2026-10-10T15:00:00+01:00,aston-villa,Aston Villa,brentford,Brentford
+6,2026-10-10T15:00:00+01:00,chelsea,Chelsea,afc-bournemouth,AFC Bournemouth
+6,2026-10-10T15:00:00+01:00,ipswich-town,Ipswich Town,fulham,Fulham
+6,2026-10-10T15:00:00+01:00,sunderland,Sunderland,brighton-hove-albion,Brighton & Hove Albion
+6,2026-10-10T17:30:00+01:00,manchester-united,Manchester United,tottenham-hotspur,Tottenham Hotspur
+6,2026-10-11T14:00:00+01:00,crystal-palace,Crystal Palace,nottingham-forest,Nottingham Forest
+6,2026-10-11T14:00:00+01:00,hull-city,Hull City,everton,Everton
+6,2026-10-11T16:30:00+01:00,liverpool,Liverpool,manchester-city,Manchester City
+6,2026-10-12T20:00:00+01:00,coventry-city,Coventry City,newcastle-united,Newcastle United
+7,2026-10-17T12:30:00+01:00,everton,Everton,chelsea,Chelsea
+7,2026-10-17T15:00:00+01:00,brentford,Brentford,liverpool,Liverpool
+7,2026-10-17T15:00:00+01:00,fulham,Fulham,hull-city,Hull City
+7,2026-10-17T15:00:00+01:00,manchester-city,Manchester City,ipswich-town,Ipswich Town
+7,2026-10-17T17:30:00+01:00,newcastle-united,Newcastle United,aston-villa,Aston Villa
+7,2026-10-18T14:00:00+01:00,afc-bournemouth,AFC Bournemouth,sunderland,Sunderland
+7,2026-10-18T14:00:00+01:00,brighton-hove-albion,Brighton & Hove Albion,crystal-palace,Crystal Palace
+7,2026-10-18T14:00:00+01:00,leeds-united,Leeds United,manchester-united,Manchester United
+7,2026-10-18T16:30:00+01:00,nottingham-forest,Nottingham Forest,arsenal,Arsenal
+7,2026-10-19T20:00:00+01:00,tottenham-hotspur,Tottenham Hotspur,coventry-city,Coventry City
+8,2026-10-23T20:00:00+01:00,ipswich-town,Ipswich Town,nottingham-forest,Nottingham Forest
+8,2026-10-24T12:30:00+01:00,aston-villa,Aston Villa,manchester-city,Manchester City
+8,2026-10-24T15:00:00+01:00,arsenal,Arsenal,everton,Everton
+8,2026-10-24T15:00:00+01:00,coventry-city,Coventry City,fulham,Fulham
+8,2026-10-24T17:30:00+01:00,chelsea,Chelsea,tottenham-hotspur,Tottenham Hotspur
+8,2026-10-25T14:00:00+00:00,crystal-palace,Crystal Palace,newcastle-united,Newcastle United
+8,2026-10-25T14:00:00+00:00,liverpool,Liverpool,brighton-hove-albion,Brighton & Hove Albion
+8,2026-10-25T14:00:00+00:00,hull-city,Hull City,brentford,Brentford
+8,2026-10-25T14:00:00+00:00,manchester-united,Manchester United,afc-bournemouth,AFC Bournemouth
+8,2026-10-25T16:30:00+00:00,sunderland,Sunderland,leeds-united,Leeds United
+9,2026-10-31T12:30:00+00:00,chelsea,Chelsea,manchester-united,Manchester United
+9,2026-10-31T15:00:00+00:00,afc-bournemouth,AFC Bournemouth,leeds-united,Leeds United
+9,2026-10-31T15:00:00+00:00,brentford,Brentford,nottingham-forest,Nottingham Forest
+9,2026-10-31T15:00:00+00:00,coventry-city,Coventry City,sunderland,Sunderland
+9,2026-10-31T15:00:00+00:00,hull-city,Hull City,ipswich-town,Ipswich Town
+9,2026-10-31T15:00:00+00:00,manchester-city,Manchester City,brighton-hove-albion,Brighton & Hove Albion
+9,2026-10-31T17:30:00+00:00,tottenham-hotspur,Tottenham Hotspur,crystal-palace,Crystal Palace
+9,2026-10-31T20:00:00+00:00,aston-villa,Aston Villa,fulham,Fulham
+9,2026-11-01T16:30:00+00:00,liverpool,Liverpool,arsenal,Arsenal
+9,2026-11-02T20:00:00+00:00,newcastle-united,Newcastle United,everton,Everton
+10,2026-11-06T20:00:00+00:00,everton,Everton,coventry-city,Coventry City
+10,2026-11-07T12:30:00+00:00,leeds-united,Leeds United,tottenham-hotspur,Tottenham Hotspur
+10,2026-11-07T15:00:00+00:00,arsenal,Arsenal,hull-city,Hull City
+10,2026-11-07T15:00:00+00:00,fulham,Fulham,newcastle-united,Newcastle United
+10,2026-11-07T17:30:00+00:00,nottingham-forest,Nottingham Forest,manchester-city,Manchester City
+10,2026-11-08T14:00:00+00:00,brighton-hove-albion,Brighton & Hove Albion,brentford,Brentford
+10,2026-11-08T14:00:00+00:00,crystal-palace,Crystal Palace,liverpool,Liverpool
+10,2026-11-08T14:00:00+00:00,ipswich-town,Ipswich Town,afc-bournemouth,AFC Bournemouth
+10,2026-11-08T14:00:00+00:00,sunderland,Sunderland,chelsea,Chelsea
+10,2026-11-08T16:30:00+00:00,manchester-united,Manchester United,aston-villa,Aston Villa
+11,2026-11-21T12:30:00+00:00,manchester-city,Manchester City,fulham,Fulham
+11,2026-11-21T15:00:00+00:00,afc-bournemouth,AFC Bournemouth,nottingham-forest,Nottingham Forest
+11,2026-11-21T15:00:00+00:00,aston-villa,Aston Villa,sunderland,Sunderland
+11,2026-11-21T15:00:00+00:00,chelsea,Chelsea,leeds-united,Leeds United
+11,2026-11-21T15:00:00+00:00,coventry-city,Coventry City,crystal-palace,Crystal Palace
+11,2026-11-21T15:00:00+00:00,tottenham-hotspur,Tottenham Hotspur,ipswich-town,Ipswich Town
+11,2026-11-21T17:30:00+00:00,newcastle-united,Newcastle United,arsenal,Arsenal
+11,2026-11-22T14:00:00+00:00,hull-city,Hull City,brighton-hove-albion,Brighton & Hove Albion
+11,2026-11-22T16:30:00+00:00,liverpool,Liverpool,manchester-united,Manchester United
+11,2026-11-23T20:00:00+00:00,brentford,Brentford,everton,Everton
+12,2026-11-27T20:00:00+00:00,nottingham-forest,Nottingham Forest,chelsea,Chelsea
+12,2026-11-28T15:00:00+00:00,leeds-united,Leeds United,coventry-city,Coventry City
+12,2026-11-28T15:00:00+00:00,manchester-united,Manchester United,brentford,Brentford
+12,2026-11-28T17:30:00+00:00,ipswich-town,Ipswich Town,aston-villa,Aston Villa
+12,2026-11-29T12:00:00+00:00,everton,Everton,liverpool,Liverpool
+12,2026-11-29T14:05:00+00:00,brighton-hove-albion,Brighton & Hove Albion,newcastle-united,Newcastle United
+12,2026-11-29T14:05:00+00:00,crystal-palace,Crystal Palace,hull-city,Hull City
+12,2026-11-29T14:05:00+00:00,fulham,Fulham,afc-bournemouth,AFC Bournemouth
+12,2026-11-29T14:05:00+00:00,sunderland,Sunderland,tottenham-hotspur,Tottenham Hotspur
+12,2026-11-29T16:30:00+00:00,arsenal,Arsenal,manchester-city,Manchester City
+13,2026-12-02T20:00:00+00:00,afc-bournemouth,AFC Bournemouth,brighton-hove-albion,Brighton & Hove Albion
+13,2026-12-02T20:00:00+00:00,aston-villa,Aston Villa,everton,Everton
+13,2026-12-02T20:00:00+00:00,brentford,Brentford,arsenal,Arsenal
+13,2026-12-02T20:00:00+00:00,chelsea,Chelsea,crystal-palace,Crystal Palace
+13,2026-12-02T20:00:00+00:00,coventry-city,Coventry City,ipswich-town,Ipswich Town
+13,2026-12-02T20:00:00+00:00,hull-city,Hull City,nottingham-forest,Nottingham Forest
+13,2026-12-02T20:00:00+00:00,liverpool,Liverpool,sunderland,Sunderland
+13,2026-12-02T20:00:00+00:00,manchester-city,Manchester City,leeds-united,Leeds United
+13,2026-12-02T20:00:00+00:00,newcastle-united,Newcastle United,manchester-united,Manchester United
+13,2026-12-02T20:00:00+00:00,tottenham-hotspur,Tottenham Hotspur,fulham,Fulham
+14,2026-12-05T15:00:00+00:00,afc-bournemouth,AFC Bournemouth,hull-city,Hull City
+14,2026-12-05T15:00:00+00:00,aston-villa,Aston Villa,crystal-palace,Crystal Palace
+14,2026-12-05T15:00:00+00:00,brentford,Brentford,manchester-city,Manchester City
+14,2026-12-05T15:00:00+00:00,chelsea,Chelsea,liverpool,Liverpool
+14,2026-12-05T15:00:00+00:00,everton,Everton,fulham,Fulham
+14,2026-12-05T15:00:00+00:00,leeds-united,Leeds United,ipswich-town,Ipswich Town
+14,2026-12-05T15:00:00+00:00,manchester-united,Manchester United,coventry-city,Coventry City
+14,2026-12-05T15:00:00+00:00,newcastle-united,Newcastle United,sunderland,Sunderland
+14,2026-12-05T15:00:00+00:00,nottingham-forest,Nottingham Forest,brighton-hove-albion,Brighton & Hove Albion
+14,2026-12-05T15:00:00+00:00,tottenham-hotspur,Tottenham Hotspur,arsenal,Arsenal
+15,2026-12-12T15:00:00+00:00,arsenal,Arsenal,afc-bournemouth,AFC Bournemouth
+15,2026-12-12T15:00:00+00:00,brighton-hove-albion,Brighton & Hove Albion,everton,Everton
+15,2026-12-12T15:00:00+00:00,coventry-city,Coventry City,aston-villa,Aston Villa
+15,2026-12-12T15:00:00+00:00,crystal-palace,Crystal Palace,manchester-united,Manchester United
+15,2026-12-12T15:00:00+00:00,fulham,Fulham,brentford,Brentford
+15,2026-12-12T15:00:00+00:00,hull-city,Hull City,tottenham-hotspur,Tottenham Hotspur
+15,2026-12-12T15:00:00+00:00,ipswich-town,Ipswich Town,newcastle-united,Newcastle United
+15,2026-12-12T15:00:00+00:00,liverpool,Liverpool,leeds-united,Leeds United
+15,2026-12-12T15:00:00+00:00,manchester-city,Manchester City,chelsea,Chelsea
+15,2026-12-12T15:00:00+00:00,sunderland,Sunderland,nottingham-forest,Nottingham Forest
+16,2026-12-19T15:00:00+00:00,afc-bournemouth,AFC Bournemouth,coventry-city,Coventry City
+16,2026-12-19T15:00:00+00:00,arsenal,Arsenal,manchester-united,Manchester United
+16,2026-12-19T15:00:00+00:00,brentford,Brentford,newcastle-united,Newcastle United
+16,2026-12-19T15:00:00+00:00,brighton-hove-albion,Brighton & Hove Albion,ipswich-town,Ipswich Town
+16,2026-12-19T15:00:00+00:00,chelsea,Chelsea,aston-villa,Aston Villa
+16,2026-12-19T15:00:00+00:00,leeds-united,Leeds United,fulham,Fulham
+16,2026-12-19T15:00:00+00:00,liverpool,Liverpool,tottenham-hotspur,Tottenham Hotspur
+16,2026-12-19T15:00:00+00:00,manchester-city,Manchester City,hull-city,Hull City
+16,2026-12-19T15:00:00+00:00,nottingham-forest,Nottingham Forest,everton,Everton
+16,2026-12-19T15:00:00+00:00,sunderland,Sunderland,crystal-palace,Crystal Palace
+17,2026-12-26T12:30:00+00:00,aston-villa,Aston Villa,leeds-united,Leeds United
+17,2026-12-26T15:00:00+00:00,everton,Everton,sunderland,Sunderland
+17,2026-12-26T15:00:00+00:00,fulham,Fulham,brighton-hove-albion,Brighton & Hove Albion
+17,2026-12-26T15:00:00+00:00,ipswich-town,Ipswich Town,brentford,Brentford
+17,2026-12-26T15:00:00+00:00,tottenham-hotspur,Tottenham Hotspur,afc-bournemouth,AFC Bournemouth
+17,2026-12-26T17:30:00+00:00,hull-city,Hull City,liverpool,Liverpool
+17,2026-12-26T20:00:00+00:00,newcastle-united,Newcastle United,manchester-city,Manchester City
+17,2026-12-27T14:00:00+00:00,coventry-city,Coventry City,chelsea,Chelsea
+17,2026-12-27T16:30:00+00:00,manchester-united,Manchester United,nottingham-forest,Nottingham Forest
+17,2026-12-27T19:00:00+00:00,crystal-palace,Crystal Palace,arsenal,Arsenal
+18,2026-12-29T19:30:00+00:00,hull-city,Hull City,leeds-united,Leeds United
+18,2026-12-29T19:30:00+00:00,tottenham-hotspur,Tottenham Hotspur,brighton-hove-albion,Brighton & Hove Albion
+18,2026-12-29T20:15:00+00:00,everton,Everton,manchester-city,Manchester City
+18,2026-12-30T19:30:00+00:00,coventry-city,Coventry City,brentford,Brentford
+18,2026-12-30T19:30:00+00:00,crystal-palace,Crystal Palace,afc-bournemouth,AFC Bournemouth
+18,2026-12-30T19:30:00+00:00,fulham,Fulham,arsenal,Arsenal
+18,2026-12-30T19:30:00+00:00,manchester-united,Manchester United,sunderland,Sunderland
+18,2026-12-30T19:30:00+00:00,newcastle-united,Newcastle United,nottingham-forest,Nottingham Forest
+18,2026-12-30T20:15:00+00:00,aston-villa,Aston Villa,liverpool,Liverpool
+18,2026-12-30T20:15:00+00:00,ipswich-town,Ipswich Town,chelsea,Chelsea
+19,2027-01-01T20:00:00+00:00,leeds-united,Leeds United,everton,Everton
+19,2027-01-02T12:30:00+00:00,brighton-hove-albion,Brighton & Hove Albion,manchester-united,Manchester United
+19,2027-01-02T15:00:00+00:00,arsenal,Arsenal,ipswich-town,Ipswich Town
+19,2027-01-02T15:00:00+00:00,brentford,Brentford,crystal-palace,Crystal Palace
+19,2027-01-02T15:00:00+00:00,liverpool,Liverpool,coventry-city,Coventry City
+19,2027-01-02T15:00:00+00:00,nottingham-forest,Nottingham Forest,fulham,Fulham
+19,2027-01-02T15:00:00+00:00,sunderland,Sunderland,hull-city,Hull City
+19,2027-01-02T17:30:00+00:00,afc-bournemouth,AFC Bournemouth,aston-villa,Aston Villa
+19,2027-01-03T14:00:00+00:00,chelsea,Chelsea,newcastle-united,Newcastle United
+19,2027-01-03T16:30:00+00:00,manchester-city,Manchester City,tottenham-hotspur,Tottenham Hotspur
+20,2027-01-05T19:30:00+00:00,arsenal,Arsenal,brentford,Brentford
+20,2027-01-05T19:30:00+00:00,brighton-hove-albion,Brighton & Hove Albion,afc-bournemouth,AFC Bournemouth
+20,2027-01-05T19:30:00+00:00,everton,Everton,aston-villa,Aston Villa
+20,2027-01-05T19:30:00+00:00,nottingham-forest,Nottingham Forest,hull-city,Hull City
+20,2027-01-05T20:15:00+00:00,sunderland,Sunderland,liverpool,Liverpool
+20,2027-01-06T19:30:00+00:00,crystal-palace,Crystal Palace,chelsea,Chelsea
+20,2027-01-06T19:30:00+00:00,fulham,Fulham,tottenham-hotspur,Tottenham Hotspur
+20,2027-01-06T19:30:00+00:00,ipswich-town,Ipswich Town,coventry-city,Coventry City
+20,2027-01-06T20:15:00+00:00,leeds-united,Leeds United,manchester-city,Manchester City
+20,2027-01-07T20:00:00+00:00,manchester-united,Manchester United,newcastle-united,Newcastle United
+21,2027-01-16T15:00:00+00:00,afc-bournemouth,AFC Bournemouth,ipswich-town,Ipswich Town
+21,2027-01-16T15:00:00+00:00,aston-villa,Aston Villa,manchester-united,Manchester United
+21,2027-01-16T15:00:00+00:00,brentford,Brentford,brighton-hove-albion,Brighton & Hove Albion
+21,2027-01-16T15:00:00+00:00,chelsea,Chelsea,sunderland,Sunderland
+21,2027-01-16T15:00:00+00:00,coventry-city,Coventry City,everton,Everton
+21,2027-01-16T15:00:00+00:00,hull-city,Hull City,arsenal,Arsenal
+21,2027-01-16T15:00:00+00:00,liverpool,Liverpool,crystal-palace,Crystal Palace
+21,2027-01-16T15:00:00+00:00,manchester-city,Manchester City,nottingham-forest,Nottingham Forest
+21,2027-01-16T15:00:00+00:00,newcastle-united,Newcastle United,fulham,Fulham
+21,2027-01-16T15:00:00+00:00,tottenham-hotspur,Tottenham Hotspur,leeds-united,Leeds United
+22,2027-01-23T15:00:00+00:00,arsenal,Arsenal,newcastle-united,Newcastle United
+22,2027-01-23T15:00:00+00:00,brighton-hove-albion,Brighton & Hove Albion,manchester-city,Manchester City
+22,2027-01-23T15:00:00+00:00,crystal-palace,Crystal Palace,tottenham-hotspur,Tottenham Hotspur
+22,2027-01-23T15:00:00+00:00,everton,Everton,brentford,Brentford
+22,2027-01-23T15:00:00+00:00,fulham,Fulham,aston-villa,Aston Villa
+22,2027-01-23T15:00:00+00:00,ipswich-town,Ipswich Town,hull-city,Hull City
+22,2027-01-23T15:00:00+00:00,leeds-united,Leeds United,chelsea,Chelsea
+22,2027-01-23T15:00:00+00:00,manchester-united,Manchester United,liverpool,Liverpool
+22,2027-01-23T15:00:00+00:00,nottingham-forest,Nottingham Forest,afc-bournemouth,AFC Bournemouth
+22,2027-01-23T15:00:00+00:00,sunderland,Sunderland,coventry-city,Coventry City
+23,2027-01-30T15:00:00+00:00,afc-bournemouth,AFC Bournemouth,fulham,Fulham
+23,2027-01-30T15:00:00+00:00,aston-villa,Aston Villa,ipswich-town,Ipswich Town
+23,2027-01-30T15:00:00+00:00,brentford,Brentford,manchester-united,Manchester United
+23,2027-01-30T15:00:00+00:00,chelsea,Chelsea,nottingham-forest,Nottingham Forest
+23,2027-01-30T15:00:00+00:00,coventry-city,Coventry City,leeds-united,Leeds United
+23,2027-01-30T15:00:00+00:00,hull-city,Hull City,crystal-palace,Crystal Palace
+23,2027-01-30T15:00:00+00:00,liverpool,Liverpool,everton,Everton
+23,2027-01-30T15:00:00+00:00,manchester-city,Manchester City,arsenal,Arsenal
+23,2027-01-30T15:00:00+00:00,newcastle-united,Newcastle United,brighton-hove-albion,Brighton & Hove Albion
+23,2027-01-30T15:00:00+00:00,tottenham-hotspur,Tottenham Hotspur,sunderland,Sunderland
+24,2027-02-06T15:00:00+00:00,arsenal,Arsenal,liverpool,Liverpool
+24,2027-02-06T15:00:00+00:00,brighton-hove-albion,Brighton & Hove Albion,hull-city,Hull City
+24,2027-02-06T15:00:00+00:00,crystal-palace,Crystal Palace,coventry-city,Coventry City
+24,2027-02-06T15:00:00+00:00,everton,Everton,newcastle-united,Newcastle United
+24,2027-02-06T15:00:00+00:00,fulham,Fulham,manchester-city,Manchester City
+24,2027-02-06T15:00:00+00:00,ipswich-town,Ipswich Town,tottenham-hotspur,Tottenham Hotspur
+24,2027-02-06T15:00:00+00:00,leeds-united,Leeds United,afc-bournemouth,AFC Bournemouth
+24,2027-02-06T15:00:00+00:00,manchester-united,Manchester United,chelsea,Chelsea
+24,2027-02-06T15:00:00+00:00,nottingham-forest,Nottingham Forest,brentford,Brentford
+24,2027-02-06T15:00:00+00:00,sunderland,Sunderland,aston-villa,Aston Villa
+25,2027-02-10T20:00:00+00:00,aston-villa,Aston Villa,afc-bournemouth,AFC Bournemouth
+25,2027-02-10T20:00:00+00:00,coventry-city,Coventry City,liverpool,Liverpool
+25,2027-02-10T20:00:00+00:00,crystal-palace,Crystal Palace,brentford,Brentford
+25,2027-02-10T20:00:00+00:00,everton,Everton,leeds-united,Leeds United
+25,2027-02-10T20:00:00+00:00,fulham,Fulham,nottingham-forest,Nottingham Forest
+25,2027-02-10T20:00:00+00:00,hull-city,Hull City,sunderland,Sunderland
+25,2027-02-10T20:00:00+00:00,ipswich-town,Ipswich Town,arsenal,Arsenal
+25,2027-02-10T20:00:00+00:00,manchester-united,Manchester United,brighton-hove-albion,Brighton & Hove Albion
+25,2027-02-10T20:00:00+00:00,newcastle-united,Newcastle United,chelsea,Chelsea
+25,2027-02-10T20:00:00+00:00,tottenham-hotspur,Tottenham Hotspur,manchester-city,Manchester City
+26,2027-02-20T15:00:00+00:00,afc-bournemouth,AFC Bournemouth,crystal-palace,Crystal Palace
+26,2027-02-20T15:00:00+00:00,arsenal,Arsenal,fulham,Fulham
+26,2027-02-20T15:00:00+00:00,brentford,Brentford,coventry-city,Coventry City
+26,2027-02-20T15:00:00+00:00,brighton-hove-albion,Brighton & Hove Albion,tottenham-hotspur,Tottenham Hotspur
+26,2027-02-20T15:00:00+00:00,chelsea,Chelsea,ipswich-town,Ipswich Town
+26,2027-02-20T15:00:00+00:00,leeds-united,Leeds United,aston-villa,Aston Villa
+26,2027-02-20T15:00:00+00:00,liverpool,Liverpool,hull-city,Hull City
+26,2027-02-20T15:00:00+00:00,manchester-city,Manchester City,newcastle-united,Newcastle United
+26,2027-02-20T15:00:00+00:00,nottingham-forest,Nottingham Forest,manchester-united,Manchester United
+26,2027-02-20T15:00:00+00:00,sunderland,Sunderland,everton,Everton
+27,2027-02-27T15:00:00+00:00,aston-villa,Aston Villa,chelsea,Chelsea
+27,2027-02-27T15:00:00+00:00,coventry-city,Coventry City,afc-bournemouth,AFC Bournemouth
+27,2027-02-27T15:00:00+00:00,crystal-palace,Crystal Palace,sunderland,Sunderland
+27,2027-02-27T15:00:00+00:00,everton,Everton,nottingham-forest,Nottingham Forest
+27,2027-02-27T15:00:00+00:00,fulham,Fulham,leeds-united,Leeds United
+27,2027-02-27T15:00:00+00:00,hull-city,Hull City,manchester-city,Manchester City
+27,2027-02-27T15:00:00+00:00,ipswich-town,Ipswich Town,brighton-hove-albion,Brighton & Hove Albion
+27,2027-02-27T15:00:00+00:00,manchester-united,Manchester United,arsenal,Arsenal
+27,2027-02-27T15:00:00+00:00,newcastle-united,Newcastle United,brentford,Brentford
+27,2027-02-27T15:00:00+00:00,tottenham-hotspur,Tottenham Hotspur,liverpool,Liverpool
+28,2027-03-03T20:00:00+00:00,afc-bournemouth,AFC Bournemouth,tottenham-hotspur,Tottenham Hotspur
+28,2027-03-03T20:00:00+00:00,arsenal,Arsenal,crystal-palace,Crystal Palace
+28,2027-03-03T20:00:00+00:00,brentford,Brentford,ipswich-town,Ipswich Town
+28,2027-03-03T20:00:00+00:00,brighton-hove-albion,Brighton & Hove Albion,fulham,Fulham
+28,2027-03-03T20:00:00+00:00,chelsea,Chelsea,coventry-city,Coventry City
+28,2027-03-03T20:00:00+00:00,leeds-united,Leeds United,hull-city,Hull City
+28,2027-03-03T20:00:00+00:00,liverpool,Liverpool,aston-villa,Aston Villa
+28,2027-03-03T20:00:00+00:00,manchester-city,Manchester City,everton,Everton
+28,2027-03-03T20:00:00+00:00,nottingham-forest,Nottingham Forest,newcastle-united,Newcastle United
+28,2027-03-03T20:00:00+00:00,sunderland,Sunderland,manchester-united,Manchester United
+29,2027-03-13T15:00:00+00:00,afc-bournemouth,AFC Bournemouth,newcastle-united,Newcastle United
+29,2027-03-13T15:00:00+00:00,aston-villa,Aston Villa,hull-city,Hull City
+29,2027-03-13T15:00:00+00:00,chelsea,Chelsea,arsenal,Arsenal
+29,2027-03-13T15:00:00+00:00,coventry-city,Coventry City,manchester-city,Manchester City
+29,2027-03-13T15:00:00+00:00,crystal-palace,Crystal Palace,fulham,Fulham
+29,2027-03-13T15:00:00+00:00,leeds-united,Leeds United,brighton-hove-albion,Brighton & Hove Albion
+29,2027-03-13T15:00:00+00:00,liverpool,Liverpool,ipswich-town,Ipswich Town
+29,2027-03-13T15:00:00+00:00,manchester-united,Manchester United,everton,Everton
+29,2027-03-13T15:00:00+00:00,sunderland,Sunderland,brentford,Brentford
+29,2027-03-13T15:00:00+00:00,tottenham-hotspur,Tottenham Hotspur,nottingham-forest,Nottingham Forest
+30,2027-03-20T15:00:00+00:00,arsenal,Arsenal,sunderland,Sunderland
+30,2027-03-20T15:00:00+00:00,brentford,Brentford,afc-bournemouth,AFC Bournemouth
+30,2027-03-20T15:00:00+00:00,brighton-hove-albion,Brighton & Hove Albion,coventry-city,Coventry City
+30,2027-03-20T15:00:00+00:00,everton,Everton,tottenham-hotspur,Tottenham Hotspur
+30,2027-03-20T15:00:00+00:00,fulham,Fulham,liverpool,Liverpool
+30,2027-03-20T15:00:00+00:00,hull-city,Hull City,chelsea,Chelsea
+30,2027-03-20T15:00:00+00:00,ipswich-town,Ipswich Town,crystal-palace,Crystal Palace
+30,2027-03-20T15:00:00+00:00,manchester-city,Manchester City,manchester-united,Manchester United
+30,2027-03-20T15:00:00+00:00,newcastle-united,Newcastle United,leeds-united,Leeds United
+30,2027-03-20T15:00:00+00:00,nottingham-forest,Nottingham Forest,aston-villa,Aston Villa
+31,2027-04-10T15:00:00+01:00,afc-bournemouth,AFC Bournemouth,manchester-city,Manchester City
+31,2027-04-10T15:00:00+01:00,aston-villa,Aston Villa,brighton-hove-albion,Brighton & Hove Albion
+31,2027-04-10T15:00:00+01:00,chelsea,Chelsea,fulham,Fulham
+31,2027-04-10T15:00:00+01:00,coventry-city,Coventry City,arsenal,Arsenal
+31,2027-04-10T15:00:00+01:00,crystal-palace,Crystal Palace,everton,Everton
+31,2027-04-10T15:00:00+01:00,leeds-united,Leeds United,nottingham-forest,Nottingham Forest
+31,2027-04-10T15:00:00+01:00,liverpool,Liverpool,newcastle-united,Newcastle United
+31,2027-04-10T15:00:00+01:00,manchester-united,Manchester United,hull-city,Hull City
+31,2027-04-10T15:00:00+01:00,sunderland,Sunderland,ipswich-town,Ipswich Town
+31,2027-04-10T15:00:00+01:00,tottenham-hotspur,Tottenham Hotspur,brentford,Brentford
+32,2027-04-17T15:00:00+01:00,arsenal,Arsenal,aston-villa,Aston Villa
+32,2027-04-17T15:00:00+01:00,brentford,Brentford,leeds-united,Leeds United
+32,2027-04-17T15:00:00+01:00,brighton-hove-albion,Brighton & Hove Albion,chelsea,Chelsea
+32,2027-04-17T15:00:00+01:00,everton,Everton,afc-bournemouth,AFC Bournemouth
+32,2027-04-17T15:00:00+01:00,fulham,Fulham,sunderland,Sunderland
+32,2027-04-17T15:00:00+01:00,hull-city,Hull City,coventry-city,Coventry City
+32,2027-04-17T15:00:00+01:00,ipswich-town,Ipswich Town,manchester-united,Manchester United
+32,2027-04-17T15:00:00+01:00,manchester-city,Manchester City,crystal-palace,Crystal Palace
+32,2027-04-17T15:00:00+01:00,newcastle-united,Newcastle United,tottenham-hotspur,Tottenham Hotspur
+32,2027-04-17T15:00:00+01:00,nottingham-forest,Nottingham Forest,liverpool,Liverpool
+33,2027-04-24T15:00:00+01:00,afc-bournemouth,AFC Bournemouth,arsenal,Arsenal
+33,2027-04-24T15:00:00+01:00,aston-villa,Aston Villa,coventry-city,Coventry City
+33,2027-04-24T15:00:00+01:00,brentford,Brentford,fulham,Fulham
+33,2027-04-24T15:00:00+01:00,chelsea,Chelsea,manchester-city,Manchester City
+33,2027-04-24T15:00:00+01:00,everton,Everton,brighton-hove-albion,Brighton & Hove Albion
+33,2027-04-24T15:00:00+01:00,leeds-united,Leeds United,liverpool,Liverpool
+33,2027-04-24T15:00:00+01:00,manchester-united,Manchester United,crystal-palace,Crystal Palace
+33,2027-04-24T15:00:00+01:00,newcastle-united,Newcastle United,ipswich-town,Ipswich Town
+33,2027-04-24T15:00:00+01:00,nottingham-forest,Nottingham Forest,sunderland,Sunderland
+33,2027-04-24T15:00:00+01:00,tottenham-hotspur,Tottenham Hotspur,hull-city,Hull City
+34,2027-05-01T15:00:00+01:00,arsenal,Arsenal,tottenham-hotspur,Tottenham Hotspur
+34,2027-05-01T15:00:00+01:00,brighton-hove-albion,Brighton & Hove Albion,nottingham-forest,Nottingham Forest
+34,2027-05-01T15:00:00+01:00,coventry-city,Coventry City,manchester-united,Manchester United
+34,2027-05-01T15:00:00+01:00,crystal-palace,Crystal Palace,aston-villa,Aston Villa
+34,2027-05-01T15:00:00+01:00,fulham,Fulham,everton,Everton
+34,2027-05-01T15:00:00+01:00,hull-city,Hull City,afc-bournemouth,AFC Bournemouth
+34,2027-05-01T15:00:00+01:00,ipswich-town,Ipswich Town,leeds-united,Leeds United
+34,2027-05-01T15:00:00+01:00,liverpool,Liverpool,chelsea,Chelsea
+34,2027-05-01T15:00:00+01:00,manchester-city,Manchester City,brentford,Brentford
+34,2027-05-01T15:00:00+01:00,sunderland,Sunderland,newcastle-united,Newcastle United
+35,2027-05-08T15:00:00+01:00,afc-bournemouth,AFC Bournemouth,manchester-united,Manchester United
+35,2027-05-08T15:00:00+01:00,brentford,Brentford,aston-villa,Aston Villa
+35,2027-05-08T15:00:00+01:00,brighton-hove-albion,Brighton & Hove Albion,sunderland,Sunderland
+35,2027-05-08T15:00:00+01:00,everton,Everton,hull-city,Hull City
+35,2027-05-08T15:00:00+01:00,fulham,Fulham,ipswich-town,Ipswich Town
+35,2027-05-08T15:00:00+01:00,leeds-united,Leeds United,arsenal,Arsenal
+35,2027-05-08T15:00:00+01:00,manchester-city,Manchester City,liverpool,Liverpool
+35,2027-05-08T15:00:00+01:00,newcastle-united,Newcastle United,coventry-city,Coventry City
+35,2027-05-08T15:00:00+01:00,nottingham-forest,Nottingham Forest,crystal-palace,Crystal Palace
+35,2027-05-08T15:00:00+01:00,tottenham-hotspur,Tottenham Hotspur,chelsea,Chelsea
+36,2027-05-15T15:00:00+01:00,arsenal,Arsenal,nottingham-forest,Nottingham Forest
+36,2027-05-15T15:00:00+01:00,aston-villa,Aston Villa,newcastle-united,Newcastle United
+36,2027-05-15T15:00:00+01:00,chelsea,Chelsea,everton,Everton
+36,2027-05-15T15:00:00+01:00,coventry-city,Coventry City,tottenham-hotspur,Tottenham Hotspur
+36,2027-05-15T15:00:00+01:00,crystal-palace,Crystal Palace,brighton-hove-albion,Brighton & Hove Albion
+36,2027-05-15T15:00:00+01:00,hull-city,Hull City,fulham,Fulham
+36,2027-05-15T15:00:00+01:00,ipswich-town,Ipswich Town,manchester-city,Manchester City
+36,2027-05-15T15:00:00+01:00,liverpool,Liverpool,brentford,Brentford
+36,2027-05-15T15:00:00+01:00,manchester-united,Manchester United,leeds-united,Leeds United
+36,2027-05-15T15:00:00+01:00,sunderland,Sunderland,afc-bournemouth,AFC Bournemouth
+37,2027-05-23T15:00:00+01:00,afc-bournemouth,AFC Bournemouth,chelsea,Chelsea
+37,2027-05-23T15:00:00+01:00,brentford,Brentford,hull-city,Hull City
+37,2027-05-23T15:00:00+01:00,brighton-hove-albion,Brighton & Hove Albion,liverpool,Liverpool
+37,2027-05-23T15:00:00+01:00,everton,Everton,arsenal,Arsenal
+37,2027-05-23T15:00:00+01:00,fulham,Fulham,coventry-city,Coventry City
+37,2027-05-23T15:00:00+01:00,leeds-united,Leeds United,sunderland,Sunderland
+37,2027-05-23T15:00:00+01:00,manchester-city,Manchester City,aston-villa,Aston Villa
+37,2027-05-23T15:00:00+01:00,newcastle-united,Newcastle United,crystal-palace,Crystal Palace
+37,2027-05-23T15:00:00+01:00,nottingham-forest,Nottingham Forest,ipswich-town,Ipswich Town
+37,2027-05-23T15:00:00+01:00,tottenham-hotspur,Tottenham Hotspur,manchester-united,Manchester United
+38,2027-05-30T15:00:00+01:00,arsenal,Arsenal,brighton-hove-albion,Brighton & Hove Albion
+38,2027-05-30T15:00:00+01:00,aston-villa,Aston Villa,tottenham-hotspur,Tottenham Hotspur
+38,2027-05-30T15:00:00+01:00,chelsea,Chelsea,brentford,Brentford
+38,2027-05-30T15:00:00+01:00,coventry-city,Coventry City,nottingham-forest,Nottingham Forest
+38,2027-05-30T15:00:00+01:00,crystal-palace,Crystal Palace,leeds-united,Leeds United
+38,2027-05-30T15:00:00+01:00,hull-city,Hull City,newcastle-united,Newcastle United
+38,2027-05-30T15:00:00+01:00,ipswich-town,Ipswich Town,everton,Everton
+38,2027-05-30T15:00:00+01:00,liverpool,Liverpool,afc-bournemouth,AFC Bournemouth
+38,2027-05-30T15:00:00+01:00,manchester-united,Manchester United,fulham,Fulham
+38,2027-05-30T15:00:00+01:00,sunderland,Sunderland,manchester-city,Manchester City

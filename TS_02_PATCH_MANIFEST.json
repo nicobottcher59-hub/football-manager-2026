@@ -1,0 +1,10 @@
+{
+  "patch": "02",
+  "base": "ts01-baseline",
+  "paths": {
+    "TS_02_PATCH_INSTRUCTIONS.txt": "6cb9c9407239ce73cb54d6668af9eebe3b5e48112a5a2e77f584092b1862c7dc",
+    "docs/TS_02_CALENDAR_SCHEDULING_CORRECTIONS.md": "625b4b6247c403d1632d8518b325985fbf2e5522de3cb2f205f4008634a8af1f",
+    "src/football_manager/domain/world_runner.py": "f52df8ac2758d883963c63fb8d2607ddf7728162f7efe01b2b50f76cada9b5b4",
+    "tests/test_ts_02_calendar_scheduling.py": "cb17d07b4905a5380a0ddc278c3b4532d127cb9684e5648d25b94c8598a7e2c3"
+  }
+}

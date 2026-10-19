@@ -1,0 +1,58 @@
+TS-19 - Tactical Studio 2.0
+===========================
+
+BASE: main con TS-19.1.1 integrado (y sus dependencias anteriores).
+Este ZIP es incremental: no es una copia completa del repositorio.
+No hace falta instalar Node.js, npm ni una segunda actualización de frontend.
+
+ANTES DE COPIAR
+1. Guardá la carrera y cerrá el juego y el servidor Python.
+2. Hacé una copia de las partidas. En Windows, salvo una ruta personalizada,
+   están en %LOCALAPPDATA%\FootballManagerGame. Copiá la carpeta con el juego cerrado.
+3. Creá la rama feat/ts-19-tactical-studio-2-0 desde main con TS-19.1.1.
+4. Extraé el contenido del ZIP en la RAÍZ del proyecto, donde está pyproject.toml.
+   Conservá las rutas y reemplazá los archivos. No incluye ni reemplaza .git.
+
+VERIFICACIÓN DEL PAQUETE
+python tools/verify_ts19_package.py
+
+PRUEBAS DE ESTA ACTUALIZACIÓN
+python -m pytest -ra tests/test_ts_19_tactical_studio.py tests/test_ts_19_tactical_match.py tests/test_ts_19_frontend_contract.py
+
+Son 92 casos nuevos. Sin Node: 90 passed, 2 skipped como referencia esperada.
+Con Node: 92 passed. Los skips opcionales no son fallos del juego.
+
+REGRESIÓN COMPLETA
+python -m pytest -ra
+
+PRUEBA ADICIONAL DE ESTRÉS (OPCIONAL, SOLO PYTHON)
+python tools/validate_ts19_stress.py --matches 1000
+
+ABRIR Y USAR
+- Iniciá INICIAR_INTERFAZ_WINDOWS.bat. Si quedó una pestaña abierta, recargá con Ctrl+F5.
+- Entrá a Tactics > Edit team tactics. Lineup conserva titulares, suplentes y tarjetas.
+- Arrastrá fichas y probá ambas fases. Las posiciones futbolísticas se cambian
+  explícitamente al seleccionar una ficha; arrastrarla no cambia su rol en secreto.
+- Coverage, Vulnerabilities y Laboratory están debajo de la MISMA cancha.
+- Library guarda plantillas, no alineaciones de jugadores. Guardá la carrera
+  completa para conservarlas después de cerrar el servidor.
+- Asigná plantillas a A/B/C. Match schedule permite reglas por minuto y marcador.
+- En Matchday podés elegir un plan inicial y cambiar el cronograma para ese partido.
+  Quick Sim ya calcula todo: no hay cambios manuales sobre el informe terminado.
+
+GUARDADOS
+Se aceptan carreras v1/v2 y se guardan en v3. No vuelvas al código anterior
+con una partida v3; para eso usá la copia previa de la partida.
+El JSON antiguo de resultados del mundo NO es un guardado completo de la carrera.
+
+GITHUB DESKTOP
+BRANCH: feat/ts-19-tactical-studio-2-0
+SUMMARY: feat(tactics): integrate free phase shapes, tactic library and scheduled match plans
+
+DOCUMENTACIÓN
+TS_19_TEST_REPORT.md - resultados ejecutados y límites de validación.
+docs/TS_19_TACTICAL_STUDIO.md - arquitectura, instrucciones y funcionamiento.
+reports/ts19/ - registros y resultados reproducibles.
+
+No incluye TS-20 (personalidad/vestuario), TS-21 (desarrollo/envejecimiento)
+ni TS-22 (radares de Squad).

@@ -1,0 +1,33 @@
+{
+  "id": "TS-09",
+  "scope": "Calendar collision, rest, international break and round chronology integrity at save/load",
+  "requires": "TS-08",
+  "branch": "fix/ts-09-calendar-world-invariants",
+  "commit_summary": "fix(calendar): validate world timing and round chronology on save",
+  "files": [
+    {
+      "path": "src/football_manager/domain/calendar_invariants.py",
+      "action": "add",
+      "sha256": "7a955dcc67c6e6404b078e74b2163cc4cf650a8e82a754975e6c947fa843612d",
+      "expected_base_sha256": null
+    },
+    {
+      "path": "src/football_manager/domain/world_runner.py",
+      "action": "modify",
+      "sha256": "1a4b1bf981ccd1532016ebd5f6aff04d30de1e9456a41823dfc81cfac65f8d18",
+      "expected_base_sha256": "6ba8bbf748b246354ed5baa3dab5b3c25423afb53465f2921b9e037c1ed17b0c"
+    },
+    {
+      "path": "tests/test_ts_09_calendar_world_invariants.py",
+      "action": "add",
+      "sha256": "b95f752757d8fecf59634bde57f81122084543edeebe041e3f9d0302776d8d63",
+      "expected_base_sha256": null
+    },
+    {
+      "path": "docs/TS_09_CALENDAR_WORLD_INVARIANTS.md",
+      "action": "add",
+      "sha256": "6e5a82f084c333aeedf0ca6bd1c5ed0f6bca25aeb9c9c3dde0a8dc2a9484e56d",
+      "expected_base_sha256": null
+    }
+  ]
+}

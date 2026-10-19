@@ -1,0 +1,33 @@
+{
+  "id": "TS-06",
+  "requires": "TS-05",
+  "branch": "refactor/ts-06-career-transition-boundary",
+  "commit_summary": "refactor(career): decouple season transitions from English rules",
+  "instructions": "Apply to an already integrated repository at the required prior patch. Keep the original folder structure.",
+  "files": [
+    {
+      "path": "src/football_manager/domain/career.py",
+      "action": "modify",
+      "sha256": "f8d9a69244690c3b989f7d80a7c3fcd0759be684e582833a56be045f081ca33e",
+      "expected_base_sha256": "4fd8922323f0ec52e45635296b219b7ecf643316f3927cb96208b90eee7f1054"
+    },
+    {
+      "path": "src/football_manager/domain/career_transition.py",
+      "action": "add",
+      "sha256": "e69116b9d5916d565d4c50dd70f0dc6a843101d9959d0be19c18e91a02b73ee4",
+      "expected_base_sha256": null
+    },
+    {
+      "path": "tests/test_ts_06_career_transition_boundary.py",
+      "action": "add",
+      "sha256": "eea3dba393859296873a6cbf4162879275d84d4b60891347a6a4aed910b869e7",
+      "expected_base_sha256": null
+    },
+    {
+      "path": "docs/TS_06_CAREER_TRANSITION_BOUNDARY.md",
+      "action": "add",
+      "sha256": "2cf7f1585e1334ee2f69323fd31df38ee70f4ac344045e22f7867b6802c21514",
+      "expected_base_sha256": null
+    }
+  ]
+}

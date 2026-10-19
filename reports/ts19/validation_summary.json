@@ -1,0 +1,56 @@
+{
+  "python": "Python 3.13.5",
+  "platform": "Linux 6.18.44 x86_64",
+  "base": "Original uploaded project + TS-18.5 REVISADO + unified TS-18.6 + TS-19.1 + TS-19.1.1",
+  "baseline_tests": {
+    "passed": 1105,
+    "failed": 0,
+    "seconds": 380.18
+  },
+  "full_regression": {
+    "passed": 1197,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 516.83
+  },
+  "new_tests_without_node": {
+    "passed": 90,
+    "failed": 0,
+    "skipped": 2,
+    "seconds": 69.45
+  },
+  "browser": {
+    "engine": "Chromium headless on Linux",
+    "interaction_checks": 39,
+    "runtime_errors": 0,
+    "transport": "Shipped frontend scripts/CSS, in-process bridge into real Python application; HTTP routes independently tested"
+  },
+  "stress": {
+    "matches": 1000,
+    "failures": 0,
+    "elapsed_seconds": 22.511,
+    "checks": {
+      "ordinary_matches": 500,
+      "goals": 3062,
+      "substitutions": 508,
+      "regulation": 746,
+      "deterministic_repeats": 20,
+      "planned_matches": 500,
+      "penalties": 140,
+      "applied_plans": 777,
+      "extra_time_plan_checks": 125,
+      "red_cards": 378,
+      "skipped_plans": 348,
+      "extra_time": 114
+    },
+    "input_snapshot_unchanged": true,
+    "scope": "Snapshot stress only; not a claim of real-world tactical calibration or long-career aging."
+  },
+  "clean_install_smoke": {
+    "passed": 8,
+    "failed": 0,
+    "seconds": 8.08
+  },
+  "supplementary_clean_suite": "Additional rerun interrupted at 120 seconds; not counted as completed. Full original suite is complete.",
+  "windows_native_run": false
+}

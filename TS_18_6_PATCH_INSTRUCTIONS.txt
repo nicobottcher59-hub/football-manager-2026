@@ -1,0 +1,32 @@
+TS-18.6 - Football Regression & Stress
+=====================================
+
+STATUS: VALIDACION PARCIAL, NO APROBADO PARA MERGE SIN REGRESION COMPLETA.
+
+Base: ZIP original del proyecto, con TS-18.5 REVISADO aplicado.
+Este parche NO modifica codigo productivo, formulas, decisiones deportivas ni UI.
+Agrega 121 casos de test: 120 semillas de simulacion rapida, y 1 prueba de
+repetibilidad en 5 semillas. Se verifican goles, asistencias, tarjetas,
+sustituciones, identidad y estadisticas de jugadores, condicion, fatiga y
+consistencia de estadisticas agregadas.
+
+Validacion realizada (Linux, Python del entorno):
+- 121/121 casos TS-18.6: OK
+- 179/179 casos TS-18.1 a TS-18.6 combinados: OK
+- Regresion completa python -m pytest -ra: INCOMPLETA por timeout a ~20%; NO es OK.
+- No se ejecuto validacion en Windows.
+- No se certifico stress masivo del motor 2D ni progresion de carrera multitemporada.
+
+APLICACION: solo despues de integrar TS-18.5 revisado. Extraer este ZIP en
+la raiz del repositorio manteniendo las rutas.
+
+BRANCH: test/ts-18-6-football-regression-stress
+SUMMARY: test(football): add seeded match consistency and determinism regression
+
+COMANDOS WINDOWS:
+  python -m pytest -ra tests/test_ts_18_6_football_regression_stress.py
+  python -m pytest -ra tests/test_ts_18_1_player_state_learning.py tests/test_ts_18_2_roles_position_integrity.py tests/test_ts_18_3_tactical_logic_instructions.py tests/test_ts_18_4_match_engine_consistency.py tests/test_ts_18_5_opposition_ai_reliability.py tests/test_ts_18_6_football_regression_stress.py
+  python -m pytest -ra
+
+No marcar TS-18.6 como cerrado antes de completar la regresion y las
+validaciones pendientes. Si surge un fallo, aislarlo antes de cambiar codigo.

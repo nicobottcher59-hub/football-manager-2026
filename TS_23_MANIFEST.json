@@ -1,0 +1,32 @@
+{
+  "base": "TS-21.4/21.5",
+  "files": {
+    "TS_23_PATCH_INSTRUCTIONS.txt": "e31c794b371c07c8c754119e5556b14e7b67ce66a8240088c7c9ed5e0c5666e4",
+    "TS_23_TEST_REPORT.md": "0c79aeb7e8e6b353b9d0b30bf1071fa7a2c3502365e0a39725f5b8cae4409ac8",
+    "frontend/portable/index.html": "c29abb01b4d7097a1b1c1fabd003ba9a52f7a16d225c191fc13f268b1d8ebb1a",
+    "frontend/portable/portable.js": "a6b08c969fd2520a5b40e76b3dba6539c612e97ab47153086e8609d3d2cf3498",
+    "frontend/portable/youth_academy.css": "ccecb7053c131d9c3fb915afacc309f95f52151c21f1c27a983ec81492f0addd",
+    "frontend/portable/youth_academy.js": "c891670c03cad1145e6069939f8b824ea9c84a0e649408621c0fb0204804cc7b",
+    "frontend/public/squad/roster.css": "3d81657e67bfaa207c3db7bd5007495c2d69492c6a6b402ce9c655d86b2b9ec9",
+    "frontend/public/squad/roster.js": "bc0f359912698652d24313adc13fc399e575861df59adb3079745e95fe84aec2",
+    "frontend/public/squad/squad.js": "d0adeb8ac0ad4df7d14f6c6ee874a12051e941bd4d1f6797d2c9ebce7d9dab8e",
+    "src/football_manager/domain/football_world.py": "1ec8169606c52f70216d8dc78725202d4895581c7a03cc82c04071f1446f822a",
+    "src/football_manager/domain/youth_academy.py": "a4dd98c6368ffcfc0dc54526b7272e53ed6056e04ae3ee97ee017897d02ef43a",
+    "src/football_manager/persistence/manager_career.py": "4231e00935fd7833ce7e3a9020041563be6cf6b4b9ae24befb0c91c08e2b8aca",
+    "src/football_manager/persistence/session_codec.py": "e463f710969641bbf6459a9b20f92a63ca95ee89f1aa2507358335154b22aa25",
+    "src/football_manager/services/player_development.py": "9b3be22eaea5a85b441043ed7c67f56af544ab23855332dd114688fc276b41cd",
+    "src/football_manager/services/world_squads.py": "390e2eb7b38b907a9596aa1cde99f3becaf5219324568489525cd12378849392",
+    "src/football_manager/services/youth_academy.py": "a7208770ffba09d8dae8f95182cbe0950ebf64d186835fa2eb220c576020096b",
+    "src/football_manager/ui_shell/application.py": "8b8851423ebd70c2128fcfa1746b0b56a0265937991448e41f0189465b3f7154",
+    "src/football_manager/ui_shell/server.py": "12c3da85e91fca2b56fc3fbcb17d2160535b6bfc8a2a00ced3efb037ed07777b",
+    "tests/test_ts_21_2_player_development.py": "5ded3bfd5d1b7a9991124e099b9b015ff3ddae446a7906ca75f266b8f3cb79bb",
+    "tests/test_ts_21_3_player_aging.py": "9c7e6c43173b9bc8db7b0ac8187577189f3792d5588bb3b1647ab871410854d0",
+    "tests/test_ts_21_4_5_world_balance.py": "d795efe702edd7f971cf98718a216c3676f62e329d010c9dcf0a5a70e37f3f22",
+    "tests/test_ts_22_presentation.py": "ad60c590c5f47296f81a1c02f53ee7830547d442d4a6a38ed81c94c9bc6d2f41",
+    "tests/test_ts_23_youth_academy.py": "44d87ae131c35953c7f3bb53ca867b51dd3ac36de7bb2794f449ad28d5f06d89",
+    "tools/verify_ts23_youth_package.py": "7eb2e132195d908f8ff661034cd66e9bcd5582c32349d237a6f712e76ee38436"
+  },
+  "installation": "Extract at the project root; preserves all original files and personal saves",
+  "name": "TS-23 Youth Academy and Quarterly Scouting",
+  "target_save_version": 10
+}

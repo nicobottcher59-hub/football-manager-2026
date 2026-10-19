@@ -1,0 +1,15 @@
+FOOTBALL MANAGER GAME — TS-03 WORLD STATE INTEGRITY
+
+BRANCH: fix/ts-03-world-state-integrity
+SUMMARY: fix(world): validate saved results and competition integrity
+
+BASE: TS-02 (and TS-01, TS-00) already committed. Apply IN ORDER.
+
+1. Create the branch from the current commit containing TS-02.
+2. Extract the ZIP into the repository root; preserve paths and overwrite files.
+3. Run with Python (Node.js not required):
+   python -m pytest -q -ra tests/test_ts_03_world_integrity.py tests/test_ts_02_calendar_scheduling.py tests/test_ts_01_atomic_world_operations.py
+4. For a full audit: python -m pytest -q -ra
+5. Commit using SUMMARY and push to GitHub.
+
+The save schema remains version 3. Invalid/tampered save archives now fail closed.

@@ -1,0 +1,26 @@
+FM PROJECT — UI-3.4.1 Calendar and Live Results Progress
+
+Base: UI-3.4 Daily Continue + Calendar Autosim (already installed).
+Branch: phase-ui-3-4-1-calendar-simulation-progress
+
+1) In GitHub Desktop create the branch from the committed UI-3.4 version.
+2) Close the old INICIAR_INTERFAZ_WINDOWS.bat terminal/server (Ctrl+C).
+3) Extract the ZIP and copy its relative files into your existing game root.
+   Overwrite matching files. Do NOT delete the other existing project files.
+4) Run INICIAR_INTERFAZ_WINDOWS.bat, refresh Chrome with Ctrl+Shift+R.
+5) Calendar: select an empty future date by clicking anywhere inside the cell.
+   Press 'Simulate to this date' and confirm. The results view shows actual
+   WorldRunner/FastMatchSimulator results, one by one, with speed options.
+6) After completion click 'Return to calendar'. Check past-day shading,
+   fixture scores, Home date, competitions and Squad condition.
+7) Day-by-day Continue still pauses at 'Go to Match'; that screen comes next.
+
+IMPORTANT:
+- The DEV game is IN MEMORY only: stopping the server resets progress.
+- No fictional/made-up results are shown in the progress feed.
+- If a run fails, no partial world state is committed.
+- The prior patch files do not need to be downloaded again.
+- Test on Windows before committing.
+
+Suggested commit Summary (after validation):
+feat(ui): add live calendar simulation progress and past-day styling

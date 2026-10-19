@@ -1,0 +1,42 @@
+{
+  "patch": "TS-14",
+  "base": "TS-13 Tactical Consumer Coverage",
+  "purpose": "opt-in versioned SQLite persistence foundation (no manager save or UX changes)",
+  "files": [
+    {
+      "path": "src/football_manager/persistence/__init__.py",
+      "sha256": "a7c4f717f65bad5bdf8825a07e1a47cdf07ccc55e47a039da31b1a12ba670c1e",
+      "size": 721
+    },
+    {
+      "path": "src/football_manager/persistence/models.py",
+      "sha256": "4d2a0e9e595d7ad7f87d470ef37dfd18441e4f6c2c057516f0154a1f96baeda4",
+      "size": 4395
+    },
+    {
+      "path": "src/football_manager/persistence/sqlite_repository.py",
+      "sha256": "ccd9399878776de872379b88c13167d83a001227d560f366126eb9de8f9c12f9",
+      "size": 13752
+    },
+    {
+      "path": "src/football_manager/persistence/career_adapter.py",
+      "sha256": "1dc65bb1f0c8479204b75e48c1336828af09d10d58debcb0be6ee3656a4a91bf",
+      "size": 3609
+    },
+    {
+      "path": "tests/test_ts_14_persistence_architecture.py",
+      "sha256": "df12035968923b59205cc8afca74244e86a8a89e6670a02776884ea01b6fd963",
+      "size": 11491
+    },
+    {
+      "path": "docs/TS_14_PERSISTENCE_ARCHITECTURE.md",
+      "sha256": "ae6178ad91fa0dac1adf4c55134fb6eb0c3972f63da54ada8e45918ec2d9d820",
+      "size": 6218
+    },
+    {
+      "path": "TS_14_PATCH_INSTRUCTIONS.txt",
+      "sha256": "3c45c67c220d923f5068b55fdbf121c0f112ec80e88c530a6983d5cd6f4fc0cc",
+      "size": 1159
+    }
+  ]
+}

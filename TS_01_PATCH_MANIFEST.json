@@ -1,0 +1,34 @@
+{
+  "patch": "TS-01 - Atomic World Operations",
+  "base": "football-manager-game.zip 2026-10-13 + TS-00 + TS-00.1",
+  "branch": "fix/ts-01-atomic-world-operations",
+  "commit_summary": "fix(world): roll back failed registration and match progression",
+  "runtime_code_modified": true,
+  "files": [
+    {
+      "path": "src/football_manager/domain/world_runner.py",
+      "sha256": "dabb2e5bfeeabb6fc04d9aa03e12b66ca2a651f2899219d37476f65e1017d386",
+      "bytes": 39852
+    },
+    {
+      "path": "tests/test_world_scalability_diagnostic.py",
+      "sha256": "a78c935126465930b59bb834d8355a871c5a8136f90e7a53ebed7fed276283ee",
+      "bytes": 2879
+    },
+    {
+      "path": "tests/test_ts_01_atomic_world_operations.py",
+      "sha256": "b3b4609b042b22abf9dae0c9299913c51a757df94acb2e052734f7fb4ef586c1",
+      "bytes": 9700
+    },
+    {
+      "path": "docs/TS_01_ATOMIC_WORLD_OPERATIONS.md",
+      "sha256": "0c8e8b397d537d740d0b447600bb604c69b6db00783bb7742c12750d2caed576",
+      "bytes": 4306
+    },
+    {
+      "path": "TS_01_PATCH_INSTRUCTIONS.txt",
+      "sha256": "1e4d2170b30dcea4de60eba1c912f55662a1e042358d77546492df1a0af52cd9",
+      "bytes": 2288
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "patch": "TC-E1 International Calendar Foundation + Fixture Reflow",
+  "base": "UI-3.5.1 with TC-E0 applied; branch technical-checkpoint-stabilization",
+  "kind": "incremental new/modified files only",
+  "files": [
+    {
+      "path": "TC_E1_PATCH_INSTRUCTIONS.txt",
+      "action": "add",
+      "bytes": 1368,
+      "sha256": "24b6c7020c379dd69aae0d8e4c61eaba12e013eef46f92bedaf8c8b4b2ffe1f8"
+    },
+    {
+      "path": "docs/CURRENT_STATUS.md",
+      "action": "modify",
+      "bytes": 44127,
+      "sha256": "3996b5e7837b4cd0cc93cfc6fb7e6feac888a51cc19d74a03666268424a50daf"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "action": "modify",
+      "bytes": 32629,
+      "sha256": "efbd1e24db52f3ea9cb1f1b0f208d954ba23e2dd23bbdb20831fa4381f1959cf"
+    },
+    {
+      "path": "docs/TECHNICAL_CHECKPOINT_INTERNATIONAL_CALENDAR.md",
+      "action": "add",
+      "bytes": 7133,
+      "sha256": "f12f37c1174f58dfd2865ea3033f055e0753b9fe0b8699042d2d7428d3739637"
+    },
+    {
+      "path": "frontend/portable/calendar.css",
+      "action": "modify",
+      "bytes": 13377,
+      "sha256": "a45eba267975ccc5b2e4da42169137a4cd1093bb72c8cceb9100fb0fa7740b81"
+    },
+    {
+      "path": "frontend/portable/calendar.js",
+      "action": "modify",
+      "bytes": 15875,
+      "sha256": "d34e48c8c33f7518000f103d8e30a04d32229e1df208ca42d30b637f1e89d811"
+    },
+    {
+      "path": "src/football_manager/data/future_seasons.py",
+      "action": "modify",
+      "bytes": 6078,
+      "sha256": "5ab9fbb280e545e2798b3934cc49075c706f2e666cc66b04916b488cd0541985"
+    },
+    {
+      "path": "src/football_manager/domain/__init__.py",
+      "action": "modify",
+      "bytes": 8751,
+      "sha256": "71f80be0f98d87b8ea140f58afb31a8ebe9442e8eeb9d2466d5e1c424ff29abb"
+    },
+    {
+      "path": "src/football_manager/domain/calendar.py",
+      "action": "modify",
+      "bytes": 29820,
+      "sha256": "7114fff861629b08c8cd793e1e2f267b115179e861b29731c059ffe48ce83da3"
+    },
+    {
+      "path": "src/football_manager/domain/career.py",
+      "action": "modify",
+      "bytes": 7850,
+      "sha256": "4fd8922323f0ec52e45635296b219b7ecf643316f3927cb96208b90eee7f1054"
+    },
+    {
+      "path": "src/football_manager/domain/international_calendar.py",
+      "action": "add",
+      "bytes": 15371,
+      "sha256": "4d64bf9c472388acbff734ff74ebbf67bb31406599810dc071fd613e95782418"
+    },
+    {
+      "path": "src/football_manager/domain/world_runner.py",
+      "action": "modify",
+      "bytes": 35228,
+      "sha256": "14b591233b0205ae7afa8ee06d96dfe2001dba24bb03b627a4dcc315911e3f51"
+    },
+    {
+      "path": "src/football_manager/ui_shell/calendar.py",
+      "action": "modify",
+      "bytes": 6296,
+      "sha256": "77edf7549f8e0d36fe7177c3e61f074ac5aa9299a2d32ea017935b7b4866dbf7"
+    },
+    {
+      "path": "tests/test_tc_e1_international_calendar.py",
+      "action": "add",
+      "bytes": 12178,
+      "sha256": "7b2aec65fdc6351d661a3e791ac9705c997a6a97b385b0c585674f570231a802"
+    },
+    {
+      "path": "tools/export_international_calendar.py",
+      "action": "add",
+      "bytes": 1968,
+      "sha256": "d5f5e1225f28ec7763df610964f6f664e7e1077007f44a84700b5b8df12f64d8"
+    },
+    {
+      "path": "tools/stress_world_calendar.py",
+      "action": "modify",
+      "bytes": 19659,
+      "sha256": "18f4700e1be5149d68e7bc6d73d32072bbab458e6751f8b11e1fe4ab0f7a66a4"
+    }
+  ],
+  "notes": [
+    "generated future fixtures first; FIFA blackout reflow second",
+    "2026/27 legacy season unchanged",
+    "national tournaments release-only; no automatic call-ups",
+    "TC-E2 rollback defect still pending"
+  ]
+}

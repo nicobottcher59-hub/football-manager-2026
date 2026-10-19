@@ -1,0 +1,49 @@
+TS-24.4 — Player Consent, Agents & Completed Transfers
+INCREMENTAL PATCH — NOT THE COMPLETE GAME
+
+REQUIRED BASE: TS-24.3.1 Scouting & Negotiation Flow installed.
+No Node, npm, internet, or new build step is required to play.
+
+INSTALLATION ON WINDOWS
+1. Close INICIAR_INTERFAZ_WINDOWS.bat and the Python game server.
+2. Back up the entire game directory and the complete SQLite career save.
+3. Extract the ZIP directly into the folder with INICIAR_INTERFAZ_WINDOWS.bat,
+   keeping relative paths and allowing overwrite. The ZIP has no wrapper folder.
+4. In PowerShell from that game folder, run:
+   python tools/verify_ts244_transfers_package.py
+5. Optional, with pytest installed:
+   python -m pytest -q tests/test_ts_24_4_personal_transfers.py
+   (This can take several minutes due full-world SQLite save/restore cases.)
+6. Start INICIAR_INTERFAZ_WINDOWS.bat and refresh browser using Ctrl+F5.
+
+TRY A TRANSFER
+A. Scouting -> find professional player -> Make transfer offer. Alternatively:
+   Other Leagues -> club -> expand a player -> Make transfer offer.
+B. Reach club agreement via the existing offers and counteroffers.
+C. In the same immersive view, negotiate salary per week, contract duration,
+   squad role and optional signing-on fee with the player's agent.
+D. The agent may agree, counter, or refuse due to level/ambition. You can
+   accept a counteroffer. Completing the agreement updates clubs, wages,
+   transfer budgets and squads immediately.
+E. For an agreed offer received for your own player, open it and select
+   'Ask player and agent to decide'. A successful sale settles the fee.
+F. Check Squad, Finances and the buyer/seller club after completion.
+
+TRANSFER ACCOUNTING
+- The guaranteed transfer fee is paid immediately, with no instalments.
+- Bonuses for appearances, goals, assists and promotion are registered;
+  payments occur only after real milestones and at most once per clause.
+- Negotiated future-sale share is paid on later resales (gross or profit).
+- Buyback options remain recorded but cannot yet be exercised. The first
+  release does NOT add a complete AI-vs-AI window market, free agents or loans.
+
+SAVES
+Full manager career graph and SQLite manager sections upgrade to VERSION 15.
+Compatible version-14 saves migrate the new personal negotiation fields.
+Loading alone does not overwrite a previous save. Saving in TS-24.4 will
+produce a version-15 archive; older patches may not load that archive.
+Retain the backup and always use the full SQLite career save.
+
+GITHUB DESKTOP
+BRANCH: feat/ts-24-4-player-consent-and-settlement
+SUMMARY: feat(transfers): add agent negotiations and settled player transfers

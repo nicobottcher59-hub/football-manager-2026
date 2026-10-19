@@ -1,0 +1,39 @@
+{
+  "patch": "TS-00 - Quality Baseline & Regression Cleanup",
+  "source": "Exported football-manager-game.zip snapshot, 2026-10-13",
+  "branch": "test/ts-00-quality-baseline",
+  "commit_summary": "test: stabilize regressions and establish quality baseline",
+  "runtime_code_modified": false,
+  "files": [
+    {
+      "path": "tests/test_ui35_matchday.py",
+      "sha256": "9e2961a8e183873d0416c454e1e852241834ba060a940e0bd7740f994bf3788e",
+      "bytes": 7430
+    },
+    {
+      "path": "tests/test_phase6_0_development_ui.py",
+      "sha256": "b87d027c1fc47a46a01f99ab92b5d8e45944a25060f430bcbfa457e0123ef303",
+      "bytes": 11929
+    },
+    {
+      "path": "tests/test_ts_00_regression_baseline.py",
+      "sha256": "503e572405bb17dee041686bb954821f835bbdc7ec32677e9f3605c6a3ec2018",
+      "bytes": 2166
+    },
+    {
+      "path": ".github/workflows/quality-baseline.yml",
+      "sha256": "1ed608e69ec6c1ea8c8e4e4ef2291897453784f6a279b81892e949f23bc3b521",
+      "bytes": 1362
+    },
+    {
+      "path": "docs/TS_00_QUALITY_BASELINE.md",
+      "sha256": "2dd8113ebed67331d303886d3e8b4797e827e3cec855c63de661e4fa0291769e",
+      "bytes": 2556
+    },
+    {
+      "path": "TS_00_PATCH_INSTRUCTIONS.txt",
+      "sha256": "362a9267a4e883f08e0f1d5ca000e9bf4b17a06877badb5f304a8bb3fd722176",
+      "bytes": 2142
+    }
+  ]
+}

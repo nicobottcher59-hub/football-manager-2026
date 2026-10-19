@@ -1,0 +1,31 @@
+{
+  "update": "TS-24.4 Player Consent, Agents and Completed Transfer Settlement",
+  "base": "TS-24.3.1",
+  "save_graph_version": 15,
+  "sha256": {
+    "frontend/portable/transfers.css": "a77ba1c08b99bd23f96c2240b7cbab9f764408ba96c11982c377322051a43f4d",
+    "frontend/portable/transfers.js": "3e7cfe73c702e3460525ac47c4c75dd0de4fca68fdd9db9a6e813c4119d00938",
+    "src/football_manager/domain/football_world.py": "a7ea6787af7d2cc380dd510a8ce0944c34f24e6609645be28b5340d53725533a",
+    "src/football_manager/domain/transfer_negotiation.py": "b04ca1fdae5c1b90923a5b94858860b70f2e9f9de44a802e6e6cd5e51efc8ee0",
+    "src/football_manager/domain/transfer_personal.py": "506bb00eeb23db4cee3811e040de5232f6b31f8cdfa4b68d2b2719fa6ad8c1fd",
+    "src/football_manager/persistence/manager_career.py": "35ca74d53e0231c6d6b6742c6aa76e28a4db6af2ce3d3e1fa8ebca33ccef95c9",
+    "src/football_manager/persistence/session_codec.py": "0482ee22c746c1a608f960e32c3102205b9080613fda5e9486fb428f68eb422d",
+    "src/football_manager/services/transfer_negotiation.py": "00fc1bd109ec0b2256c3a0f0d3717224acb070dea7c5e209b51572578900e645",
+    "src/football_manager/services/transfer_personal.py": "ec4f92d1ba73d92bd36fd134ac0922da09737cc4d6fe93ccd07fbd23c16cb76b",
+    "tests/test_ts_21_2_player_development.py": "8e5480b1b17534b6053e0cd980aba0487cfbc4eb892b8b744cc28296bf0a58e0",
+    "tests/test_ts_21_3_player_aging.py": "01e47cf9dbc4a2235dde80b31c2f229bbdaf6b944630e864cd5f6380c99c067f",
+    "tests/test_ts_21_4_5_world_balance.py": "a3085e0ab179fbe072f95ce29a70c1ec0f8472a3d1dee6368b67931be235d4be",
+    "tests/test_ts_22_presentation.py": "114c62553989f8e02cdafbb13a7618b5acee78d458ea9705fff8386d1dfeeaf5",
+    "tests/test_ts_23_1_academy_polish.py": "0452f6138599936526ee85cac3ad7d03b3218b86fcc79a1a4d499482c3574bac",
+    "tests/test_ts_23_youth_academy.py": "3351fabc635abb6119ab7f6dcd668fe85d1f1b662556f3fd68cc808fbe78dcce",
+    "tests/test_ts_24_1_market_valuation.py": "9bead539a8cccec28b9bdcbc6791f35f6c034b327ff97e0c9af4f1a3a93e0214",
+    "tests/test_ts_24_2_contracts_finances.py": "76e3492dd11d6d02e4b2ff9b79a958beb9c4e73306e3e1eb005e0f732a25b9eb",
+    "tests/test_ts_24_3_1_scouting_flow.py": "bf1a36af92d6c0ff593c174aa581e13faa8ecd96ba28312ab6407c5bb7c1ed1e",
+    "tests/test_ts_24_3_transfer_negotiation.py": "e7664bc86e11fee44b13624ee74c111595bfbce9d9c391d530bb4b7aecd3535b",
+    "tests/test_ts_24_4_personal_transfers.py": "431001b826a660438b6d053a092351823e45dd649d51a7cc1d2f9aa36c6fedde",
+    "TS_24_4_PATCH_INSTRUCTIONS.txt": "edb48298ca8835cbbabfda3f49f507899fec179ee05f970e131ecdd6a58e2f90",
+    "TS_24_4_TEST_REPORT.md": "de44810aa3608b5587f632f965f8ae89d8ed2bdb1e32f9f07188da5a28dcf6ea",
+    "tools/verify_ts244_transfers_package.py": "147ffa1bbd0149c0cb1ed0a6012e6aee8dc95603fbe4aeeaf06729fa9b315708"
+  },
+  "files": 23
+}

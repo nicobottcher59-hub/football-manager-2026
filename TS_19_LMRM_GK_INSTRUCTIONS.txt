@@ -1,0 +1,47 @@
+TS-19 | LM/RM in the drop selector + immovable goalkeeper
+=========================================================
+
+BASE REQUIRED
+  football-manager-game.zip / TS-19 Tactical Studio 2.0, with the
+  zone-aware placement and coverage heatmap update already installed.
+  Works with TS-20 Player DNA & Dressing Room installed.
+
+WINDOWS INSTALLATION (NO NODE NEEDED)
+  1. Close the game, including the window opened by INICIAR_INTERFAZ_WINDOWS.bat.
+  2. Open the project ROOT (the directory containing this .bat, tools/, src/,
+     frontend/ and tests/).
+  3. Extract TS-19-LM-RM-Arquero-Fijo.zip into that root, merging folders and
+     OVERWRITING same-named files. Do not extract it into a second nested folder.
+  4. Open a terminal (cmd or PowerShell) in the project root and verify:
+       python tools/verify_ts19_lmrm_gk_package.py
+  5. Run the regression tests if pytest is installed:
+       python -m pytest -ra tests/test_ts_19_placement_heatmap.py
+  6. Restart with INICIAR_INTERFAZ_WINDOWS.bat, press Ctrl+F5, open
+     Tactics > Edit team tactics.
+
+MANUAL CHECK
+  - Drag an OUTFIELD marker to the left middle flank: Choose position -> LM.
+  - Drag an OUTFIELD marker to the right middle flank: Choose position -> RM.
+  - Ahead on those flanks: LW/RW remain the recommended wide roles.
+  - Choose LM or RM: the tactical marker displays LM/RM in midfield zones.
+  - Try dragging GK or moving GK with arrow keys: it must stay where it was.
+  - Try Copy other phase: GK remains in its existing location.
+
+COMPATIBILITY
+  LM/RM are labels in the zone selector and tactical pitch, mapped to the
+  existing LW/RW football positions. They do not introduce separate role,
+  OVR/ACT, positional familiarity or save codes.
+  Existing saves, formations and the TS-20 dressing room are unchanged.
+  The legacy goalkeeper was already locked as a role; now the editor also
+  rejects moves through backend placement/point/shape commands.
+  Reset phase can remove older manually saved keeper targets.
+  No Node/npm or frontend build is required; all JS is loaded locally.
+
+NOTE ON OLD CHECKSUM MANIFESTS
+  Older TS-19 package-verification scripts refer to the pre-hotfix version.
+  Their hashes for intentionally changed files will not match. Use the
+  TS-19 LM/RM + GK verifier listed above for this updated installation.
+
+GITHUB DESKTOP
+  Suggested branch:  fix/ts-19-lm-rm-goalkeeper-lock
+  Summary:           fix(tactics): show LM/RM in drop chooser and lock goalkeeper

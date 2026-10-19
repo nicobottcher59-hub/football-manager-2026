@@ -1,0 +1,29 @@
+TS-15 — CAREER SAVE RELIABILITY (base TS-14)
+
+REQUISITO: aplicar TS-14, validarlo en Windows y hacer merge a main.
+
+BRANCH: feat/ts-15-career-save-reliability
+SUMMARY: feat(persistence): support validated manager career save and restore
+
+INSTALACION
+1. Crear la branch desde main que ya contiene TS-14.
+2. Extraer este ZIP en la carpeta football-manager-game, respetando rutas.
+3. Ejecutar:
+   python -m pytest -ra tests/test_ts_15_career_save_reliability.py
+   python -m pytest -ra tests/test_ts_14_persistence_architecture.py
+   python -m pytest -ra
+4. Probar opcionalmente guardar/cargar desde la API local; ejemplos y
+   precauciones en docs/TS_15_CAREER_SAVE_RELIABILITY.md.
+5. Commit, push y merge a main SOLO si la validacion de Windows es correcta.
+
+CAMBIOS
+- Guardado versionado de la sesion completa (jugadores, tacticas,
+  alineaciones, estado, seed, calendario, competiciones, historial).
+- Validaciones del dominio y referencias entre entidades.
+- Load seguro que solo publica la nueva sesion si termina correctamente.
+- Endpoints locales /api/career/save, /api/career/load, GET /api/career/saves.
+- Backup manual SQLite consistente y atomico.
+- Tests nuevos de continuidad, corrupcion, revisiones, backup e HTTP.
+
+SIN cambios de UX, sin autosave, sin migracion de JSON antiguo de resultados
+ni dependencias adicionales; tampoco hace falta Node.js.

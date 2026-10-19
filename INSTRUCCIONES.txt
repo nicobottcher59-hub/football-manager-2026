@@ -1,0 +1,14 @@
+PHASE 5.11B - FAST MATCH SIMULATOR MVP
+
+1. Partir de main con Phase 5.11A ya mergeada.
+2. Crear branch: phase-5-11b-fast-match-simulator
+3. Copiar el contenido de este ZIP sobre la raiz del proyecto y reemplazar archivos.
+4. Ejecutar:
+   python -m pytest
+   Esperado: 350 passed
+5. Ejecutar demo:
+   $env:PYTHONPATH = "src"
+   python examples/demo_fast_match_simulator.py
+6. Enviar la salida del demo antes de commitear para revision final.
+
+Esta fase no importa ni ejecuta el motor 2D.

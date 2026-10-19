@@ -1,0 +1,29 @@
+{
+  "scope": "Social history stress plus separate real DEV seasons; no newgens, aging or medical simulation.",
+  "social_stress": {
+    "years": 15,
+    "elapsed_days": 5474,
+    "synthetic_participation_records": 782,
+    "members": 18,
+    "links": 153,
+    "remembered_fixtures": 256,
+    "events_retained": 40,
+    "base_attributes_and_states_unchanged": true,
+    "morale_offsets_within_bounds": true
+  },
+  "real_seasons": [
+    {
+      "season": "2026/27",
+      "real_managed_matches": 56,
+      "social_matches_retained": 56,
+      "save_reload_equal": true
+    },
+    {
+      "season": "2027/28",
+      "real_managed_matches": 62,
+      "social_matches_retained": 118,
+      "save_reload_equal": true
+    }
+  ],
+  "seconds": 12.24
+}

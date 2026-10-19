@@ -1,0 +1,3 @@
+ablation,matches_per_variant,home_points_delta,home_possession_pp_delta,home_passes_attempted_delta,home_pass_completion_pp_delta,home_shots_delta,home_xg_delta,home_crosses_delta,home_tackles_delta,home_recoveries_delta,home_fouls_delta,away_pass_completion_pp_delta,seeds_with_any_material_change_pct
+tempo,2,-2.5,0.8707176691052716,152.5,4.562486974382285,0.5,-0.6533500000000001,2.0,-1.0,26.5,-1.0,0.05565166293558832,100.0
+pressing_intensity,2,0.5,21.983514549586797,201.0,5.451233175422498,5.0,1.2781500000000001,0.0,4.0,32.0,-1.0,-16.37034339988506,100.0

@@ -1,0 +1,39 @@
+TS-24.8 - Reequilibrio estructural de plantillas y finanzas
+PARCHE INCREMENTAL: necesita el juego completo con TS-24.7 instalada.
+
+EN WINDOWS
+1. Cerrar el juego, el navegador del juego y INICIAR_INTERFAZ_WINDOWS.bat.
+2. Hacer una copia de la carpeta del proyecto y de la partida SQLite.
+3. Descomprimir el ZIP sobre la CARPETA RAIZ del proyecto.
+   Mantener rutas src/, tools/, tests/, reports/ y docs/.
+4. Desde la raiz, ejecutar:
+       python tools/verify_ts248_balance_package.py
+5. Opcional (requiere pytest):
+       python -m pytest -q tests/test_ts_24_8_structural_balance.py
+6. Reiniciar INICIAR_INTERFAZ_WINDOWS.bat y actualizar con Ctrl + F5.
+
+CONTENIDO
+- IA mejor planificada para ventas, fichajes por necesidad y agentes libres.
+- Promociones U21 segun vacantes de la formacion y proximidad a retiro.
+- Inicio ocasional real para U23 preparados en partidos simulados de la IA.
+- Rebase economico de ingresos, gastos y salarios por division y club.
+- Ningun cambio estetico o de interfaz. Guardado SQLite mantiene version 16.
+- Ninguna inyeccion de cash ni alteracion de valoraciones por decreto.
+
+AUDITORIA ACELERADA (OPCIONAL, DEMANDANTE)
+       python tools/stress_ts248_long_horizon.py --seasons 20 --output reports/ts248_long_horizon.json
+       python tools/summarize_ts248_long_horizon.py --input reports/ts248_long_horizon.json --output TS_24_8_LONG_HORIZON_REPORT.md
+
+Solo los resultados de los partidos senior usan un marcador de fondo en
+la auditoria. Eso significa que NO valida minutos senior, lesiones, formas,
+ni avance real de jugadores en veinte temporadas. La prueba completa de
+rotacion U23 consta por separado en tests/test_ts_24_8_structural_balance.py.
+
+GITHUB DESKTOP
+BRANCH
+    feat/ts-24-8-structural-squad-economy-balance
+SUMMARY
+    feat(career): rebalance AI squad depth, youth succession and club finances
+
+Confirmar primero TS-24.6, luego TS-24.7 si siguen sin commit, y crear
+TS-24.8 a partir del ultimo cambio confirmado. No se cambia Git del usuario.

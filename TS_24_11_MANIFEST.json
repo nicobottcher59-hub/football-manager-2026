@@ -1,0 +1,20 @@
+{
+  "version": "TS-24.11",
+  "base": "TS-24.10",
+  "save_graph_version": 16,
+  "files": 12,
+  "sha256": {
+    "src/football_manager/services/loan_market.py": "d4dc6988c5e992ee1f9dbd1a3b652a64d09bd92a3853ab3aa61549a6442d551d",
+    "src/football_manager/services/transfer_negotiation.py": "084b07c7a671e2b3c15f736712534c1f6a2657102ed87d3e7632abb9cc585ab4",
+    "src/football_manager/services/club_economy.py": "7142bf254eff1ab9261750c95f864e0905e8d1dd28454aabce52e5f8b1ec4876",
+    "src/football_manager/services/world_matches.py": "ca6367cb87bbe7335c194d7829ec763109b560b2cc8f8132ec79ad71b0b4f623",
+    "src/football_manager/domain/world_runner.py": "c6475daaf221ee3e20f18bc815664a8743e59ea1de1dca8b3baced4880000fac",
+    "tests/test_ts_24_11_ai_loans.py": "5ee432757617894a06fd80361cc873b0bc188bb41763d6a49a1dc9d3d436dfd4",
+    "tools/verify_ts2411_ai_loans_package.py": "951ce2961585b43a77968ade5ded9b3fca1d01598552ae114ca968cad1a9abc1",
+    "tools/stress_ts2411_ai_loans.py": "a1475b6b2c535043197c4776e3599c8099cd7af2c9df2bdcd664ec18e7a78e34",
+    "docs/TS_24_11_AI_LOANS.md": "a86b1299175951104b3889aecf677d6bb2b028593339a8b27d04c131556b400e",
+    "reports/ts2411_ai_loans.json": "647c40cc9c92e9a6ec84c8a5cda94090d0153ae09df14f9cafc067b6651816a7",
+    "TS_24_11_TEST_REPORT.md": "1f2b0b5d6d5338c17b69b7476d03a67712a71760e159e206ed6cc0b154393a66",
+    "TS_24_11_PATCH_INSTRUCTIONS.txt": "8dfc4d76f19f6e7588c12ddf6cc3633bf71e14e7db59a73601544c6a99bc7a93"
+  }
+}

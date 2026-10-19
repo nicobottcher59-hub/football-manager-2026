@@ -1,0 +1,20 @@
+{
+  "update": "TS-24.3.1 Scouting and Immersive Club Negotiation UX",
+  "base": "TS-24.3",
+  "save_graph_version": 14,
+  "files": 12,
+  "sha256": {
+    "TS_24_3_1_PATCH_INSTRUCTIONS.txt": "d5a6e53c988acd3d987f8b213890d669910a896fa2c0b37e8ce37d72e094b7e3",
+    "TS_24_3_1_TEST_REPORT.md": "5acfd34c3d78271d48fa48f15ec5aa7d1bb13b8945c7826171f8f4a53d6a7c44",
+    "frontend/portable/index.html": "f24631e9df2a4df200feefe9ab4107ed3375ec77ec68ad0bb9e9f6e6d51a0f62",
+    "frontend/portable/portable.js": "04e35cd7109ae0e6652f284ffd8a840770b1ae3f594d7c87f638ecc1e2f52e04",
+    "frontend/portable/transfers.js": "f2cb6268f81b2469ba8542347b2e905a064c884e0b6b42fd72eec609906fffde",
+    "frontend/portable/transfers.css": "dabe2532b0343bf1e81577a77f99f12f80f0b606c8085558be6349e8d942598b",
+    "frontend/public/squad/roster.js": "876f90637ec32bec63bc4b1a3eb0526a52ecd81689814e42d44acba17edb7de5",
+    "frontend/public/squad/squad.js": "80ad2a557615381cb81f0c07f0672e2c00253dbc3d21c389fa7c00923c8e2f09",
+    "src/football_manager/services/transfer_negotiation.py": "7dd388a5d2329c2b287b6090f7f2eab823f1117e3cb9eabaff4e71b9e0b45f68",
+    "tests/test_ts_24_3_1_scouting_flow.py": "d5d8523a99ed0d6b5b4c95ff63acb603dad60400473f7fd29216986602194201",
+    "tests/test_ts_24_3_transfer_negotiation.py": "eb669d9b4375966ee74a713bc3a857e1d5fc21ed7fa0be7b32b585fb650dd9db",
+    "tools/verify_ts2431_scouting_package.py": "654b7477ce4629647fbc3b893a798b17daa3147d758607730db27b6ca25d48ff"
+  }
+}

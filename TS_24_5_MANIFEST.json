@@ -1,0 +1,20 @@
+{
+  "update": "TS-24.5 Tactical Squad Depth & Autonomous AI Market",
+  "base": "TS-24.4",
+  "save_graph_version": 15,
+  "files": 12,
+  "sha256": {
+    "src/football_manager/services/ai_squad_planning.py": "cb9f33151e3ba06df11813b31d35bc7185ed378d470b23f0d8524b4878864641",
+    "src/football_manager/services/ai_transfer_market.py": "a29fa9d02542da3252ac92a1e444e6745bba2e8117c90aab77c4fb4c271858d8",
+    "src/football_manager/services/transfer_negotiation.py": "3ecfa1ef3de2500378cfc6263441e65cbc8df583b2dde417103e4b4e9bd81fd4",
+    "src/football_manager/ui_shell/world_squads.py": "e51e6c7912d13917bb69d45c606ca93e9f22abdac5b44b068a6b5889f7a87793",
+    "src/football_manager/ui_shell/progression.py": "2e5ba64e0089aabdbb585ccab6bcf99c3173b6fc7fadad56037b607170e1eaa5",
+    "frontend/portable/transfers.js": "7bebde7e62d986dc26744448fc8d2615e914de6df2086fa4c5352143e5c3817c",
+    "frontend/portable/world_squads.js": "3cc16146c773af8bfbfe60a6a912fe544f9d0b4e92dda520eec13a0f66dc5768",
+    "tests/test_ts_24_5_ai_squad_market.py": "a6af1c4484f756113accf5b06cc508eb80139119eafbddcd50370b177cc37485",
+    "tests/test_ts_24_3_transfer_negotiation.py": "4f1d8216d47bb5d83c1dbb12a661e07bbed93600ac475aa032cddf201ee64a4a",
+    "tools/verify_ts245_ai_market_package.py": "886fe51cf6aec40c2d1913d25be88bcee474ad2b2471eed0c6fa1141e24be0bb",
+    "TS_24_5_PATCH_INSTRUCTIONS.txt": "784803511444a4041bfd2e9e94bb9b9e969316f2f313f905c72533d8e9b7eca1",
+    "TS_24_5_TEST_REPORT.md": "5f29b8c1f2d9b05b16a5a136ca8fe45162416f06b0c1624c6962389f83f3dfdb"
+  }
+}

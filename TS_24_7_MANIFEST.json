@@ -1,0 +1,21 @@
+{
+  "update": "TS-24.7 Balance de largo plazo — auditoria 5, 10 y 20 temporadas",
+  "base": "TS-24.6",
+  "save_graph_version": 16,
+  "files": 14,
+  "sha256": {
+    "TS_24_7_LONG_HORIZON_REPORT.md": "8a1b6981dc77c40ff26c41bb341c77371aab9ae38fe2480c2db3d3eba032e4f7",
+    "TS_24_7_PATCH_INSTRUCTIONS.txt": "42bbb4b9eadce116d2694ed7a00a9581aeae38a62ae3ffc410d39c857c8f94d4",
+    "TS_24_7_TEST_REPORT.md": "b4995a0366ad544650e38ba7a62cda426625e670a3aaa08c688890168173f0e9",
+    "reports/ts247_long_horizon.json": "4416d55798c7d759c17a907968ec54eb6deb643b6ef6c91c723163b0fd2e4c5d",
+    "src/football_manager/services/loan_market.py": "89179d4cb6a092450216ce096811aecd354cd22192bd8a7467c2f27c6a50613b",
+    "src/football_manager/services/player_aging.py": "b9e0ed4fdadb54303859d9a52fb9aeaa504b5758fece96da7e70bb40de2de1a1",
+    "src/football_manager/services/player_development.py": "bdf1ad2f72e9b4aeb207645811337ab66d420d9f84c21c81fd5ba0c91ee7c579",
+    "src/football_manager/services/world_squads.py": "2d992cdb7b323e048b7165d352dd181ee594da8b22dd84073b58052347fada1d",
+    "src/football_manager/services/youth_academy.py": "81199fa5e31730dece5affca5adb1b6fdf31008540430d7b16a4e26808c0e993",
+    "tests/test_ts_24_7_long_horizon.py": "7b66b4eaeb1fd877b3318c4d1e8709eabcb6dbb77b0d58035050590505826a95",
+    "tools/stress_ts247_long_horizon.py": "f0c832b26aa7043080bcd85ef989a251deba4f4787b8c9d68aca4915d6ef13d9",
+    "tools/summarize_ts247_long_horizon.py": "4e80376a0daf42442cd10d3cee1146babe0c7312ab31fd6438869734a69420c4",
+    "tools/verify_ts247_balance_package.py": "4c4af182408bf486cea9b898d6aa27b9e3e55762a3f7d724008f8197bed9f369"
+  }
+}

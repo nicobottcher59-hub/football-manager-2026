@@ -1,0 +1,32 @@
+FM Project - UI-3.3.2 HOTFIX 2 - Club competitions + Other Leagues API
+
+REQUIRES: The portable UI with UI-3.3.2 and its previous separate-Other-Leagues hotfix installed.
+APPLY THIS ZIP AS A PATCH. Do not delete or recreate your game folder.
+
+1. GitHub Desktop: STAY on the current UI-3.3.2 branch (phase-ui-3-3-2-competition-explorer).
+   If it is already committed, create a separate hotfix branch from that commit.
+2. Stop ALL running UI server terminals (Ctrl+C). Do not just close the Chrome tab.
+3. Extract the contents of this ZIP over the GAME REPOSITORY ROOT (the directory containing README.md).
+   Preserve folders and accept replacements, ESPECIALLY:
+       src/football_manager/ui_shell/competitions.py
+       frontend/portable/competitions.js
+4. Start INICIAR_INTERFAZ_WINDOWS.bat and press Ctrl+Shift+R in Chrome.
+5. Open COMPETITIONS from the left sidebar. You should see exactly FOUR buttons:
+   Premier League / FA Cup / Carabao Cup / UEFA Champions League.
+6. Open OTHER LEAGUES (separate sidebar item). Choose:
+   Europe > National > England > Leagues > Third division => League One.
+   Europe > National > England > Leagues > Second division => Championship.
+   Europe > International => UEFA Europa League and Conference League.
+   Europe > National > Spain => a legitimate empty state (no Spanish league coded).
+7. Check the Carabao Cup bilateral bracket, +/- zoom, and right-side fixture list.
+8. Once all of these work in Windows, make the commit. Don't commit before testing.
+
+CAUSE OF 10/0 ISSUE: An older running Python backend used the UI-3.3 index format,
+which combined ten competitions under 'competitions' and provided no
+'other_competitions'. This hotfix re-delivers the correct Python index module,
+marks the API as schema_version=2, and makes JavaScript refuse that stale format.
+There are NO changes to FastMatchSimulator, match engine, season advancement,
+or existing fixtures/results. No Node/npm needed.
+
+Suggested Summary AFTER acceptance:
+fix(ui): sync club competition filters with Python index

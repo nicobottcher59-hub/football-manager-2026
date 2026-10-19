@@ -1,0 +1,27 @@
+FM PROJECT - UI-3.5.1 MATCHDAY VISUAL + DRAG/DROP HOTFIX
+
+BASE: UI-3.5 Pre-Match & Post-Match (fully applied).
+BRANCH: phase-ui-3-5-1-matchday-refinement
+
+1. Create the branch from the verified UI-3.5 branch in GitHub Desktop.
+2. Stop the game server (Ctrl+C).
+3. Extract this ZIP to the ROOT of your existing repository, preserving the
+   frontend/portable, docs and tests paths. Accept replacement of files.
+   It does NOT contain the entire game.
+4. Restart INICIAR_INTERFAZ_WINDOWS.bat (no Node.js or npm required).
+5. Force-refresh with Ctrl+Shift+R.
+
+CHECK:
+- Kit Settings: choose home/away colors using previews, click Save.
+- Match Tactics: seven bench players visible; drag bench to pitch.
+- Touch/click: select bench then click starter to replace.
+- Drag one starter over another; verify both players exchange slots.
+- Return to Pre-Match: weather/referee appear without technical warning.
+- Simulate quickly: goals, cards and event icons share the team's side.
+- Verify ordinary squad tactics remained unchanged.
+
+LIMITATIONS: This is UI-only. Game still has no persistent save, no in-match
+injury events or tackle counts, and no immersive match playback.
+
+PROPOSED COMMIT SUMMARY (only after you confirm it works):
+feat(ui): refine match kits, tactical drag-and-drop and event timeline

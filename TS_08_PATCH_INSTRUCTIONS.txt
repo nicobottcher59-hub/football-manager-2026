@@ -1,0 +1,23 @@
+TS-08 - SCORE & PERSISTENCE CONTRACTS
+
+Requires: TS-07.1 already applied/committed, preferably merged into main.
+
+GitHub Desktop branch: fix/ts-08-score-persistence-contracts
+Commit Summary: fix(persistence): validate scores and career archives before saving
+
+1. Starting from main with TS-07.1 integrated, create the branch above.
+2. Extract this ZIP into the football-manager-game root and preserve paths.
+3. Run the focused checks (Python; Node.js is not required):
+
+   python -m pytest -q -ra tests/test_ts_08_score_persistence_contracts.py tests/test_ts_07_1_match_lineup_integrity.py tests/test_ts_03_world_integrity.py
+
+4. Run the complete regression (recommended before committing):
+
+   python -m pytest -q -ra
+
+5. In the existing UI, play at least one match and verify score and winner.
+6. If the checks pass, commit with the summary above; push and merge to main.
+
+This patch validates results-only world/career archives; it does NOT implement
+full manager saves, change the database technology, or change any UX screen.
+For details see docs/TS_08_SCORE_PERSISTENCE_CONTRACTS.md.

@@ -1,0 +1,8 @@
+scenario,strength_gap,matches,home_points_per_match,home_goal_diff_per_match,home_xg_diff_per_match,home_xg_share_pct,home_win_pct,draw_pct,away_win_pct,underdog_win_pct,favorite_non_win_pct
+home_weaker_20_heterogeneous,-20,2,0.5,-1.5,0.41950000000000004,74.90205390003561,0.0,50.0,50.0,0.0,50.0
+home_weaker_10_heterogeneous,-10,2,1.5,0.5,-0.5304499999999999,30.83149640443754,50.0,0.0,50.0,50.0,50.0
+home_weaker_5_heterogeneous,-5,2,1.5,0.0,0.1287500000000001,59.16565814764718,50.0,0.0,50.0,50.0,50.0
+equal_heterogeneous,0,2,2.0,2.0,0.6141,73.43177655677657,50.0,50.0,0.0,,
+home_stronger_5_heterogeneous,5,2,2.0,0.5,0.35540000000000005,61.894243641231604,50.0,50.0,0.0,0.0,50.0
+home_stronger_10_heterogeneous,10,2,1.5,0.0,-0.41925,29.439458584669705,50.0,0.0,50.0,50.0,50.0
+home_stronger_20_heterogeneous,20,2,1.5,-1.5,-0.12460000000000004,46.140263924168266,50.0,0.0,50.0,50.0,50.0

@@ -1,0 +1,23 @@
+TS-12 — FAST MATCH DISCIPLINE CONSISTENCY
+
+Requiere main actualizado hasta TS-11, antes de aplicar este parche.
+
+BRANCH GitHub Desktop:
+fix/ts-12-fast-match-discipline-consistency
+
+SUMMARY:
+fix(match): enforce dismissals and coherent discipline statistics
+
+PASOS:
+1. Crear la branch desde main (TS-11 integrado).
+2. Extraer este ZIP en la raiz de football-manager-game; conservar las rutas.
+3. En PowerShell, ejecutar:
+   python -m pytest -ra tests/test_ts_12_fast_match_discipline.py
+   python -m pytest -ra tests/test_phase5_11b_fast_match_simulator.py
+   python -m pytest -ra
+4. Verificar cero fallos y revisar el partido desde la interfaz.
+5. Commit, publicar branch y mergear en main solo si todas las pruebas pasan.
+
+No instalar Node.js. No contiene el proyecto completo. No modifica la UX.
+Los partidos con expulsiones pueden arrojar resultados diferentes a la version
+anterior, porque las rojas ahora modifican los acontecimientos posteriores.

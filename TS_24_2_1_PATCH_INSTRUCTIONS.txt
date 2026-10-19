@@ -1,0 +1,30 @@
+TS-24.2.1 - Squad Contracts in Table / Collapsible Details
+INCREMENTAL PATCH (NOT THE FULL GAME)
+
+Required version: TS-24.2 - Contratos y Finanzas.
+This update does NOT require Node/npm, new Python packages, or a new career.
+
+WINDOWS INSTALLATION
+1. Close the game and its Python local server.
+2. Back up the project folder and any existing SQLite career save.
+3. Extract this ZIP into the PROJECT ROOT, the same folder containing
+   INICIAR_INTERFAZ_WINDOWS.bat. Keep the internal folder paths and
+   replace the files. Do not nest an additional folder.
+4. From a PowerShell terminal opened in the project root, run:
+       python tools/verify_ts2421_squad_package.py
+5. Optional focused tests:
+       python -m pytest -ra tests/test_ts_24_2_1_squad_contract_display.py
+6. Start INICIAR_INTERFAZ_WINDOWS.bat, refresh the page (Ctrl + F5),
+   and open Squad > General.
+
+BEHAVIOR
+- New Contract column next to Market value. Shows the real signed weekly
+  wage and expiration date without opening the player profile.
+- Click player name/portrait or the + button to expand the profile.
+- Click the same button (now -) or Close details to collapse it.
+- Player management has its own control inside the expanded profile.
+- Contract values are read from existing TS-24.2 Python data, not guessed.
+- No finance/gameplay/save schema changes. Current save version remains 13.
+
+BRANCH: fix/ts-24-2-1-squad-contract-and-collapse
+SUMMARY: fix(squad): show contracts in table and allow closing player details

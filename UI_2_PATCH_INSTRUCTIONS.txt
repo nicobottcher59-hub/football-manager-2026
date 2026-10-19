@@ -1,0 +1,37 @@
+FM PROJECT - UI-2 Squad, Roles & Tactics (parche incremental)
+
+REQUISITOS
+- Repositorio Python original Phase 6.7 con los dos parches UI-1 aplicados:
+  1. FM_Project_UI-1_Dashboard_React_PATCH.zip
+  2. FM_Project_UI-1_Portable_SIN_NODE_PATCH.zip
+- Python compatible con el proyecto (el mismo que usas para ejecutar pytest).
+- NO necesitas instalar Node.js, npm, Vite, Electron ni paquetes nuevos.
+
+INSTALACION EN WINDOWS
+1. Desde GitHub Desktop crea una branch nueva desde la branch que contiene UI-1:
+   phase-ui-2-squad-tactics-python
+2. Extrae este ZIP y copia SU CONTENIDO directamente en la raiz de tu
+   repositorio, donde estan README.md, README_DEV.md y la carpeta src.
+3. Permite reemplazar archivos existentes. NO borres carpetas previas.
+4. Haz doble clic en INICIAR_INTERFAZ_WINDOWS.bat.
+5. Abre Squad: selecciona formacion y jugadores; pulsa un titular para
+   modificar roles/instrucciones; entra en Edit Tactics para la vista de
+   fichitas con el UNICO selector Con/Sin posesion.
+
+LIMITACIONES IMPORTANTES
+- Squad y Tactics modifican una sesion de desarrollo Python, pero NO guardan
+  esos cambios al cerrar la ventana. Aun no hay save completo de manager.
+- Home/Continue siguen siendo una demostracion, no hay avance real de dias.
+- Pelota parada todavia NO permite asignar lanzadores.
+- La cancha de fichitas es un diagrama explicativo, no la simulacion 2D.
+- La parte de React/TypeScript original no se borra, pero la visualizacion
+  compartida de Squad/Tactics se sirve desde frontend/public/squad.
+
+TESTS (opcional, PowerShell desde la raiz)
+  python -m pytest -q tests/test_ui_shell_squad.py
+  python -m pytest -q tests/test_phase6_0_development_ui.py tests/test_tactics.py tests/test_phase6_0b_role_ovr_familiarity.py
+
+DOCUMENTACION
+  docs/PHASE_UI_2_SQUAD_TACTICS.md
+
+NO HAGAS COMMIT TODAVIA. Proba manualmente en Windows y avisame si funciona.

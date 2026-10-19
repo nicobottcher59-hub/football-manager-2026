@@ -1,0 +1,405 @@
+{
+  "package": "TS-21.3-Envejecimiento-Lesiones-y-Retiro",
+  "python": "3.13.5",
+  "platform": "Linux",
+  "no_node_install": {
+    "node_on_path": false,
+    "npm_on_path": false,
+    "python": "3.13.5",
+    "platform": "linux"
+  },
+  "summaries": {
+    "fresh": "167 passed in 49.46s",
+    "world_tactics_regression": "352 passed, 1 skipped in 833.15s (0:13:53)",
+    "presentation_save_regression": "2 failed, 133 passed in 465.83s (0:07:45)",
+    "presentation_recheck": "5 passed in 30.65s"
+  },
+  "runs": {
+    "fresh": {
+      "returncode": 0,
+      "seconds": 51.45469627600005,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "pytest",
+        "-ra",
+        "--tb=short",
+        "tests/test_ts_21_3_player_aging.py",
+        "tests/test_ts_21_2_player_development.py"
+      ]
+    },
+    "world_tactics_regression": {
+      "returncode": 0,
+      "seconds": 835.777142465,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "pytest",
+        "-ra",
+        "--tb=short",
+        "tests/test_ts_21_english_world.py",
+        "tests/test_ts_21_1_1_performance_calendar.py",
+        "tests/test_ts_01_atomic_world_operations.py",
+        "tests/test_ts_03_world_integrity.py",
+        "tests/test_ui34_daily_progression.py",
+        "tests/test_ts_19_tactical_studio.py",
+        "tests/test_ts_19_tactical_match.py",
+        "tests/test_ts_19_placement_heatmap.py",
+        "tests/test_ts_20_dressing_room.py",
+        "tests/test_ts_20_integration.py"
+      ]
+    },
+    "presentation_save_regression": {
+      "returncode": 1,
+      "seconds": 471.3951480789999,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "pytest",
+        "-ra",
+        "--tb=short",
+        "tests/test_ts_22_presentation.py",
+        "tests/test_ui35_matchday.py",
+        "tests/test_ui351_matchday_refinements.py",
+        "tests/test_phase5_11e_condition_recovery.py",
+        "tests/test_ts_04_managed_match_transactions.py",
+        "tests/test_ts_11_session_application_reliability.py",
+        "tests/test_ts_16_application_architecture.py",
+        "tests/test_ts_15_career_save_reliability.py"
+      ]
+    },
+    "presentation_recheck": {
+      "returncode": 0,
+      "seconds": 32.62563305899994,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "-m",
+        "pytest",
+        "-ra",
+        "--tb=short",
+        "tests/test_ts_22_presentation.py::test_save_current_version_roundtrip_has_exact_stats_and_deterministic_continuation",
+        "tests/test_ui35_matchday.py"
+      ]
+    }
+  },
+  "season": {
+    "mode": "season",
+    "seasons": [
+      {
+        "season": "2026/27",
+        "fixtures": 2959,
+        "managed_matches": 51,
+        "completed_medical_episodes": 862,
+        "active_medical_episodes": 7,
+        "retired_this_transition": 33,
+        "total_retired": 33,
+        "active_players": 2035,
+        "registered_clubs": 94,
+        "smallest_squad": 21,
+        "deferred_retirements": 2
+      },
+      {
+        "season": "2027/28",
+        "fixtures": 2959,
+        "managed_matches": 48,
+        "completed_medical_episodes": 1726,
+        "active_medical_episodes": 5,
+        "retired_this_transition": 31,
+        "total_retired": 64,
+        "active_players": 2048,
+        "registered_clubs": 96,
+        "smallest_squad": 20,
+        "deferred_retirements": 5
+      }
+    ],
+    "next_date": "2028-08-22",
+    "seconds": 188.853,
+    "identities_birthdays_potential_preserved": true,
+    "sqlite_load_next_match_identical": true,
+    "limitation": "Existing external entrants can add clubs/players at rollover. No Newgens, no constant-population claim."
+  },
+  "cohort": {
+    "mode": "cohort",
+    "players": 140,
+    "years": 20,
+    "seconds": 11.146,
+    "yearly": [
+      {
+        "year": 1,
+        "mean_reference_ovr": 66.763,
+        "mean_pace": 66.136,
+        "mean_vision": 66.45,
+        "retirement_requests": 9
+      },
+      {
+        "year": 2,
+        "mean_reference_ovr": 67.346,
+        "mean_pace": 66.021,
+        "mean_vision": 66.893,
+        "retirement_requests": 19
+      },
+      {
+        "year": 3,
+        "mean_reference_ovr": 67.674,
+        "mean_pace": 65.657,
+        "mean_vision": 67.193,
+        "retirement_requests": 23
+      },
+      {
+        "year": 4,
+        "mean_reference_ovr": 67.837,
+        "mean_pace": 64.979,
+        "mean_vision": 67.364,
+        "retirement_requests": 26
+      },
+      {
+        "year": 5,
+        "mean_reference_ovr": 67.774,
+        "mean_pace": 64.043,
+        "mean_vision": 67.443,
+        "retirement_requests": 32
+      },
+      {
+        "year": 6,
+        "mean_reference_ovr": 67.53,
+        "mean_pace": 62.893,
+        "mean_vision": 67.414,
+        "retirement_requests": 43
+      },
+      {
+        "year": 7,
+        "mean_reference_ovr": 67.142,
+        "mean_pace": 61.586,
+        "mean_vision": 67.329,
+        "retirement_requests": 50
+      },
+      {
+        "year": 8,
+        "mean_reference_ovr": 66.642,
+        "mean_pace": 60.086,
+        "mean_vision": 67.214,
+        "retirement_requests": 55
+      },
+      {
+        "year": 9,
+        "mean_reference_ovr": 66.028,
+        "mean_pace": 58.393,
+        "mean_vision": 66.979,
+        "retirement_requests": 61
+      },
+      {
+        "year": 10,
+        "mean_reference_ovr": 65.324,
+        "mean_pace": 56.593,
+        "mean_vision": 66.686,
+        "retirement_requests": 65
+      },
+      {
+        "year": 11,
+        "mean_reference_ovr": 64.557,
+        "mean_pace": 54.593,
+        "mean_vision": 66.307,
+        "retirement_requests": 68
+      },
+      {
+        "year": 12,
+        "mean_reference_ovr": 63.719,
+        "mean_pace": 52.407,
+        "mean_vision": 65.943,
+        "retirement_requests": 73
+      },
+      {
+        "year": 13,
+        "mean_reference_ovr": 62.798,
+        "mean_pace": 50.1,
+        "mean_vision": 65.493,
+        "retirement_requests": 81
+      },
+      {
+        "year": 14,
+        "mean_reference_ovr": 61.772,
+        "mean_pace": 47.657,
+        "mean_vision": 64.993,
+        "retirement_requests": 91
+      },
+      {
+        "year": 15,
+        "mean_reference_ovr": 60.709,
+        "mean_pace": 45.036,
+        "mean_vision": 64.457,
+        "retirement_requests": 95
+      },
+      {
+        "year": 16,
+        "mean_reference_ovr": 59.614,
+        "mean_pace": 42.343,
+        "mean_vision": 63.943,
+        "retirement_requests": 101
+      },
+      {
+        "year": 17,
+        "mean_reference_ovr": 58.441,
+        "mean_pace": 39.636,
+        "mean_vision": 63.264,
+        "retirement_requests": 109
+      },
+      {
+        "year": 18,
+        "mean_reference_ovr": 57.226,
+        "mean_pace": 36.814,
+        "mean_vision": 62.629,
+        "retirement_requests": 121
+      },
+      {
+        "year": 19,
+        "mean_reference_ovr": 55.982,
+        "mean_pace": 34.171,
+        "mean_vision": 61.907,
+        "retirement_requests": 124
+      },
+      {
+        "year": 20,
+        "mean_reference_ovr": 54.687,
+        "mean_pace": 31.664,
+        "mean_vision": 61.107,
+        "retirement_requests": 126
+      }
+    ],
+    "bounds_and_potential_preserved": true,
+    "limitation": "Isolated individuals, kept for observation after a retirement request. No new intake and NOT proof of stable population/ratings."
+  },
+  "benchmark": {
+    "mode": "benchmark",
+    "rows": [
+      {
+        "players": 2024,
+        "mode": "growth_only",
+        "samples_seconds": [
+          0.2869,
+          0.2433,
+          0.187
+        ],
+        "median_seconds": 0.2433
+      },
+      {
+        "players": 2024,
+        "mode": "growth_and_aging",
+        "samples_seconds": [
+          0.3417,
+          0.3311,
+          0.3559
+        ],
+        "median_seconds": 0.3417
+      },
+      {
+        "players": 10000,
+        "mode": "growth_only",
+        "samples_seconds": [
+          1.3616,
+          1.4028,
+          1.4032
+        ],
+        "median_seconds": 1.4028
+      },
+      {
+        "players": 10000,
+        "mode": "growth_and_aging",
+        "samples_seconds": [
+          2.0564,
+          2.0696,
+          2.0653
+        ],
+        "median_seconds": 2.0653
+      }
+    ],
+    "limitation": "Isolated monthly calculation. Not end-to-end Continue/Windows measurements."
+  },
+  "browser": {
+    "status": "failed_or_blocked",
+    "checks": [],
+    "js_errors": [],
+    "error": "Page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at http://127.0.0.1:34955/portable/match.html\nCall log:\n  - navigating to \"http://127.0.0.1:34955/portable/match.html\", waiting until \"networkidle\"\n"
+  },
+  "syntax": {
+    "javascript": [
+      "frontend/portable/match.js",
+      "frontend/public/squad/presentation.js"
+    ],
+    "syntax_check": "node --check in the build environment",
+    "passed": true,
+    "node_required_by_user": false
+  },
+  "unchanged_formulas": [
+    {
+      "path": "src/football_manager/domain/attributes.py",
+      "sha256": "8414a1bfcb55783f12caa6ec0637b8140d0a579d01bfbdc7997fa345f3f62521",
+      "unchanged": true
+    },
+    {
+      "path": "src/football_manager/domain/conditioning.py",
+      "sha256": "e8b82a92e275e0104a1f64cb7cac4638a92e9ba6ca6299ef17f4bcf892e36b9b",
+      "unchanged": true
+    },
+    {
+      "path": "src/football_manager/domain/player_ratings.py",
+      "sha256": "be53b954614538c0d955d3e6a3831b31c48bc11d0b2a3c4ab99f1070ec79f247",
+      "unchanged": true
+    },
+    {
+      "path": "src/football_manager/domain/roles.py",
+      "sha256": "f7a4ccd7a8a1db63fd8fdb2a0c40bf128d79eae7390c5d81d8c75c588fa99db7",
+      "unchanged": true
+    },
+    {
+      "path": "src/football_manager/fast_simulation/__init__.py",
+      "sha256": "c04f5db5dce5ecf00e1e8b4f3d79d9c66b12c1e1ed4cd98f5567de6483daecf6",
+      "unchanged": true
+    },
+    {
+      "path": "src/football_manager/fast_simulation/conditioning.py",
+      "sha256": "0c7e567ad0b9f378e002ff7a12d804e832bbae5a616d0882f33509eee158335d",
+      "unchanged": true
+    },
+    {
+      "path": "src/football_manager/fast_simulation/engine.py",
+      "sha256": "2dd15723fe946d0b3a0f49b16730585567b2cb75388cecfc5bf2ee72c05460ea",
+      "unchanged": true
+    },
+    {
+      "path": "src/football_manager/fast_simulation/models.py",
+      "sha256": "df814ea713aa2d59f6ad54a0a45979fac359d774fdac0f445c3b312c65df091c",
+      "unchanged": true
+    },
+    {
+      "path": "src/football_manager/fast_simulation/plans.py",
+      "sha256": "7cc7b47978cda69d41cae577b7de58f9ead6e6b1f1545da95b255653461b33e9",
+      "unchanged": true
+    },
+    {
+      "path": "src/football_manager/fast_simulation/profiles.py",
+      "sha256": "3372a66117b3d48f8628a8123e7615c75cc67c41316334e4961fc7a276720122",
+      "unchanged": true
+    },
+    {
+      "path": "src/football_manager/fast_simulation/randomness.py",
+      "sha256": "b61036213d63365f63da6e79ff40d6dfe5dfb6c45cf41ae253ff22278d34e01d",
+      "unchanged": true
+    },
+    {
+      "path": "src/football_manager/fast_simulation/tactical_coverage.py",
+      "sha256": "44233feaa06fbb0148b9f5c3a9a0ba41b78240c681b3c2ee4618324f88669dd6",
+      "unchanged": true
+    },
+    {
+      "path": "src/football_manager/fast_simulation/tactical_effects.py",
+      "sha256": "9ed020eee747f3174834474da875b64d0803476320d8a842661d7bdd991eaee3",
+      "unchanged": true
+    }
+  ],
+  "limitations": [
+    "No native Windows test",
+    "No complete repository suite",
+    "Browser navigation blocked before page load",
+    "No Newgens/demographic equilibrium validation"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "update": "TS-23.1 Youth Academy polish and scout recruitment",
+  "base": "TS-23",
+  "save_graph_version": 11,
+  "files": 15,
+  "sha256": {
+    "TS_23_1_PATCH_INSTRUCTIONS.txt": "63060053ead52a0e6fa2bc3027498b1d42e33511d580f9f91ecba5c7dd823304",
+    "TS_23_1_TEST_REPORT.md": "895e734965d477c7960478b0f243d5e75d2a892c71b7c50d6f10c955923be85f",
+    "frontend/portable/youth_academy.js": "ede697b993891f89e258543b7942a050c2e81f04babb64a33242172ad9aa8a1d",
+    "frontend/portable/youth_academy.css": "87596261841cad8fc43deead56eecb5c62ef5928154cb15e5e466af2d66db1e7",
+    "src/football_manager/domain/youth_academy.py": "23f9990fc87572d382f0cad2e6d983a6f6e4cc4c58625c134475255dc30d2d99",
+    "src/football_manager/services/youth_academy.py": "9cfcbe78753b6d4a1e19d81551190ba79566eea30e0da189e9c1f3b044a49063",
+    "src/football_manager/persistence/session_codec.py": "c66cb0f8a4dd0d937047a8f85dbedc4bff2c699827203dc820697273db067b8b",
+    "src/football_manager/persistence/manager_career.py": "ccb19c2c8ca3894a104cf1e7490fb7ba73b67096ac9050f42d110d53ed30b227",
+    "tests/test_ts_23_1_academy_polish.py": "4ce96399745b8c1df308572e2dfd5c394010bd2e501ca581da68dc87f5e358de",
+    "tests/test_ts_23_youth_academy.py": "f6329612b65f78c62d72c003d50caed62edf6893893bceeed00410ffd72b968f",
+    "tests/test_ts_21_2_player_development.py": "35fc4ce5781ffacb52231eaa03964f27d854e0054429a6363b3230e2a6f7fd88",
+    "tests/test_ts_21_3_player_aging.py": "88f7f714db5054154646a5cc50a9ee7d4dd892719d89b6aebbee2611c45e2ade",
+    "tests/test_ts_21_4_5_world_balance.py": "b983b93f6d076d1631b68d210508f8aaebc17d59e0e088795db8aa6f8f40bbc0",
+    "tests/test_ts_22_presentation.py": "92b9204928c56f9027b0f30a453a248298e4b52a792d60f7285a362f948d8e1f",
+    "tools/verify_ts231_academy_package.py": "720d44457adf0530e3195e0be9a6e6e3d1d8929838675f98bd0b34ea46feb17c"
+  }
+}

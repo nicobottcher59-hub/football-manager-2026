@@ -1,0 +1,14 @@
+{
+  "update": "TS-23.2 U17/U21 formation board and avatar pass",
+  "base": "TS-23.1",
+  "save_graph_version": 11,
+  "files": 6,
+  "sha256": {
+    "TS_23_2_PATCH_INSTRUCTIONS.txt": "843e13966f87e09943f1e239939fbfbcccbf1aca9f85e95d50cd6d5ffc8c9041",
+    "TS_23_2_TEST_REPORT.md": "2892079a094f9444640de64931cdd0bc3b14652d0f9aeb7e64de40999499338b",
+    "frontend/portable/youth_academy.js": "75d0316c376254719ebb795e4992a25e1b37913a7b77b2a2ef84a2137e6ae309",
+    "frontend/portable/youth_academy.css": "ac4b211a3251fca69015ea929d1096f66a0b47f0b77307c48968e64349918b31",
+    "tests/test_ts_23_2_u17_u21_layout.py": "4724664084ba3907146ab8e80cfcdbcfc535cfaa21a5f199f308b56ad635d3cb",
+    "tools/verify_ts232_package.py": "32d780ca21415870fb750e756715ae712c5b0aee7af4674be6d1e0c46119a29c"
+  }
+}

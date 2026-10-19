@@ -1,0 +1,33 @@
+TS-18.4 - MATCH ENGINE CONSISTENCY
+
+PREREQUISITE
+main includes TS-17.1 to TS-17.4 and TS-18.1 to TS-18.3.
+This ZIP is an INCREMENTAL patch, not the full game.
+
+BRANCH
+fix/ts-18-4-match-engine-consistency
+
+SUMMARY
+fix(match): reconcile defensive ratings and preserve goalkeeper and penalty continuity
+
+INSTALL
+1. Create the branch above from updated main in GitHub Desktop.
+2. Extract this ZIP into the root of the repository, preserving paths.
+3. Run focused and full pytest checks in Windows PowerShell.
+4. Commit with the Summary above, then merge only after tests pass.
+
+FOCUSED TESTS
+python -m pytest -ra tests/test_ts_18_4_match_engine_consistency.py
+python -m pytest -ra tests/test_match_flow.py tests/test_ts_12_fast_match_discipline.py tests/test_phase5_11b_fast_match_simulator.py tests/test_ts_18_2_roles_position_integrity.py tests/test_ts_18_4_match_engine_consistency.py
+
+FULL SUITE
+python -m pytest -ra
+
+CHANGES
+- Keeper saves/conceded and defensive clean sheets count only while player was on pitch.
+- Goalkeeper red card in the 2D engine keeps an active outfield player in goal.
+- Long 2D penalty shootouts cannot be resolved by an unrecorded random goal.
+- No OVR/ACT coefficient changes; no new controls, mechanics or UI elements.
+
+DETAILS
+docs/TS_18_4_MATCH_ENGINE_CONSISTENCY.md

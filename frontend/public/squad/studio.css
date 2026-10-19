@@ -1,0 +1,128 @@
+/* TS-19: confined to Edit Tactics. Lineup card geometry remains untouched. */
+.is-tactical-editor{--ts-cyan:#51d9f9;--ts-gold:#edc67d;--ts-ink:#081c2c;--ts-muted:#8eabc0}
+.is-tactical-editor .fm-heading strong{letter-spacing:-.6px}
+.ts-library{margin:0 0 14px;background:linear-gradient(112deg,#123750,#0c2238 64%,#102c40);border-color:#31536b;overflow:hidden}
+.ts-library-top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 18px}
+.ts-library-identity{display:flex;align-items:center;gap:12px;min-width:0}
+.ts-studio-icon{display:grid;place-items:center;flex:0 0 39px;height:39px;font-size:28px;color:var(--ts-cyan);background:#0c263c;border:1px solid #28718a;border-radius:12px}
+.ts-eyebrow{font-size:9px;letter-spacing:1.6px;font-weight:750;color:#8fc5d9}
+.ts-library-name{font-size:16px;font-weight:750;margin-top:4px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.ts-save-state{font-size:10px;border-radius:20px;padding:3px 8px;color:#8ee3c3;background:#1b6a532a;border:1px solid #42887950;font-weight:500}
+.ts-save-state.dirty{color:#e9ca88;border-color:#91783b66;background:#a38a3130}
+.ts-library-buttons,.ts-library-save,.ts-library-manage{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ts-library button,.ts-board-tools button,.ts-position-control button{border:1px solid #35566d;background:#102a40;color:#d6eafa;border-radius:7px;padding:8px 12px;cursor:pointer;font:inherit;font-size:12px}
+.ts-library button:hover,.ts-board-tools button:hover,.ts-position-control button:hover{border-color:#51b9d8;background:#193d55}
+.ts-library button:disabled,.ts-board-tools button:disabled{opacity:.4;cursor:default}
+.ts-library-buttons button span{display:inline-block;padding:1px 5px;background:#234a61;border-radius:4px;font-size:10px;margin-left:5px}
+.ts-library-buttons .ts-save-quick{background:#128aaf;color:white;border-color:#3fc7e5}
+.ts-plan-strip{display:flex;align-items:center;gap:12px;border-top:1px solid #244657;background:#071b2b66;padding:9px 18px}
+.ts-plan{display:flex;flex:1;min-width:0;align-items:center;border:1px solid #26465c;border-radius:8px;background:#0c2238;overflow:hidden}
+.ts-plan.active{border-color:#48b8c0;background:#143444}
+.ts-plan>button:first-child{border:0;border-right:1px solid #28485d;border-radius:0;background:#1b3e57;width:36px;padding:13px 0;color:#6fe3ed}
+.ts-plan>div{padding:4px 8px;min-width:0;flex:1}
+.ts-plan small{font-size:9px;color:#789fb4}
+.ts-plan select{display:block;width:100%;max-width:100%;border:0;background:transparent;color:#e3eff9;font:inherit;font-size:11px;padding:2px 0}
+.ts-plan select option,.ts-library select option,.ts-lab-opponent select option{background:#112d42}
+.ts-plan .ts-plan-apply{padding:8px;border:0;background:transparent;color:#72c8df}
+.ts-library-body{border-top:1px solid #294c62;padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px;background:#071c2c}
+.ts-library label,.ts-rule label{display:flex;flex-direction:column;gap:5px;color:#a5c2d6;font-size:11px;flex:1;min-width:130px}
+.ts-library input,.ts-library-manage select,.ts-rule select,.ts-position-control select{min-height:35px;border:1px solid #2b516e;border-radius:6px;background:#091d30;padding:7px 10px;color:#e9f4ff;font-size:12px;min-width:0;width:100%}
+.ts-library-manage>div{display:flex;gap:5px}
+.ts-library-body p{grid-column:1/-1;margin:0;color:#7c9bb0;font-size:10px;line-height:1.6}
+.ts-schedule{padding:16px 18px;border-top:1px solid #2a4d63}
+.ts-schedule-heading{display:flex;gap:12px;align-items:center;margin-bottom:12px;font-size:13px}
+.ts-schedule-heading small{font-size:10px;color:#89a9be}
+.ts-rule{display:flex;gap:10px;align-items:flex-end;margin:8px 0}
+.ts-rule label:first-child{flex:0 0 80px;min-width:70px}
+.ts-rule-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.ts-rule-actions span{color:#8caac0;font-size:10px}
+.is-tactical-editor .fm-content-grid{grid-template-columns:minmax(0,1.48fr) minmax(330px,.82fr);gap:16px;align-items:start}
+.is-tactical-editor .fm-tactics-grid .fm-pitch-panel{min-height:0;overflow:hidden;border-color:#31526a;box-shadow:0 12px 35px #0003}
+.is-tactical-editor .fm-tactics-grid .fm-pitch{min-width:0;min-height:440px;height:clamp(440px,60vh,670px);flex:none;background:repeating-linear-gradient(0deg,#174f491a 0 10%,#104f561a 10% 20%),radial-gradient(ellipse at 50% 40%,#123b43,#08272d 80%);box-shadow:inset 0 0 80px #0005}
+.is-tactical-editor .fm-pitch:after{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(#91ccb507 1px,transparent 1px),linear-gradient(90deg,#91ccb507 1px,transparent 1px);background-size:10% 10%;z-index:0}
+.is-tactical-editor .fm-pitch-lines{inset:3%;opacity:.6;z-index:1}
+.is-tactical-editor .fm-shape-layer{z-index:3;pointer-events:none}
+.ts-overlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:.95}
+.is-tactical-editor .fm-pitch-caption{background:linear-gradient(90deg,#0c253c,#133747);font-size:13px;min-height:42px}
+.is-tactical-editor .fm-pitch-caption-right{font-size:9px;letter-spacing:.3px;color:#7eabbb}
+.is-tactical-editor .ts-token{pointer-events:auto;position:absolute;width:34px;height:34px;transform:translate(-50%,-50%);border:1.5px solid #97eeff;border-radius:50%;background:linear-gradient(160deg,#239fcc,#066ea5);box-shadow:0 4px 14px #0008,0 0 0 4px #41b9e51a;color:#fff;cursor:grab;touch-action:none;user-select:none;padding:0;z-index:3;transition:left .2s,top .2s,box-shadow .15s}
+.is-tactical-editor .ts-token.keeper{cursor:default;touch-action:auto;background:linear-gradient(155deg,#c9a147,#89702c);border-color:#f1d899;box-shadow:0 0 0 4px #ddbc4115,0 4px 14px #0008}
+.ts-token-core{font-weight:850;font-size:10px;letter-spacing:.2px;display:block;text-shadow:0 1px 4px #064260}
+.ts-token-name{position:absolute;left:50%;top:calc(100% + 4px);transform:translateX(-50%);background:#061c2cc4;color:#bfd9e8;border:1px solid #28546599;padding:2px 6px;font-size:9px;border-radius:4px;max-width:84px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;pointer-events:none}
+.ts-token-name.above{top:auto;bottom:calc(100% + 4px)}
+.is-tactical-editor .ts-token:hover,.is-tactical-editor .ts-token:focus-visible,.is-tactical-editor .ts-token.selected{outline:2px solid #9ff1f8;outline-offset:5px;z-index:5;box-shadow:0 0 24px #49c4ed66}
+.is-tactical-editor .ts-token.ts-manual:after{content:"";position:absolute;width:5px;height:5px;border:1px solid #e7edf0;border-radius:50%;right:-3px;top:-1px;background:#f0c975}
+.is-tactical-editor.ts-dragging .ts-token{transition:none!important;cursor:grabbing}
+.ts-analysis-controls{display:flex;align-items:center;gap:12px;padding:12px 14px 10px;border-top:1px solid #335261;background:#091e2f}
+.ts-analysis-buttons{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ts-analysis-buttons button,.ts-clear-layer{color:#a9c6d8;font:inherit;font-size:11px;display:flex;align-items:center;gap:6px;padding:7px 11px;border:1px solid #264c61;border-radius:6px;background:#112d40;cursor:pointer}
+.ts-analysis-buttons button span{font-size:16px;line-height:15px;color:#70c6e5}
+.ts-analysis-buttons button.active{background:#165064;color:#e8feff;border-color:#4bd1dc;box-shadow:0 0 0 1px #4bd1dc24}
+.ts-analysis-buttons button[data-mode=vulnerabilities].active{border-color:#de8588;background:#52333e}
+.ts-analysis-buttons button[data-mode=laboratory].active{border-color:#ddb16a;background:#423d30}
+.ts-clear-layer{margin-left:auto;padding:4px 8px;font-size:18px;background:transparent;border-color:transparent}
+.ts-overlay-summary{padding:0 14px 12px;background:#091e2f;min-height:49px}
+.ts-overlay-summary>[data-studio-summary]{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:10px;color:#8eacbf;line-height:1.5}
+.ts-overlay-summary small{display:block;width:100%;font-size:9px;color:#6e93a9}
+.ts-overlay-summary b{color:#d2e5ef}
+.ts-legend{display:flex;align-items:center;gap:6px;color:#bcd1df}
+.ts-legend i{display:inline-block;width:33px;height:6px;border-radius:3px}
+.ts-legend .coverage{background:linear-gradient(90deg,#143b3b,#41e1b8)}
+.ts-legend .vulnerabilities{background:linear-gradient(90deg,#352b39,#f07981)}
+.ts-legend .laboratory{background:linear-gradient(90deg,#46c7ee,#253f50,#e6b56a)}
+.ts-overlay-summary .ts-warn{color:#efadac;font-weight:550}.ts-overlay-summary .ts-safe{color:#72cbb0;font-weight:550}
+.ts-lab-opponent{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:10px;color:#a1bdce}
+.ts-lab-opponent[hidden]{display:none}
+.ts-lab-opponent select{max-width:360px;min-width:0;padding:5px 8px;background:#102d41;border:1px solid #315168;color:#cee4ee;border-radius:5px;font-size:10px}
+.ts-board-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#0b2133;border-top:1px solid #214357;padding:10px 14px;font-size:9px;color:#81a1b6}
+.ts-board-tools>div{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.ts-board-tools button{font-size:9px;padding:5px 7px}
+.is-tactical-editor .fm-tactic-controls{min-height:0;max-height:calc(60vh + 230px);border-color:#31516b}
+.is-tactical-editor .fm-tactic-controls>.fm-panel-head{background:linear-gradient(100deg,#13334b,#16334e);border-bottom:1px solid #31516b}
+.is-tactical-editor .fm-control-section{padding:14px 15px}
+.is-tactical-editor .fm-control-section h3{font-size:14px;letter-spacing:.3px;color:#d4e9f7;border-left:3px solid #5accc7;padding-left:10px}
+.is-tactical-editor .fm-controls-grid{gap:8px}
+.is-tactical-editor .fm-control{background:linear-gradient(145deg,#153147,#10273c);border:1px solid #2b455b;border-radius:7px;padding:9px 10px;box-shadow:none}
+.is-tactical-editor .fm-control:nth-child(4n+3),.is-tactical-editor .fm-control:nth-child(4n+4){background:#0b2337}
+.is-tactical-editor .fm-control-head{min-height:27px;margin:0 0 4px}
+.is-tactical-editor .fm-control-head label{font-size:11px;color:#c2d7e6}
+.is-tactical-editor .fm-control-head strong{font-size:9px;color:#61cfdb}
+.is-tactical-editor .fm-control input[type=range]{accent-color:#57caca;margin:5px 0}
+.is-tactical-editor .fm-scale{font-size:7px;color:#638196}
+.is-tactical-editor .fm-preset{background:#0b2336}
+.is-tactical-editor .fm-style-panel{background:#0d2437;opacity:.95}
+.is-tactical-editor .fm-style-panel .fm-panel-head{min-height:32px;padding:8px 12px}
+.is-tactical-editor .fm-style-panel h2{font-size:12px}
+.is-tactical-editor .fm-style-grid>div{background:transparent;border-color:#284354}
+.ts-position-control{padding:13px 15px;border-bottom:1px solid #2a4a60;background:#0c293d}
+.ts-position-control label{display:flex;gap:10px;align-items:center;font-size:12px;color:#cbe2ef}
+.ts-position-control select{margin-left:auto;max-width:140px}
+.ts-position-control p{font-size:10px;line-height:1.5;color:#8aaabc;margin:8px 0}
+.ts-position-control button{font-size:10px;padding:6px 8px}
+.is-tactical-editor button:focus-visible,.is-tactical-editor select:focus-visible,.is-tactical-editor input:focus-visible{outline:2px solid #75d4e8;outline-offset:2px}
+@media(max-width:1150px){.is-tactical-editor .fm-content-grid{grid-template-columns:minmax(0,1.25fr) minmax(295px,1fr)}.ts-library-top{flex-wrap:wrap}.ts-plan-strip{gap:7px}.ts-plan-strip>.ts-eyebrow{display:none}.ts-analysis-controls>.ts-eyebrow{display:none}.ts-board-tools{flex-wrap:wrap}.ts-library-body{grid-template-columns:1fr}}
+@media(max-width:980px){.is-tactical-editor .fm-content-grid{grid-template-columns:1fr}.is-tactical-editor .fm-tactic-controls{max-height:none}.is-tactical-editor .fm-tactics-grid .fm-pitch{height:560px}.ts-library-buttons{margin-left:auto}.ts-token-name{font-size:10px}}
+@media(max-width:600px){.ts-library-top{padding:12px}.ts-library-name{font-size:14px}.ts-library-buttons button{font-size:10px;padding:7px}.ts-plan-strip{padding:9px;flex-wrap:wrap}.ts-plan{flex:1 1 100%}.ts-plan>div{display:flex;align-items:center;gap:12px}.ts-plan small{white-space:nowrap}.ts-analysis-buttons button{font-size:10px;padding:6px 8px}.ts-analysis-controls{gap:4px;padding:10px}.ts-rule{flex-wrap:wrap}.ts-rule label{min-width:100px}.ts-schedule-heading{flex-direction:column;align-items:flex-start}.is-tactical-editor .fm-tactics-grid .fm-pitch{height:470px}.is-tactical-editor .ts-token{width:27px;height:27px}.ts-token-core{font-size:8px}.ts-token-name{max-width:55px;font-size:8px}.ts-overlay-summary{padding:0 10px 10px}.ts-library-body{padding:12px}.ts-library-manage>div{flex-wrap:wrap}.ts-board-tools>span{width:100%}}
+@media(prefers-reduced-motion:reduce){.is-tactical-editor .ts-token{transition:none}}
+/* TS-19 placement refinement: a small, explicit zone chooser after a drop. */
+.ts-placement-dialog{box-sizing:border-box;width:min(460px,calc(100vw - 28px));max-height:calc(100dvh - 40px);padding:22px;border:1px solid #42708a;border-radius:14px;background:linear-gradient(140deg,#15384a,#0b2034 75%);color:#e0edf5;box-shadow:0 24px 80px #0009;font-family:inherit;overflow-y:auto}
+.ts-placement-dialog::backdrop{background:#030e1e80;backdrop-filter:blur(2px)}
+.ts-placement-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.ts-placement-head h2{margin:5px 0 14px;font-size:23px;letter-spacing:-.5px;color:#f3f9ff}
+.ts-placement-dialog button{cursor:pointer;font-family:inherit;color:inherit}
+.ts-placement-head>button{border:0;background:transparent;font-size:26px;color:#8faec1;padding:0 6px}
+.ts-placement-player{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px;font-weight:650;font-size:14px}
+.ts-placement-player span{font-size:11px;font-weight:400;color:#adc6d6;background:#061c2b80;border:1px solid #355368;padding:4px 7px;border-radius:5px}
+#ts-placement-note{font-size:12px;line-height:1.6;color:#afc8d9;margin:0 0 15px}
+.ts-placement-options{display:grid;gap:8px}
+.ts-placement-options button{display:flex;align-items:center;gap:13px;text-align:left;padding:10px 12px;background:#0b2438;border:1px solid #36566b;border-radius:9px;font-size:13px;min-height:53px}
+.ts-placement-options button:hover,.ts-placement-options button:focus-visible{background:#18455a;border-color:#78dfcf;outline:2px solid #78dfcf;outline-offset:1px}
+.ts-placement-options b{display:grid;place-items:center;min-width:37px;height:33px;border-radius:8px;background:#174960;color:#a6f0ec;font-size:13px}
+.ts-placement-options button>span:last-child{margin-left:auto;font-size:18px;color:#6fcec8}
+.ts-placement-options small{display:block;color:#7ed9c7;font-size:10px;margin-top:3px}
+.ts-placement-footnote{font-size:10px;color:#8dabbf;line-height:1.6;margin:14px 0}
+.ts-placement-actions{display:flex;justify-content:flex-end;border-top:1px solid #29495d;padding-top:14px}
+.ts-placement-actions button{border:1px solid #3c576b;border-radius:6px;background:#102a3f;padding:7px 12px;font-size:12px}
+.is-tactical-editor.ts-placing .ts-token,.is-tactical-editor.ts-dragging .ts-token{transition:none!important}
+.ts-legend .coverage{width:88px;height:8px;background:linear-gradient(90deg,#ef4444 0%,#f59e0b 25%,#facc15 50%,#84cc16 75%,#22c55e 100%)}
+.ts-position-control select{max-width:235px}

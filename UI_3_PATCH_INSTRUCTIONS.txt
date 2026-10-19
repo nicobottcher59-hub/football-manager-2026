@@ -1,0 +1,32 @@
+FM PROJECT — UI-3 SORTABLE SQUAD + TACTICS NAVIGATION
+====================================================
+
+BRANCH (GitHub Desktop): phase-ui-3-squad-roster-tactics-polish
+BASE: original game + UI-1 React + UI-1 portable + UI-2 Python + UI-2 404 hotfix.
+This archive is an INCREMENTAL PATCH. It is NOT the complete game.
+
+1. Commit UI-2 and its hotfix first, on its own branch.
+2. Create the branch shown above FROM the already-updated UI-2 state.
+3. Unzip this patch over the repository ROOT (same folder as README.md).
+   Preserve all directories. Accept replacements for changed files.
+4. Double-click INICIAR_INTERFAZ_WINDOWS.bat (unchanged).
+   The Python server opens /portable/ in your browser. No Node/npm needed.
+5. Refresh using Ctrl+Shift+R if the browser had cached older scripts.
+6. Test Squad / General, Attributes, Season Stats, expand a player,
+   dynamically displayed positional familiarity, squad number and transfer
+   availability; then Tactics / lineup, click players, Edit Team Tactics,
+   in/out of possession, formation/role/sliders and return to lineup.
+7. Run the tests documented in docs/PHASE_UI_3_SQUAD_ROSTER.md.
+8. Report results BEFORE committing UI-3 (Summary below is suggested).
+
+SUGGESTED COMMIT SUMMARY AFTER MANUAL ACCEPTANCE:
+feat(ui): add sortable squad roster and unify tactical views
+
+HONEST SCOPE:
+* No invented season stats, xA, transfer values, contracts or happiness.
+  Unsupported columns show a dash / explicit information panel.
+* Shirt numbers and availability flags are DEVELOPMENT SESSION ONLY.
+  They are not saved, and do not alter career transfers or contracts.
+* Training, contracts and chat remain disabled, clearly marked planned.
+* Home remains UI-1 demo; Continue remains demo, without WorldCareer advance.
+* Existing Python game engine, WorldRunner, 2D legacy and sandbox unchanged.

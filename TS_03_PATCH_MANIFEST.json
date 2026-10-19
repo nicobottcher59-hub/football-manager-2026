@@ -1,0 +1,10 @@
+{
+  "patch": "03",
+  "base": "ts02-checkpoint",
+  "paths": {
+    "TS_03_PATCH_INSTRUCTIONS.txt": "7d0bd4a5e36ad41ed8001e80f3ce50d318cede5bb9aeb341fff9705fdfef36a4",
+    "docs/TS_03_WORLD_STATE_INTEGRITY.md": "302b1f29db95cc1e2f4a72ca17e0ef76f333a925b0bd6a254d53a3a1f482da29",
+    "src/football_manager/domain/world_runner.py": "07fbc1c329eeb8cb10d2d8f865ae09a5ae1b04ca38083118488972f5db9dd028",
+    "tests/test_ts_03_world_integrity.py": "bad125bbe46e18004dbe0b858445c60e88ec68aff8750667b18b37a71cc1ad52"
+  }
+}

@@ -1,0 +1,34 @@
+FM PROJECT - UI-3.3 COMPETITIONS - PARCHE INCREMENTAL
+
+Branch nueva en GitHub Desktop (desde la version UI-3.2):
+  phase-ui-3-3-competitions
+
+Summary provisorio para el commit (SOLO despues de probar en Windows):
+  feat(ui): add live competition tables, matchdays and knockout brackets
+
+APLICACION
+1. Crear la branch desde la version UI-3.2, con todos los commits anteriores.
+2. Abrir carpeta raiz del repositorio (donde estan README.md y src/).
+3. Extraer TODO el contenido de este ZIP directamente alli, manteniendo las rutas.
+4. Reemplazar los archivos existentes cuando Windows lo pida.
+5. Cerrar el antiguo servidor (.bat) antes de relanzarlo.
+6. Hacer doble clic en INICIAR_INTERFAZ_WINDOWS.bat.
+7. Abrir el navegador (http://127.0.0.1:8765/portable/) y pulsar Ctrl+Shift+R.
+No requiere Node.js ni npm; usa el Python actual del juego.
+
+PRUEBAS MANUALES
+- Abrir Competitions y cambiar Premier/Championship/League One/League Two.
+- Navegar jornadas en panel derecho: deben verse TODOS los partidos de la jornada.
+- Abrir FA Cup/Carabao; seleccionar rondas, zoom +/-, My path / All ties y desplazamiento.
+- Cambiar Champions/Europa/Conference entre League Phase y Knockout Stage.
+- EFL Trophy: cambiar grupo y verificar fixtures de la fecha para todos los grupos.
+- Rondas no sorteadas deben decir que aun no hay cruce, nunca inventar rivales.
+
+Prueba Python opcional desde PowerShell, en raiz:
+  $env:PYTHONPATH='src'; python -m pytest -q tests/test_ui33_competitions.py
+
+LIMITACIONES
+- La sesion Python sigue siendo temporal; Continue no simula ni guarda la partida.
+- Los equipos son ficticios y los escudos, provisionales.
+- Los emparejamientos futuros que dependen de un sorteo no estan predichos.
+- Sin cambios en FastMatchSimulator o el motor de temporadas.

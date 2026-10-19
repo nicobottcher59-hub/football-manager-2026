@@ -1,0 +1,22 @@
+TS-07.1 -- MATCH & LINEUP INTEGRITY (consolidates the prior 07.1 / 07.2 / 07.3)
+
+Requires: TS-07 already applied and committed (ideally merged into main).
+GitHub Desktop branch: fix/ts-07-1-match-lineup-integrity
+Commit Summary: fix(match): enforce canonical fixtures, tactics and lineup integrity
+
+1. Make sure TS-07 is present on main (merge/push it first if still on a feature branch).
+2. Create the branch above from updated main, before copying files.
+3. Extract this ZIP into the football-manager-game repository root, keeping
+   the original relative folders. Only new/modified files are included.
+4. Run these tests in PowerShell (no Node.js required):
+
+   python -m pytest -q -ra tests/test_ts_07_1_match_lineup_integrity.py tests/test_ts_07_match_result_contract.py tests/test_match_snapshot.py tests/test_spatial_core.py tests/test_ui35_matchday.py
+
+5. Play a match from the existing interface after a temporary instruction,
+   role and formation/bench change. Verify the permanent plan is unchanged.
+6. If the checks pass, commit and push this branch, then merge into main.
+7. Recommended full-suite check before the next patch:
+
+   python -m pytest -q -ra
+
+For scope, behavior and test details, read docs/TS_07_1_MATCH_AND_LINEUP_INTEGRITY.md.

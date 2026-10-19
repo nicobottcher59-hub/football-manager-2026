@@ -1,0 +1,58 @@
+{
+  "id": "TS-13",
+  "scope": "Audit tactical control consumers; contextual offside trap and late scoreline-based match management",
+  "requires": "TS-12 integrated into main",
+  "branch": "fix/ts-13-tactical-consumer-coverage",
+  "commit_summary": "fix(tactics): connect match management controls and audit fast-sim coverage",
+  "files": [
+    {
+      "path": "src/football_manager/fast_simulation/engine.py",
+      "action": "modify",
+      "sha256": "f94b0ab69f87ce714745b96700ab3bb36ea8e4c8d9754e4f6a7f801a8270d175",
+      "expected_base_sha256": "914d13b715b4736c5b6fa1b54a26bb75cf49264634d43f6749174dac9b0615c5",
+      "expected_base_lf_sha256": "914d13b715b4736c5b6fa1b54a26bb75cf49264634d43f6749174dac9b0615c5"
+    },
+    {
+      "path": "src/football_manager/fast_simulation/profiles.py",
+      "action": "modify",
+      "sha256": "14d025e32ef2a387066f25587669aacabfc4a7d6c368d6349cd001cba6255ec1",
+      "expected_base_sha256": "a0ddd0634f398a3ceb0ca31a248ef9d279c27f7c9701b5b7474f5aedc2bf42b2",
+      "expected_base_lf_sha256": "14c992ae1e4f61c500b768e7d8dc2ea1a506f3d1b8ad6d1154f5db954a9e0278"
+    },
+    {
+      "path": "src/football_manager/fast_simulation/tactical_coverage.py",
+      "action": "add",
+      "sha256": "1af38e5b9a338c020e9ce74bc8c3808b96341cff0b6ade2ef4b2cbb44a80016a",
+      "expected_base_sha256": null,
+      "expected_base_lf_sha256": null
+    },
+    {
+      "path": "tests/test_ts_13_tactical_consumer_coverage.py",
+      "action": "add",
+      "sha256": "b39457cbabde07935a45a5a767ec4bc1e7971f178dc9988fc01471d75ebaad72",
+      "expected_base_sha256": null,
+      "expected_base_lf_sha256": null
+    },
+    {
+      "path": "tools/audit_tactical_consumers.py",
+      "action": "add",
+      "sha256": "25df4265fe2ea679a9f63f26e408b7ab821021746805eca34b5a23895e671347",
+      "expected_base_sha256": null,
+      "expected_base_lf_sha256": null
+    },
+    {
+      "path": "docs/TS_13_TACTICAL_CONSUMER_COVERAGE.md",
+      "action": "add",
+      "sha256": "fc3e4a83d8defe378ceb35b665c49a57f1586c765dcaa9edf4c7fef7dba80fef",
+      "expected_base_sha256": null,
+      "expected_base_lf_sha256": null
+    },
+    {
+      "path": "TS_13_PATCH_INSTRUCTIONS.txt",
+      "action": "add",
+      "sha256": "d4dff75457ac78060ae1243df9c5de7a1972172d7dc9317a504c249f76ca34dd",
+      "expected_base_sha256": null,
+      "expected_base_lf_sha256": null
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "update": "TS-23.2.1 compact youth formation hotfix",
+  "base": "TS-23.2",
+  "save_graph_version": 11,
+  "files": 7,
+  "sha256": {
+    "TS_23_2_1_PATCH_INSTRUCTIONS.txt": "474582ba2bb374b6c219e897ba2449289699d108e9979a8fec34227ca97e5630",
+    "TS_23_2_1_TEST_REPORT.md": "3135f606c5d4d6ff9299d04badba5da4b2f0c21bfe37af3068e333a985dd99dc",
+    "frontend/portable/youth_academy.js": "6fbace2aa95441532c1d8e6af71d54e4f86bfc038396f0082a04d1c33f25a2ba",
+    "frontend/portable/youth_academy.css": "dcdebd50b98157c1017c039207af3f1e3c7b22dee3aa0455dd083cb7ed7af44d",
+    "tests/test_ts_23_2_u17_u21_layout.py": "df4f230969a52d0ff43260160a8e900606d2b982adb0cbc04639692a9aaf8eb3",
+    "tools/verify_ts2321_package.py": "3f93c3101c6462e126611fa34d1218c0811f373f729fdf08d7e73fd9efb90dd1"
+  }
+}

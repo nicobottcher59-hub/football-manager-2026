@@ -1,0 +1,33 @@
+{
+  "stage": "17_4",
+  "branch": "perf/ts-17-4-long-career-archives",
+  "summary": "perf(save): compress historic seasons while preserving legacy career saves",
+  "base": "previous TS-17 patch",
+  "files": [
+    {
+      "path": "src/football_manager/persistence/session_codec.py",
+      "sha256": "de7387599b5295ec201f6995927ead28aa6b769261ff2dc2010a3ba79206af4c",
+      "bytes": 13488
+    },
+    {
+      "path": "src/football_manager/persistence/manager_career.py",
+      "sha256": "33832cd0cc374d554916d506bb23bdbc02d5db12d6767c82d8797e0f11fc1e8f",
+      "bytes": 12034
+    },
+    {
+      "path": "tests/test_ts_15_career_save_reliability.py",
+      "sha256": "bf6620f7ec7ccacd27ea8d5ed184bf14fc4c9b7b54221becc2800f564574b0fd",
+      "bytes": 16117
+    },
+    {
+      "path": "tests/test_ts_17_4_long_career_persistence.py",
+      "sha256": "090ea6351c62f2e8511509f25ce8c0293547b639416f58488049a256c1597860",
+      "bytes": 2864
+    },
+    {
+      "path": "tools/profile_long_career.py",
+      "sha256": "4dd1ce02a2ad753b413e55fc1ab64cf7743c050d50f7469162dd82c781301f7d",
+      "bytes": 3301
+    }
+  ]
+}

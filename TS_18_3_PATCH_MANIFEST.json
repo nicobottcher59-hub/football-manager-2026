@@ -1,0 +1,40 @@
+{
+  "patch": "TS-18.3",
+  "base": "TS-18.2",
+  "branch": "fix/ts-18-3-tactical-logic-instructions",
+  "summary": "fix(tactics): apply leading risk only on score advantage and reconcile late controls",
+  "files": [
+    {
+      "path": "src/football_manager/domain/tactics.py",
+      "sha256": "8aa13b124f18e3a4e3f9a2c020569c8e44da67858b0ce1bd525e827fd0cebabd"
+    },
+    {
+      "path": "src/football_manager/fast_simulation/profiles.py",
+      "sha256": "e31d6c46757e519481cabf3f347100ea730c4288efa8028287fa88c1876351fc"
+    },
+    {
+      "path": "src/football_manager/fast_simulation/engine.py",
+      "sha256": "855f4f6569b896f8e169f8c53c7446b59c94a9850847d796f76a9c37906560d8"
+    },
+    {
+      "path": "src/football_manager/fast_simulation/tactical_coverage.py",
+      "sha256": "88a2cffe9cadf7ea492aa9cdfa7fb346096d36f5b9d4ccdcd0eecdd3cadac004"
+    },
+    {
+      "path": "tests/test_ts_13_tactical_consumer_coverage.py",
+      "sha256": "4f3fdddc06bb8b50bd6348486bf32031b58580ddc18b9b9fa30bf3724caf4365"
+    },
+    {
+      "path": "tests/test_ts_18_3_tactical_logic_instructions.py",
+      "sha256": "18d97af706be96690e3c32d979ec92db6400b90fa042ae7765681107b84434ff"
+    },
+    {
+      "path": "docs/TS_18_3_TACTICAL_LOGIC_INSTRUCTIONS.md",
+      "sha256": "cea2f161d739459791f78a3fe5e2bc62ca6db79036205ab73b7ea4ee1e52302e"
+    },
+    {
+      "path": "TS_18_3_PATCH_INSTRUCTIONS.txt",
+      "sha256": "34da5edbac38172549b9ec709842189ca38c27822c97483d0a3ca42c5e3badd1"
+    }
+  ]
+}

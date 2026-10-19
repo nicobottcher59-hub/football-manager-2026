@@ -1,0 +1,25 @@
+TS-23.2.1 - Compact U17/U21 formation board hotfix
+INCREMENTAL UPDATE - not a full game
+
+Required base: TS-23.2 installed. No Node or npm required.
+
+1. Close the game and stop the Python server.
+2. Back up the project folder and your career saves (SQLite).
+3. Extract this ZIP into the project root containing INICIAR_INTERFAZ_WINDOWS.bat.
+   Preserve paths and replace existing files. Do not extract into an extra folder.
+4. Verify: python tools/verify_ts2321_package.py
+5. Tests: python -m pytest -ra tests/test_ts_23_2_u17_u21_layout.py
+6. Restart with INICIAR_INTERFAZ_WINDOWS.bat, press Ctrl+F5 and check Youth Academy > U17 / U21.
+
+What changed:
+- Fixed the overwide player cards. Every on-pitch player is now a compact card.
+- Corrected the pitch layout: 3 attackers, 3 midfielders, 4 defenders and GK centered.
+- Reused the same ID-based illustrated portrait service already used in Squad.
+- Restored a single detailed squad management table immediately below the pitch.
+- Kept match/results/standings rail on the right.
+
+Unchanged: U15 intake, Scouts, match engine, potential, player development, promotions,
+finances, saves and career graph version (still v11).
+
+GitHub Desktop branch: fix/ts-23-2-1-compact-youth-pitch
+Commit summary: fix(youth): restore compact U17/U21 pitch cards and portraits

@@ -1,0 +1,24 @@
+UI-3.3.2 HOTFIX - TWO SIDEBAR SECTIONS / COUNTRY FILTERS
+
+REQUIRES: The already-applied UI-3.3.2 Competition Explorer patch, on top of UI-3.3.1.
+This is a repair to UI-3.3.2, not UI-3.4. Do not remove your game files.
+
+1. STAY on your UI-3.3.2 branch phase-ui-3-3-2-competition-explorer if you have not committed it.
+   If you have already committed UI-3.3.2, create a hotfix branch from that commit.
+2. Stop the current Windows game server: Ctrl+C in the .bat console.
+3. Extract ALL CONTENTS of this ZIP directly over your game's repository ROOT (where README.md is).
+   Preserve the internal folder structure and approve file replacements.
+4. Double-click INICIAR_INTERFAZ_WINDOWS.bat. No Node.js or npm.
+5. Hard-refresh Chrome with Ctrl+Shift+R and click COMPETITIONS in the left menu.
+   It should show the original club-competition buttons, including FA Cup.
+6. Click OTHER LEAGUES, a separate left menu entry. Use Continent and Country dropdowns:
+   Europe > National > Spain: explicit empty state; England > Third division: League One;
+   South America > Argentina: empty state; Europe > International: Europa/Conference.
+7. Return to Competitions; verify Carabao two-sided bracket and +/- zoom, plus right match panel.
+8. Do not commit until you have confirmed correct behavior in Windows.
+
+Only new/modified files are included. Python gameplay, scheduling and simulation unchanged.
+
+Suggested Summary AFTER Windows acceptance:
+fix(ui): separate other leagues and repair continent and country filters
+Documentation: docs/PHASE_UI_3_3_2_COMPETITION_EXPLORER.md

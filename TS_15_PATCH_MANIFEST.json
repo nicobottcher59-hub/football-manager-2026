@@ -1,0 +1,49 @@
+{
+  "patch": "TS-15",
+  "name": "Career Save Reliability",
+  "base_patch": "TS-14",
+  "branch": "feat/ts-15-career-save-reliability",
+  "summary": "feat(persistence): support validated manager career save and restore",
+  "files": [
+    {
+      "path": "src/football_manager/persistence/session_codec.py",
+      "sha256": "aa88ea5e3f57879937f85348f9cd1942f21d6780854f9820a42ce8b6c7267073",
+      "bytes": 10991
+    },
+    {
+      "path": "src/football_manager/persistence/manager_career.py",
+      "sha256": "8141049b07632139e6bd4b33cb364e243e68b865ed321145e262b865d8be4ec9",
+      "bytes": 12025
+    },
+    {
+      "path": "src/football_manager/persistence/sqlite_repository.py",
+      "sha256": "3f821d2ca167e7bbfcbff20f5dec63ffee86d4d591d46ea0ea2e643075392567",
+      "bytes": 15063
+    },
+    {
+      "path": "src/football_manager/persistence/__init__.py",
+      "sha256": "4e5273f1ac1209bddc27a6719632ee1f50e34d066a045ca22a54500f2e8ca3b9",
+      "bytes": 1081
+    },
+    {
+      "path": "src/football_manager/ui_shell/server.py",
+      "sha256": "0d451bf30507d1f9bd787752556d2ef77663a1a9aad7803a337c17a676874c59",
+      "bytes": 20254
+    },
+    {
+      "path": "tests/test_ts_15_career_save_reliability.py",
+      "sha256": "2cd348aab621a65524c7bcf62acb88164fe596e5060d62c3c7272fd64dbaaebb",
+      "bytes": 16117
+    },
+    {
+      "path": "docs/TS_15_CAREER_SAVE_RELIABILITY.md",
+      "sha256": "d4c7a1692792b590325b20d44bd15b7626aca5c71263bf7b00a922667d341baf",
+      "bytes": 6534
+    },
+    {
+      "path": "TS_15_PATCH_INSTRUCTIONS.txt",
+      "sha256": "86b016759439295b7b929a861ebc1880cbab6627058d2a50b481911cbcda413f",
+      "bytes": 1364
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+TS-18.2 - ROLES AND POSITION INTEGRITY
+
+Prerequisite: main with TS-18.1 and TS-17.1 through TS-17.4 integrated.
+This is an incremental patch, NOT a standalone game and NOT compatible with an earlier base.
+
+BRANCH
+fix/ts-18-2-role-position-integrity
+
+SUMMARY
+fix(match): recalculate role and position ACT for tactical changes and substitutes
+
+INSTALL
+1. In GitHub Desktop, start the branch above from updated main.
+2. Extract this ZIP into the root of the repository, keeping relative folder paths.
+3. Run the focused tests, then the whole regression suite.
+4. After successful tests, commit with the Summary above and merge to main.
+
+FOCUSED TESTS (PowerShell)
+python -m pytest -ra tests/test_ts_18_2_roles_position_integrity.py
+
+EXISTING RATING/ROLE REGRESSIONS
+python -m pytest -ra tests/test_phase6_0b_role_ovr_familiarity.py tests/test_match_snapshot.py tests/test_positional_familiarity.py
+
+FULL REGRESSION
+python -m pytest -ra
+
+WHAT CHANGES
+- Correct ACT/OVR recomputation on substitutions and on live role/formation changes.
+- Preserve existing match chemistry when recomputing ACT.
+- Reject incompatible live tactic updates atomically.
+- Reuse the original rating formulas without changing any weights, rules or UX.
+
+Full technical detail: docs/TS_18_2_ROLES_POSITION_INTEGRITY.md

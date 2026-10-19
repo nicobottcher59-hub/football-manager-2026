@@ -1,0 +1,27 @@
+TS-17.4 - Football Manager Game
+
+REQUIRES: commit + merge of the immediately preceding patch.
+BRANCH: perf/ts-17-4-long-career-archives
+GITHUB DESKTOP SUMMARY: perf(save): compress historic seasons while preserving legacy career saves
+
+SCOPE: Versioned manager graph v2 stores finished worlds in a bounded compressed archive; keeps current world by reference; v1 save slots still load; guard against corrupt/oversized archives; add opt-in long-career profile.
+
+INSTALL:
+1. On updated main, create the branch shown above.
+2. Extract this ZIP into the football-manager-game repository ROOT, preserving paths.
+3. Run the targeted tests from PowerShell:
+   python -m pytest -ra tests/test_ts_17_4_long_career_persistence.py tests/test_ts_15_career_save_reliability.py
+4. If green, run full regression:
+   python -m pytest -ra
+   Expected suite on this exact version: 890 passed, 0 failed.
+5. Commit with the Summary above and merge into main before the next patch.
+   No local Node.js is required.
+
+OPTIONAL LONG-CAREER TEST (can take several minutes):
+   python tools/profile_long_career.py --seasons 10 --every 5
+   python tools/profile_long_career.py --seasons 30 --every 5
+This creates a temporary SQLite database and removes it afterward.
+The game UI still requires a manual Windows smoke test: run the app,
+open the calendar, make a tactical change, play a match, check the
+post-match report, save/load a career via the existing API, and
+continue a season. No UX redesign or new buttons are included.

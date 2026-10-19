@@ -1,0 +1,126 @@
+/* UI-3.2 Monthly calendar: uses the same navy panels and electric-blue action language. */
+.fm-calendar-screen{display:none;min-width:0}
+.cal-root{color:#edf5ff;font-size:12px;max-width:100%;padding-bottom:12px}
+.cal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:2px 2px 15px}
+.cal-month-controls{display:flex;align-items:center;gap:5px}
+.cal-month-controls>button{min-width:38px;height:38px;border:1px solid #28516a;border-radius:7px;color:#e3f5ff;background:#0a263b;font-weight:700;font-size:22px}
+.cal-month-controls>button:hover,.cal-filter-chip:hover{border-color:#36a5e2;background:#114060}
+.cal-month-controls>span{min-width:175px;text-align:center;font-size:17px;font-weight:750;color:#fff}
+.cal-month-controls>.cal-today-button{font-size:12px;padding:0 15px;margin-left:10px}
+.cal-filter-tabs{display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end}
+.cal-filter-chip{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:38px;padding:6px 12px;border:1px solid #254459;border-radius:7px;background:#091d30;color:#9ebbd0;font-size:11px;font-weight:650;white-space:nowrap;transition:background .16s,border-color .16s}
+.cal-filter-chip.active{color:white;border-color:#30baff;box-shadow:inset 0 0 0 1px #2bb7ff35,0 5px 18px #0065c43b;background:linear-gradient(140deg,#116cb6,#123f7e)}
+.cal-comp-dot{display:inline-block;flex:none;width:8px;height:8px;border-radius:50%;background:var(--cal-accent,#61a4bc);box-shadow:0 0 7px var(--cal-accent,#61a4bc)}
+.cal-comp-league{--cal-accent:#21d0a1;--cal-tint:#104b4052}
+.cal-comp-fa{--cal-accent:#e7799a;--cal-tint:#6f233f4c}
+.cal-comp-carabao{--cal-accent:#47b6ff;--cal-tint:#11518a56}
+.cal-comp-champions{--cal-accent:#9b8dff;--cal-tint:#453d9b56}
+.cal-comp-europa{--cal-accent:#f9a449;--cal-tint:#9b531256}
+.cal-comp-conference{--cal-accent:#96d665;--cal-tint:#42762a56}
+.cal-comp-trophy{--cal-accent:#ba7bf3;--cal-tint:#6a329153}
+.cal-comp-other{--cal-accent:#a0bace;--cal-tint:#28506a44}
+.cal-layout{display:grid;grid-template-columns:minmax(0,2.12fr) minmax(310px,.98fr);gap:12px;align-items:start}
+.cal-month{overflow:hidden;background:linear-gradient(140deg,#091e32,#061829)!important;min-width:0}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));background:linear-gradient(#102e47,#092239)}
+.cal-weekdays>div{padding:12px 2px;text-align:center;font-size:12px;font-weight:750;color:#d4e3f4;border-right:1px solid #1a3b53}
+.cal-weekdays>div:last-child{border-right:0}
+.cal-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-auto-rows:minmax(126px,auto)}
+.cal-day{min-width:0;padding:7px 5px;box-shadow:inset -1px -1px #1b395064;background:linear-gradient(145deg,#091f32,#07192b);display:flex;flex-direction:column;gap:6px}
+.cal-day.cal-outside{background:#071626;opacity:.5}
+.cal-day.cal-today{background:radial-gradient(circle at 60% 0,#13497155,#091b30 70%);box-shadow:inset 0 0 0 1px #2d8de3,inset -1px -1px #1c3951}
+.cal-day-label{display:flex;align-items:center;justify-content:space-between;padding:0 3px;color:#b4cde2;font-weight:740;font-size:13px}
+.cal-day.cal-today .cal-day-label .cal-day-select{display:grid;place-items:center;border-radius:50%;width:25px;height:25px;background:#1889ef;color:white}
+.cal-day-label small{font-size:8px;letter-spacing:.7px;color:#54cdff}
+.cal-fixture{position:relative;width:100%;min-width:0;display:flex;flex-direction:column;gap:3px;padding:6px 6px 5px;border:1px solid color-mix(in srgb,var(--cal-accent) 33%,transparent);border-left:3px solid var(--cal-accent);border-radius:6px;background:linear-gradient(140deg,var(--cal-tint),#071c2bd9);text-align:left;color:#e8f7ff;overflow:hidden;box-shadow:inset 0 1px #ffffff10,0 3px 7px #00121f50;cursor:pointer}
+.cal-fixture:hover,.cal-fixture:focus-visible{z-index:2;outline:none;box-shadow:0 0 0 1px #8addff,0 0 15px #1789ef50;filter:brightness(1.14)}
+.cal-fixture.cal-selected{outline:2px solid #21b7ff;outline-offset:0}
+.cal-fixture.cal-win{border-left-color:#3bebac}.cal-fixture.cal-draw{border-left-color:#a5b5cc}.cal-fixture.cal-loss{border-left-color:#ff6577}
+.cal-fixture-top{display:flex;align-items:center;gap:4px;min-width:0;color:#bfd6e8;font-size:9px;font-weight:760;white-space:nowrap}
+.cal-fixture-top>span:last-child{overflow:hidden;text-overflow:ellipsis}
+.cal-fixture-main{display:flex;align-items:center;gap:5px;min-width:0}
+.cal-fixture-main .cal-crest{width:24px;height:27px;font-size:9px}
+.cal-venue{font-weight:750;color:#9eb7c5;font-size:10px}
+.cal-fixture-score{font-size:12px;margin-left:auto;font-variant-numeric:tabular-nums;color:#f4faff;white-space:nowrap}
+.cal-fixture-opponent{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;font-size:10px;font-weight:650}
+.cal-outcome-label{align-self:start;padding:2px 5px;font-size:9px;font-weight:760;border-radius:5px}
+.cal-outcome-win{color:#62f4ba;background:#12593d77}.cal-outcome-draw{color:#d5dfed;background:#47586877}.cal-outcome-loss{color:#ff91a1;background:#6b293977}
+.cal-crest{--crest-hue:200;display:grid;place-items:center;flex:none;width:52px;height:59px;clip-path:polygon(50% 0,92% 13%,92% 66%,50% 100%,8% 66%,8% 13%);background:linear-gradient(145deg,hsl(var(--crest-hue) 70% 61%),hsl(var(--crest-hue) 58% 22%));border:1px solid #fff6;box-shadow:inset 0 0 0 3px #ffffff20;position:relative}
+.cal-crest>span{font-size:16px;letter-spacing:-.6px;color:white;text-shadow:0 2px 4px #000e;font-weight:900}
+.cal-crest-managed{background:linear-gradient(140deg,#e8f7ff,#27415b);box-shadow:inset 0 0 0 3px #102943}
+.cal-crest-managed>span{color:#061826;text-shadow:none}
+.cal-legend{display:flex;align-items:center;flex-wrap:wrap;gap:14px;padding:13px 14px;color:#bacbdc;font-size:10px;border-top:1px solid #19374d}
+.cal-legend>span{display:flex;align-items:center;gap:6px}
+.cal-legend i{display:block;width:7px;height:14px;border-radius:3px}
+.cal-legend .win{background:#3bebac}.cal-legend .draw{background:#a5b5cc}.cal-legend .loss{background:#ff6577}
+.cal-legend small{margin-left:auto;color:#83a3bb}
+.cal-sidebar{display:flex;flex-direction:column;gap:11px;min-width:0}
+.cal-detail-card{overflow:hidden}
+.cal-side-title{display:flex;align-items:center;justify-content:space-between;gap:7px;padding:14px 14px;font-size:13px;font-weight:800;color:white;background:linear-gradient(110deg,#102f48,#0c2237)}
+.cal-side-source{font-size:9px;color:#8fc6de;font-weight:700;white-space:nowrap}
+.cal-detail-stadium{padding:19px 8px;background:linear-gradient(0deg,#09292ba3,#081d2abf),url('./assets/stadium.svg') center /cover}
+.cal-detail-teams{display:grid;grid-template-columns:minmax(0,1fr) 42px minmax(0,1fr);align-items:center;gap:4px}
+.cal-detail-teams>div{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-width:0}
+.cal-detail-teams strong{font-size:13px;line-height:1.2}
+.cal-detail-teams small{font-size:10px;color:#a7c4d8}
+.cal-vs{text-align:center;font-size:21px;font-weight:950;color:#c5dfef}
+.cal-detail-meta{display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 8px;font-size:11px;border-top:1px solid #ffffff16;border-bottom:1px solid #143c4d;flex-wrap:wrap}
+.cal-detail-body{padding:14px;display:flex;flex-direction:column;gap:13px}
+.cal-stage-row{display:flex;justify-content:space-between;gap:9px;color:#a5c1d3;font-size:11px}
+.cal-stage-row strong{color:#ecf6ff;font-size:11px;text-align:right}
+.cal-result-panel,.cal-fixture-pending,.cal-aggregate{padding:13px;border:1px solid #29475a;border-radius:9px;background:#0b273b;display:flex;flex-direction:column;gap:5px}
+.cal-result-panel strong{font-size:17px}.cal-result-panel small,.cal-aggregate span{color:#a7bed1;font-size:10px;line-height:1.5}
+.cal-result-win{border-color:#248865}.cal-result-win strong{color:#6af2bf}.cal-result-loss{border-color:#873a4f}.cal-result-loss strong{color:#ff879d}.cal-result-draw{border-color:#69798c}.cal-result-draw strong{color:#d6e3ef}
+.cal-fixture-pending{color:#bdd4e0;line-height:1.6;font-size:11px}
+.cal-aggregate strong{color:#e8f8ff;font-size:12px}
+.cal-truth-note{border-top:1px solid #2d4a5b7a;padding-top:13px;color:#779bb3;font-size:10px;line-height:1.6}
+.cal-no-selection{padding:30px 16px;line-height:1.7;color:#b5cede}.cal-no-selection p{margin-top:10px;color:#7e9fb8}.cal-detail-card h3{font-size:15px;padding:14px}
+.cal-next-card{padding:0 10px 10px}.cal-next-heading{display:flex;align-items:center;justify-content:space-between;padding:13px 1px 12px}
+.cal-next-heading h3{font-size:15px}.cal-next-heading small{color:#62c9ff;font-size:10px}
+.cal-next-card>button{width:100%;display:flex;align-items:center;gap:8px;padding:8px 5px;background:#0b2336;border:1px solid #1d3d53;border-bottom:0;text-align:left;color:#e1eef9;font-size:10px}
+.cal-next-card>button:hover{background:#123a56}
+.cal-next-card>button:last-child{border-bottom:1px solid #1d3d53;border-radius:0 0 6px 6px}
+.cal-next-card .cal-crest{width:23px;height:27px}.cal-next-card .cal-crest>span{font-size:9px}
+.cal-next-date{color:#a9bdd1;min-width:54px;white-space:nowrap}.cal-next-comp{height:17px;width:3px;border-radius:2px;background:var(--cal-accent)}
+.cal-next-team{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+.cal-next-team small{display:block;color:#84abc4;font-weight:400;overflow:hidden;text-overflow:ellipsis}
+.cal-next-venue{color:#91bfd1;font-weight:700}.cal-empty-upcoming{padding:14px;color:#a8bed1}
+.cal-footer-note{color:#6d98b1;padding:13px 4px;font-size:10px}
+.cal-error,.cal-loading{padding:30px;color:#e5f6ff}.cal-error p{padding:12px 0;color:#97b6cd}.cal-error button{padding:10px;border:1px solid #2fa6e4;background:#0c4772;color:#fff;border-radius:6px}
+@media(max-width:1350px){.cal-layout{grid-template-columns:minmax(0,1.85fr) minmax(280px,1fr)}.cal-days{grid-auto-rows:minmax(115px,auto)}.cal-fixture{padding:5px 4px}.cal-fixture-main{gap:3px}.cal-fixture-main .cal-crest{width:20px;height:23px}.cal-fixture-score{font-size:10px}}
+@media(max-width:1090px){.cal-layout{grid-template-columns:1fr}.cal-sidebar{display:grid;grid-template-columns:1fr 1fr}.cal-days{grid-auto-rows:minmax(123px,auto)}}
+@media(max-width:720px){.cal-toolbar{align-items:start}.cal-filter-tabs{justify-content:start}.cal-days{grid-auto-rows:minmax(94px,auto)}.cal-day{padding:4px 2px}.cal-fixture{gap:2px;padding:3px 2px}.cal-fixture-top{font-size:7px}.cal-fixture-main .cal-crest,.cal-venue{display:none}.cal-fixture-score{font-size:8px}.cal-fixture-opponent{font-size:8px}.cal-sidebar{grid-template-columns:1fr}}
+
+/* UI-3.4: date selection and auto-simulation panel; sizes retained. */
+.cal-day.cal-selected-day{box-shadow:inset 0 0 0 2px #31baff,inset -1px -1px #1c3951;background:linear-gradient(145deg,#102e49,#09223a)}
+.cal-day-select{border:0;background:transparent;color:inherit;cursor:pointer;font:inherit;text-align:center;min-width:24px;min-height:24px;border-radius:6px}
+.cal-day-select:hover,.cal-day-select:focus-visible{background:#176299;color:white;outline:1px solid #5dc7ff}
+.cal-sim-card{padding:14px;display:flex;flex-direction:column;gap:9px;background:linear-gradient(130deg,#0c2941,#091c2f)!important}
+.cal-sim-heading{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.cal-sim-heading span{font-size:11px;color:#9ec6e2;font-weight:750}
+.cal-sim-heading strong{font-size:13px;color:white}
+.cal-sim-card p,.cal-sim-card small{font-size:10px;line-height:1.5;color:#97b9d1}
+.cal-sim-card>button{width:100%;padding:11px 8px;border-radius:6px;border:1px solid #37b0ef;background:linear-gradient(135deg,#0d83ed,#075ca9);color:white;font-size:12px;font-weight:800;cursor:pointer}
+.cal-sim-card>button:disabled{background:#173347;color:#8fa7b9;border-color:#365269;cursor:not-allowed}
+
+/* UI-3.4.1 — whole date cells selectable; elapsed dates clearly subdued. */
+.cal-day[data-cal-cell]{cursor:pointer;transition:background .16s ease,box-shadow .16s ease}
+.cal-day[data-cal-cell]:hover{background-color:#13334b;box-shadow:inset 0 0 0 1px #508bad}
+.cal-day[data-cal-cell]:focus-visible{outline:2px solid #56c5fa;outline-offset:-2px}
+.cal-day.cal-past{background:linear-gradient(145deg,#071522,#06131f)}
+.cal-day.cal-past .cal-day-label{color:#7e99ab}
+.cal-day.cal-past .cal-day-select{color:#7e9db0}
+.cal-day.cal-past .cal-fixture{filter:saturate(.69) brightness(.87)}
+.cal-day.cal-past .cal-fixture.cal-win{border-left-color:#45d7ab}
+.cal-day.cal-past .cal-fixture.cal-loss{border-left-color:#f0788c}
+.cal-day.cal-past .cal-fixture.cal-draw{border-left-color:#a2b4c4}
+.cal-day.cal-today{background:radial-gradient(circle at 55% 0,#12588274,#081f34 75%)}
+.cal-day.cal-selected-day,.cal-day.cal-past.cal-selected-day{background:linear-gradient(145deg,#10354e,#082138);box-shadow:inset 0 0 0 2px #3ebcff,inset 0 0 22px #128ef33b}
+.cal-day.cal-selected-day .cal-day-label,.cal-day.cal-selected-day .cal-day-select{color:#f5fbff}
+
+/* TC-E1: subtle informational globe only; no match-sized FIFA event blocks. */
+.cal-fifa-mark{display:inline-flex;align-items:center;justify-content:center;flex:none;
+  margin-left:auto;width:15px;height:15px;font-size:11px;line-height:1;
+  opacity:.67;filter:saturate(.72);cursor:help;user-select:none}
+.cal-fifa-mark:hover{opacity:1;filter:saturate(1)}
+.cal-day.cal-past .cal-fifa-mark{opacity:.48}
+.cal-day-label>small + .cal-fifa-mark{margin-left:2px}

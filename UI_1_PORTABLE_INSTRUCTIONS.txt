@@ -1,0 +1,37 @@
+FM PROJECT - UI-1 PORTABLE SIN INSTALAR NADA
+==========================================
+
+ESTE ZIP ES UN PARCHE, NO EL JUEGO COMPLETO.
+
+1. Mantene la branch phase-ui-1-react-dashboard-shell.
+2. Descomprimi el CONTENIDO del ZIP en la RAIZ del repositorio.
+   Al lado de README.md, README_DEV.md, src/, frontend/, tools/.
+3. Hace DOBLE CLIC en INICIAR_INTERFAZ_WINDOWS.bat.
+   Se abrira el Dashboard en tu navegador predeterminado.
+   ALTERNATIVA: doble clic en frontend/portable/index.html.
+4. No hay comandos de terminal: NO se usa npm ni Node.js.
+
+REQUISITOS: Un navegador moderno (Edge, Chrome, Firefox).
+NO necesitas instalar nada, ni tener Python en el PATH para ver esta UI-1.
+NO necesita conexion a Internet.
+
+ESTADO DE ESTA ENTREGA:
+- Misma presentacion de Dashboard UI-1, distribuida como vista HTML local.
+- Widgets, OVR por jugador, tabla switchable, club card, notifications,
+  news, navigation, match preview y modales de demostracion.
+- Datos ficticios de ejemplo, NO de la partida Python.
+- Continue solo avanza la fecha visual por un dia.
+  NO simula el mundo ni altera las partidas del juego.
+- No cambia ni reemplaza el motor Python, FastMatchSimulator ni Tkinter.
+- El codigo React + TypeScript del juego sigue intacto en frontend/src/.
+- frontend/portable es una COPIA PRE-RENDERIZADA para probar sin npm;
+  se volvera a actualizar cuando cambie la interfaz React.
+- Esta version no es todavia un ejecutable Electron.
+
+SI EL .BAT NO ABRE:
+- Entra en frontend/portable/ y hace doble clic en index.html.
+- Proba abrir el HTML con Edge o Chrome.
+- Si falta alguna imagen o no responde un boton, contame que navegador
+  usas y el error exacto.
+
+NO HAGAS COMMIT hasta que verifiquemos el funcionamiento.

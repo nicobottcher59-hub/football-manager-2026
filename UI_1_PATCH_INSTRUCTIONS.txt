@@ -1,0 +1,31 @@
+FM PROJECT -- UI-1 DASHBOARD SHELL (incremental patch)
+
+This archive contains ONLY new/modified project files.
+Do NOT extract the old complete game again. Do NOT copy any .git folder.
+
+1. In GitHub Desktop, start from your updated repository (Phase 6.7) and create:
+   phase-ui-1-react-dashboard-shell
+2. Extract this patch ZIP and copy its CONTENTS over the repository root,
+   preserving folders (frontend/, docs/, etc.) and replacing named files.
+3. In Windows PowerShell, from the repository root:
+      cd frontend
+      npm install
+      npm run dev
+   Open http://127.0.0.1:5173
+4. Check UI visuals, competition tabs, inbox/story previews, tactical XI OVR,
+   and the Continue button. Continue changes the DEMO DATE ONLY, not the
+   Python career; an on-screen notice explains this.
+5. Optional frontend build check (requires npm packages):
+      npm run build
+6. Python regression check, from root:
+      cd ..
+      python -m pytest
+7. Keep the Tkinter development UI available and unchanged:
+      $env:PYTHONPATH = "src"
+      python -m football_manager.dev_ui
+8. Send UI feedback, build log, pytest results and manual observations.
+   Do not commit until you confirm this phase works.
+
+This first patch does NOT include Electron/Tauri, a running Python API, real
+notifications/stories, or a day-by-day world simulation. Those follow in UI-2+.
+See docs/PHASE_UI_1_DASHBOARD_SHELL.md for exact scope and next phases.

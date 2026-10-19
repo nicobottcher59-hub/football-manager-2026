@@ -1,0 +1,33 @@
+{
+  "id": "TS-07",
+  "requires": "TS-06",
+  "branch": "refactor/ts-07-match-result-contract",
+  "commit_summary": "refactor(match): validate results at the world integration boundary",
+  "instructions": "Apply to an already integrated repository at the required prior patch. Keep the original folder structure.",
+  "files": [
+    {
+      "path": "src/football_manager/dev_ui/session.py",
+      "action": "modify",
+      "sha256": "bcca3ee4fa21a40dc18e990888eddaf25c906fbb5a64bdcc14039f20f50ece29",
+      "expected_base_sha256": "0b10e20ca1b3d005e0b51b88817bf6b5740dc36abf6f4a91f06c77f1f90397cd"
+    },
+    {
+      "path": "src/football_manager/services/match_result_contract.py",
+      "action": "add",
+      "sha256": "1ffef177f528fec9bbba8c7de6e9f90872740b0fb3525a11959a16e4f1fce7fd",
+      "expected_base_sha256": null
+    },
+    {
+      "path": "tests/test_ts_07_match_result_contract.py",
+      "action": "add",
+      "sha256": "949cda1bc86b6890817bb73fe2a46264a065c0a2a4b1601249b68d1a2136aa96",
+      "expected_base_sha256": null
+    },
+    {
+      "path": "docs/TS_07_MATCH_RESULT_CONTRACT.md",
+      "action": "add",
+      "sha256": "4da21cf82f6b42e37a538c1bbc2024c3d2f99bb2c9380290137d985bdfc315ea",
+      "expected_base_sha256": null
+    }
+  ]
+}

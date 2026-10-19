@@ -1,0 +1,56 @@
+TS-24.6 - Loans, free agents and buyback clauses
+INCREMENTAL UPDATE - not a full game
+
+REQUIRED BASE: TS-24.5 already installed. No Node or npm needed.
+
+INSTALLATION (Windows)
+1. Close the game/server launched by INICIAR_INTERFAZ_WINDOWS.bat.
+2. Back up your game folder and your FULL SQLite career save.
+3. Extract this ZIP into the game's ROOT directory, which contains
+   INICIAR_INTERFAZ_WINDOWS.bat. Preserve the included subfolders and
+   replace files on request.
+4. In PowerShell at that directory, run:
+       python tools/verify_ts246_loans_package.py
+5. Optionally run the focused regression tests (some can take minutes):
+       python -m pytest -ra tests/test_ts_24_6_loans_free_agents.py
+6. Run INICIAR_INTERFAZ_WINDOWS.bat and use Ctrl+F5 to reload the UI.
+
+WHERE TO USE IT
+- Scouting -> Loans & free agents.
+- Loan out / Loan in: select a player and propose a 6-, 12- or 24-month loan.
+- Choose the BORROWER's percentage of the existing wage and a credible
+  playing-time role. Parent retains the employment contract. There are no
+  installment payments.
+- Optionally include a fixed future purchase price; this is NOT required.
+  The borrowing manager may exercise it only in the last 90 days of the
+  loan AND during a transfer window; the player must still consent.
+- My loans: inspect active/completed agreements, playing time and the
+  minutes target, recall eligible outgoing players, or buy with the option.
+- Free agents: after contracts expire and the monthly review is run,
+  eligible players can be signed directly with a professional contract.
+- Buybacks: exercise valid buyback rights from earlier player sales.
+
+GUARDRAILS / LIMITATIONS
+- The lender cannot abandon its starting XI or second goalkeeper.
+- An academy youth must first be promoted to the FIRST TEAM before loans.
+- Playing-time promises are recorded and monitored; the game does not yet
+  impose automatic sanctions on clubs missing a promise.
+- AI clubs use vacant roles to sign some free agents; autonomous AI-to-AI
+  loan offers are NOT part of this release.
+- Salaries are prorated by actual active loan days. An unsigned player has
+  no club wage bill until a new contract is signed.
+- Contract expiry is reviewed monthly; some essential players can remain
+  under interim paid retention until the club has safe coverage.
+- A loan requires the parent professional contract to cover its full length.
+- Temporary borrower registration and permanent parental contract are both
+  saved. No player cloning. Duplicate monthly payments are prohibited.
+
+SAVE FORMAT: graph/manager-state version 16 (previously 15). Existing v15
+saves migrate forward on load and are only overwritten when you save again.
+Keep your backup; previous builds may reject version 16.
+
+SUGGESTED GITHUB DESKTOP BRANCH:
+feat/ts-24-6-loans-free-agents-buybacks
+
+SUGGESTED COMMIT SUMMARY:
+feat(transfers): add 6-12-24 month loans, shared wages, free agents and buybacks

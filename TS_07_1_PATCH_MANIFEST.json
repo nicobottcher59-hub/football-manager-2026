@@ -1,0 +1,39 @@
+{
+  "id": "TS-07.1",
+  "scope": "Consolidated match, tactics, lineup integrity",
+  "requires": "TS-07",
+  "branch": "fix/ts-07-1-match-lineup-integrity",
+  "commit_summary": "fix(match): enforce canonical fixtures, tactics and lineup integrity",
+  "files": [
+    {
+      "path": "src/football_manager/services/match_result_contract.py",
+      "action": "modify",
+      "sha256": "ed0c8002ae1c7e7e6ff7d4b4961aa907e7f8c867b6f779f2e642d5e2336d8e03",
+      "expected_base_sha256": "1ffef177f528fec9bbba8c7de6e9f90872740b0fb3525a11959a16e4f1fce7fd"
+    },
+    {
+      "path": "src/football_manager/ui_shell/server.py",
+      "action": "modify",
+      "sha256": "d1cfb7984b04b26e1b58d72ac75943d009146181e62c3df5dfe57d0487726b05",
+      "expected_base_sha256": "119265781e5e4cf59669c0d8925d92cbc5ba47b22d849cb034a3262cdb34dff3"
+    },
+    {
+      "path": "src/football_manager/domain/club.py",
+      "action": "modify",
+      "sha256": "08b99239eb005950e2aefa98a554fba4762c2242336546bf9d3dbec8bace2592",
+      "expected_base_sha256": "6bf28f02ffb07a80ee17fa547c35ba0eef6ec41ea8990d9ec13e041705b9c67e"
+    },
+    {
+      "path": "tests/test_ts_07_1_match_lineup_integrity.py",
+      "action": "add",
+      "sha256": "22df01d210c0be99eb716c09c9f263d7aa5d3ac7503880d9cade2c4a65439b07",
+      "expected_base_sha256": null
+    },
+    {
+      "path": "docs/TS_07_1_MATCH_AND_LINEUP_INTEGRITY.md",
+      "action": "add",
+      "sha256": "9acd5d6e91ad4ee0af7759a7921ab603e207db0b979dfee1d4e7429f5f4d7e86",
+      "expected_base_sha256": null
+    }
+  ]
+}

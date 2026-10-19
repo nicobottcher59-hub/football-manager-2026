@@ -1,0 +1,50 @@
+/* UI-3.4.1 — club-only live auto-simulation display and integrated confirmation. */
+.fm-sim-overlay{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:30px;background:rgba(2,10,22,.92);backdrop-filter:blur(11px);color:#edf6ff}
+.fm-sim-window{width:min(950px,100%);max-height:min(92vh,980px);display:flex;flex-direction:column;overflow:hidden;border:1px solid #306183;border-radius:15px;background:radial-gradient(ellipse at 80% 0%,#153954 0,transparent 53%),linear-gradient(146deg,#0a2238,#061322);box-shadow:0 30px 100px #000b,0 0 80px #007cc41c;font-family:inherit}
+.fm-sim-top{padding:26px 31px 18px;display:flex;align-items:start;justify-content:space-between;gap:18px;border-bottom:1px solid #2b527050}
+.fm-sim-eyebrow{display:block;color:#45c3f9;font-size:10px;letter-spacing:1.8px;font-weight:850;margin-bottom:9px}
+.fm-sim-top h2{font-size:28px;line-height:1.2;color:white;margin:0 0 8px;font-weight:850}
+.fm-sim-top p{margin:0;color:#a5c4d7;font-size:13px}
+.fm-sim-pulse{border:1px solid #276c90;border-radius:6px;background:#12466b;color:#7edaff;padding:7px 11px;font-size:11px;letter-spacing:.5px;white-space:nowrap;font-weight:800}
+.fm-sim-pulse-done{color:#65f0bd;background:#103c33;border-color:#267b60}.fm-sim-pulse-error{color:#ff93a4;background:#482936;border-color:#a45567}
+.fm-sim-status{display:flex;justify-content:space-between;align-items:end;gap:16px;padding:24px 31px 15px}
+.fm-sim-status>div{display:flex;flex-direction:column;gap:6px}.fm-sim-status small{font-size:10px;letter-spacing:1px;font-weight:800;color:#8ca8bd}
+.fm-sim-status strong.fm-sim-date{font-size:23px;color:#fff}.fm-sim-description{color:#80a8c2;font-size:12px}
+.fm-sim-percentage{font-size:36px;color:#52beff;font-variant-numeric:tabular-nums}
+.fm-sim-progress{height:11px;background:#14364e;border-radius:99px;margin:0 31px;overflow:hidden;box-shadow:inset 0 2px 7px #00131b}
+.fm-sim-progress-fill{height:100%;width:0;background:linear-gradient(90deg,#087af0,#33b9ff,#66d4f5);border-radius:inherit;transition:width .17s;box-shadow:0 0 16px #16aaff}
+.fm-sim-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:#31546c55;border:1px solid #31546c55;margin:22px 31px 15px;border-radius:8px;overflow:hidden}
+.fm-sim-summary>span{display:flex;flex-direction:column;gap:5px;align-items:center;padding:11px 5px;background:#0b263d}.fm-sim-summary strong{font-size:22px;color:#e8f8ff;font-variant-numeric:tabular-nums}.fm-sim-summary small{font-size:9px;letter-spacing:.5px;color:#8aa9bc;font-weight:750}
+.fm-sim-feed-heading{padding:7px 31px 12px;display:flex;align-items:center;justify-content:space-between;gap:20px}.fm-sim-feed-heading h3{margin:0;font-size:15px;color:#e7f7ff}
+.fm-sim-feed-heading label{display:flex;align-items:center;gap:9px;color:#98bad1;font-size:12px}.fm-sim-speed{background:#102b44;color:#e4f7ff;border:1px solid #316583;padding:6px 9px;border-radius:6px;font:inherit}
+.fm-sim-feed{margin:0 31px;display:flex;flex-direction:column;gap:7px;overflow:hidden;min-height:200px;max-height:350px;flex:1}
+.fm-sim-feed-empty{height:160px;display:grid;place-items:center;text-align:center;color:#709ab7;border:1px dashed #294e6b;border-radius:9px;font-size:12px;padding:20px}
+.fm-sim-result{position:relative;display:grid;grid-template-columns:190px 1fr;align-items:center;gap:12px;padding:10px 14px;border:1px solid #1d4963;border-radius:9px;background:linear-gradient(110deg,#0d2c43,#0a2236);animation:fm-sim-slide .16s ease-out;flex:none;min-height:45px}
+.fm-sim-result.fm-sim-own{border-color:#168dea;background:linear-gradient(110deg,#123f6c,#0c2c48);box-shadow:inset 3px 0 #4fbfff}
+.fm-sim-result-meta{display:flex;flex-direction:column;gap:3px;color:#aac3d5;font-size:10px}.fm-sim-result-meta span+span{color:#64bfea;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fm-sim-result-main{display:grid;grid-template-columns:minmax(0,1fr) 70px minmax(0,1fr);align-items:center;gap:9px;font-size:12px;font-weight:650}
+.fm-sim-team{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fm-sim-away{text-align:right}
+.fm-sim-score{display:block;text-align:center;border:1px solid #32637c;background:#103c55;border-radius:6px;padding:6px 1px;font-size:13px;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fm-sim-shootout{grid-column:2;text-align:center;font-size:10px;color:#f2ca7e}
+.fm-sim-bottom{padding:19px 31px 25px;display:flex;align-items:center;justify-content:space-between;gap:18px;border-top:1px solid #23526b;flex-wrap:wrap;margin-top:15px}
+.fm-sim-note{font-size:11px;line-height:1.5;color:#99b7c9;margin:0;max-width:520px}.fm-sim-done{padding:11px 19px;color:#fff;background:linear-gradient(140deg,#0c85e9,#0861b3);font-weight:800;font-size:13px;border:1px solid #52b8ff;border-radius:7px;cursor:pointer}
+.fm-sim-done:disabled{opacity:.44;cursor:not-allowed;background:#18425e}
+@keyframes fm-sim-slide{from{opacity:.2;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:740px){.fm-sim-overlay{padding:8px}.fm-sim-top,.fm-sim-status,.fm-sim-feed-heading{padding-left:16px;padding-right:16px}.fm-sim-progress,.fm-sim-summary,.fm-sim-feed{margin-left:16px;margin-right:16px}.fm-sim-top h2{font-size:21px}.fm-sim-status strong.fm-sim-date{font-size:18px}.fm-sim-result{grid-template-columns:1fr;gap:4px}.fm-sim-result-meta{flex-direction:row}.fm-sim-feed{min-height:120px}.fm-sim-top{flex-wrap:wrap}.fm-sim-bottom{padding:15px}}
+@media(prefers-reduced-motion:reduce){.fm-sim-result{animation:none}.fm-sim-progress-fill{transition:none}}
+
+/* UI-3.4.1 hotfix: in-game confirmation instead of the browser's native confirm(). */
+.fm-sim-confirm-backdrop{position:fixed;inset:0;z-index:9998;display:grid;place-items:center;padding:20px;background:rgba(2,10,24,.8);backdrop-filter:blur(8px)}
+.fm-sim-confirm-dialog{width:min(560px,100%);padding:26px 28px 25px;border:1px solid #316387;border-radius:14px;background:radial-gradient(ellipse at 85% 0%,#19476a 0,transparent 55%),linear-gradient(150deg,#0d2943,#061525);color:#edf7ff;box-shadow:0 28px 90px #000d,0 0 65px #0587df14;font-family:inherit}
+.fm-sim-confirm-head{display:flex;gap:14px;align-items:center}.fm-sim-confirm-icon{display:grid;place-items:center;width:48px;height:48px;flex:none;border:1px solid #3281b8;border-radius:11px;color:#6bcbff;background:linear-gradient(145deg,#154c79,#0a2c49);font-size:30px;font-weight:700}
+.fm-sim-confirm-head h2{font-size:24px;font-weight:850;color:#fff;line-height:1.2;margin:3px 0 0}
+.fm-sim-confirm-dialog #fm-sim-confirm-desc{color:#b6cfe1;font-size:13px;line-height:1.65;margin:19px 0 20px}.fm-sim-confirm-dialog #fm-sim-confirm-desc strong{color:#edf9ff}
+.fm-sim-confirm-stats{border:1px solid #2b536d;border-radius:9px;background:#092238;overflow:hidden}
+.fm-sim-confirm-target{display:flex;flex-direction:column;gap:6px;padding:17px 19px;background:linear-gradient(100deg,#143d60,#0a263c)}
+.fm-sim-confirm-target small,.fm-sim-confirm-metrics small{font-size:10px;letter-spacing:.65px;font-weight:800;color:#9ab8d0}
+.fm-sim-confirm-date{font-size:21px;color:#fff;line-height:1.2}.fm-sim-confirm-from{font-size:11px;color:#90b7d1}
+.fm-sim-confirm-metrics{display:grid;grid-template-columns:1fr 1fr}.fm-sim-confirm-metrics>span{padding:15px 18px;display:flex;flex-direction:column;gap:6px}.fm-sim-confirm-metrics>span+span{border-left:1px solid #2a4f69}.fm-sim-confirm-metrics strong{font-size:22px;color:#5ec9ff;font-variant-numeric:tabular-nums}
+.fm-sim-confirm-notice{display:flex;align-items:flex-start;gap:10px;margin:16px 0 22px;padding:11px 12px;border:1px solid #436482;border-radius:8px;background:#102e46;color:#7fc9ec}.fm-sim-confirm-notice>span{font-size:17px}.fm-sim-confirm-notice p{font-size:11px;color:#b4c7d8;line-height:1.6;margin:0}
+.fm-sim-confirm-actions{display:flex;justify-content:flex-end;gap:11px}.fm-sim-confirm-actions button{border-radius:7px;font:inherit;font-size:12px;font-weight:800;padding:12px 19px;cursor:pointer}.fm-sim-confirm-cancel{background:#0e2b43;border:1px solid #355d79;color:#c4d7e7}.fm-sim-confirm-accept{background:linear-gradient(140deg,#0d8cea,#075fa9);border:1px solid #4eb9ff;color:#fff;box-shadow:0 5px 20px #0b80d338}.fm-sim-confirm-accept span{margin-left:8px}
+.fm-sim-confirm-actions button:focus-visible{outline:2px solid #8ed8ff;outline-offset:3px}.fm-sim-confirm-actions button:hover{filter:brightness(1.12)}
+@media(max-width:600px){.fm-sim-confirm-dialog{padding:20px 17px}.fm-sim-confirm-head h2{font-size:20px}.fm-sim-confirm-date{font-size:17px}.fm-sim-confirm-actions{flex-direction:column-reverse}.fm-sim-confirm-actions button{width:100%}}

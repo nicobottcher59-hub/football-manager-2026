@@ -1,0 +1,15 @@
+{
+  "competition_id": "eng-premier-league",
+  "edition_id": "eng-premier-league-2026-27",
+  "season_label": "2026/27",
+  "competition_name": "Premier League",
+  "short_name": "Premier League",
+  "country": "England",
+  "stage_id": "league",
+  "timezone": "Europe/London",
+  "source_url": "https://www.premierleague.com/en/news/4675097/all-380-fixtures-for-202627-premier-league-season",
+  "source_title": "All 380 fixtures for 2026/27 Premier League season",
+  "published_date": "2026-06-19",
+  "snapshot_date": "2026-10-08",
+  "dataset_basis": "Official published fixture schedule; kickoff times follow the published article, using its stated default times where no individual kickoff was specified. Fixtures remain subject to later real-world changes."
+}

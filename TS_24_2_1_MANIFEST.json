@@ -1,0 +1,14 @@
+{
+  "update": "TS-24.2.1 Squad Contracts in Table and Collapsible Details",
+  "base": "TS-24.2",
+  "save_graph_version": 13,
+  "files": 6,
+  "sha256": {
+    "TS_24_2_1_PATCH_INSTRUCTIONS.txt": "6d68c4afe9d551b9926ae3b69e4262bd0dcdc8878c51334c736178171f60cf20",
+    "TS_24_2_1_TEST_REPORT.md": "b4138653187c1dc5aeba47e4cbc74c642ca1c915ca4d9476fbbf77bc8da32df6",
+    "frontend/public/squad/roster.js": "c644ba677ca44a51ac7dc0072613e20661d3429bb3aa8975972129cbff439c87",
+    "frontend/public/squad/roster.css": "8f9039d39cfeca1eeb66c80174759067620a14ffd1117c77be1debc0e1abe5b3",
+    "tests/test_ts_24_2_1_squad_contract_display.py": "22c87d762868d87483fbf01f9901a8530ae1df31f0204b8416f323266cdaac36",
+    "tools/verify_ts2421_squad_package.py": "d935c95a8c576169287d4f08d546cd591cf684628c2aee0dc8309a23c7452a7e"
+  }
+}

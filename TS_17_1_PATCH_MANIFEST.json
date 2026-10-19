@@ -1,0 +1,18 @@
+{
+  "stage": "17_1",
+  "branch": "fix/ts-17-1-multiseason-scheduling",
+  "summary": "fix(calendar): resolve multi-season fixture congestion and tie chronology",
+  "base": "previous TS-17 patch",
+  "files": [
+    {
+      "path": "src/football_manager/domain/world_runner.py",
+      "sha256": "f99eb4e9d3217f47f442d28da52866127b337931222ad46b1e143c03178bf5d4",
+      "bytes": 54950
+    },
+    {
+      "path": "tests/test_ts_17_1_multiseason_scheduling.py",
+      "sha256": "84822fe2513e0b7c22c5a2a1474aa35387dea08542a0c122b6c6485d922e7f3f",
+      "bytes": 5889
+    }
+  ]
+}

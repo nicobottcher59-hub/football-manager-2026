@@ -1,0 +1,23 @@
+{
+  "version": "TS-24.10",
+  "base": "TS-24.9",
+  "save_graph_version": 16,
+  "files": 15,
+  "sha256": {
+    "src/football_manager/domain/loan_market.py": "00a224a32228319ae8b8ee4d7b8413f0e274b9f85f212b4b47ae199d3cd5a20a",
+    "src/football_manager/domain/player_aging.py": "7652f8235dbe66fd224b6f5b9e8c067090d3170092144e5c3274be57f2fd3bcb",
+    "src/football_manager/services/club_economy.py": "7a76251c1079cf83133d11d07265c83db73e29e06b2f935811cf85617489d5a8",
+    "src/football_manager/services/loan_market.py": "746bf116468d583e7ca68654315c405a5a6f5ba34a4ea1020689f4bc84005ae6",
+    "src/football_manager/services/player_aging.py": "8c3fae783588b0ef564442b68470fa94d77379e31febfafa1ad4c4b7bc25f23e",
+    "src/football_manager/services/transfer_personal.py": "ef6e4a7fb58c5397d043b187d890a78ad36aad6966c56b4ac367c8759663a8c8",
+    "tests/test_ts_21_3_player_aging.py": "dd4dc584a908153fcdd427be4f35db1dd13a4beab1bd600d84f2140989df06f6",
+    "tests/test_ts_24_7_long_horizon.py": "39a2ae2a7d8f533dd63525e486e72fe329d76966d83ffc9ddb0ccb6931246397",
+    "tests/test_ts_24_9_calibration.py": "098c1d406f07ec7bbe495813724d2b825a9709ec207c709cdaf2c315ec26e9b0",
+    "tests/test_ts_24_10_player_autonomy.py": "9b4466d827f6b50cb32640ff85d8c8ba55a453dbcb1be69be66e1c035bbdc4c3",
+    "tools/verify_ts2410_player_autonomy_package.py": "5f1c1dcf3dd75b1ffb610ba0a4a314c514470daf64568a5218a191dc441e652e",
+    "docs/TS_24_10_AUTONOMIA_RETIROS.md": "c4f070b215cb236196df03ce9caee57f4dca1ac43cba6086b1d5ccbeeabeb662",
+    "reports/ts2410_diagnostic_5y.json": "503bdc4932d6e7bfd62eb8836170db6b7627137c0930b54d4e89a4da2c5e1d5d",
+    "TS_24_10_TEST_REPORT.md": "f5e0c916e47a77b70cc1a65171e12070f530efaea2779ad190c314687e3ea96c",
+    "TS_24_10_PATCH_INSTRUCTIONS.txt": "987f206836ad6892b5d95a139fe231f2b923c17e973ca15edd399352b02fda9c"
+  }
+}

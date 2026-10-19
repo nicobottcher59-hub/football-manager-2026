@@ -1,0 +1,54 @@
+{
+  "patch": "TS-16",
+  "name": "Application Architecture",
+  "base_patch": "TS-15",
+  "branch": "refactor/ts-16-application-boundaries",
+  "summary": "refactor(app): separate UI application services and package static assets",
+  "files": [
+    {
+      "path": "MANIFEST.in",
+      "sha256": "3fbd692d104251f0b0247b7e85d597c7271e56ea301390fccacf24d1f177fe28",
+      "bytes": 80
+    },
+    {
+      "path": "setup.py",
+      "sha256": "13a9f92462e94eff20d16a548e487c9d650c5e868b4d21d900fe75fec0cd293f",
+      "bytes": 994
+    },
+    {
+      "path": "src/football_manager/ui_shell/application.py",
+      "sha256": "0b875dbfed839d6dc0a486a8ed0bd5b1505c13de33781139f84a6c8a956f7454",
+      "bytes": 8564
+    },
+    {
+      "path": "src/football_manager/ui_shell/runtime.py",
+      "sha256": "12e575630104ee6f339f6f66b8e73c638398c133b5d2d5c76ee6bffd24112802",
+      "bytes": 2691
+    },
+    {
+      "path": "src/football_manager/ui_shell/static_assets.py",
+      "sha256": "122922affc0940b02fbd5adb3b257e6733b3bea8c51ec775b89b2cf671c353ec",
+      "bytes": 2020
+    },
+    {
+      "path": "src/football_manager/ui_shell/server.py",
+      "sha256": "5453e0b2f93d7279b5efbef4f0a4260829b6b273f594f6298cc7f8709ee27bc5",
+      "bytes": 10303
+    },
+    {
+      "path": "tests/test_ts_16_application_architecture.py",
+      "sha256": "80dcb217b86c4d0886fa477decaa1736620125b35db31f97560875b8fd98c4ea",
+      "bytes": 7393
+    },
+    {
+      "path": "docs/TS_16_APPLICATION_ARCHITECTURE.md",
+      "sha256": "1444f4ff3508de05b40782c2417c6c81ef07f936c0e42a7f1f378b5d1ee8b823",
+      "bytes": 4017
+    },
+    {
+      "path": "TS_16_PATCH_INSTRUCTIONS.txt",
+      "sha256": "36a9a45a6aa6e6a8986ad73493f982997327208ea926c7bdff9fe3902c0784c9",
+      "bytes": 1333
+    }
+  ]
+}

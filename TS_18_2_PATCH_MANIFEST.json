@@ -1,0 +1,44 @@
+{
+  "patch": "TS-18.2",
+  "base": "TS-18.1",
+  "branch": "fix/ts-18-2-role-position-integrity",
+  "summary": "fix(match): recalculate role and position ACT for tactical changes and substitutes",
+  "files": [
+    {
+      "path": "src/football_manager/domain/match_snapshot.py",
+      "sha256": "073495d411960b4233b7dfffc9660fa0892d85e62f5c7da0a397c272e5c0cae6"
+    },
+    {
+      "path": "src/football_manager/domain/snapshot_assignment.py",
+      "sha256": "90b675360eeec4e6b70d5978f16aafffd400c864b54b515e5a8b4d6cfbc3ad76"
+    },
+    {
+      "path": "src/football_manager/services/match_snapshot_builder.py",
+      "sha256": "4fdd5ead1738c187482dd9703d9f6b01940b2d6e5479c8230be34c6c134b603a"
+    },
+    {
+      "path": "src/football_manager/simulation/engine.py",
+      "sha256": "6a15de5625339521260aaef9d26da3e9ab711febce237a0a29de1331352c36d7"
+    },
+    {
+      "path": "src/football_manager/simulation/flow.py",
+      "sha256": "da41124b251a54358536c0ea56f43ed5fad11c2f32abf0be4cac4c2042403217"
+    },
+    {
+      "path": "src/football_manager/fast_simulation/engine.py",
+      "sha256": "be1e6ce595ac2cfc28cda957ae8606513ee0448497b4b6503023e3479613a367"
+    },
+    {
+      "path": "tests/test_ts_18_2_roles_position_integrity.py",
+      "sha256": "e2783951b80224f7fd1a5a17a185948f5af002bb6ee2cf10a3d4637fe3b5c7fc"
+    },
+    {
+      "path": "docs/TS_18_2_ROLES_POSITION_INTEGRITY.md",
+      "sha256": "dd4157c6c9b34b74ad6b7d6c4a9f4585fcbe864729be32e6c372d6d15116de07"
+    },
+    {
+      "path": "TS_18_2_PATCH_INSTRUCTIONS.txt",
+      "sha256": "b93153e4e7a555e4d34965f07a3dc63de5280d09b8ba6e27dc1085b39ef59118"
+    }
+  ]
+}

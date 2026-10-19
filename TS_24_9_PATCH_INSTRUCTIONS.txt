@@ -1,0 +1,41 @@
+TS-24.9 - Calibracion y validacion avanzada
+PARCHE INCREMENTAL: requiere el juego completo con TS-24.8 instalada.
+
+INSTALACION (WINDOWS)
+1. Cerrar el juego y el navegador.
+2. Hacer una copia de la carpeta del proyecto y del archivo SQLite de partida.
+3. Descomprimir el ZIP en la carpeta raiz donde esta INICIAR_INTERFAZ_WINDOWS.bat.
+   Respetar carpetas src/, tools/, tests/, docs/ y reports/.
+4. Ejecutar desde esa carpeta: python tools/verify_ts249_calibration_package.py
+5. Opcional con pytest: python -m pytest -q tests/test_ts_24_9_calibration.py
+6. Reiniciar el juego y actualizar navegador con Ctrl + F5.
+
+CAMBIOS
+- Contrataciones anticipadas para cubrir proximos retiros (solo clubes IA).
+- Retiro mas realista de veteranos 43+, manteniendo titulares y dos arqueros.
+- Renovaciones automaticas sujetas a prevision de caja, sin reducir contratos.
+- Seleccion de semillas reproducibles, solo para pruebas y sin alterar el
+  mundo por defecto del juego (6606).
+- Auditoria multisemilla acelerada y muestra separada de partidos reales.
+
+AUDITORIAS (OPCIONALES; LA LARGA ES COSTOSA)
+ python tools/stress_ts249_multiseed.py --seeds 6606,7707,8808 --seasons 5 --output reports/ts249_multi_seed.json
+ python tools/stress_ts249_multiseed.py --seeds 9909 --seasons 20 --output reports/ts249_long_horizon.json
+ python tools/audit_ts249_real_match_minutes.py --matches 18 --output reports/ts249_real_minutes.json
+
+Las auditorias largas usan marcadores de fondo: no comprueban minutos ni
+lesiones de veinte temporadas completas con FastMatchSimulator. La muestra
+real se registra por separado. Ninguna prueba en Windows se ha ejecutado.
+
+COMPATIBILIDAD
+- No incluye archivos de partidas ni modifica la version SQLite v16.
+- TS-24.8 es requisito imprescindible; el verificador comprueba hashes
+  de los archivos incluidos, no la totalidad de instalaciones anteriores.
+
+GITHUB DESKTOP
+BRANCH
+ feat/ts-24-9-multiseed-market-calibration
+SUMMARY
+ test(career): calibrate succession, contract viability and multiseed horizons
+
+Confirmar primero TS-24.8 en Git antes de crear la rama TS-24.9.

@@ -1,0 +1,56 @@
+TS-21.1 - Mundo inglés persistente, planteles y tácticas
+======================================================
+
+REQUISITOS
+Este ZIP es incremental. Se aplica sobre football-manager-game con TS-20 y
+el hotfix TS-19-LM-RM-Arquero-Fijo instalados. Python 3.11 o superior,
+igual que el proyecto original. No necesita Node, npm ni compilación frontend.
+
+INSTALACIÓN EN WINDOWS
+1. Cerrá el juego y conservá una copia del proyecto y de tus partidas SQLite.
+2. Extraé el contenido del ZIP en la raíz del proyecto, donde está
+   INICIAR_INTERFAZ_WINDOWS.bat. Reemplazá los archivos y conservá las rutas.
+3. Desde esa carpeta ejecutá:
+   python tools/verify_ts21_english_world_package.py
+4. Pruebas específicas (requieren pytest, como las anteriores):
+   python -m pytest -ra tests/test_ts_21_english_world.py
+5. Abrí INICIAR_INTERFAZ_WINDOWS.bat y recargá con Ctrl + F5.
+
+DÓNDE VERLO
+Competitions / Other Leagues -> una de las cuatro divisiones inglesas ->
+Club squads & tactical identities, debajo del explorador de la competición.
+Inspect club permite elegir el equipo. Primary plan y Alternative plan
+muestran los roles por puesto y las instrucciones reales. Al desplegar un
+jugador se ven sus atributos. No se necesita una sección lateral nueva.
+
+PARTIDAS
+Las partidas completas anteriores se migran a la versión 5 en memoria;
+la base no se sobrescribe por cargarla. Los guardados v5 requieren este código.
+Se preservan tus jugadores, atributos, tácticas, relaciones y resultados.
+Los planteles incompletos se completan; no se borran jugadores para forzar 22.
+Los minutos de rivales previos a la migración no se inventan.
+
+La persistencia se incluye en el guardado completo SQLite ya existente.
+No se agrega autoguardado ni un nuevo menú de guardado: cerrar sin guardar
+sigue sin conservar la sesión. Los JSON de resultados NO guardan planteles;
+al importarlos se reinicia el registro actual de minutos, no se reconstruye
+el estado histórico de jugadores. Para continuar una carrera, usá el guardado
+completo, no el exportador de resultados.
+
+ALCANCE
+92 clubes activos, 22 jugadores iniciales por club, 2.024 futbolistas.
+11 identidades tácticas basadas en las instrucciones y roles existentes.
+Los rivales ingleses usan sus jugadores persistentes y el simulador rápido
+real; no se reconstruyen según la fuerza del equipo del usuario.
+Los clubes que salen de las cuatro divisiones se retienen sin inventar una
+liga adicional. Los nuevos entrantes externos reciben plantel una sola vez.
+
+Esta entrega es TS-21.1, la base del mundo. Todavía NO incorpora CA/PA,
+crecimiento o declive de atributos, entrenamiento nuevo, retiros ni Newgens.
+No modifica las fórmulas OVR/ACT, los roles existentes ni el motor de partidos.
+
+PRUEBA LARGA OPCIONAL
+python tools/check_ts21_full_season.py
+Crea una carrera de prueba independiente, completa la temporada, pasa a la
+siguiente y verifica guardar/cargar. No abre ni modifica tus partidas reales.
+Puede tardar varios minutos según tu equipo.

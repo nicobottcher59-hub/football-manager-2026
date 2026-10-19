@@ -1,0 +1,2 @@
+points,ppg_slope_per_10_points,xg_diff_slope_per_10_points,ppg_monotonic_violations,xg_monotonic_violations,largest_adjacent_ppg_jump,largest_adjacent_xg_jump
+7,0.4095238095238095,0.09488809523809523,3,2,0.8,0.30396999999999996

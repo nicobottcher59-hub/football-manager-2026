@@ -1,0 +1,318 @@
+{
+  "package": "TS-19 - Tactical Studio 2.0",
+  "type": "incremental",
+  "required_base": "main with TS-19.1.1 and earlier dependencies applied",
+  "branch": "feat/ts-19-tactical-studio-2-0",
+  "summary": "feat(tactics): integrate free phase shapes, tactic library and scheduled match plans",
+  "save_format": {
+    "read": [
+      1,
+      2,
+      3
+    ],
+    "write": 3,
+    "backup_required_for_downgrade": true
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "size": 23361,
+      "sha256": "b43ff7b9a98592101afa4616248084fc1b2277a9021121c9e8e94edba910c056"
+    },
+    {
+      "path": "README_DEV.md",
+      "size": 33802,
+      "sha256": "933e45bed77abacca14ab181a393d2592d55d73f5fe2533d1dc31f365d0173d6"
+    },
+    {
+      "path": "TS_19_TACTICAL_STUDIO_INSTRUCTIONS.txt",
+      "size": 2814,
+      "sha256": "394713da4132846558ac58ddb45f003df1a064967af3bb031babdeb6e811cb66"
+    },
+    {
+      "path": "TS_19_TEST_REPORT.md",
+      "size": 8240,
+      "sha256": "2a8ad47ea690bf647490d6c503412163e98493adcffd575b2f80782ac55a2a07"
+    },
+    {
+      "path": "docs/TS_19_TACTICAL_STUDIO.md",
+      "size": 11604,
+      "sha256": "148c332b8e39a584329a933548a4b86b2f430ee6e84276e1756aaf2d626bfd68"
+    },
+    {
+      "path": "frontend/portable/match.css",
+      "size": 37047,
+      "sha256": "ca42390d3c5c07e8edd4fc61178ed2f901b384016c9d7cba52531b59c905df67"
+    },
+    {
+      "path": "frontend/portable/match.js",
+      "size": 33123,
+      "sha256": "8904fbb464175c0c2216d159d7bbd7a3d123f83c17e5168437a8e703c0db5138"
+    },
+    {
+      "path": "frontend/public/squad/board.js",
+      "size": 6784,
+      "sha256": "6421b72141da52b1bdc9b2e6e331479fc29581c5ac3b1e525e757f5aefb5777a"
+    },
+    {
+      "path": "frontend/public/squad/embed.html",
+      "size": 875,
+      "sha256": "c478abdd971fded10b785ead72459aaf423aeafef20b3f46146d2cc486239e2d"
+    },
+    {
+      "path": "frontend/public/squad/squad.js",
+      "size": 36555,
+      "sha256": "10c4a0a75582ea169449432b33f19ba7e26db77851a08a84db5302549c0ae88d"
+    },
+    {
+      "path": "frontend/public/squad/studio.css",
+      "size": 12578,
+      "sha256": "5d06cb74ca36cc68b34387b96b3899df794f3041db97bfd6df72e5182dcf7743"
+    },
+    {
+      "path": "frontend/public/squad/studio.js",
+      "size": 23350,
+      "sha256": "c41c39a28a4323fb7d865af691d85ee37d46362f83ee9904fc9ea6987009b307"
+    },
+    {
+      "path": "reports/ts19/baseline_reference_match.json",
+      "size": 1257,
+      "sha256": "1e6260e19cd85e89929bba49e2d1edb38c366b65a96680d29966ab8007251c97"
+    },
+    {
+      "path": "reports/ts19/baseline_regression.log",
+      "size": 1313,
+      "sha256": "ae9fb1dce669371108ba8c77f0b7416b2e00a72a68bc6fdac85711047ee4ecbc"
+    },
+    {
+      "path": "reports/ts19/browser_interactions.json",
+      "size": 2174,
+      "sha256": "9b258f040fb0e94b939fe20ccaee5187e68cd9babc38fc4a968f217c5efe9a00"
+    },
+    {
+      "path": "reports/ts19/browser_interactions.log",
+      "size": 1904,
+      "sha256": "61a214e97b055197879a365e149014f7d901bc90325a031d64e757e554e55f7d"
+    },
+    {
+      "path": "reports/ts19/clean_install_smoke.log",
+      "size": 98,
+      "sha256": "017517d0be79344dfa195de63078b78d6b9e669090dc749fead1221ba2d20fb5"
+    },
+    {
+      "path": "reports/ts19/clean_install_supplementary_interrupted.log",
+      "size": 33,
+      "sha256": "4f653a0e984483819dba67aef5fb2c0453694565f100d3fb21d55c7f5e856718"
+    },
+    {
+      "path": "reports/ts19/full_regression.log",
+      "size": 1393,
+      "sha256": "f83aa6d20c101cf4bc7b82fe738de30dafa1e45ec47c85847ed73084fa0da5f3"
+    },
+    {
+      "path": "reports/ts19/new_tests_without_node.log",
+      "size": 546,
+      "sha256": "afd6bde5b56b94b6249cd305fd45655982eb545cf64a28304e5b812054752e0b"
+    },
+    {
+      "path": "reports/ts19/stress.json",
+      "size": 538,
+      "sha256": "ab9e8defc9562cc722a570948700231c3415a5ea3108918c34332e3277a79586"
+    },
+    {
+      "path": "reports/ts19/tactical_consumers.log",
+      "size": 2745,
+      "sha256": "52afa155d188017ad4d51a1dcfce7081d391365305cdcd8c3903351537eeee3a"
+    },
+    {
+      "path": "reports/ts19/ts19_reference_match.json",
+      "size": 1174,
+      "sha256": "7841f7a5eb49f93792301eda0629b3f7d83f65d21536272249780a645093fe37"
+    },
+    {
+      "path": "reports/ts19/validation_summary.json",
+      "size": 1564,
+      "sha256": "47daa8b76499ead3b997a238a76d3019f18a0515eb504f27f65422ab4a3a614d"
+    },
+    {
+      "path": "src/football_manager/dev_ui/formations.py",
+      "size": 380,
+      "sha256": "ea8c24ef56d66b080c9e27a67378e98fb94e8d75eaef2a3a6dca55d728e35275"
+    },
+    {
+      "path": "src/football_manager/dev_ui/session.py",
+      "size": 146141,
+      "sha256": "4a6041959cebaeb6cce24ed8b9f8b4458fcdfe0c226bf09ac425c8b288c63fe1"
+    },
+    {
+      "path": "src/football_manager/domain/match_snapshot.py",
+      "size": 6395,
+      "sha256": "da59b9824ab62d9f83e044f67ce562ff291792049dcaa67bdbb77b473b327bda"
+    },
+    {
+      "path": "src/football_manager/domain/tactical_catalogue.py",
+      "size": 7246,
+      "sha256": "344cc308840e3cd3084df2e179dcbf7de424aa3d4a398ba63806d25ee76fda64"
+    },
+    {
+      "path": "src/football_manager/domain/tactical_geometry.py",
+      "size": 10700,
+      "sha256": "5590247eb63b02829a77b1d3094b2e7a5dba94c80c6b7531d1d6f03acdb5444c"
+    },
+    {
+      "path": "src/football_manager/domain/tactical_shapes.py",
+      "size": 2754,
+      "sha256": "fba080a54e8fa0895353cde236fe8090ea07bdcf6fe0cb70993163eb658c7cca"
+    },
+    {
+      "path": "src/football_manager/domain/tactical_studio.py",
+      "size": 4094,
+      "sha256": "380817ea25ca5a25f573e143631cc8efea3688d788121e80a3adec6aec2cf2cc"
+    },
+    {
+      "path": "src/football_manager/domain/tactics.py",
+      "size": 12342,
+      "sha256": "f22b85e3fe9577c3c48109e9f61de796c96f3288b64276db688efb1030424ede"
+    },
+    {
+      "path": "src/football_manager/fast_simulation/engine.py",
+      "size": 98361,
+      "sha256": "3b02f0699e2beab30f49b6f4ea4850df6a404d41428efc2232ad2bb81a75578c"
+    },
+    {
+      "path": "src/football_manager/fast_simulation/models.py",
+      "size": 17190,
+      "sha256": "df814ea713aa2d59f6ad54a0a45979fac359d774fdac0f445c3b312c65df091c"
+    },
+    {
+      "path": "src/football_manager/fast_simulation/plans.py",
+      "size": 1745,
+      "sha256": "0e61b1060150fd482a8457f0c16577d525f5712888503b860c740042ece79d28"
+    },
+    {
+      "path": "src/football_manager/fast_simulation/profiles.py",
+      "size": 11012,
+      "sha256": "3372a66117b3d48f8628a8123e7615c75cc67c41316334e4961fc7a276720122"
+    },
+    {
+      "path": "src/football_manager/fast_simulation/tactical_coverage.py",
+      "size": 6020,
+      "sha256": "44233feaa06fbb0148b9f5c3a9a0ba41b78240c681b3c2ee4618324f88669dd6"
+    },
+    {
+      "path": "src/football_manager/fast_simulation/tactical_effects.py",
+      "size": 14735,
+      "sha256": "4d20c65e049dc8084617f8e0fcbdaa6f73c88f0c526c27a2392454a34a180c2a"
+    },
+    {
+      "path": "src/football_manager/persistence/manager_career.py",
+      "size": 12693,
+      "sha256": "be6d446bdb403ed2f0eb4ff9e8eb4a5c4b5a418bebcf7de97778d50d64815d14"
+    },
+    {
+      "path": "src/football_manager/persistence/session_codec.py",
+      "size": 14908,
+      "sha256": "e5dbf0f67dd89375e1b05481f1dd6b05be4cc106142b144ee26c86f1bfa09510"
+    },
+    {
+      "path": "src/football_manager/services/match_snapshot_builder.py",
+      "size": 7292,
+      "sha256": "e7a936f256501f65baed5add5770cfb7421244e08f031f683ecd4efddb1c4f3c"
+    },
+    {
+      "path": "src/football_manager/services/player_match_progression.py",
+      "size": 4514,
+      "sha256": "b0effe3f248e25915d317b95087d34d0fedffb99d6737b2a33d471fd420d776d"
+    },
+    {
+      "path": "src/football_manager/services/tactical_studio.py",
+      "size": 12490,
+      "sha256": "f873073f640b4dfe1052ec14a9a17fb6b4563eadb226499dd15de62fd6cf25e2"
+    },
+    {
+      "path": "src/football_manager/simulation/tactical_positioning.py",
+      "size": 21878,
+      "sha256": "fd2dd7982bd82d011fdc27a5b9e84befcc92332acd03a694930d8b43665fd31c"
+    },
+    {
+      "path": "src/football_manager/ui_shell/application.py",
+      "size": 8880,
+      "sha256": "bc435f92e9c2bd2795606f751dbd5c4b8e68d0f1e1b79b8e1801dcf87d005b69"
+    },
+    {
+      "path": "src/football_manager/ui_shell/match.py",
+      "size": 12030,
+      "sha256": "d617bf7af59a1384a4693113eae5ebedee47b803405fa5bcc372a49abc16bad4"
+    },
+    {
+      "path": "src/football_manager/ui_shell/models.py",
+      "size": 16832,
+      "sha256": "cd954d05e3453b2d4d07c1f7b3b2d4e99d6aa3e31a3396254e4743fc54310169"
+    },
+    {
+      "path": "src/football_manager/ui_shell/transactions.py",
+      "size": 3357,
+      "sha256": "456c96f6203f0bd530c265e204023d8d11a55068a8822b230aa1b4fff43adef4"
+    },
+    {
+      "path": "tests/fixtures/ts19/manager_v2_with_result.json.gz",
+      "size": 138428,
+      "sha256": "4e1eff62495b0826012bede290722e0235df7ddfeb419444fab61ee6064ea3af"
+    },
+    {
+      "path": "tests/test_ts_12_fast_match_discipline.py",
+      "size": 9685,
+      "sha256": "b99511f40ad653d9be2d31d0e24332471ecc9c79f6fb714a9159f1ec04b8bbe8"
+    },
+    {
+      "path": "tests/test_ts_13_tactical_consumer_coverage.py",
+      "size": 8061,
+      "sha256": "5a46fdb416abc3af7741f0110a0dd04390481dab99e7d90fea714fcbb5f47085"
+    },
+    {
+      "path": "tests/test_ts_15_career_save_reliability.py",
+      "size": 16472,
+      "sha256": "e89f860dd6bf8dfe4b52a91393862dd22aee1c975051de0d17259b5556f27291"
+    },
+    {
+      "path": "tests/test_ts_17_4_long_career_persistence.py",
+      "size": 2984,
+      "sha256": "a5356416766d6f409b4c747accd822c62dc00269d7092cd4724a19213282dc27"
+    },
+    {
+      "path": "tests/test_ts_18_3_tactical_logic_instructions.py",
+      "size": 11705,
+      "sha256": "c16611ad0ccf46d2cc3e3a7c6e66412e315aaf5d9fa937c9b4c16f8554e375bb"
+    },
+    {
+      "path": "tests/test_ts_19_frontend_contract.py",
+      "size": 6409,
+      "sha256": "1bed811b896027556f4849908b89f5abcd80b6713cb2e83aede85913d147a1f3"
+    },
+    {
+      "path": "tests/test_ts_19_tactical_match.py",
+      "size": 20076,
+      "sha256": "b2c177b14bb809fde5e2b64c73403c8a536fce1ed0e7c608f7c4b6241fbf1e4f"
+    },
+    {
+      "path": "tests/test_ts_19_tactical_studio.py",
+      "size": 13746,
+      "sha256": "2406ac1e0a08afca9bbf17bab595f3437848aa6679d2be8f422063c9db0efe54"
+    },
+    {
+      "path": "tools/validate_ts19_browser.py",
+      "size": 15800,
+      "sha256": "65e956750382493b853708b42ac2e9758c52c44a3a2628ef5941640516a987bb"
+    },
+    {
+      "path": "tools/validate_ts19_stress.py",
+      "size": 5344,
+      "sha256": "00b04228a4631cc296fde4e05c4961c3027a8433b8f1b2bc4216134f1e8fbc14"
+    },
+    {
+      "path": "tools/verify_ts19_package.py",
+      "size": 1515,
+      "sha256": "d70181c836ee89aa710a3a5436ecaa148e1e7bab37ec74cca2954cb880e16615"
+    }
+  ]
+}
