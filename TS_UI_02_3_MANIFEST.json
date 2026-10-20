@@ -1,0 +1,56 @@
+{
+  "version": "TS-UI-02.3",
+  "patch_type": "incremental",
+  "requires": [
+    "TS-UI-02.2"
+  ],
+  "branch": "feat/ts-ui-02-3-animated-squad",
+  "summary": "feat(ui): TS-UI-02.3 animated club-themed Squad polish",
+  "changes": [
+    {
+      "path": "frontend/public/squad/embed.html",
+      "bytes": 1201,
+      "sha256": "7af05456672a53640757336708c4ae9ef8cf940763f9adef80e3b11132411bda"
+    },
+    {
+      "path": "frontend/public/squad/squad.js",
+      "bytes": 43681,
+      "sha256": "da24b057a38187fb9f5bf0d2ddcae00784e5cb3e930b463147df6937332ac9cf"
+    },
+    {
+      "path": "frontend/public/squad/squad_ui02.js",
+      "bytes": 30777,
+      "sha256": "a7e4dd56ba6e5393dfef509ff9318fc42cd267c2c150120bb534126e64abf423"
+    },
+    {
+      "path": "frontend/public/squad/squad_ui023.css",
+      "bytes": 25662,
+      "sha256": "9418a96839ccc07aeca2a4f4efb4ef9340f6249a0d191903c240390b337e680b"
+    },
+    {
+      "path": "frontend/portable/data/club-identities.json",
+      "bytes": 806,
+      "sha256": "7a3f2cc9c0185c1cb22cae7ee6c4329f420b9b031ac68b5f490936f621c5fc64"
+    },
+    {
+      "path": "tests/test_ts_ui_02_3_squad_visual.py",
+      "bytes": 4595,
+      "sha256": "7d2c9a19656ef00961c2b4a4cc3b66662f1b8ca5f18b9b6adb5ba80959dc5e7e"
+    },
+    {
+      "path": "docs/TS_UI_02_3_ANIMATED_SQUAD.md",
+      "bytes": 3804,
+      "sha256": "a111ba84b262082dc5ef7b6786eca7f1f9706fb132b012259b9d08615ad9e1fd"
+    },
+    {
+      "path": "INSTALAR_TS_UI_02_3.txt",
+      "bytes": 2633,
+      "sha256": "f3963e6d33b3a79f7dde4aa786ae029335f76865315dcb46634276fc14bfa579"
+    },
+    {
+      "path": "TS_UI_02_3_TEST_REPORT.md",
+      "bytes": 1942,
+      "sha256": "5f81a1251c67a62075a28844c6eb1cc74cab22568fc67cd47a0b40a07d29ae64"
+    }
+  ]
+}

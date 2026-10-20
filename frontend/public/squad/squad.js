@@ -65,6 +65,8 @@
     if(busy||inspectedClub)return;
     const keepScroll = {
       roster: $('.rt-table-wrap')?.scrollLeft ?? null,
+      squadList: $('.s2-list-scroll')?.scrollTop ?? null,
+      squadDetail: $('.s2-detail-scroll')?.scrollTop ?? null,
       team: $('.fm-tactic-controls')?.scrollTop ?? null,
       instructions: $('.fm-instruction-scroll')?.scrollTop ?? null,
       attributes: $('.fm-attr-scroll')?.scrollTop ?? null,
@@ -76,6 +78,15 @@
       const result=await res.json();
       if(!res.ok)throw Error(result.error||'Command rejected');
       data=result;
+      // A squad-number/transfer command returns the default season totals. If
+      // the user is inspecting one competition, immediately re-read that scope.
+      if(screen==='squad' && window.FMRoster?.state?.competition && window.FMRoster.state.competition!=='all'){
+        const scoped=new URLSearchParams();
+        if(window.FMRoster.state.season)scoped.set('season',window.FMRoster.state.season);
+        scoped.set('competition',window.FMRoster.state.competition);
+        const current=await fetch('/api/squad?'+scoped,{cache:'no-store'});
+        if(current.ok)data=await current.json();
+      }
       publishSnapshot();
       selectedSlot=selectedSlot && result.slots.some(s=>s.slot_id===selectedSlot)?selectedSlot:null;
       if(success)announce(success);
@@ -97,6 +108,8 @@
   }
   function restoreScroll(previous){
     if(previous.roster!==null && $('.rt-table-wrap')) $('.rt-table-wrap').scrollLeft=previous.roster;
+    if(previous.squadList!=null && $('.s2-list-scroll')) $('.s2-list-scroll').scrollTop=previous.squadList;
+    if(previous.squadDetail!=null && $('.s2-detail-scroll')) $('.s2-detail-scroll').scrollTop=previous.squadDetail;
     if(previous.team!==null && $('.fm-tactic-controls')) $('.fm-tactic-controls').scrollTop=previous.team;
     if(previous.instructions!==null && $('.fm-instruction-scroll')) $('.fm-instruction-scroll').scrollTop=previous.instructions;
     if(previous.attributes!==null && $('.fm-attr-scroll')) $('.fm-attr-scroll').scrollTop=previous.attributes;
@@ -289,14 +302,24 @@
   function refreshKeepingTable(){
     const table=$('.rt-table-wrap');
     const left=table?.scrollLeft ?? 0, top=table?.scrollTop ?? 0;
+    const squadList=$('.s2-list-scroll')?.scrollTop ?? null;
+    const detail=$('.s2-detail-scroll')?.scrollTop ?? null;
     render();
     const newer=$('.rt-table-wrap');
     if(newer){newer.scrollLeft=left;newer.scrollTop=top;}
+    if(squadList!=null && $('.s2-list-scroll'))$('.s2-list-scroll').scrollTop=squadList;
+    if(detail!=null && $('.s2-detail-scroll'))$('.s2-detail-scroll').scrollTop=detail;
   }
   function render(){
     if(!data)return;
     if(inspectedClub&&data.available===false){root.innerHTML=`<section class="rt-card"><h2>${esc(data.club)}</h2><p>${esc(data.message)}</p></section>`;return;}
+    // TS-UI-02.2: preserve independent panel positions during model refreshes.
+    // An open tab or a newly selected player explicitly resets the inspector only.
+    const squadListTop=screen==='squad'?$('.s2-list-scroll')?.scrollTop:null;
+    const squadDetailTop=screen==='squad'?$('.s2-detail-scroll')?.scrollTop:null;
     root.innerHTML=(screen==='squad'?window.FMRoster.render(data):toolbar()+(tacticMode==='editor'?tacticsScreen():lineupScreen()))+(pickerOpen?formationDialog():'');
+    if(squadListTop!=null && $('.s2-list-scroll'))$('.s2-list-scroll').scrollTop=squadListTop;
+    if(squadDetailTop!=null && $('.s2-detail-scroll'))$('.s2-detail-scroll').scrollTop=squadDetailTop;
     root.classList.toggle('is-tactics',screen==='tactics');
     root.classList.toggle('is-squad',screen==='squad');
     root.classList.toggle('is-tactical-editor',screen==='tactics'&&tacticMode==='editor');
@@ -351,7 +374,13 @@
   }
   root.addEventListener('click',event=>{
     const button=event.target.closest('button');
-    if(!button)return;
+    if(!button){
+      // TS-UI-02.2: the entire list row opens the inspector; player names
+      // remain separate buttons leading to the full player history/profile.
+      const row=screen==='squad'?event.target.closest('[data-s2-row]'):null;
+      if(row)window.FMRoster.onClick({dataset:{rosterExpand:row.dataset.s2Row}},refreshKeepingTable);
+      return;
+    }
     if(button.hasAttribute('data-open-career-player')) {
       const id=button.dataset.openCareerPlayer;
       if(parent!==window)parent.postMessage({type:'fm-open-history',entity:'player',id},window.location.origin);
@@ -399,6 +428,17 @@
       }
       selectedSlot=button.dataset.playerSlot; activeTab='role';render();
     }
+  });
+  // TS-UI-02.3: selectable cards also work with Enter/Space. Navigation has
+  // its own explicit button, so focusing the player's name never opens both.
+  root.addEventListener('keydown',event=>{
+    if(screen!=='squad'||!['Enter',' '].includes(event.key))return;
+    if(event.target.closest('button,input,select,textarea,a'))return;
+    const card=event.target.closest('[data-s2-row]');
+    if(!card)return;
+    event.preventDefault();
+    window.FMRoster.onClick({dataset:{rosterExpand:card.dataset.s2Row}},refreshKeepingTable);
+    $('.s2-roster-row.selected')?.focus({preventScroll:true});
   });
   root.addEventListener('change',event=>{
     const e=event.target;

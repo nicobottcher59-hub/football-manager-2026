@@ -1,0 +1,48 @@
+TS-UI-02.3 - SQUAD VISUAL Y ANIMADA (PARCHE INCREMENTAL)
+=======================================================
+
+BASE OBLIGATORIA:
+  TS-UI-02.2 ya instalado (y sus parches previos).
+
+INSTALAR EN WINDOWS
+1. Cerrar el juego. Hacer copia de seguridad de la carpeta y partidas.
+2. Extraer este ZIP en la carpeta RAIZ del proyecto Football Manager.
+3. Aceptar reemplazar archivos. No borrar otros archivos ni bases de datos.
+4. Abrir con el lanzador habitual de Windows.
+5. Usar Ctrl + F5 si se ven estilos anteriores en la interfaz.
+
+QUE VERIFICAR
+- Squad: jugadores presentados en TARJETAS (no tabla), panel de jugador a la derecha.
+- Click en la tarjeta, incluida la zona del nombre: selecciona jugador.
+- Click EXCLUSIVAMENTE en el icono ↗ o el boton Full player profile:
+  navega al perfil/historial sin seleccionar accidentalmente otra tarjeta.
+- Enter o Espacio sobre tarjeta enfocada: selecciona al jugador.
+- Cuatro pestañas con transiciones (Perfil, Temporada, Estado, Contrato/Acciones).
+- Temporada: All competitions y torneos individuales; datos reales del juego.
+- Contrato y Acciones siguen separados en bloques distintos.
+- Hover, barridos sutiles, barra de atributos, radar y cambio de jugador con animacion.
+- El tema responde al club. Sunderland incluye escudo, rojiblanco y camiseta esquematica.
+- Si falta una foto, el retrato temporal anterior sigue visible.
+
+ESCALABILIDAD
+- Se usa club_id para colorear fondos, acentos y camiseta.
+- Catalogo de clubes: frontend/portable/data/club-identities.json.
+- Se agrega kit_style opcional. 'vertical_stripes' para Sunderland; de otro modo color liso.
+- Se puede agregar kit_image opcional con ruta assets/clubs/<club_id>/kit.png.
+- Fotos: frontend/public/squad/data/player-portraits.json por ID inmutable.
+- No se programaron condiciones por nombre de futbolista o de club.
+
+COMPATIBILIDAD
+- Solo interfaz, eventos y un campo visual en el catalogo institucional.
+- Sin cambios a motores Python, contratos, simulacion, API ni SQLite.
+- Se conservan los controles ya existentes del juego (transferibles, dorsal,
+  navegacion a contratos, conversaciones, tacticas y entrenamiento).
+- Prueba real en Windows y 20 temporadas siguen pendientes.
+
+GITHUB DESKTOP
+Branch:  feat/ts-ui-02-3-animated-squad
+Summary: feat(ui): TS-UI-02.3 animated club-themed Squad polish
+Description: Bring Squad closer to the approved visual concept with animated
+  club-aware player cards, a cinematic player hero and stronger tabs. Separate
+  row selection from the full-profile shortcut, preserve all existing player
+  operations and verified statistics, and retain replaceable portraits by ID.

@@ -1,0 +1,52 @@
+{
+  "base": "TS-UI-02.3",
+  "version": "TS-UI-02.4",
+  "incremental": true,
+  "files": [
+    {
+      "path": "frontend/public/squad/embed.html",
+      "size_bytes": 1250,
+      "sha256": "b43764b78633217418752633c26d3c73f4fb60f43e7232be076496f723fd693e"
+    },
+    {
+      "path": "frontend/public/squad/squad_ui02.js",
+      "size_bytes": 37299,
+      "sha256": "51e200052f4e23d0fa2aa7433f112445dce5093021da9124f07338fd27d12bae"
+    },
+    {
+      "path": "frontend/public/squad/presentation.js",
+      "size_bytes": 13877,
+      "sha256": "557dff3cae603bfd760258d1f494b96624abe5dee8119ea9c0db01ec1ab3b532"
+    },
+    {
+      "path": "frontend/public/squad/squad_ui024.css",
+      "size_bytes": 15173,
+      "sha256": "5c8548c65345d8fae4dbbd1f1149046abd25380914fbc67d032aa7809a3089ed"
+    },
+    {
+      "path": "frontend/portable/data/club-identities.json",
+      "size_bytes": 866,
+      "sha256": "154cf88b64f2998f408cd512377ea4312663d43a61cd1b0fded9d71d890e91c9"
+    },
+    {
+      "path": "frontend/portable/assets/clubs/sunderland/home_kit.webp",
+      "size_bytes": 99880,
+      "sha256": "2f21c594b32c86e89298ec4b869cac6f495c266188b99e1601ab0f37057265bf"
+    },
+    {
+      "path": "tests/test_ts_ui_02_4_profile.py",
+      "size_bytes": 4275,
+      "sha256": "abdce1b18bf87414a94251d88e045ba26c4d6269288eab006b464e482f872e49"
+    },
+    {
+      "path": "docs/TS_UI_02_4_SQUAD_PROFILE.md",
+      "size_bytes": 3363,
+      "sha256": "603de27441d365bd7820fc062b6166c2f30ac7fa0cbf3cb13a19d15b2c45a1ef"
+    },
+    {
+      "path": "TS_UI_02_4_TEST_REPORT.md",
+      "size_bytes": 1717,
+      "sha256": "1c66262fd91d1b6310630b58cacafa906a72b3f37f359ac1f6f732515cd20a95"
+    }
+  ]
+}

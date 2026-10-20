@@ -1,0 +1,77 @@
+{
+  "version": "TS-UI-02.2",
+  "patch_type": "incremental",
+  "requires": [
+    "TS-UI-01A.3.1",
+    "TS-UI-02.1"
+  ],
+  "branch": "feat/ts-ui-02-2-squad-split-view",
+  "summary": "feat(ui): TS-UI-02.2 scalable split-view Squad redesign",
+  "changes": [
+    {
+      "path": "frontend/public/squad/embed.html",
+      "bytes": 1152,
+      "sha256": "5ca1258b3fe15d306ebc4c4bc2b3be33de65e104023b1341820da496feaa4cef"
+    },
+    {
+      "path": "frontend/public/squad/presentation.js",
+      "bytes": 10132,
+      "sha256": "ecedb4e5ab70305930c3e44f7021be762b7c1a53372b65004abacec429456b81"
+    },
+    {
+      "path": "frontend/public/squad/squad.js",
+      "bytes": 43079,
+      "sha256": "01d46e858375d442a40be6b45f7aae6260ff4ffb0e1e4f9bcb6caacba799d3ad"
+    },
+    {
+      "path": "frontend/public/squad/squad_ui02.js",
+      "bytes": 24522,
+      "sha256": "c2bd1690876948d1021df80d0721e1c0f8a167b848fe12075bf9d9028b39c71b"
+    },
+    {
+      "path": "frontend/public/squad/squad_ui02.css",
+      "bytes": 21185,
+      "sha256": "f7074d8386e80580c50d91440ef1c3b41c0caaf31b86700b996ad9784d1735f1"
+    },
+    {
+      "path": "frontend/public/squad/data/player-portraits.json",
+      "bytes": 269,
+      "sha256": "644e7f0a029e9a73b022a1e90ca41c3eafe58f2fce9a9170901dd7a5c3b4719f"
+    },
+    {
+      "path": "frontend/portable/club_theme.css",
+      "bytes": 5322,
+      "sha256": "c2198bd1f05dfcd5a8dc890a0c82b8b8aa24e5da6a499e9b3a7f3585769843e1"
+    },
+    {
+      "path": "frontend/portable/portable.js",
+      "bytes": 38434,
+      "sha256": "8ba889994ca7eb6fe991a6c8e8062d12a8bff50f8e3e4a010a148e45ba7e7532"
+    },
+    {
+      "path": "src/football_manager/ui_shell/models.py",
+      "bytes": 18682,
+      "sha256": "ef52ca71079c20d590c10bcaa18aa8044eb8549c0ef0b9edd971b1aa4e3f97ad"
+    },
+    {
+      "path": "tests/test_ts_ui_02_2_squad_split.py",
+      "bytes": 3977,
+      "sha256": "83149a1656270d4b7acd118440f5e818fc6e51076f3f09d275c45888e8dc9ed0"
+    },
+    {
+      "path": "docs/TS_UI_02_2_SQUAD.md",
+      "bytes": 2936,
+      "sha256": "f3b936e697bf2afa3f0480a0a1b7a915c6bf48f26e58056f7f2a552c0131a91e"
+    },
+    {
+      "path": "INSTALAR_TS_UI_02_2.txt",
+      "bytes": 1810,
+      "sha256": "50c48571f9e43936f331f6aea312be1eb9d11be1e89e29263278f0d0b277f769"
+    },
+    {
+      "path": "TS_UI_02_2_TEST_REPORT.md",
+      "bytes": 1564,
+      "sha256": "8752bcff72158a1263f12fa35f22fc2685625226bef3fa75ade9c59aa88a0c5c"
+    }
+  ]
+}

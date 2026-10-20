@@ -1,0 +1,24 @@
+TS-UI-02.1 - Primer parche visual de Squad
+
+BASE: aplicar sobre la carpeta del juego actualizada con TS-UI-01A.3.1.
+
+1. Cerrar el juego.
+2. Hacer una copia de seguridad de la carpeta de juego y partidas.
+3. Descomprimir el contenido de este ZIP en la carpeta raiz del juego (la que contiene frontend/).
+4. Aceptar reemplazar los 2 archivos de frontend/public/squad/.
+5. Reiniciar el juego y refrescar la interfaz con Ctrl+F5 si se mantienen estilos viejos.
+
+Archivos del parche:
+- frontend/public/squad/roster.js
+- frontend/public/squad/polish.css
+
+Alcance: primera iteracion del panel de Squad con pestanas de detalle,
+separacion visual de Contrato y Acciones, y resumen de estadisticas
+segun la temporada/competicion seleccionada.
+
+LIMITACIONES: no incluye una reimplementacion completa de la pantalla
+Split View lateral del mockup aprobado; esta es una primera iteracion
+basada en el desplegable del roster existente. Se comprobo la sintaxis
+JS y 4 pruebas dirigidas de contrato. La suite amplia no concluyo,
+por lo que falta validacion jugable en Windows.
+No modifica Python, SQLite ni datos de las partidas.

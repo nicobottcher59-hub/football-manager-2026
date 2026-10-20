@@ -1,0 +1,37 @@
+TS-UI-02.2 - SQUAD SPLIT VIEW (PARCHE INCREMENTAL)
+=================================================
+
+BASE NECESARIA:
+  TS-UI-01A.3.1 + TS-UI-02.1 aplicados en el mismo proyecto.
+
+INSTALACION EN WINDOWS
+1. Cerrar el juego y hacer copia de seguridad de la carpeta y las partidas.
+2. Extraer este ZIP en la RAIZ de tu proyecto Football Manager.
+3. Aceptar reemplazar los archivos incluidos en el parche. No borrar otros.
+4. Abrir con el iniciador de interfaz Windows que usas normalmente.
+5. Recargar la pantalla (Ctrl+F5) si aparecen los estilos anteriores.
+
+VERIFICAR
+- Squad: lista compacta a la izquierda, ficha permanente a la derecha.
+- Click en cualquier parte vacia de la fila: selecciona jugador.
+- Click en el nombre: abre su pagina/historial existente.
+- Cuatro pestañas: Perfil/Atributos, Temporada, Estado/Desarrollo,
+  Contrato/Acciones (divididos en dos bloques separados).
+- Temporada: elegir 'All competitions' o una competicion; NO sumar datos a mano.
+- Acciones: modificar dorsal o estado transferible (metadata DEV) y usar accesos
+  a los modulos existentes. Confirmar respuestas del motor antes de considerar
+  los cambios guardados.
+- Retratos actuales siguen como fallback; los reales se cargan por ID segun la guia.
+
+DATOS Y COMPATIBILIDAD
+- No se modifican el motor de partidos, la progresion, contratos ni SQLite.
+- No incluye imagenes de jugadores, partidas, ni archivos Git.
+- Los informes historicos incompletos o datos no registrados se muestran como
+  desconocidos, nunca como inventados.
+- Probar en Windows sigue siendo necesario. La regresion integral de 20 anos
+  NO forma parte de este parche.
+
+Branch: feat/ts-ui-02-2-squad-split-view
+Summary: feat(ui): TS-UI-02.2 scalable split-view Squad redesign
+
+Mas informacion en docs/TS_UI_02_2_SQUAD.md y TS_UI_02_2_TEST_REPORT.md.

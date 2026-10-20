@@ -401,6 +401,7 @@
     $('.preview-label').textContent = 'UI-3.5 · PYTHON DEV';
     refreshProgression();
     document.body.classList.toggle('tsui-home-active',home);
+    document.body.classList.toggle('tsui-squad-active',page==='Squad');
     if (home) { refreshHome();window.dispatchEvent(new CustomEvent('fm-ui-home-refresh')); }
     headerTitle.textContent = page;
     headerSubhead.textContent = home
@@ -427,6 +428,7 @@
     if (event.source !== squadFrame.contentWindow || event.origin !== window.location.origin) return;
     if (event.data?.type === 'fm-open-youth-academy') { navigate('Youth Academy'); return; }
     if (event.data?.type === 'fm-open-finances') { navigate('Finances'); return; }
+    if (event.data?.type === 'fm-squad-open-section' && ['Dressing Room','Training','Medical Centre','Tactics'].includes(event.data.page)) { navigate(event.data.page); return; }
     if (event.data?.type === 'fm-squad-state' && /^\d{4}-\d{2}-\d{2}$/.test(event.data.date)) {
       $('.club-identity small').textContent = dateLabel(event.data.date);
       $('.sidebar-bottom strong').textContent = dateLabel(event.data.date);

@@ -118,3 +118,30 @@ html,body{background:radial-gradient(ellipse at 58% -20%,#1b3a54,#081a2c 42%,#05
 .fm-player-chip .fm-player-ovr.fm-grade-good{background:linear-gradient(135deg,#81efe1,#34c4ba)!important;color:#064343}
 .fm-player-chip .fm-player-ovr.fm-grade-mid{background:linear-gradient(135deg,#f8d78c,#d9ab51)!important;color:#4a351b}
 .fm-player-chip .fm-player-ovr.fm-grade-low{background:linear-gradient(135deg,#b7c5ce,#859aaa)!important;color:#183249}
+
+/* UI-3.5 squad refinement: tabbed player profile, separated contract/actions, and season scope cards. */
+.rt-detail-tabs-card{padding:12px 14px!important}
+.rt-detail-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.rt-detail-tabs button{font:inherit;font-size:12px;font-weight:750;color:#a7c2d5;background:#0d2b43;border:1px solid #325872;border-radius:999px;padding:9px 14px;cursor:pointer;transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease}
+.rt-detail-tabs button:hover{background:#123854;color:#eff9ff;border-color:#4fa8d3;transform:translateY(-1px)}
+.rt-detail-tabs button.active,.rt-detail-tabs button[aria-selected="true"]{background:linear-gradient(145deg,#189afc,#0866cf);border-color:#57bfff;color:#fff;box-shadow:0 6px 14px #006ace30}
+.rt-detail-stage{display:grid;gap:12px;min-width:0}
+.rt-season-layout,.rt-management-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.rt-season-summary,.rt-season-grid-card,.rt-admin-section{min-width:0}
+.rt-season-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.rt-season-card{display:grid;gap:6px;padding:12px;border-radius:10px;border:1px solid #355c7585;background:linear-gradient(155deg,#11324a,#0a253b)}
+.rt-season-card span{font-size:11px;color:#8fb0c7}
+.rt-season-card strong{font-size:22px;color:#fff;font-weight:850}
+.rt-season-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.rt-season-meta span{padding:7px 10px;border-radius:999px;background:#0c2d44;border:1px solid #315772;color:#b5d3e5;font-size:11px}
+.rt-season-meta b{color:#fff;margin-left:4px}
+.rt-season-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.rt-season-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:9px;border:1px solid #31556e73;background:#0c2b42;color:#dcecf7}
+.rt-season-row span{font-size:12px;color:#9fbdd0}
+.rt-season-row strong{font-size:14px;color:#fff;font-weight:800;text-align:right}
+.rt-admin-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.rt-admin-facts .rt-fact{padding:10px 12px;border-radius:9px;border:1px solid #34597573;background:#0c2b42}
+.rt-admin-section .rt-admin-controls{margin-top:4px}
+.rt-admin-section .rt-admin-actions button:not(:disabled):hover{background:linear-gradient(#18425c,#0d2e48);border-color:#57bfff;transform:translateY(-1px)}
+.rt-admin-section .rt-admin-actions button:not(:disabled) .rt-action-icon{background:#14507c;color:#86dbff}
+@media(max-width:980px){.rt-season-layout,.rt-management-layout{grid-template-columns:1fr}.rt-season-cards,.rt-season-grid,.rt-admin-facts{grid-template-columns:1fr}}

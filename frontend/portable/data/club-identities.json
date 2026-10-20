@@ -16,7 +16,9 @@
       "accent_color": "#d0a66f",
       "visual_only": true,
       "image_credit": "Photograph and crest supplied by the project owner",
-      "tagline": "Ha'way the Lads"
+      "tagline": "Ha'way the Lads",
+      "kit_style": "vertical_stripes",
+      "kit_image": "assets/clubs/sunderland/home_kit.webp"
     }
   }
 }

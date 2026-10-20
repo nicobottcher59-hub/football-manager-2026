@@ -1,0 +1,20 @@
+TS-UI-02.5 — PARCHE INCREMENTAL (NO ES EL JUEGO COMPLETO)
+
+REQUISITO: Tener instalada TS-UI-02.4.
+
+1) Cerrar FM Project.
+2) Hacer una copia de seguridad de la carpeta del juego y las partidas.
+3) Extraer este ZIP en la RAIZ del proyecto del juego.
+   Debe quedar, por ejemplo: frontend/public/squad/squad_ui025.css
+4) Aceptar el reemplazo de los archivos existentes.
+5) Reiniciar la interfaz, y forzar Ctrl + F5 en caso de estilos cacheados.
+
+No hay migraciones de SQLite, cambios de reglas de juego ni nuevos paquetes Python.
+Si falta el dato de dorsal, se muestra —. El distintivo C solo aparece si
+el modelo Python identifica al capitan efectivo del equipo titular.
+
+BRANCH:
+feat/ts-ui-02-5-squad-hero-final-polish
+
+SUMMARY:
+feat(ui): TS-UI-02.5 polish Squad hero, dorsal and captain states

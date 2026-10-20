@@ -1,0 +1,24 @@
+TS-UI-02.6 - SQUAD DIRECTORY + PLAYER HEADER REBUILD
+
+BASE OBLIGATORIA: TS-UI-02.5 (con los parches anteriores ya aplicados)
+
+1) Cerra el juego.
+2) Hace copia de seguridad del proyecto.
+3) Descomprimi este ZIP en la CARPETA RAIZ del proyecto, donde esta frontend/.
+4) Acepta reemplazar los archivos modificados.
+5) Reinicia el juego y usa Ctrl+F5 si ves estilos viejos.
+
+Este archivo es SOLO el parche diferencial, NO el juego completo.
+No elimina partidas, no modifica la simulacion ni requiere migraciones.
+
+Branch: feat/ts-ui-02-6-squad-directory-hero-rebuild
+Summary: feat(ui): TS-UI-02.6 rebuild Squad directory and player hero
+
+Que cambia:
+- Lista izquierda fiel al nuevo diseno, sin apariencia de planilla.
+- Cabecera del jugador reconstruida con camiseta, escudo y dorsal.
+- Insignia de capitan tomada de Python.
+- Corrige nombre de club que podia seguir mostrando Northbridge al cargar tarde la identidad.
+- Mantiene seleccion independiente del enlace al perfil y pestanas sin recarga.
+
+Prueba final de apariencia en Windows pendiente.

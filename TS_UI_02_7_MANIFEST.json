@@ -1,0 +1,46 @@
+{
+  "version": "TS-UI-02.7",
+  "base_required": "TS-UI-02.6",
+  "type": "incremental_patch",
+  "scope": "Squad directory, player header, Profile/Attributes spacing only",
+  "files": [
+    {
+      "path": "frontend/public/squad/embed.html",
+      "sha256": "1cb5fb5bb7683cf9d75a457b581ecbccab10cac5c7669f2423401f4a32c137a5",
+      "bytes": 1397
+    },
+    {
+      "path": "frontend/public/squad/squad_ui02.js",
+      "sha256": "d9c718117a4599639dfc1d71f2c025e20f6ffa76b71c20a61f248e17919c3714",
+      "bytes": 42087
+    },
+    {
+      "path": "frontend/public/squad/squad_ui027.css",
+      "sha256": "ad5cbcfbf2b6164c5464f5e0f7e4e7a46aba0c6b5796db335dee2b79d3575547",
+      "bytes": 21035
+    },
+    {
+      "path": "tests/test_ts_ui_02_7_squad_polish.py",
+      "sha256": "9dc89f1fa240ff2ef6ef2d714f7b2db256816607a24021fedeb5504aa86ebf11",
+      "bytes": 2830
+    },
+    {
+      "path": "docs/TS_UI_02_7_SQUAD_HEADER_DIRECTORY.md",
+      "sha256": "388602f519b5e9a3f233fb72ba0454c54baaf00a2d32f409c9563106f1ddde2f",
+      "bytes": 1949
+    },
+    {
+      "path": "TS_UI_02_7_TEST_REPORT.md",
+      "sha256": "e773d921cd61ff1a9b647ab73c409dc82c0160a0864138faf97cf3a5216a1205",
+      "bytes": 1476
+    },
+    {
+      "path": "INSTALAR_TS_UI_02_7.txt",
+      "sha256": "b92f821dce5632b71c2df2a40d3f21f665c8b17345a3db910e6a330681162926",
+      "bytes": 624
+    }
+  ],
+  "no_gameplay_changes": true,
+  "branch": "feat/ts-ui-02-7-squad-faithful-layout",
+  "summary": "feat(ui): TS-UI-02.7 align Squad hero and directory with approved mockup"
+}

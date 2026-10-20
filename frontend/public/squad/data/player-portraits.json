@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "notes": "Optional image overrides by immutable player ID. Paths are relative to frontend/public/squad/ and must start with assets/ and use png, jpg, jpeg or webp. Missing photos use deterministic placeholder portraits.",
+  "portraits": {}
+}

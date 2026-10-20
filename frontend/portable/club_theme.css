@@ -75,3 +75,24 @@ body.tsui-home-active .tsui-inbox-card .tsui-update:hover {border-color:rgba(var
 body.tsui-home-active .tsui-home .tsui-competition-card[data-competition-brand] {
   border-top-color:var(--ci-accent);
 }
+
+/* TS-UI-02.2: continue the same club accent in the existing navigation while in Squad.
+ * Club identity is still resolved from club-identities.json (no Sunderland CSS). */
+body.tsui-squad-active .sidebar {
+  background:linear-gradient(175deg,#071420,#06111c 55%,var(--ui-club-soft) 160%);
+  border-right-color:rgba(var(--ui-club-highlight-rgb),.23);
+}
+body.tsui-squad-active .sidebar::before {
+  background:repeating-linear-gradient(38deg,transparent 0 45px,rgba(var(--ui-club-rgb),.10) 46px 48px),
+    radial-gradient(ellipse at 25% 94%,rgba(var(--ui-club-rgb),.21),transparent 68%);
+}
+body.tsui-squad-active .sidebar .nav-item.is-active {
+  color:#fff;
+  background:linear-gradient(105deg,rgba(var(--ui-club-rgb),.36),#12283b 92%);
+  border-color:rgba(var(--ui-club-highlight-rgb),.64);
+  box-shadow:inset 3px 0 var(--ui-club-highlight),0 6px 18px #020b1b44;
+}
+body.tsui-squad-active .sidebar .nav-item.is-active svg {color:var(--ui-club-highlight);}
+body.tsui-squad-active .sidebar .nav-item:hover:not(.is-active) {
+  background:rgba(var(--ui-club-rgb),.14);color:#fff;
+}

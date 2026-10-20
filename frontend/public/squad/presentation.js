@@ -16,6 +16,33 @@
   const polygon=valid?`<polygon points="${axes.map((a,i)=>point(i,Math.max(0,Math.min(100,a.value))/100).join(',')).join(' ')}" class="ts22-radar-area"/>`:'';
   return `<svg class="ts22-radar" viewBox="0 0 320 286" role="img" aria-label="${h(label)}"><title>${h(label)}: ${h(axes.map(a=>a.label+' '+fmt(a.value)).join(', '))}. Scale 0 to 100.</title>${grid}${axes.map((a,i)=>{const [x,y]=point(i,1),[lx,ly]=point(i,1.32);return `<path d="M${cx},${cy} L${x},${y}" class="ts22-radar-grid"/><text x="${lx}" y="${ly-3}" text-anchor="middle">${h(a.label)}</text><text x="${lx}" y="${ly+12}" text-anchor="middle" class="ts22-radar-value">${fmt(a.value)}</text>`;}).join('')}${polygon}</svg>`;
  }
+ // TS-UI-02.4: both polygons use the same six engine role axes.
+ // Cyan shows the player's recorded 0-100 attributes; coral shows normalized
+ // relative role weights. Weight is NOT a minimum rating or hidden potential.
+ function roleComparison(graphics, position, positions, chosen){
+  const role=graphics.role||{},axes=(role.axes||[]).filter(a=>a.attribute&&a.weight!=null);
+  const maxWeight=Math.max(0,...axes.map(a=>Number(a.weight)||0));
+  const options=graphics.role_options||[];
+  const toolbar=`<div class="s24-comparison-tools"><div><span class="s24-comparison-eyebrow">ROLE ANALYSIS</span><h4>${h(role.name||'Selected role')}</h4></div><div class="s24-comparison-selects"><label>Position <select data-chart-position>${positions.map(v=>`<option value="${h(v)}" ${v===chosen.position?'selected':''}>${h(v)}</option>`).join('')}</select></label><label>Role <select data-chart-role>${options.map(r=>`<option value="${h(r.id)}" ${r.id===role.id?'selected':''}>${h(r.name)}</option>`).join('')}</select></label></div></div>`;
+  if(axes.length<3 || !maxWeight)return `${toolbar}<div class="s24-chart-empty">Comparison unavailable for this role.</div>`;
+  const cx=305,cy=178,r=117,n=axes.length;
+  const point=(i,k)=>{const angle=-Math.PI/2+2*Math.PI*i/n;return [cx+Math.cos(angle)*r*k,cy+Math.sin(angle)*r*k];};
+  const poly=(values)=>values.map((value,i)=>point(i,Math.max(0,Math.min(100,Number(value)||0))/100).join(',')).join(' ');
+  const roleValues=axes.map(axis=>Math.max(0,(Number(axis.weight)||0)/maxWeight*100));
+  const playerValues=axes.map(axis=>axis.value);
+  const playerKnown=playerValues.every(v=>typeof v==='number'&&Number.isFinite(v));
+  const rings=[.25,.5,.75,1].map(k=>`<polygon class="s24-radar-ring" points="${axes.map((_,i)=>point(i,k).join(',')).join(' ')}"/>`).join('');
+  const rays=axes.map((axis,i)=>{
+   const [x,y]=point(i,1),[lx,ly]=point(i,1.34);
+   const align=lx>cx+8?'start':lx<cx-8?'end':'middle';
+   const offset=align==='start'?6:align==='end'?-6:0;
+   return `<path class="s24-radar-ray" d="M${cx},${cy}L${x},${y}"/><text x="${lx+offset}" y="${ly}" text-anchor="${align}" dominant-baseline="middle">${h(axis.label)}</text>`;
+  }).join('');
+  const roleShape=`<polygon class="s24-radar-emphasis" points="${poly(roleValues)}"/>`;
+  const playerShape=playerKnown?`<polygon class="s24-radar-player" points="${poly(playerValues)}"/>${axes.map((axis,i)=>{const [x,y]=point(i,playerValues[i]/100);return `<circle class="s24-radar-node" cx="${x}" cy="${y}" r="3.4"/>`;}).join('')}`:'';
+  const dataRows=axes.map(axis=>`<div class="s24-chart-key-row"><span>${h(axis.label)}</span><strong>${fmt(axis.value)}</strong></div>`).join('');
+  return `${toolbar}<div class="s24-comparison-body"><div class="s24-chart-canvas"><svg class="s24-comparison-radar" viewBox="0 0 610 350" role="img" aria-label="Player ability and relative role weight on the same six selected attributes"><title>Ability values use the 0 to 100 player scale. Role emphasis is the relative weight of attributes in this role, normalized to 100; not a required rating.</title><g>${rings}${rays}</g>${roleShape}${playerShape}</svg></div><div class="s24-comparison-side"><div class="s24-radar-legend"><div><span class="s24-legend-player"></span>Player ability</div><div><span class="s24-legend-role"></span>Role emphasis <span class="s24-help" tabindex="0" title="Role importance is normalized from the engine's attribute weights. It is NOT a required skill level or potential.">i</span></div></div><div class="s24-chart-key-list">${dataRows}</div></div></div>`;
+ }
  function developmentPanel(d,readonly){
   if(!d?.registered)return `<p class="ts22-history-note">${h(d?.message||'Development not registered.')}</p>`;
   const changes=Object.entries(d.last_changes||{});
@@ -45,7 +72,11 @@
    const result=await res.json();if(!res.ok)throw Error(result.error||'Profile unavailable');
    if(!el.isConnected||pendingRequests.get(el)!==request)return;
    const g=result.graphics;
-   el.innerHTML=`<div class="ts22-chart-head"><strong>Player profile</strong><label>Inspect position <select data-chart-position>${positions.map(v=>`<option value="${h(v)}" ${v===chosen.position?'selected':''}>${h(v)}</option>`).join('')}</select></label><label>Inspect role <select data-chart-role>${g.role_options.map(r=>`<option value="${h(r.id)}" ${r.id===g.role.id?'selected':''}>${h(r.name)}</option>`).join('')}</select></label></div><div class="ts22-charts"><section><h3>Footballing capabilities</h3>${radar(g.general,'General attributes')}</section><section><h3>${h(g.role.name)}</h3>${radar(g.role.axes,'Role attributes')}</section></div><p class="rt-fam-hint">${h(g.note)} Inspecting a role does not change the lineup or tactical assignment.</p><details class="ts22-chart-values"><summary>Chart definitions and attribute values</summary><div>${g.general.map(a=>`<p><b>${h(a.label)}: ${fmt(a.value)}</b><br>${h(a.attributes.join(', '))}</p>`).join('')}${g.role.axes.map(a=>`<p>${h(a.attribute)}: ${fmt(a.value)} (role weight ${a.weight})</p>`).join('')}</div></details>${developmentPanel(g.evolution,!!data.readonly)}`;
+   const mode=el.dataset.graphicsMode || 'both';
+   const charts=`<div class="ts22-chart-head"><strong>Player profile</strong><label>Inspect position <select data-chart-position>${positions.map(v=>`<option value="${h(v)}" ${v===chosen.position?'selected':''}>${h(v)}</option>`).join('')}</select></label><label>Inspect role <select data-chart-role>${g.role_options.map(r=>`<option value="${h(r.id)}" ${r.id===g.role.id?'selected':''}>${h(r.name)}</option>`).join('')}</select></label></div><div class="ts22-charts"><section><h3>Footballing capabilities</h3>${radar(g.general,'General attributes')}</section><section><h3>${h(g.role.name)}</h3>${radar(g.role.axes,'Role attributes')}</section></div><p class="rt-fam-hint">${h(g.note)} Inspecting a role does not change the lineup or tactical assignment.</p><details class="ts22-chart-values"><summary>Chart definitions and attribute values</summary><div>${g.general.map(a=>`<p><b>${h(a.label)}: ${fmt(a.value)}</b><br>${h(a.attributes.join(', '))}</p>`).join('')}${g.role.axes.map(a=>`<p>${h(a.attribute)}: ${fmt(a.value)} (role weight ${a.weight})</p>`).join('')}</div></details>`;
+   const evolution=developmentPanel(g.evolution,!!data.readonly);
+   const comparison=mode==='comparison'?roleComparison(g,chosen.position,positions,chosen):'';
+   el.innerHTML=mode==='comparison'?comparison:mode==='charts'?charts:mode==='development'?evolution:charts+evolution;
    const focus=el.querySelector('[data-development-focus]');
    if(focus&&!data.readonly)focus.addEventListener('change',async()=>{
     focus.disabled=true;const status=el.querySelector('[data-development-status]');
@@ -57,8 +88,8 @@
     }catch(err){status.textContent=err.message;focus.value=g.evolution.focus;}
     finally{focus.disabled=false;}
    });
-   el.querySelector('[data-chart-position]').addEventListener('change',e=>{choices.set(ck,{position:e.target.value,role:''});hydrate(container,data);});
-   el.querySelector('[data-chart-role]').addEventListener('change',e=>{choices.set(ck,{position:chosen.position,role:e.target.value});hydrate(container,data);});
+   el.querySelector('[data-chart-position]')?.addEventListener('change',e=>{choices.set(ck,{position:e.target.value,role:''});window.FMSquadUI02?.focusPosition?.(e.target.value);hydrate(container,data);});
+   el.querySelector('[data-chart-role]')?.addEventListener('change',e=>{choices.set(ck,{position:chosen.position,role:e.target.value});hydrate(container,data);});
   }catch(err){if(el.isConnected&&pendingRequests.get(el)===request)el.innerHTML=`<p class="rt-muted">${h(err.message)}. Close and reopen this profile to retry.</p>`;}
  }
  function clubHeader(data){

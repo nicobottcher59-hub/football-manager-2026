@@ -4,7 +4,7 @@
   'use strict';
   const state = {
     tab:'general', query:'', position:'all', availability:'all', group:'technical',
-    expanded:null, more:false, season:'', competition:'all', sort:{general:['name','asc'],attributes:['name','asc'],season:['name','asc']}
+    expanded:null, detailTab:'overview', more:false, season:'', competition:'all', sort:{general:['name','asc'],attributes:['name','asc'],season:['name','asc']}
   };
   const html = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const dec = value => Number.isFinite(Number(value)) && value !== null && value !== ''
@@ -95,9 +95,7 @@
   }
   function rows(data){
     const q=state.query.toLocaleLowerCase();
-    const filtered=data.roster.filter(p=>(!q || `${p.name} ${p.nationality} ${p.primary_position}`.toLocaleLowerCase().includes(q))
-      &&(state.position==='all'||p.primary_position===state.position||p.secondary_positions.includes(state.position))
-      &&(state.availability==='all'|| (state.availability==='injured'?!p.available:p.transfer_status===state.availability)));
+    const filtered=data.roster.filter(p=>!q || `${p.name} ${p.nationality} ${p.primary_position}`.toLocaleLowerCase().includes(q));
     const [key,dir]=state.sort[state.tab];
     return filtered.sort((a,b)=>compare(a,b,key,dir));
   }
@@ -130,13 +128,64 @@
   function fact(name,value,hint=''){
     return `<div class="rt-fact"><span>${html(name)}</span><strong>${value}</strong>${hint?`<small>${html(hint)}</small>`:''}</div>`;
   }
+  function competitionLabel(data){
+    const selected=state.competition||data.stats_selection?.competition||'all';
+    if(selected==='all')return 'All competitions';
+    return data.statistics?.competitions?.find(item=>item.id===selected)?.name || title(selected);
+  }
+  function seasonScope(data){
+    return `${html(state.season||data.stats_selection?.season||data.statistics?.current_season||'Current season')} · ${html(competitionLabel(data))}`;
+  }
+  function seasonHighlights(p, data){
+    const stats=p.season_stats||{};
+    const cards=[
+      ['Appearances',stats.appearances],['Starts',stats.starts],['Minutes',stats.minutes],
+      ['Goals',stats.goals],['Assists',stats.assists],['Clean sheets',stats.clean_sheets],
+    ];
+    return `<section class="rt-card rt-season-summary"><div class="rt-card-header"><span>Season snapshot</span><small>${seasonScope(data)}</small></div><div class="rt-season-cards">${cards.map(([label,value])=>`<div class="rt-season-card"><span>${html(label)}</span><strong>${value==null?'—':html(value)}</strong></div>`).join('')}</div><div class="rt-season-meta"><span>xG <b>${dec(stats.xg)}</b></span><span>xA <b>${dec(stats.xa)}</b></span><span>Pass % <b>${percent(stats.pass_completion)}</b></span><span>Avg rating <b>${dec(stats.average_match_rating)}</b></span></div></section>`;
+  }
+  function seasonGrid(p, data){
+    const stats=p.season_stats||{};
+    const supported=(data.statistics?.supported||STATS.map(([key])=>key));
+    const rows=STATS.filter(([key])=>supported.includes(key)).map(([key,label])=>`<div class="rt-season-row"><span>${html(label)}</span><strong>${key==='pass_completion'?percent(stats[key]):['xg','xa','average_match_rating'].includes(key)?dec(stats[key]):stats[key]==null?'—':html(stats[key])}</strong></div>`).join('');
+    return `<section class="rt-card rt-season-grid-card"><div class="rt-card-header"><span>Competition breakdown</span><small>${html(competitionLabel(data))}</small></div><div class="rt-season-grid">${rows||'<span class="rt-muted">No season statistics recorded for this scope.</span>'}</div><p class="rt-fam-hint">Use the season and competition selectors above to switch between a single tournament and the full-season total.</p></section>`;
+  }
+  function contractPanel(p, data){
+    const details=p.contract_details||{};
+    const expiry=details.expires_on?html(contractDate(details.expires_on)):'—';
+    const wage=details.weekly_wage?html(details.weekly_wage):'—';
+    const status=details.status==='out_of_contract_retained'?'Expired / retained':'Active contract';
+    return `<section class="rt-card rt-admin-section"><div class="rt-card-header"><span>Contract</span><small>${html(status)}</small></div><div class="rt-admin-facts">
+      ${fact('Weekly wage',wage,'Registered contract value')}
+      ${fact('Expires on',expiry,'Contract expiration date')}
+      ${fact('Market value',empty(p.market_value),`Estimate · ${p.market_value_as_of||'current month'}`)}
+      ${fact('Squad number',p.number==null?'—':`#${html(p.number)}`,'Registration metadata')}
+    </div>${data.readonly?'':`<div class="rt-admin-controls">${select('rt-player-number',p.number==null?'':String(p.number),[['','Not assigned'],...Array.from({length:99},(_,i)=>[String(i+1),String(i+1)])],'Squad number')}${select('rt-transfer-status',p.transfer_status,Object.entries(ROLE_NAMES),'Transfer / loan status')}</div>`}<p class="rt-fam-hint">Contracts stay grounded in the Python career data. Negotiation still flows through Finances.</p></section>`;
+  }
+  function actionsPanel(p, data){
+    if(data.readonly){
+      return `<section class="rt-card rt-admin-section"><div class="rt-card-header"><span>Actions</span><small>Rival club profile</small></div><div class="rt-admin-actions"><button type="button" data-open-transfer-offer="${html(p.id)}"><span class="rt-action-icon">→</span><strong>Make transfer offer</strong><small>Open negotiation flow</small></button><button type="button" disabled><span class="rt-action-icon">☆</span><strong>Declare interest</strong><small>Future</small></button><button type="button" disabled><span class="rt-action-icon">✉</span><strong>Contact player</strong><small>Future</small></button></div><p class="rt-fam-hint">Read-only club views allow scouting and transfer entry points only.</p></section>`;
+    }
+    return `<section class="rt-card rt-admin-section"><div class="rt-card-header"><span>Player actions</span><small>Live dev session</small></div><div class="rt-admin-actions"><button type="button" disabled title="Player conversations not implemented"><span class="rt-action-icon">✉</span><strong>Talk to player</strong><small>Planned</small></button><button type="button" disabled title="Training focus not implemented"><span class="rt-action-icon">◆</span><strong>Individual training</strong><small>Planned</small></button><button type="button" data-open-finances title="Open Finances to renew player contracts"><span class="rt-action-icon">▤</span><strong>Open Finances</strong><small>Renew contract</small></button></div><p class="rt-fam-hint">Actions are intentionally separated from the contract block so the panel stays breathable and scalable as more interactions arrive.</p></section>`;
+  }
+  function detailTabs(p, data){
+    const tabs=[['overview','Overview'],['analytics','Statistics'],['season','Season'],['management','Contract & actions']];
+    const current=state.detailTab||'overview';
+    const content={
+      overview:`<div class="rt-expanded-detail">${familiarities(p)}${bestAttributes(p)}</div>`,
+      analytics:`<section class="ts22-graphics rt-card" data-player-graphics="${html(p.id)}"><p>Loading attribute charts...</p></section>`,
+      season:`<div class="rt-season-layout">${seasonHighlights(p,data)}${seasonGrid(p,data)}</div>`,
+      management:`<div class="rt-management-layout">${contractPanel(p,data)}${actionsPanel(p,data)}</div>`,
+    };
+    return `<section class="rt-card rt-detail-tabs-card"><div class="rt-detail-tabs" role="tablist" aria-label="Player detail sections">${tabs.map(([key,label])=>`<button type="button" role="tab" data-roster-detail-tab="${key}" aria-selected="${current===key}" class="${current===key?'active':''}">${html(label)}</button>`).join('')}</div><div class="rt-detail-stage">${content[current]||content.overview}</div></section>`;
+  }
   function expanded(p, span, data){
     const avail=p.injury?'Injured':p.suspension?'Suspended':'Available';
     const fn=window.FMPortraits?.nation;
     const flag=fn?fn(p.nationality):html(p.nationality);
     return `<tr class="rt-expanded"><td colspan="${span}"><div class="rt-expanded-inner">
       <div class="rt-detail-toolbar"><span>Player details</span><div class="rt-detail-controls"><button type="button" class="rt-detail-manage" data-open-career-player="${html(p.id)}">Career history ↗</button>
-        ${data.readonly?`<button type="button" class="rt-detail-manage" data-open-transfer-offer="${html(p.id)}">Make transfer offer →</button>`:`<button type="button" data-roster-more="${html(p.id)}" aria-expanded="${state.more}" class="rt-detail-manage">${state.more?'Hide management':'Player management'}</button>`}
+        ${data.readonly?`<button type="button" class="rt-detail-manage" data-open-transfer-offer="${html(p.id)}">Make transfer offer →</button>`:`<button type="button" data-roster-more="${html(p.id)}" aria-expanded="${state.detailTab==='management'}" class="rt-detail-manage">Contract & actions</button>`}
         <button type="button" data-roster-expand="${html(p.id)}" class="rt-detail-close" aria-label="Close details for ${html(p.name)}">Close details <span aria-hidden="true">×</span></button>
       </div></div>
       <section class="rt-expanded-hero rt-card">
@@ -152,13 +201,7 @@
         ${fact('Contract',empty(p.contract),'Signed weekly salary and contract expiration')}
         ${fact('Happiness',empty(p.happiness),'Separate system pending')}
       </section>
-      <div class="rt-expanded-detail">${familiarities(p)}${bestAttributes(p)}</div>
-      <section class="ts22-graphics rt-card" data-player-graphics="${html(p.id)}"><p>Loading attribute charts...</p></section>
-      ${state.more?`<section class="rt-admin rt-card"><div class="rt-card-header"><span>Player management</span><small>Only active controls affect the DEV session</small></div>
-        ${data.readonly?`<div class="ts22-readonly-actions"><button disabled>Negotiate with club (future)</button><button disabled>Declare interest (future)</button><button disabled>Contact player (future)</button></div>`:`<div class="rt-admin-controls">${select('rt-player-number',p.number==null?'':String(p.number),[['','Not assigned'],...Array.from({length:99},(_,i)=>[String(i+1),String(i+1)])],'Squad number')}${select('rt-transfer-status',p.transfer_status,Object.entries(ROLE_NAMES),'Transfer / loan status')}</div>
-        <div class="rt-admin-actions"><button type="button" disabled title="Player conversations not implemented"><span class="rt-action-icon">✉</span><strong>Talk to player</strong><small>Planned</small></button><button type="button" disabled title="Training focus not implemented"><span class="rt-action-icon">◆</span><strong>Individual training</strong><small>Planned</small></button><button type="button" data-open-finances title="Open Finances to renew player contracts"><span class="rt-action-icon">▤</span><strong>Open Finances</strong><small>Renew contract</small></button></div>
-        <p class="rt-fam-hint">Go to Finances to renew contracts and view wage budgets. Dorsal and transfer/loan flags remain development metadata; transfers and conversations are not yet active.</p>`}
-      </section>`:''}
+      ${detailTabs(p,data)}
     </div></td></tr>`;
   }
   function summary(data){
@@ -178,7 +221,7 @@
     return `${window.FMPlayerPresentation?.clubHeader(data)||''}${summary(data)}<section class="rt-panel">
       ${!data.readonly ? `<div class="rt-academy-entry"><button type="button" data-open-youth-academy>View Youth Academy · U17 / U21 / Next academy intake</button></div>` : ''}
       <div class="rt-tabs" role="tablist" aria-label="Squad table views">${[['general','General'],['attributes','Attributes'],['season','Season stats']].map(([k,label])=>`<button type="button" role="tab" aria-selected="${state.tab===k}" data-roster-tab="${k}" class="${state.tab===k?'active':''}">${label}</button>`).join('')}</div>
-      <div class="rt-tools"><label class="rt-search-label">Search players<input id="rt-search" type="search" value="${html(state.query)}" placeholder="Search name, position or nationality…" autocomplete="off" data-roster-query/></label>${select('rt-position',state.position,[['all','All positions'],...allPositions.map(p=>[p,p])],'Position')}${select('rt-availability',state.availability,[['all','All statuses'],['normal','Available'],['injured','Injured or suspended'],...Object.entries(ROLE_NAMES).filter(([k])=>k!=='normal')],'Status')}${groupSelector}${statsFilters}<div class="rt-sort-caption">Click a heading to sort ↑↓</div></div>
+      <div class="rt-tools"><label class="rt-search-label">Search players<input id="rt-search" type="search" value="${html(state.query)}" placeholder="Search name, position or nationality…" autocomplete="off" data-roster-query/></label>${groupSelector}${statsFilters}<div class="rt-sort-caption">Compact list · open a player to view the full profile</div></div>
       ${seasonNote}<div class="rt-table-wrap" tabindex="0" role="region" aria-label="Scrollable roster table"><table class="rt-table"><thead><tr><th scope="col" class="rt-sticky rt-name-head" aria-sort="${sortedKey==='name'?(sortedDir==='asc'?'ascending':'descending'):'none'}"><button type="button" data-roster-sort="name">Player ${sortedKey==='name'?(sortedDir==='asc'?'↑':'↓'):'↕'}</button></th>${cols.map(([key,name,width])=>`<th scope="col" style="min-width:${width}px" aria-sort="${sortedKey===key?(sortedDir==='asc'?'ascending':'descending'):'none'}"><button type="button" title="Sort ${html(name)}" data-roster-sort="${html(key)}">${html(name)} ${sortedKey===key?(sortedDir==='asc'?'↑':'↓'):'↕'}</button></th>`).join('')}</tr></thead><tbody>${list.map(p=>`<tr class="rt-player-row ${state.expanded===p.id?'rt-open':''}"><th scope="row" class="rt-sticky"><div class="ts22-player-cell"><button type="button" class="rt-player-trigger" data-roster-expand="${html(p.id)}" aria-expanded="${state.expanded===p.id}">${face(p)}<span class="rt-player-name"><strong>${html(p.name)}</strong><small>${nation(p.nationality)} <span class="rt-position-muted">· ${html(p.primary_position)}</span></small></span></button><button type="button" class="rt-history-shortcut" data-open-career-player="${html(p.id)}" title="Open the career history of ${html(p.name)}" aria-label="Career history of ${html(p.name)}">↗</button><button type="button" class="ts22-more" data-roster-expand="${html(p.id)}" aria-label="${state.expanded===p.id?'Collapse':'Expand'} details for ${html(p.name)}" aria-expanded="${state.expanded===p.id}" title="${state.expanded===p.id?'Collapse':'Expand'} details">${state.expanded===p.id?'−':'+'}</button></div></th>${cols.map(([key])=>`<td>${formatCell(p,key)}</td>`).join('')}</tr>${state.expanded===p.id?expanded(p,cols.length+1,data):''}`).join('')}</tbody></table>${!list.length?'<p class="rt-no-results">No players match those filters.</p>':''}</div>
       <div class="rt-footnote"><span>${list.length} of ${data.roster.length} players · Fixed player column · Horizontal scroll for more attributes</span><span>GRL = current ACT / Base OVR shown separately</span></div></section>`;
   }
@@ -188,16 +231,15 @@
       const key=button.dataset.rosterSort; const current=state.sort[state.tab];
       state.sort[state.tab]=[key,current[0]===key&&current[1]==='asc'?'desc':'asc'];refresh();return true;
     }
-    if(button.dataset.rosterMore){const same=state.expanded===button.dataset.rosterMore;state.expanded=button.dataset.rosterMore;state.more=same?!state.more:true;refresh();return true;}
-    if(button.dataset.rosterExpand){state.more=false;state.expanded=state.expanded===button.dataset.rosterExpand?null:button.dataset.rosterExpand;refresh();return true;}
+    if(button.dataset.rosterMore){const same=state.expanded===button.dataset.rosterMore&&state.detailTab==='management';state.expanded=button.dataset.rosterMore;state.detailTab='management';state.more=!same;refresh();return true;}
+    if(button.dataset.rosterDetailTab){state.detailTab=button.dataset.rosterDetailTab;refresh();return true;}
+    if(button.dataset.rosterExpand){state.more=false;state.detailTab='overview';state.expanded=state.expanded===button.dataset.rosterExpand?null:button.dataset.rosterExpand;refresh();return true;}
     return false;
   }
   function onChange(target, command, refresh){
     if(target.id==='rt-season'){state.season=target.value;window.FMRoster.reload?.();return true;}
     if(target.id==='rt-competition'){state.competition=target.value;window.FMRoster.reload?.();return true;}
     if(target.dataset.rosterFilter && !['rt-player-number','rt-transfer-status'].includes(target.id)){
-      if(target.id==='rt-position')state.position=target.value;
-      if(target.id==='rt-availability')state.availability=target.value;
       if(target.id==='rt-attribute-group')state.group=target.value;
       refresh();return true;
     }

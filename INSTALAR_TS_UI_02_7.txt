@@ -1,0 +1,14 @@
+TS-UI-02.7 — SOLO PARCHE
+
+BASE: Tener instalada TS-UI-02.6.
+
+1. Cerrar Football Manager.
+2. Hacer una copia de seguridad de la carpeta del juego y las partidas.
+3. Descomprimir el ZIP en la carpeta RAIZ del juego (donde estan frontend, tests, etc.).
+4. Aceptar reemplazar frontend/public/squad/embed.html y squad_ui02.js.
+5. El nuevo archivo frontend/public/squad/squad_ui027.css se crea al instalar.
+6. Reiniciar el juego. Si se ven estilos viejos, Ctrl+F5.
+
+NO se borran datos ni se sustituye el juego completo.
+NO se modifican los guardados ni el motor Python.
+Si no tenes la version 02.6, instala primero esa version.

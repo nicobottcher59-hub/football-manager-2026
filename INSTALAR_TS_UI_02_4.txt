@@ -1,0 +1,24 @@
+TS-UI-02.4 - Squad Perfil / Atributos y pestañas fluidas
+
+REQUISITO: tener aplicada TS-UI-02.3 (el parche Squad animado).
+
+INSTALACION
+1) Cerrar el juego y, por precaucion, copiar la partida guardada.
+2) Extraer el contenido del ZIP en la raiz de tu proyecto football-manager-2026.
+3) Aceptar reemplazar archivos cuando Windows lo solicite.
+4) Reiniciar el juego y forzar refresco de la interfaz con Ctrl + F5 si se ven los estilos anteriores.
+
+IMPORTANTE
+- No borrar nada, no hay que crear bases de datos ni instalar npm.
+- No se modifican el motor deportivo ni el formato SQLite.
+- Se agrega la camiseta del Sunderland como asset opcional dentro de su catalogo de club.
+- Se mantienen las imagenes temporales por jugador y el fallback visual para otros clubes.
+
+Branch sugerido:
+feat/ts-ui-02-4-squad-profile-polish
+
+Summary (GitHub Desktop):
+feat(ui): TS-UI-02.4 interactive player profile and seamless tabs
+
+Description:
+Polish the Squad Profile / Attributes tab with an interactive SVG position map, all recorded attributes, and a single player-vs-role-weight radar. Replace Sunderland placeholder kit with the provided club asset, loaded from the scalable identity catalogue. Make internal tab changes update only the inspector content, preserve roster/player header state, and add reduced-motion-safe transitions. No simulation, contract, save schema, or other screen changes.

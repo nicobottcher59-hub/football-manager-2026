@@ -1,0 +1,47 @@
+{
+  "release": "TS-UI-02.5",
+  "base": "TS-UI-02.4",
+  "type": "incremental patch",
+  "files": [
+    {
+      "path": "frontend/public/squad/embed.html",
+      "sha256": "caa664fb50c269c50b5317871833ac23d7870df9354536cc252cee0cc0ddd1fb",
+      "bytes": 1299
+    },
+    {
+      "path": "frontend/public/squad/squad_ui02.js",
+      "sha256": "c6a0c7ae11fbc3d36785aeac225144df252bdce00c63c1eafcae38b815354103",
+      "bytes": 39291
+    },
+    {
+      "path": "frontend/public/squad/squad_ui025.css",
+      "sha256": "f7a336fe2477c1a867b5e4d786eaec78218f7444bf2caac1d99e5581e9a98edd",
+      "bytes": 15314
+    },
+    {
+      "path": "frontend/portable/assets/clubs/sunderland/home_kit.webp",
+      "sha256": "8ca45dfcf9d4a65814015a3d53898c4d599937461497b96607a0ad0b0b3c5a37",
+      "bytes": 100182
+    },
+    {
+      "path": "tests/test_ts_ui_02_5_squad_polish.py",
+      "sha256": "b1788782869c5c9cead70ebf3debc2a43c098c33fa362bb15847d2d3f314dc58",
+      "bytes": 4216
+    },
+    {
+      "path": "docs/TS_UI_02_5_SQUAD_POLISH.md",
+      "sha256": "b4dd307e9f20b89ec478b08920af02fd84eb174d04d6d3c1ebb27dfe99146a67",
+      "bytes": 2751
+    },
+    {
+      "path": "TS_UI_02_5_TEST_REPORT.md",
+      "sha256": "685b38d65d285a17f2f3d2be8e4eda37a81825aa8f68ec4dc9cdddc33059be28",
+      "bytes": 1038
+    }
+  ],
+  "notes": [
+    "Club and player presentation only",
+    "No save migrations",
+    "Native Windows validation pending"
+  ]
+}

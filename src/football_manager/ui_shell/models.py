@@ -207,10 +207,17 @@ def squad_read_model(session: DevelopmentSession, admin: UIRosterAdmin | None = 
         }
         for formation in development_formations()
     ]
+    # TS-UI-02.2: Expose the managed club's scheduled competitions for a short,
+    # relevant season selector. This is read-only calendar data, never a new rule.
+    stats_options = statistics_options(session._world_squads, session._world)
+    club_competitions = sorted({fx.competition_id for fx in session._world.fixtures.values()
+                                if session.home_club.id in (fx.home_club_id, fx.away_club_id)})
+    if club_competitions:
+        stats_options["club_competitions"] = {session._world_squads.season_label: club_competitions}
     return {
         "source": "python-development-session", "persistent": True,
         "club_id": session.home_club.id, "readonly": False,
-        "statistics": statistics_options(session._world_squads, session._world),
+        "statistics": stats_options,
         "stats_selection": {"season": season or session._world_squads.season_label, "competition": competition or "all"},
         "club": session.home_club.name, "date": session.current_date.isoformat(),
         "next_match": session.next_match_label,

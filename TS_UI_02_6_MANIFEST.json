@@ -1,0 +1,43 @@
+{
+  "version": "TS-UI-02.6",
+  "base": "TS-UI-02.5",
+  "kind": "incremental_patch",
+  "branch": "feat/ts-ui-02-6-squad-directory-hero-rebuild",
+  "files": [
+    {
+      "path": "frontend/public/squad/embed.html",
+      "bytes": 1348,
+      "sha256": "f80f70f8b6fe2fb5c8a4e09f79c09bf4f912b3de5d669df8b794c1bd9d3083cc"
+    },
+    {
+      "path": "frontend/public/squad/squad_ui02.js",
+      "bytes": 40695,
+      "sha256": "c1b383d013d75d03ca26054a85b381f1318ebf4b14e935385c04407cb464655a"
+    },
+    {
+      "path": "frontend/public/squad/squad_ui026.css",
+      "bytes": 21543,
+      "sha256": "bc27dade8d05c17acc4007fb3424bfdffa825bd7d92309c73628855626c7ecb6"
+    },
+    {
+      "path": "tests/test_ts_ui_02_6_squad_layout.py",
+      "bytes": 4206,
+      "sha256": "4181c30bb34b479a410c8c1a27af7dcfa19525abccc79b7031fe95bfe5ab5acc"
+    },
+    {
+      "path": "docs/TS_UI_02_6_SQUAD_DIRECTORY_HERO.md",
+      "bytes": 2553,
+      "sha256": "7df306779b8133f5d3ecf243ca95f1cf257b957658b00533e566c52a24e56e51"
+    },
+    {
+      "path": "TS_UI_02_6_TEST_REPORT.md",
+      "bytes": 1229,
+      "sha256": "a2af309e779128717840b948db42708863c58df4a5ae5d690490b2c4d39319a2"
+    },
+    {
+      "path": "INSTALAR_TS_UI_02_6.txt",
+      "bytes": 1045,
+      "sha256": "4f39283473dac3ae83ad650ef14b2618223938988ea09395856daef87a9297de"
+    }
+  ]
+}
