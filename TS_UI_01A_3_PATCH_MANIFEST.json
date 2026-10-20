@@ -1,0 +1,90 @@
+{
+  "patch": "TS-UI-01A.3",
+  "requires": "TS-UI-01A.2",
+  "incremental": true,
+  "game_code_changes": "frontend only",
+  "sqlite_save_schema": "v22 unchanged",
+  "file_count": 13,
+  "files": [
+    {
+      "path": "frontend/portable/club_identity.js",
+      "change": "modified",
+      "size": 5196,
+      "sha256": "3a5549fb7d88261d339ce227462d0c0aada99a315165d77e96bbff78502592ae"
+    },
+    {
+      "path": "frontend/portable/club_theme.css",
+      "change": "new",
+      "size": 4245,
+      "sha256": "a341ce9a5218cc09e1435593e63432fc659bed9b2567f14c7da3eafefa3e1243"
+    },
+    {
+      "path": "frontend/portable/competition_branding.js",
+      "change": "modified",
+      "size": 1915,
+      "sha256": "493c196a9bdd92e2b5bc4980f70b9ea1be859e30b76915ab33481f5ad0b5278d"
+    },
+    {
+      "path": "frontend/portable/competition_branding.css",
+      "change": "modified",
+      "size": 15191,
+      "sha256": "f4127f26b1dd3dad75af379a6386091edf7ae2257f4cc214300c34db4526ac4a"
+    },
+    {
+      "path": "frontend/portable/ui_home.css",
+      "change": "modified",
+      "size": 31951,
+      "sha256": "d8ce63645e8a71a316757f0ad659c29b1bfef14cdd83e19fc685777d4e3ba523"
+    },
+    {
+      "path": "frontend/portable/ui_home.js",
+      "change": "modified",
+      "size": 28879,
+      "sha256": "a2aff6402b39fb7db539a13c7ad255e6c6298283a03d52bdb88855e768eb6933"
+    },
+    {
+      "path": "frontend/portable/index.html",
+      "change": "modified",
+      "size": 39933,
+      "sha256": "3bd1c2391fa8acb60cd7e10b1b2270488cf7a699d350d10c2e96fc4556026096"
+    },
+    {
+      "path": "frontend/portable/assets/competitions/premier-league-icon.png",
+      "change": "new",
+      "size": 15203,
+      "sha256": "4b28c1376e7aad79850e403a9f4649a6fe821ea8003c1b1cc6f4e48eb227bcc2"
+    },
+    {
+      "path": "frontend/portable/assets/competitions/fa-cup-icon.png",
+      "change": "new",
+      "size": 15513,
+      "sha256": "9cab588732897535f1241f2bb8b5f7637bbd3dbe5996b9b2d3c065a44293c610"
+    },
+    {
+      "path": "frontend/portable/assets/competitions/champions-league-icon.png",
+      "change": "new",
+      "size": 1996,
+      "sha256": "03029e3a32bbd8983a8fde865225d432f07a497b399fa4e9ff519555fc45b87b"
+    },
+    {
+      "path": "tests/test_ts_ui_01a3_home_final.py",
+      "change": "new",
+      "size": 2144,
+      "sha256": "9f7bf119944a447f8bfe8d3cb4c8111a5202be5510584c713c5bf54a1160f452"
+    },
+    {
+      "path": "tests/ui/test_club_identity_theme.cjs",
+      "change": "new",
+      "size": 2312,
+      "sha256": "64dd0a9be699d94b6625bc6595312421f783021d825d651d57f8dd4f7cc5d9f1"
+    },
+    {
+      "path": "docs/TS_UI_01A_3_THEMES.md",
+      "change": "new",
+      "size": 3024,
+      "sha256": "eb4cccb038d242f8449efde1c09979d25d0fd320fcbb57b072f018c1fbe31efd"
+    }
+  ],
+  "compatibility": "No deletions; install directly into existing project root",
+  "tests": "TS_UI_01A_3_TEST_REPORT.md"
+}

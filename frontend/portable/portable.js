@@ -129,6 +129,7 @@
     $('.tactics-caption').textContent='Illustrated portraits are placeholders · Names, current GRL and team metrics come from the Python session';
     $('.app-footer span:first-child').textContent='FM Project · UI-3.5 Python DEV session';
     $('.app-footer span:last-child').textContent='Live Python world progression · verified news · manual save required';
+    window.FMClubIdentity?.applyShell(data.club_id,data.club);
     // Continue is managed separately by the authoritative /api/progression service.
   }
   async function refreshHome(){
@@ -399,7 +400,8 @@
     }
     $('.preview-label').textContent = 'UI-3.5 · PYTHON DEV';
     refreshProgression();
-    if (home) refreshHome();
+    document.body.classList.toggle('tsui-home-active',home);
+    if (home) { refreshHome();window.dispatchEvent(new CustomEvent('fm-ui-home-refresh')); }
     headerTitle.textContent = page;
     headerSubhead.textContent = home
       ? 'Live results, fixtures and verified football news from your career.'
@@ -520,6 +522,7 @@
       }
     }catch(error){console.warn('Home world summary unavailable',error);}
   }
+  
   function renderHomeLeague(data){
     if(!Array.isArray(data.table))return;
     const table=data.table;

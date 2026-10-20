@@ -1,0 +1,14 @@
+TS-UI-01A.3.1 - CORRECCION CALENDARIO: LOGOS Y COLORES
+
+BASE: TS-UI-01A.3
+
+1. Cerrar la interfaz del juego.
+2. Hacer una copia de seguridad del proyecto y las partidas antes de aplicar el parche.
+3. Copiar el contenido de este ZIP en la carpeta raiz del proyecto.
+4. Aceptar reemplazar los archivos indicados.
+5. Reiniciar la interfaz y pulsar Ctrl+F5 si se ve la version anterior.
+
+Cambios: ID canonico en /api/calendar, compatibilidad del Calendar expandido,
+logos y colores de las competiciones en Home, icono Champions corregido.
+
+No se modifican partidas, motor ni simulacion. Este ZIP no incluye el juego completo.

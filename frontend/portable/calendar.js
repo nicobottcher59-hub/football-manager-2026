@@ -6,7 +6,7 @@ window.FMCalendar = (() => {
   const html=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const names=['January','February','March','April','May','June','July','August','September','October','November','December'];
   const shortWeekdays=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const competitionKind=id=>({league:'league','fa-cup':'fa','carabao-cup':'carabao','champions-league':'champions','europa-league':'europa','conference-league':'conference','efl-trophy':'trophy'})[id]||'other';
+  const competitionKind=id=>({'dev-premier':'league',league:'league','fa-cup':'fa','carabao-cup':'carabao','champions-league':'champions','europa-league':'europa','conference-league':'conference','efl-trophy':'trophy'})[id]||'other';
   const hash=s=>[...String(s)].reduce((v,c)=>(Math.imul(v,31)+c.charCodeAt(0))|0,17);
   const badge=(name,managed=false)=>{
     const hue=managed?204:Math.abs(hash(name))%360;

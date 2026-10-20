@@ -1,0 +1,397 @@
+/* TS-UI-01A | One reusable Home layout. No club-specific CSS selectors. */
+:root { --club-primary:#1585d9; --club-accent:#d8b273; }
+.tsui-top-crest { width:37px;height:42px;object-fit:contain;filter:drop-shadow(0 2px 6px #0009); }
+body.tsui-home-active .main-content { max-width:none;padding:9px 17px 13px; }
+body.tsui-home-active .app-header { min-height:53px;margin-bottom:8px;justify-content:flex-end; }
+body.tsui-home-active .header-left { display:none; }
+body.tsui-home-active .continue-button { height:43px;min-width:157px;font-size:14px;border-radius:6px; }
+body.tsui-home-active .club-identity { min-width:190px;padding:4px 12px;min-height:47px; }
+body.tsui-home-active .app-footer { display:none; }
+body.tsui-ready .dashboard-grid > .top-grid,
+body.tsui-ready .dashboard-grid > .widgets-grid { display:none !important; }
+body.tsui-home-active .dashboard-grid { display:block; }
+body.tsui-home-active .sidebar { background:linear-gradient(180deg,#07121e,#06101b 65%,#071a28); }
+body.tsui-home-active .sidebar-bottom.tsui-sidebar-branded { border:1px solid #274559;height:100px;min-height:100px;overflow:hidden;align-items:flex-end;
+  background-image:linear-gradient(0deg,#05101de8,#07142540),var(--tsui-sidebar-photo);background-size:cover;background-position:center; }
+body.tsui-home-active .sidebar-bottom.tsui-sidebar-branded .sidebar-bottom-icon,
+body.tsui-home-active .sidebar-bottom.tsui-sidebar-branded > svg { display:none; }
+body.tsui-home-active .sidebar-bottom.tsui-sidebar-branded strong { font-size:10px;text-shadow:0 1px 5px #000; }
+body.tsui-home-active .sidebar-bottom.tsui-sidebar-branded span { color:#d5dfeb; }
+.tsui-home { display:grid;gap:12px;animation:tsui-arrive .34s cubic-bezier(.2,.8,.25,1) both; }
+@keyframes tsui-arrive { from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)} }
+.tsui-home button { font:inherit;cursor:pointer; }
+.tsui-home button:focus-visible { outline:2px solid #9be5ff;outline-offset:2px; }
+.tsui-hero { position:relative;isolation:isolate;min-height:315px;overflow:hidden;border:1px solid #274356;border-radius:12px;background:#0a1a2a;box-shadow:0 18px 45px #0006,inset 0 1px 0 #ffffff14; }
+.tsui-hero-background { position:absolute;inset:-1%;z-index:-3;background:url('assets/stadium.svg') center 50% / cover no-repeat;
+  filter:brightness(.67) contrast(1.10) saturate(.93);transition:transform .7s ease; }
+.tsui-hero:hover .tsui-hero-background { transform:scale(1.017); }
+.tsui-hero-shade { z-index:-2;position:absolute;inset:0;background:
+  linear-gradient(90deg,#07121cfb 0%,#06101de7 17%,#07111bc9 33%,#06121e75 58%,#07121a38 100%),
+  linear-gradient(0deg,#04121be0 0%,transparent 37%),linear-gradient(180deg,#0716257a,transparent 35%); }
+.tsui-hero:before { content:'';position:absolute;z-index:-1;inset:0;pointer-events:none;background:radial-gradient(ellipse at 40% 100%,#9a712011,transparent 60%); }
+.tsui-hero-content { position:relative;z-index:1;min-height:315px;padding:31px clamp(20px,2.6vw,40px) 31px;display:flex;flex-direction:column;justify-content:space-between;gap:21px; }
+.tsui-brand-row { display:flex;align-items:center;gap:clamp(18px,2.4vw,36px);min-width:0; }
+.tsui-large-crest { display:grid;place-items:center;flex:0 0 145px;height:170px;filter:drop-shadow(0 12px 13px #000b); }
+.tsui-large-crest img { max-width:100%;max-height:100%;object-fit:contain; }
+.tsui-large-crest svg { width:75px;height:75px;color:var(--club-accent); }
+.tsui-hero-text { min-width:0;max-width:810px; }
+.tsui-hero-eyebrow { display:block;color:var(--club-accent);font-size:11px;letter-spacing:2.4px;font-weight:800;text-transform:uppercase;text-shadow:0 2px 10px #000; }
+.tsui-club-name { color:#f7f4ed;margin:8px 0 8px;font-size:clamp(39px,4.2vw,76px);font-weight:920;line-height:.99;letter-spacing:-2.1px;text-transform:uppercase;text-shadow:0 5px 22px #000c;cursor:pointer;max-width:100%; }
+.tsui-club-name:hover { color:#fff; }
+.tsui-hero-tagline { color:#e9e5dc;font-size:15px;text-shadow:0 2px 12px #000d;letter-spacing:.2px; }
+.tsui-hero-bottom { display:flex;justify-content:space-between;align-items:flex-end;gap:19px;flex-wrap:wrap; }
+.tsui-hero-facts { display:flex;flex-wrap:wrap;align-items:center;gap:0;max-width:65%; }
+.tsui-institutional { display:flex;align-items:center;gap:11px;min-height:47px;padding-right:24px;margin-right:23px;border-right:1px solid #c5b59a3c;color:var(--club-accent); }
+.tsui-institutional:last-child { border-right:0;margin-right:0;padding-right:0; }
+.tsui-institutional svg { width:22px;height:22px; }
+.tsui-institutional>span { display:flex;flex-direction:column;gap:4px; }
+.tsui-institutional small { color:#dfd5c6;font-size:10px;letter-spacing:.35px; }
+.tsui-institutional strong { color:#fff;font-size:13px;font-weight:750;text-shadow:0 2px 5px #000; }
+.tsui-hero-results { display:grid;gap:9px;padding:12px 15px;border:1px solid #59738666;background:#061a28ce;backdrop-filter:blur(10px);border-radius:9px;box-shadow:0 8px 16px #0004; }
+.tsui-hero-results>span { color:#eee5dc;font-weight:800;font-size:10px;letter-spacing:.9px; }
+.tsui-results-items,.tsui-calendar-results { display:flex;align-items:center;gap:7px;flex-wrap:wrap; }
+.tsui-result { display:inline-grid;place-items:center;min-width:28px;height:28px;border-radius:5px;font-size:13px;color:white;font-weight:850;
+  box-shadow:inset 0 1px 0 #ffffff44,0 3px 8px #0004; }
+.tsui-win { background:linear-gradient(180deg,#20b87e,#0e8f5a); }
+.tsui-loss { background:linear-gradient(180deg,#eb5062,#b42f44); }
+.tsui-draw { background:linear-gradient(180deg,#7a8595,#58677a); }
+.tsui-unknown { background:#1e3a4e; }
+.tsui-muted { font-size:11px;color:#bac5ca;font-weight:500;line-height:1.5; }
+.tsui-hero-note { position:absolute;z-index:3;right:15px;bottom:6px;font-size:9px;color:#c4bfadab;max-width:370px;text-align:right;pointer-events:none; }
+.tsui-hero-note[hidden] {display:none;}
+.tsui-home-widgets { display:grid;grid-template-columns:minmax(0,1.14fr) minmax(0,.95fr) minmax(0,1.22fr) minmax(0,.99fr);align-items:stretch;gap:11px; }
+.tsui-home-card { position:relative;min-width:0;min-height:465px;display:flex;flex-direction:column;overflow:hidden;
+  background:linear-gradient(158deg,#0d2333ed 0%,#071b2beb 75%,#061423ec);border:1px solid #31516b;border-radius:10px;
+  box-shadow:inset 0 1px 0 #ffffff0c,0 10px 32px #00000030;transition:border-color .22s,box-shadow .22s; }
+.tsui-home-card:hover { border-color:#3b7196;box-shadow:inset 0 1px 0 #ffffff10,0 10px 36px #00000055; }
+.tsui-card-heading { min-height:54px;padding:0 15px;display:flex;align-items:center;border-bottom:1px solid #2642587d; }
+.tsui-card-link { display:flex;align-items:center;gap:11px;border:0;width:100%;height:54px;background:none;color:#f5f5f3;text-align:left;font-weight:850!important;font-size:21px!important;letter-spacing:-.45px; }
+.tsui-card-link>svg:first-child { width:22px;height:22px;color:var(--club-accent); }
+.tsui-card-link span { flex:1; }
+.tsui-card-link>svg:last-child { color:var(--club-accent);width:16px;height:16px;transition:transform .18s; }
+.tsui-card-link:hover>svg:last-child { transform:translateX(4px); }
+.tsui-card-label { color:#9bbdd0;padding:11px 14px 8px;font-size:10px;font-weight:800;letter-spacing:1.12px; }
+.tsui-empty { color:#9fb5c7;font-size:12px;line-height:1.6;padding:13px; }
+.tsui-empty button { border:0;background:none;color:#77cbf2; }
+/* Team: all four metrics stay faithful to the Python squad model. */
+.tsui-status-grid { padding:12px 11px 6px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px; }
+.tsui-stat { min-width:0;min-height:73px;display:grid;grid-template-columns:31px minmax(0,1fr);grid-template-rows:auto auto;align-items:center;gap:6px 6px;padding:8px 9px;border:1px solid #294e64;border-radius:8px;background:#10283ac4; }
+.tsui-stat-icon { width:30px;height:30px;display:grid;place-items:center;color:#58e5aa;border-radius:50%;background:#125243aa; }
+.tsui-stat:nth-child(3) .tsui-stat-icon { color:#55c4f2;background:#114064; }
+.tsui-stat-body { min-width:0;display:flex;flex-direction:column;gap:2px; }
+.tsui-stat-body small { color:#b9c6cd;font-size:10px; }
+.tsui-stat-body strong { font-size:12px;color:#f2f6f7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.tsui-stat-track { height:6px;border-radius:30px;overflow:hidden;background:#263f51; }
+.tsui-stat-track span { height:100%;display:block;border-radius:30px;background:linear-gradient(90deg,#20a87d,#3bdcab); }
+.tsui-stat:nth-child(3) .tsui-stat-track span { background:linear-gradient(90deg,#2472b1,#5bcaed); }
+.tsui-stat b { color:#c9e0e8;text-align:right;font-size:10px; }
+.tsui-pitch-title { padding:7px 13px;display:flex;align-items:center;justify-content:space-between;color:#eee;font-size:14px;font-weight:850; }
+.tsui-pitch-title button { border:0;color:var(--club-accent);background:none;padding:0;display:flex; }
+.tsui-pitch { position:relative;min-height:254px;flex:1;isolation:isolate;margin:0 11px 11px;overflow:hidden;border:1px solid #29695f;border-radius:7px;background:#0a4738; }
+.tsui-pitch:before { content:'';z-index:-2;position:absolute;inset:0;background:repeating-linear-gradient(0deg,#0e4538,#0e4538 36px,#115343 36px,#115343 72px); }
+.tsui-pitch:after { content:'';z-index:-1;position:absolute;inset:0;background:radial-gradient(ellipse at 50% 35%,#2f7c5366,transparent 75%),linear-gradient(0deg,#06182780,transparent 42%); }
+.tsui-pitch-lines { position:absolute;inset:4% 4%;border:1px solid #d6eedb5e; }
+.tsui-midline { height:1px;position:absolute;left:0;right:0;top:50%;background:#d6eedb5e; }
+.tsui-center-circle { width:25%;aspect-ratio:1;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:1px solid #d6eedb66;border-radius:50%; }
+.tsui-goal-box { position:absolute;left:24%;width:52%;height:19%;border:1px solid #d6eedb5e; }
+.tsui-top-box { top:0;border-top:none; }.tsui-bottom-box { bottom:0;border-bottom:none; }
+.tsui-players { position:absolute;inset:0; }
+.tsui-pitch-empty { padding:40% 14px 0;text-align:center;color:#d1e2e2;font-size:12px; }
+.tsui-pitch-player { position:absolute;width:62px;padding:0;border:0;background:transparent;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:0;filter:drop-shadow(0 4px 3px #0009);transition:transform .14s; }
+.tsui-pitch-player:hover { transform:translate(-50%,-50%) scale(1.12);z-index:5; }
+.tsui-player-photo { display:block;position:relative;width:34px;height:35px; }
+.tsui-player-photo svg { width:34px;height:35px;display:block; }
+.tsui-player-photo b { position:absolute;top:22px;left:26px;padding:2px 4px;border-radius:4px;font-size:9px;background:#80dfba;color:#092c22;border:1px solid #a8f6d5; }
+.tsui-player-name { max-width:65px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;font-weight:800;font-size:9px;line-height:16px;color:white;background:#09202ce3;padding:0 4px;border-radius:3px;border:1px solid #447c7e80; }
+.tsui-fallback-face { width:34px;height:35px;background:#145872;display:grid;place-items:center;border-radius:6px; }
+/* Fixtures */
+.tsui-fixtures { padding:0 9px;display:grid;gap:5px; }
+.tsui-fixture-row { border:1px solid #17354c;display:grid;grid-template-columns:62px minmax(0,1fr) 22px;align-items:center;gap:9px;min-height:64px;padding:7px 8px;text-align:left;color:#f2f6fa;border-radius:7px;background:#0c253b85;transition:background .16s,border-color .16s; }
+.tsui-fixture-row:hover { background:#133a57;border-color:#35739b; }
+.tsui-fixture-date { display:grid;gap:3px;color:#e6eff6;font-size:11px;line-height:1.2; }
+.tsui-fixture-date small {font-size:10px;color:#779db8;}
+.tsui-fixture-opponent { display:flex;align-items:center;gap:8px;min-width:0; }
+.tsui-fixture-opponent>span:last-child {display:grid;min-width:0;gap:3px;}
+.tsui-fixture-opponent strong {font-size:11px;max-width:100%;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
+.tsui-fixture-opponent small {font-size:10px;color:#76b1d2;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
+.tsui-other-crest {width:27px;height:30px;flex:0 0 27px;clip-path:polygon(50% 0,96% 15%,88% 79%,50% 100%,12% 79%,4% 15%);display:grid;place-items:center;background:linear-gradient(140deg,#34779c,#102839);border:1px solid #a8d4ef;font-size:13px;font-weight:800;color:#e1f2fd;}
+.tsui-location-type {font-size:10px;font-weight:850;color:#a6bdd1;text-align:center;}
+.tsui-calendar-form {margin-top:auto;margin-bottom:4px;padding:5px 13px 13px;border-top:1px solid #294459;}
+.tsui-calendar-form .tsui-card-label { padding:9px 0 10px; }
+/* Competition selector, leagues, recorded draws */
+.tsui-competition-tabs { display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));align-items:stretch;gap:5px;padding:10px 10px 4px; }
+.tsui-competition-tabs[data-columns="2"] {grid-template-columns:repeat(2,minmax(0,1fr));}
+.tsui-competition-tabs button { min-width:0;width:100%;background:#102c43;border:1px solid #325773;border-radius:5px;color:#a8c8df;padding:9px 8px;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.tsui-competition-tabs button:hover { color:white;border-color:#70b9d8; }
+.tsui-competition-tabs button.selected { background:linear-gradient(135deg,#176fb9,#095293);color:#fff;border-color:#37b2ec;box-shadow:inset 0 1px #ffffff25; }
+.tsui-competition-body {flex:1;display:flex;flex-direction:column;min-height:0;}
+.tsui-competition-summary {display:flex;justify-content:space-between;gap:8px;padding:16px 13px 12px;align-items:center;}
+.tsui-competition-summary strong {font-size:14px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tsui-competition-summary small {font-size:9px;color:#91c1db;white-space:nowrap;}
+.tsui-league-rows {padding:0 10px 14px;}
+.tsui-table-head,.tsui-league-row {display:grid;grid-template-columns:33px minmax(0,1fr) 28px 30px 30px;gap:2px;align-items:center;}
+.tsui-table-head {color:#88a9bd;font-size:9px;font-weight:800;padding:9px 7px;border-bottom:1px solid #26485e;}
+.tsui-league-row {min-height:40px;color:#dce9f0;padding:5px 7px;border-bottom:1px solid #ffffff0b;font-size:10px;}
+.tsui-league-row span:not(.tsui-cell-club),.tsui-league-row b {text-align:center;}
+.tsui-league-row.is-managed {background:#12568a77;border-radius:5px;box-shadow:inset 3px 0 #54c8ef;}
+.tsui-cell-club {min-width:0;}
+.tsui-cell-club button,.tsui-bracket-tie button {border:0;background:none;padding:0;max-width:100%;color:inherit;font-size:10px;text-align:left;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;}
+.tsui-cell-club button:hover,.tsui-bracket-tie button:hover {color:#6edcfe;text-decoration:underline;}
+.tsui-bracket-scroll {overflow-x:auto;overflow-y:hidden;padding:3px 12px 12px;min-height:280px;scrollbar-width:thin;scrollbar-color:#44728d transparent;}
+.tsui-bracket {display:flex;align-items:stretch;gap:17px;min-width:max-content;}
+.tsui-bracket-round {width:153px;position:relative;display:flex;flex-direction:column;gap:12px;}
+.tsui-round-title {font-size:10px;color:#a4c8d8;font-weight:800;white-space:nowrap;min-height:25px;padding:4px 0;}
+.tsui-bracket-tie {position:relative;border:1px solid #33526a;background:#122c418a;border-radius:5px;display:grid;gap:0;padding:2px 5px;}
+.tsui-bracket-tie.is-managed {border-color:#3eb3d8;background:#11496eaa;}
+.tsui-bracket-tie>div {display:flex;gap:5px;align-items:center;justify-content:space-between;min-height:28px;}
+.tsui-bracket-tie>div+div {border-top:1px solid #5c8b9940;}
+.tsui-bracket-tie strong {font-size:10px;color:#e4e8ea;}
+.tsui-bracket-placeholder {display:grid;place-items:center;height:85px;padding:10px;text-align:center;border:1px dashed #537087;border-radius:6px;color:#a0b9ce;font-size:11px;}
+.tsui-bracket-note {font-size:10px;color:#7394aa;line-height:1.4;padding:6px 12px 12px;margin-top:auto;}
+/* Inbox and news */
+.tsui-inbox-tabs {display:flex;gap:6px;padding:10px 10px 8px;}
+.tsui-inbox-tabs button {flex:1;min-height:34px;padding:5px 10px;border-radius:6px;border:1px solid #365873;background:#122a3f;color:#a5c7d8;font-size:11px;font-weight:750;}
+.tsui-inbox-tabs button.selected {color:white;border-color:#37b2ed;background:linear-gradient(120deg,#1363ac,#0a4786);}
+.tsui-unread {margin-left:5px;border-radius:20px;display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;background:#e94658;color:#fff;font-size:10px;}
+.tsui-unread[hidden] { display:none; }
+.tsui-updates {padding:0 8px 12px;display:grid;align-content:start;}
+.tsui-update {position:relative;display:flex;align-items:center;gap:10px;text-align:left;min-height:70px;max-height:83px;padding:9px 5px;background:none;border:0;border-bottom:1px solid #41617a36;color:#f4f5fa;}
+.tsui-update:hover {background:#15456756;}
+.tsui-update-icon {width:39px;height:39px;flex:none;border-radius:6px;display:grid;place-items:center;color:#bce5fb;background:#1b4d6e;}
+.tsui-update-copy {flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+.tsui-update-copy small {font-size:9px;color:#79bad7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tsui-update-copy strong {font-size:11px;color:#fff;line-height:1.25;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.tsui-update-copy>span {font-size:10px;color:#9eafbd;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3;}
+.tsui-unread-dot {width:7px;height:7px;background:#4dbcfa;border-radius:50%;flex:none;box-shadow:0 0 12px #388fff;}
+/* Four cards should remain legible on smaller Windows screens. */
+@media(max-width:1480px){
+  .tsui-home-widgets { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .tsui-home-card { min-height:480px; }
+  .tsui-institutional { margin-right:14px;padding-right:14px; }
+  .tsui-home .tsui-pitch { min-height:275px; }
+}
+@media(max-width:850px){
+  body.tsui-home-active .main-content {padding:10px;}
+  .tsui-hero {min-height:360px;}
+  .tsui-hero-content {min-height:360px;padding:20px;}
+  .tsui-large-crest {flex-basis:90px;height:120px;}
+  .tsui-club-name {font-size:clamp(29px,5vw,44px);}
+  .tsui-hero-facts {max-width:100%;}
+  .tsui-home-widgets {grid-template-columns:1fr;}
+  .tsui-home-card {min-height:430px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .tsui-home,.tsui-hero-background,.tsui-home-card,.tsui-card-link svg,.tsui-pitch-player{animation:none!important;transition:none!important;}
+}
+
+.tsui-bracket-pending .tsui-bracket-round {width:172px;}
+.tsui-bracket-entered {border-style:solid;border-color:#4789a6;background:#133e5a;color:#edf7ff;font-weight:750;}
+
+.tsui-top-placeholder {width:36px;height:36px;display:grid;place-items:center;border:1px solid #355b70;border-radius:8px;color:#9dc9e2;}
+
+/* TS-UI-01A.1 | Cinematic visual polish. All selectors are universal and club-agnostic. */
+body.tsui-home-active .main-content { padding:10px 18px 23px; }
+.tsui-home { gap:14px; }
+.tsui-hero {
+  min-height:clamp(335px,36.7vh,380px);
+  border-color:#455b65;
+  border-radius:13px;
+  box-shadow:0 25px 55px #0008,0 0 0 1px #d0a66f12,inset 0 1px #ffffff26;
+}
+.tsui-hero-background {
+  background-position: center 46%;
+  filter:brightness(.93) contrast(1.09) saturate(1.08);
+  animation:tsui-hero-reveal .85s cubic-bezier(.19,1,.22,1) both;
+}
+@keyframes tsui-hero-reveal { from{transform:scale(1.055);filter:brightness(.75) saturate(.8)} to{transform:scale(1);filter:brightness(.93) contrast(1.09) saturate(1.08)} }
+.tsui-hero-shade {
+  background:
+    linear-gradient(90deg,#04101deb 0%,#041320e0 18%,#071522b6 39%,#081d2880 58%,#000b1840 100%),
+    linear-gradient(0deg,#04101bdc 0%,#06152351 22%,transparent 62%),
+    linear-gradient(180deg,#06101b57,transparent 38%);
+}
+.tsui-hero:before { background:radial-gradient(ellipse at 64% 1%,#fcf6dd1b,transparent 36%),linear-gradient(90deg,transparent 0%,transparent 92%,#e1b36b20 100%); }
+.tsui-hero:after {content:'';position:absolute;inset:auto 0 0;height:3px;z-index:2;pointer-events:none;background:linear-gradient(90deg,var(--club-accent),#ffffff12 48%,transparent 86%);opacity:.63;}
+.tsui-hero-content { min-height:clamp(335px,36.7vh,380px);padding:clamp(30px,3.3vh,38px) clamp(26px,2.9vw,48px) 35px;gap:23px; }
+.tsui-brand-row { gap:clamp(22px,2.7vw,46px); }
+.tsui-large-crest { flex:0 0 clamp(137px,10vw,175px);height:clamp(160px,12vw,194px);filter:drop-shadow(0 14px 18px #000b); }
+.tsui-hero-eyebrow {font-size:12px;letter-spacing:2.1px;}
+.tsui-club-name {font-size:clamp(44px,4.25vw,78px);line-height:1.04;letter-spacing:-1.7px;margin:11px 0 10px;}
+.tsui-hero-tagline {font-size:16px;color:#f8eee3;}
+.tsui-hero-facts {max-width:calc(100% - 275px);}
+.tsui-institutional {gap:13px;min-height:54px;padding-right:25px;margin-right:23px;}
+.tsui-institutional svg {width:25px;height:25px;}
+.tsui-institutional small {font-size:11px;letter-spacing:.55px;}
+.tsui-institutional strong {font-size:14px;}
+.tsui-hero-results {min-width:238px;padding:14px 16px;border-radius:10px;background:linear-gradient(135deg,#081928e8,#0d2434d5);border-color:#b6c0ae65;box-shadow:0 9px 30px #0008;}
+.tsui-hero-results>span {font-size:11px;}
+.tsui-hero-results .tsui-result {width:31px;height:31px;font-size:13px;}
+.tsui-result {flex:0 0 auto;}
+.tsui-form-empty {font-size:10px;font-weight:600;color:#9eb3c1;letter-spacing:.1px;}
+.tsui-home-widgets {grid-template-columns:minmax(0,1.15fr) minmax(0,1.03fr) minmax(0,1.24fr) minmax(0,.99fr);gap:12px;}
+.tsui-home-card {min-height:max(545px,calc(100vh - 410px));border-color:#36596c;border-radius:11px;background:linear-gradient(155deg,#102c3b 0%,#071c2b 77%,#071929 100%);box-shadow:inset 0 1px #ffffff18,0 14px 35px #0007;}
+.tsui-home-card:before {content:'';position:absolute;inset:0 0 auto;height:1px;background:linear-gradient(90deg,var(--club-accent),transparent 65%);opacity:.3;pointer-events:none;}
+.tsui-home-card:hover {border-color:#52869d;box-shadow:inset 0 1px #ffffff2a,0 14px 45px #0009;}
+.tsui-card-heading {min-height:58px;padding:0 17px;border-bottom-color:#50708564;}
+.tsui-card-link {height:58px;font-size:23px!important;}
+.tsui-card-link>svg:first-child {height:23px;width:23px;}
+.tsui-card-label {font-size:10px;letter-spacing:1.18px;padding:11px 15px 8px;}
+.tsui-stat {min-height:77px;border-color:#395d70;background:linear-gradient(140deg,#163747c0,#0d2939b6);padding:9px 11px;}
+.tsui-stat-icon {height:34px;width:34px;}
+.tsui-stat-body small {font-size:11px;}
+.tsui-stat-body strong {font-size:13px;}
+.tsui-stat b {font-size:11px;}
+.tsui-status-grid {padding:13px 13px 6px;gap:8px;}
+.tsui-pitch-title {font-size:15px;padding:10px 15px;}
+.tsui-pitch {margin:0 13px 13px;min-height:252px;border-color:#478579;box-shadow:inset 0 8px 28px #0005,0 6px 16px #0005;}
+.tsui-pitch:after {background:radial-gradient(ellipse at 50% 35%,#60af9063,transparent 78%),linear-gradient(0deg,#06182780,transparent 40%);}
+.tsui-player-name {font-size:10px;max-width:74px;line-height:17px;padding:0 5px;}
+.tsui-player-photo {width:38px;height:39px;}
+.tsui-player-photo svg {width:38px;height:39px;}
+.tsui-player-photo b {top:24px;left:27px;font-size:10px;}
+.tsui-pitch-player {width:70px;}
+/* Match calendar: one featured next opponent followed by concise live-form rows. */
+.tsui-fixtures {padding:0 12px 9px;gap:6px;}
+.tsui-featured-fixture {
+  display:flex;flex-direction:column;align-items:stretch;gap:8px;position:relative;min-width:0;
+  border:1px solid #c09a6491;border-left:3px solid var(--club-accent);border-radius:10px;
+  padding:11px 13px 12px;text-align:left;color:#eef8ff;
+  background:radial-gradient(ellipse at 92% 1%,#3f85a247,transparent 64%),linear-gradient(145deg,#174058,#0b293d 77%);
+  box-shadow:0 7px 24px #0007,inset 0 1px #ffffff18;transition:transform .18s,box-shadow .18s,border-color .18s;
+}
+.tsui-featured-fixture:hover {transform:translateY(-2px);border-color:#f0c88c;box-shadow:0 12px 26px #0009,0 0 0 1px #d9c0a51e;}
+.tsui-featured-top {display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.tsui-featured-eyebrow {color:#edc58e;letter-spacing:1.1px;font-size:10px;font-weight:900;}
+.tsui-featured-home {font-size:9px;letter-spacing:.5px;color:#a5d7ed;font-weight:750;}
+.tsui-featured-team {display:flex;align-items:center;gap:13px;min-width:0;}
+.tsui-featured-name {display:flex;flex-direction:column;gap:4px;flex:1;min-width:0;}
+.tsui-featured-name strong {font-size:clamp(16px,1.18vw,19px);font-weight:850;line-height:1.15;overflow:hidden;text-overflow:ellipsis;}
+.tsui-featured-name small {font-size:11px;color:#9bd7f6;line-height:1.2;}
+.tsui-featured-chevron {color:var(--club-accent);}
+.tsui-featured-chevron svg {height:20px;width:20px;}
+.tsui-featured-date {display:flex;align-items:center;gap:8px;color:#d8e7ee;font-size:11px;line-height:1.35;}
+.tsui-featured-date svg {height:15px;width:15px;color:var(--club-accent);}
+.tsui-featured-form {display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid #d6e1e12d;padding-top:8px;min-width:0;}
+.tsui-featured-form>small {font-size:9px;letter-spacing:.3px;color:#a9c1d0;white-space:nowrap;}
+.tsui-opponent-form {display:flex;align-items:center;flex-wrap:nowrap;gap:3px;min-width:0;}
+.tsui-opponent-form .tsui-result {min-width:17px;height:17px;font-size:9px;line-height:1;border-radius:3px;box-shadow:inset 0 1px #ffffff26;}
+.tsui-opponent-form-featured .tsui-result {min-width:19px;height:19px;font-size:10px;}
+.tsui-featured-fixture .tsui-other-crest {filter:drop-shadow(0 4px 8px #0005);}
+.tsui-other-crest-large {width:49px;height:54px;flex-basis:49px;font-size:23px;}
+.tsui-other-crest img {height:100%;width:100%;object-fit:contain;}
+.tsui-fixture-row {min-height:62px;grid-template-columns:46px minmax(0,1fr) 14px;padding:6px 7px;gap:6px;border-color:#345169;background:#102b3bba;}
+.tsui-fixture-row:hover {background:#19445a;border-color:#6ba0b2;transform:translateX(2px);}
+.tsui-fixture-date {font-size:11px;gap:4px;}
+.tsui-fixture-date small {font-size:9px;}
+.tsui-fixture-opponent {gap:8px;min-width:0;}
+.tsui-fixture-opponent>.tsui-fixture-content {display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;}
+.tsui-fixture-opponent strong {font-size:12px;line-height:1.2;}
+.tsui-fixture-opponent small {font-size:10px;color:#99c7df;line-height:1.2;}
+.tsui-fixture-opponent .tsui-other-crest {width:28px;height:31px;flex-basis:28px;}
+.tsui-fixture-row .tsui-location-type {display:grid;place-items:center;color:#d4bb90;}
+.tsui-fixture-row .tsui-location-type svg {height:15px;width:15px;}
+.tsui-fixture-row .tsui-form-empty {font-size:9px;line-height:1.2;}
+.tsui-calendar-form {margin: auto 12px 12px;padding:10px 2px 0;border-top-color:#59768c6c;}
+.tsui-calendar-form .tsui-card-label {padding:3px 0 9px;}
+.tsui-calendar-results .tsui-result {height:24px;min-width:24px;font-size:11px;}
+/* Stronger competition typography, but recorded ties only. */
+.tsui-competition-tabs {gap:7px;padding:13px 12px 5px;}
+.tsui-competition-tabs button {font-size:11px;padding:10px 6px;border-radius:7px;}
+.tsui-competition-summary {padding:15px 15px 12px;}
+.tsui-competition-summary strong {font-size:16px;}
+.tsui-competition-summary small {font-size:10px;}
+.tsui-table-head {font-size:10px;}
+.tsui-league-row {font-size:11px;min-height:43px;}
+.tsui-cell-club button,.tsui-bracket-tie button {font-size:11px;}
+.tsui-bracket-scroll {padding:7px 13px 15px;min-height:280px;}
+.tsui-bracket {gap:20px;}
+.tsui-bracket-round {width:165px;gap:12px;}
+.tsui-round-title {font-size:11px;min-height:29px;letter-spacing:.25px;}
+.tsui-bracket-tie {border-color:#4d7890;background:linear-gradient(155deg,#173b4e,#0b2535);border-radius:8px;padding:6px 9px;box-shadow:0 6px 18px #0004;}
+.tsui-bracket-tie.is-managed {border-color:#65daf4;background:linear-gradient(140deg,#145774,#103149);box-shadow:0 7px 22px #0007,0 0 0 1px #5dcaf841;}
+.tsui-bracket-tie>div {min-height:31px;}
+.tsui-bracket-tie strong {font-size:11px;}
+.tsui-bracket-note {font-size:11px;line-height:1.5;color:#acc3d5;}
+/* Better readability and intentional empty state for young careers. */
+.tsui-inbox-tabs {gap:8px;padding:13px 12px 9px;}
+.tsui-inbox-tabs button {min-height:37px;font-size:12px;}
+.tsui-updates {padding:0 11px 15px;}
+.tsui-update {min-height:78px;max-height:100px;padding:11px 6px;gap:11px;}
+.tsui-update-icon {width:41px;height:41px;border-radius:8px;}
+.tsui-update-copy small {font-size:10px;}
+.tsui-update-copy strong {font-size:12px;}
+.tsui-update-copy>span {font-size:11px;}
+.tsui-inbox-idle {display:grid;gap:9px;justify-items:start;margin:22px 6px;padding:18px;border:1px dashed #365a73;border-radius:10px;background:linear-gradient(150deg,#15405c39,#0c263343);}
+.tsui-inbox-idle svg {width:25px;height:25px;color:#a7cbe2;}
+.tsui-inbox-idle strong {font-size:13px;color:#d9ecf4;}
+.tsui-inbox-idle span {font-size:11px;line-height:1.6;color:#a2b9c7;}
+/* Responsive: do not cram tiny columns or conceal key form data. */
+@media(max-width:1500px){
+ .tsui-home-widgets {grid-template-columns:repeat(2,minmax(0,1fr));}
+ .tsui-home-card {min-height:545px;}
+ .tsui-fixture-row {min-height:60px;}
+}
+@media(max-width:930px){
+ .tsui-hero {min-height:375px;}
+ .tsui-hero-content {min-height:375px;padding:24px;}
+ .tsui-hero-facts {max-width:100%;}
+ .tsui-hero-results {min-width:190px;}
+ .tsui-brand-row {gap:14px;}
+ .tsui-large-crest {flex-basis:100px;height:128px;}
+ .tsui-club-name {font-size:clamp(30px,6vw,53px);}
+ .tsui-home-widgets {grid-template-columns:1fr;}
+ .tsui-home-card {min-height:480px;}
+}
+@media(prefers-reduced-motion:reduce){
+ .tsui-hero-background,.tsui-featured-fixture,.tsui-fixture-row {animation:none!important;transition:none!important;transform:none!important;}
+}
+/* Neutral outlines indicate missing results, not draws. */
+.tsui-result.tsui-pending {background:#0b21305e;border:1px dashed #5a78867a;color:#718898;box-shadow:none;font-weight:500;}
+.tsui-opponent-form .tsui-pending {color:#657d90;border-color:#46647890;}
+
+/* TS-UI-01A.3 — All four Home columns have stable independent heights.
+   Switching to a long news feed must never stretch the Team/Calendar/Cup cards. */
+.tsui-home-widgets {align-items:start;}
+.tsui-home-widgets>.tsui-home-card {
+  height:clamp(545px,calc(100vh - 390px),730px);
+  min-height:0;
+  max-height:none;
+}
+.tsui-home .tsui-inbox-card .tsui-card-heading,
+.tsui-home .tsui-inbox-card .tsui-inbox-tabs {flex-shrink:0;}
+.tsui-home .tsui-inbox-card .tsui-updates {
+  display:grid;grid-auto-rows:max-content;align-content:start;
+  flex:1 1 auto;min-height:0;
+  overflow-y:auto;overflow-x:hidden;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;scrollbar-color:#607f91 #061827;
+  scrollbar-gutter:stable;
+  padding-bottom:19px;
+}
+.tsui-home .tsui-inbox-card .tsui-updates::-webkit-scrollbar {width:7px;}
+.tsui-home .tsui-inbox-card .tsui-updates::-webkit-scrollbar-thumb {background:#4e758a;border-radius:20px;}
+.tsui-home .tsui-inbox-card .tsui-updates:focus-visible {outline:2px solid var(--ui-club-highlight,#6ea6df);outline-offset:-3px;}
+.tsui-home .tsui-competition-card .tsui-competition-body {
+  min-height:0;overflow-y:auto;overflow-x:hidden;
+  scrollbar-width:thin;scrollbar-color:#55778b #071a29;
+}
+.tsui-home .tsui-team-card .tsui-pitch {min-height:245px;}
+@media(max-width:1500px) {
+  .tsui-home-widgets>.tsui-home-card {height:clamp(545px,calc(100vh - 385px),730px);}
+}
+@media(max-width:930px) {
+  .tsui-home-widgets>.tsui-home-card {height:clamp(505px,calc(100vh - 330px),690px);}
+}
+/* The four heights are stable, but the five fixtures must remain reachable. */
+.tsui-home .tsui-calendar-card>.tsui-card-label {flex:0 0 auto;}
+.tsui-home .tsui-calendar-card .tsui-fixtures {
+  display:flex;flex-direction:column;align-content:start;
+  flex:1 1 auto;min-height:0;
+  overflow-y:auto;overflow-x:hidden;
+  scrollbar-width:thin;scrollbar-color:#55778b #071a29;
+  scrollbar-gutter:stable;
+  overscroll-behavior:contain;
+}
+.tsui-home .tsui-calendar-card .tsui-fixture-row,
+.tsui-home .tsui-calendar-card .tsui-featured-fixture {flex:0 0 auto;width:100%;}
+.tsui-home .tsui-calendar-card .tsui-calendar-form {margin-top:0;flex:0 0 auto;}

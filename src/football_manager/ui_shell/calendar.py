@@ -45,6 +45,35 @@ def _aggregate_for_fixture(session: DevelopmentSession, fixture_id: str, competi
     }
 
 
+
+def _latest_opponent_form(world, opponent_ids: set[str], today: date) -> dict[str, list[str]]:
+    """Five verified completed results per opponent, across registered tournaments.
+
+    This is one pass through the current season's result ledger. Do not infer
+    scores from scheduled games, future dates, standings, ratings or strengths.
+    A shootout winner counts as a win, even when match goals were tied.
+    """
+    recorded: dict[str, list[tuple]] = {club_id: [] for club_id in opponent_ids}
+    if not recorded:
+        return {}
+    for fixture_id, result in world.results.items():
+        fixture = world.fixtures.get(fixture_id)
+        if fixture is None or fixture.kickoff is None or fixture.kickoff.date() > today:
+            continue
+        for club_id, is_home in ((fixture.home_club_id, True), (fixture.away_club_id, False)):
+            if club_id not in recorded:
+                continue
+            own = result.home_goals if is_home else result.away_goals
+            other = result.away_goals if is_home else result.home_goals
+            if own == other and (result.penalties_home or result.penalties_away):
+                own = result.penalties_home if is_home else result.penalties_away
+                other = result.penalties_away if is_home else result.penalties_home
+            outcome = 'V' if own > other else 'D' if own < other else 'E'
+            recorded[club_id].append((fixture.kickoff, fixture_id, outcome))
+    return {club_id: [entry[2] for entry in sorted(rows)[-5:]]
+            for club_id, rows in recorded.items()}
+
+
 def calendar_read_model(session: DevelopmentSession) -> dict:
     """Export the actual managed club fixtures + registered match results.
 
@@ -55,11 +84,22 @@ def calendar_read_model(session: DevelopmentSession) -> dict:
     world = session._world
     games: list[dict] = []
     competitions: dict[str, str] = {}
+    # Read only the five upcoming opponents; one result-ledger scan for all.
+    upcoming = sorted((scheduled for scheduled in session._season_calendar.fixtures_for_club(managed_id)
+                       if scheduled.match_date is not None and scheduled.match_date >= session.current_date
+                       and world.result_for(scheduled.fixture_id) is None),
+                      key=lambda scheduled: (scheduled.kickoff, scheduled.fixture_id))[:5]
+    opponent_ids = {scheduled.away_club_id if scheduled.home_club_id == managed_id
+                    else scheduled.home_club_id for scheduled in upcoming}
+    opponent_form = _latest_opponent_form(world, opponent_ids, session.current_date)
     for scheduled in session._season_calendar.fixtures_for_club(managed_id):
         match = session._managed_schedule.get(scheduled.fixture_id)
         if match is None or scheduled.match_date is None:
             continue
-        competition_id = match.competition_key
+        # Expose the same canonical competition ID as the world fixture.
+        # Legacy managed keys (e.g. "league") describe the schedule, not the
+        # branded competition (e.g. "dev-premier"). Cups already matched.
+        competition_id = scheduled.competition_id
         competitions[competition_id] = match.competition_name
         is_home = match.fixture.home_club_id == managed_id
         opponent_id = match.fixture.away_club_id if is_home else match.fixture.home_club_id
@@ -95,6 +135,8 @@ def calendar_read_model(session: DevelopmentSession) -> dict:
             "away_club": opponent if is_home else session.home_club.name,
             "opponent": opponent,
             "opponent_id": opponent_id,
+            # V / E / D from the rival's point of view; current results only.
+            "opponent_form": opponent_form.get(opponent_id, []),
             "home_id": scheduled.home_club_id, "away_id": scheduled.away_club_id,
             "score": score,
             "penalties": penalties,

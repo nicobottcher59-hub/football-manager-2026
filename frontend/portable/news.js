@@ -87,5 +87,5 @@
     }catch(error){if(request!==serial)return;status='error';stories=[];console.warn('Live career news unavailable',error);}
     renderCards();renderPanel();
   }
-  window.FMNews={refresh,renderPanel,renderCards};
+  window.FMNews={refresh,renderPanel,renderCards,openStory};
 })();

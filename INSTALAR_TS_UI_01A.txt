@@ -1,0 +1,28 @@
+TS-UI-01A | SUNDERLAND AFC - HOME CINEMATICA
+
+BASE OBLIGATORIA
+Este parche se creo comparando con football-manager-2026--BackUp.zip, el backup exacto que entregaste el 19/10/2026 (el mismo proyecto con las actualizaciones TS-28.3/28.4).
+
+INSTALACION (PARCHE, NO JUEGO COMPLETO)
+1. Cerra la interfaz del juego. Hace una copia de seguridad de las partidas.
+2. Descomprimi TS-UI-01A-PARCHE.zip.
+3. Copia su contenido EN LA RAIZ de la carpeta de tu juego, manteniendo las subcarpetas frontend/portable, tests, etc. Acepta reemplazar los archivos existentes.
+4. Ejecuta INICIAR_INTERFAZ_WINDOWS.bat y actualiza con Ctrl+F5 si la interfaz estaba abierta previamente.
+5. Una carrera nueva o una ya existente puede seguir usando la misma base deportiva: no se cambian los archivos SQLite ni el esquema de guardado.
+
+ALCANCE
+- Home cinematica y cuatro widgets reales (Equipo, Calendario, Competiciones, Buzon).
+- Identidad visual e institucional del Sunderland en Home y cabecera superior, con fotografia y escudo aportados por vos.
+- Datos deportivos (jugadores, division, resultados, presupuesto, historia y competiciones) SIGUEN SIENDO FICTICIOS. El ID interno 'northbridge' no se renombro para no romper la persistencia ni el motor.
+- Las demas pantallas conservan, por ahora, sus propios datos y diseno. Las iremos actualizando por seccion.
+- Identidades reutilizables: frontend/portable/data/club-identities.json admite otros clubes usando su ID permanente. Las imagenes van en frontend/portable/assets/clubs/.
+- Sin cambios del motor, sin partidas, sin archivos .git, sin archivos a borrar.
+
+VISUALES
+- La panoramica original se remuestreo a mayor resolucion con mejora leve de nitidez/contraste. El remuestreo no crea detalle fotografico real ausente en el original.
+- Se elimino el fondo de cuadros del escudo y se exporto como PNG con transparencia.
+- Para distribuir el juego publicamente con fotos y escudos reales, revisa los derechos de uso de esos materiales.
+
+PRUEBAS Y LIMITACIONES
+Ver TS_UI_01A_TEST_REPORT.md. La prueba visual se realizo en Chromium aislado con respuestas reales de la API cargadas localmente, no desde el navegador accediendo a localhost (bloqueado por el entorno).
+No damos por confirmada la ejecucion nativa en Windows ni una simulacion integral de 20 temporadas.

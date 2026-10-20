@@ -1,0 +1,162 @@
+/* Competition identity is shared by the four-widget Home and full competitions.
+   The ornamental patterns are purpose-built CSS; user-supplied PNGs are logos. */
+:where(.tsui-home,.cmp-root) [data-competition-brand] { --ci-accent:#79bce4;--ci-rgb:121,188,228;--ci-shade:#173447;--ci-logo:none; }
+.tsui-home .tsui-fixture-row[data-competition-brand],
+.tsui-home .tsui-featured-fixture[data-competition-brand] {
+  position:relative;isolation:isolate;overflow:hidden;
+  border-left:3px solid var(--ci-accent);
+  background:linear-gradient(105deg,rgba(var(--ci-rgb),.30),var(--ci-shade) 120%,#102a3a 94%);
+}
+.tsui-home .tsui-featured-fixture[data-competition-brand] {
+  border-top-color:rgba(var(--ci-rgb),.6);border-bottom-color:rgba(var(--ci-rgb),.28);
+  background:linear-gradient(125deg,rgba(var(--ci-rgb),.26),#122b3d 63%,var(--ci-shade));
+  box-shadow:0 10px 28px #0006,inset 0 1px rgba(255,255,255,.18);
+}
+.tsui-home .tsui-fixture-row[data-competition-brand]::before,
+.tsui-home .tsui-featured-fixture[data-competition-brand]::before {
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:-1;opacity:.24;
+  background:repeating-linear-gradient(135deg,transparent 0 17px,rgba(var(--ci-rgb),.25) 18px 19px,transparent 20px 37px),
+    radial-gradient(circle at 88% 8%,rgba(var(--ci-rgb),.3),transparent 60%);
+}
+.tsui-home .tsui-featured-fixture[data-competition-brand]::after {
+  content:'';position:absolute;right:2%;top:10%;width:32%;height:76%;opacity:.085;pointer-events:none;z-index:-1;
+  background-image:var(--ci-logo);background-size:contain;background-position:center;background-repeat:no-repeat;
+}
+.tsui-home .tsui-fixture-row[data-competition-brand]:hover {background:linear-gradient(100deg,rgba(var(--ci-rgb),.3),#163c4c 70%);border-color:var(--ci-accent);}
+.tsui-home .tsui-featured-fixture .tsui-featured-eyebrow {color:#fff4d8;}
+.tsui-home .tsui-fixture-comp {display:flex;align-items:center;gap:5px;min-width:0;color:var(--ci-accent,#c6d7e3);font-size:10px;}
+.tsui-home .tsui-fixture-comp .ci-fixture-logo {width:21px;height:19px;flex:0 0 21px;object-fit:contain;filter:drop-shadow(0 1px 3px #0006);}
+.tsui-home .tsui-fixture-comp .ci-generic-logo {display:grid;place-items:center;color:var(--ci-accent);}
+.tsui-home .tsui-featured-comp {color:#d6e9ef;font-size:11px;}
+.tsui-home .tsui-featured-comp .ci-fixture-logo {width:27px;height:28px;flex-basis:27px;}
+.tsui-home .tsui-comp-name {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;}
+.tsui-home .tsui-competition-card[data-competition-brand] {--ci-accent:#79bce4;--ci-rgb:121,188,228;--ci-shade:#173447;--ci-logo:none;border-top:2px solid var(--ci-accent);}
+.tsui-home .tsui-competition-tabs button[data-competition-brand] {border-color:rgba(var(--ci-rgb),.29);position:relative;display:flex;justify-content:center;align-items:center;gap:6px;min-width:0;}
+.tsui-home .tsui-competition-tabs button[data-competition-brand].selected {color:#fff;background:linear-gradient(112deg,rgba(var(--ci-rgb),.37),var(--ci-shade));border-color:var(--ci-accent);box-shadow:inset 0 1px rgba(255,255,255,.22),0 0 18px rgba(var(--ci-rgb),.18);}
+.tsui-home .tsui-competition-tabs .ci-tab-logo {width:20px;height:19px;object-fit:contain;flex:0 0 20px;}
+.tsui-home .tsui-competition-tabs button span:last-child {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tsui-home .tsui-competition-body {position:relative;isolation:isolate;overflow:hidden;}
+.tsui-home .tsui-competition-body[data-competition-brand]::before {
+  content:'';z-index:-1;position:absolute;right:-8%;top:10%;height:57%;width:65%;pointer-events:none;
+  background:var(--ci-logo) right top / contain no-repeat;opacity:.055;
+}
+.tsui-home .tsui-competition-summary {display:flex;align-items:center;gap:11px;}
+.tsui-home .tsui-competition-summary .ci-summary-logo {height:43px;width:45px;flex:0 0 45px;object-fit:contain;filter:drop-shadow(0 3px 7px #0008);}
+.tsui-home .tsui-competition-summary .ci-generic-logo {display:grid;place-items:center;height:41px;width:41px;color:var(--ci-accent);}
+.tsui-home .tsui-competition-summary > span {display:flex;flex-direction:column;gap:3px;min-width:0;}
+.tsui-home .tsui-competition-summary > span strong {color:#f7fafb;}
+.tsui-home .tsui-league-row.is-managed {border-left:3px solid var(--ci-accent);background:rgba(var(--ci-rgb),.11);}
+.tsui-home .tsui-bracket-tie.is-managed {border-color:var(--ci-accent);box-shadow:0 0 0 1px rgba(var(--ci-rgb),.22),0 10px 22px #0006;}
+/* Full competition viewer: use the same brand resolution and art as the Home. */
+.cmp-root[data-competition-brand] {--cmp-accent:var(--ci-accent);}
+.cmp-root[data-competition-brand] .cmp-topline {position:relative;isolation:isolate;overflow:hidden;border:1px solid rgba(var(--ci-rgb),.38);border-radius:12px;padding:14px;background:linear-gradient(110deg,var(--ci-shade),#0c283b 70%);}
+.cmp-root[data-competition-brand] .cmp-topline::before {content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.21;background:repeating-linear-gradient(138deg,transparent 0 24px,rgba(var(--ci-rgb),.3) 25px 26px,transparent 27px 51px);}
+.cmp-root[data-competition-brand] .cmp-topline::after {content:'';position:absolute;z-index:-1;right:1%;top:-34px;width:23%;height:170px;background:var(--ci-logo) right center / contain no-repeat;opacity:.09;pointer-events:none;}
+.cmp-root[data-competition-brand] .cmp-title-emblem {display:grid;place-items:center;overflow:hidden;background:rgba(var(--ci-rgb),.10);border-color:rgba(var(--ci-rgb),.35);color:var(--ci-accent);}
+.cmp-root .cmp-title-emblem .ci-title-logo {width:56px;height:58px;object-fit:contain;}
+.cmp-root .cmp-comp-selector button[data-competition-brand] {--tab-accent:var(--ci-accent);}
+.cmp-root .cmp-comp-selector .ci-selector-logo {width:22px;height:23px;object-fit:contain;margin-right:5px;vertical-align:middle;}
+.cmp-root .cmp-comp-selector .ci-generic-logo {display:inline-flex;align-items:center;justify-content:center;}
+.cmp-root[data-competition-brand] .cmp-round-toolbar {border-bottom:1px solid rgba(var(--ci-rgb),.31);}
+.cmp-root[data-competition-brand] .cmp-main-panel {border-top:2px solid rgba(var(--ci-rgb),.8);}
+.cmp-root[data-competition-brand] .cmp-bracket-panel,.cmp-root[data-competition-brand] .cmp-fixtures-panel {background-image:linear-gradient(145deg,rgba(var(--ci-rgb),.05),transparent 65%);}
+.cmp-root[data-competition-brand] .cmp-bracket-panel .cmp-kicker,.cmp-root[data-competition-brand] .cmp-panel-top .cmp-kicker {color:var(--ci-accent);}
+.cmp-root[data-competition-brand] .cmp-table tr:has(.cmp-team-cell small) {background:rgba(var(--ci-rgb),.11);}
+@media(max-width:1480px){
+  .tsui-home .tsui-fixture-comp .ci-fixture-logo {width:17px;height:16px;flex-basis:17px;}
+  .tsui-home .tsui-competition-tabs .ci-tab-logo {width:17px;height:17px;flex-basis:17px;}
+}
+@media(prefers-reduced-motion:reduce){.tsui-home .tsui-fixture-row[data-competition-brand],.tsui-home .tsui-featured-fixture[data-competition-brand]{transition:none!important;}}
+/* Compact cup path: precisely two slots. No arbitrary unrelated ties. */
+.tsui-home .tsui-mini-path {display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin:0 13px 10px;padding:0;align-content:start;}
+.tsui-home .tsui-mini-tie {min-width:0;padding:10px 11px;border:1px solid rgba(var(--ci-rgb),.37);border-radius:10px;background:linear-gradient(150deg,rgba(var(--ci-rgb),.14),#0a2536 83%);box-shadow:0 6px 18px #0004;}
+.tsui-home .tsui-mini-tie>small {display:block;color:var(--ci-accent);font-weight:800;font-size:10px;letter-spacing:.65px;text-transform:uppercase;margin-bottom:7px;}
+.tsui-home .tsui-mini-tie .tsui-bracket-tie {background:#081f2d99;padding:3px 8px;box-shadow:none;}
+.tsui-home .tsui-mini-tie .tsui-bracket-tie>div {min-height:28px;}
+.tsui-home .tsui-mini-tie .tsui-bracket-tie>div button {text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80%;}
+.tsui-home .tsui-mini-tie .tsui-bracket-tie strong {font-size:12px;}
+.tsui-home .tsui-mini-tie.is-managed {border-color:var(--ci-accent);background:linear-gradient(135deg,rgba(var(--ci-rgb),.26),#0b2b3b 80%);}
+.tsui-home .tsui-mini-link {height:14px;display:flex;flex-direction:column;align-items:center;gap:0;color:var(--ci-accent);}
+.tsui-home .tsui-mini-link span {height:3px;width:1px;background:rgba(var(--ci-rgb),.56);}
+.tsui-home .tsui-mini-link b {font-size:16px;line-height:9px;transform:rotate(90deg);font-weight:500;}
+.tsui-home .tsui-mini-tie-pending {min-height:115px;display:grid;grid-template-columns:30px 1fr;column-gap:9px;align-items:center;align-content:center;border-style:dashed;background:rgba(var(--ci-rgb),.045);}
+.tsui-home .tsui-mini-tie-pending>small {grid-column:1/-1;}
+.tsui-home .tsui-mini-tie-pending-icon {grid-row:2/4;color:var(--ci-accent);font-size:28px;}
+.tsui-home .tsui-mini-tie-pending>strong {font-size:14px;color:#f4f8fd;}
+.tsui-home .tsui-mini-tie-pending>span {font-size:11px;color:#9eb8c7;line-height:1.45;}
+.tsui-home .tsui-competition-card .tsui-bracket-note {padding:8px 13px 14px;margin:0;color:#aac7d3;font-size:10px;}
+/* A richer editorial news/inbox module; every line comes from API data. */
+.tsui-home .tsui-updates {gap:7px;padding:0 12px 16px;}
+.tsui-home .tsui-update {position:relative;isolation:isolate;overflow:hidden;max-height:none;min-height:70px;padding:11px 10px;border:1px solid #3552656f;border-radius:8px;background:linear-gradient(105deg,#0e2c3b,#0a2130);box-shadow:inset 0 1px #ffffff0b;transition:transform .16s,border-color .16s,background .16s;}
+.tsui-home .tsui-update:hover {border-color:#72a6ba;transform:translateX(2px);background:#184051;}
+.tsui-home .tsui-update-featured {min-height:130px;align-items:flex-start;padding:15px 12px;border-color:#627b8b92;background:linear-gradient(128deg,#174456,#092338 78%);box-shadow:0 9px 18px #0005,inset 0 1px #ffffff20;}
+.tsui-home .tsui-update-featured::before {content:'';position:absolute;right:-34px;top:-50px;width:190px;height:200px;border:2px solid #84b7d323;border-radius:50%;transform:rotate(-26deg);pointer-events:none;z-index:-1;box-shadow:0 0 0 27px #89b5ce0a,0 0 0 53px #89b5ce05;}
+.tsui-home .tsui-update-featured .tsui-update-icon {width:49px;height:51px;flex:0 0 49px;border:1px solid #ffffff16;}
+.tsui-home .tsui-update-icon {width:37px;height:39px;flex:0 0 37px;background:linear-gradient(145deg,#235777,#12394e);color:#a5dff8;box-shadow:inset 0 1px #ffffff18;}
+.tsui-home .tsui-update-result .tsui-update-icon,.tsui-home .tsui-update-award .tsui-update-icon {background:linear-gradient(135deg,#5c4824,#241d1d);color:#f7d38a;}
+.tsui-home .tsui-update-transfer .tsui-update-icon {background:#26453b;color:#95ead2;}
+.tsui-home .tsui-update-medical .tsui-update-icon {background:#4d2b35;color:#ffc2ce;}
+.tsui-home .tsui-update-copy {gap:4px;}
+.tsui-home .tsui-update-copy small {color:#a9cad5;line-height:1.25;white-space:normal;}
+.tsui-home .tsui-update-copy small em {font-style:normal;text-transform:uppercase;letter-spacing:.6px;font-size:9px;font-weight:850;color:#e5c99b;}
+.tsui-home .tsui-update-copy strong {font-size:12px;line-height:1.34;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.tsui-home .tsui-update-featured .tsui-update-copy strong {font-size:15px;line-height:1.28;-webkit-line-clamp:3;}
+.tsui-home .tsui-update-copy>span {font-size:11px;line-height:1.45;-webkit-line-clamp:2;color:#a8bfcc;}
+.tsui-home .tsui-update-featured .tsui-update-copy>span {-webkit-line-clamp:3;}
+.tsui-home .tsui-update-arrow {align-self:flex-end;font-size:27px;color:#e5c38d;margin-left:2px;}
+.tsui-home .tsui-unread-dot {margin-left:3px;}
+.tsui-home .tsui-inbox-idle,.tsui-home .tsui-news-idle {border:1px dashed #52748981;background:radial-gradient(circle at 82% 9%,#3b88ad25,transparent 63%),linear-gradient(135deg,#143449,#0a2334);padding:19px 17px;border-radius:10px;margin:8px 1px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;color:#dcebf6;}
+.tsui-home .tsui-inbox-idle svg,.tsui-home .tsui-news-idle svg {height:30px;width:30px;color:#d2ad79;}
+.tsui-home .tsui-inbox-idle strong,.tsui-home .tsui-news-idle strong {font-size:14px;}
+.tsui-home .tsui-inbox-idle span,.tsui-home .tsui-news-idle span {font-size:11px;line-height:1.5;color:#a7bdcb;}
+@media(max-width:1480px){
+ .tsui-home .tsui-mini-path {margin:0 15px 10px;}
+ .tsui-home .tsui-update-featured {min-height:122px;}
+}
+
+/* TS-UI-01A.3 — Rich, legible tournament colours in all four states.
+   Icons are cropped from user-provided art; full wordmarks remain for watermarks. */
+.tsui-home .tsui-competition-tabs button[data-competition-brand] {
+  background:linear-gradient(110deg,rgba(var(--ci-rgb),.23) 0%,var(--ci-shade) 155%);
+  border:1px solid rgba(var(--ci-rgb),.58);
+  border-left:3px solid var(--ci-accent);
+  color:#f5f3fa;
+  box-shadow:inset 0 1px rgba(255,255,255,.09),0 2px 10px #0002;
+  transition:border-color .18s,background .18s,transform .18s;
+}
+.tsui-home .tsui-competition-tabs button[data-competition-brand]:hover {
+  transform:translateY(-1px);
+  background:linear-gradient(110deg,rgba(var(--ci-rgb),.37),var(--ci-shade));
+  border-color:var(--ci-accent);
+}
+.tsui-home .tsui-competition-tabs button[data-competition-brand].selected {
+  background:linear-gradient(115deg,rgba(var(--ci-rgb),.41),var(--ci-shade));
+  border-color:var(--ci-accent);
+  border-left-width:3px;
+  box-shadow:0 0 0 1px rgba(var(--ci-rgb),.3),0 6px 18px rgba(var(--ci-rgb),.12),inset 0 1px rgba(255,255,255,.18);
+}
+.tsui-home .tsui-competition-tabs .ci-tab-logo {width:25px;height:25px;flex:0 0 25px;object-fit:contain;filter:drop-shadow(0 2px 3px #0008);}
+.tsui-home .tsui-fixture-comp .ci-fixture-logo {width:24px;height:24px;flex:0 0 24px;object-fit:contain;}
+.tsui-home .tsui-featured-comp .ci-fixture-logo {width:31px;height:31px;flex:0 0 31px;object-fit:contain;}
+.tsui-home .tsui-competition-summary .ci-summary-logo {width:54px;height:54px;flex:0 0 54px;object-fit:contain;}
+.tsui-home .tsui-competition-body[data-competition-brand]::before {background-image:var(--ci-symbol);opacity:.08;}
+.cmp-root .cmp-comp-selector button[data-competition-brand] {
+  background:linear-gradient(110deg,rgba(var(--ci-rgb),.12),#0e2539);
+  border-color:rgba(var(--ci-rgb),.43);
+  box-shadow:inset 2px 0 var(--ci-accent);
+}
+.cmp-root .cmp-comp-selector button[data-competition-brand].active {
+  background:linear-gradient(105deg,rgba(var(--ci-rgb),.34),var(--ci-shade));
+  border-color:var(--ci-accent);
+  box-shadow:inset 3px 0 var(--ci-accent),0 5px 15px rgba(var(--ci-rgb),.16);
+}
+.cmp-root .cmp-comp-selector .ci-selector-logo {width:26px;height:27px;object-fit:contain;}
+.cmp-root .cmp-title-emblem .ci-title-logo {width:67px;height:65px;object-fit:contain;}
+.cmp-root[data-competition-brand] .cmp-topline::after {background-image:var(--ci-logo);opacity:.11;}
+@media(max-width:1480px) {
+  .tsui-home .tsui-competition-tabs .ci-tab-logo {width:21px;height:22px;flex-basis:21px;}
+  .tsui-home .tsui-fixture-comp .ci-fixture-logo {width:21px;height:21px;flex-basis:21px;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .tsui-home .tsui-competition-tabs button[data-competition-brand] {transition:none!important;transform:none!important;}
+}

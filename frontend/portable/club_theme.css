@@ -1,0 +1,77 @@
+/* TS-UI-01A.3 — Club adaptive chrome, independent from competition and match-state themes.
+   --ui-club-* tokens come from FMClubIdentity; neutral dark surfaces remain universal. */
+:root {
+  --ui-club-rgb:20,135,216;
+  --ui-club-highlight-rgb:66,155,222;
+  --ui-club-highlight:#429bde;
+  --ui-club-border:#52798d;
+  --ui-club-soft:#112d41;
+}
+body.tsui-home-active .app-shell {
+  background:radial-gradient(ellipse at 48% -5%,rgba(var(--ui-club-rgb),.12),transparent 51%),
+    linear-gradient(160deg,#071827 0%,#06131f 57%,#04101c 100%);
+}
+body.tsui-home-active .sidebar {
+  background:linear-gradient(175deg,#071420,#06111c 55%,var(--ui-club-soft) 160%);
+  border-right-color:rgba(var(--ui-club-highlight-rgb),.23);
+}
+body.tsui-home-active .sidebar::before {
+  background:repeating-linear-gradient(38deg,transparent 0 45px,rgba(var(--ui-club-rgb),.10) 46px 48px),
+    radial-gradient(ellipse at 25% 94%,rgba(var(--ui-club-rgb),.21),transparent 68%);
+}
+body.tsui-home-active .sidebar .nav-item.is-active {
+  color:#fff;
+  background:linear-gradient(105deg,rgba(var(--ui-club-rgb),.36),#12283b 92%);
+  border-color:rgba(var(--ui-club-highlight-rgb),.64);
+  box-shadow:inset 3px 0 var(--ui-club-highlight),0 6px 18px #020b1b44;
+}
+body.tsui-home-active .sidebar .nav-item.is-active svg,
+body.tsui-home-active .sidebar-bottom-icon {color:var(--ui-club-highlight);}
+body.tsui-home-active .sidebar .nav-item:hover:not(.is-active) {
+  background:rgba(var(--ui-club-rgb),.14);color:#fff;
+}
+body.tsui-home-active .club-identity {
+  border-color:rgba(var(--ui-club-highlight-rgb),.35);
+  box-shadow:inset 2px 0 rgba(var(--ui-club-highlight-rgb),.32);
+}
+/* Keep the main 'Go to Match' control blue for navigation consistency. */
+body.tsui-home-active .continue-button {box-shadow:0 0 0 1px rgba(var(--ui-club-highlight-rgb),.29),0 9px 28px #0066e440,inset 0 1px #b5eaff5b;}
+body.tsui-home-active .tsui-hero {
+  border-color:rgba(var(--ui-club-highlight-rgb),.40);
+  box-shadow:0 25px 55px #0008,0 0 0 1px rgba(var(--ui-club-rgb),.13),inset 0 1px #ffffff26;
+}
+body.tsui-home-active .tsui-hero-shade {
+  background:linear-gradient(95deg,#04101deb 0%,#041320dc 18%,#071522b0 39%,#081d2870 58%,#000b1830 100%),
+    linear-gradient(0deg,#04101bdc 0%,#06152351 22%,transparent 62%),
+    linear-gradient(0deg,rgba(var(--ui-club-rgb),.16),transparent 68%);
+}
+body.tsui-home-active .tsui-hero:before {
+  background:radial-gradient(ellipse at 64% 1%,rgba(var(--ui-club-rgb),.17),transparent 47%),
+    linear-gradient(90deg,transparent 82%,rgba(var(--ui-club-rgb),.13));
+}
+body.tsui-home-active .tsui-hero:after {
+  background:linear-gradient(90deg,var(--ui-club-highlight),rgba(var(--ui-club-rgb),.18) 46%,transparent 88%);
+}
+body.tsui-home-active .tsui-hero-results {border-color:rgba(var(--ui-club-highlight-rgb),.32);}
+body.tsui-home-active .tsui-home-card {border-color:rgba(var(--ui-club-highlight-rgb),.22);}
+body.tsui-home-active .tsui-home-card:before {background:linear-gradient(90deg,var(--ui-club-highlight),transparent 70%);opacity:.44;}
+body.tsui-home-active .tsui-home-card:hover {border-color:rgba(var(--ui-club-highlight-rgb),.57);}
+body.tsui-home-active .tsui-card-link>svg:first-child,
+body.tsui-home-active .tsui-card-link>svg:last-child,
+body.tsui-home-active .tsui-pitch-title button {color:var(--ui-club-highlight);}
+body.tsui-home-active .tsui-inbox-tabs button.selected {
+  background:linear-gradient(120deg,rgba(var(--ui-club-rgb),.40),#15374a);
+  border-color:var(--ui-club-highlight);
+  box-shadow:inset 2px 0 rgba(var(--ui-club-highlight-rgb),.62);
+}
+body.tsui-home-active .tsui-inbox-card .tsui-update-featured {border-left:2px solid rgba(var(--ui-club-highlight-rgb),.65);}
+body.tsui-home-active .tsui-inbox-card .tsui-update:hover {border-color:rgba(var(--ui-club-highlight-rgb),.42);}
+/* Deliberately do not recolour --ci-* branding, form badges or health indicators. */
+@media(prefers-reduced-motion:reduce) {
+  body.tsui-home-active .sidebar .nav-item,
+  body.tsui-home-active .tsui-home-card {transition:none!important;}
+}
+/* Within the shared club chrome, the selected competition keeps its own colour. */
+body.tsui-home-active .tsui-home .tsui-competition-card[data-competition-brand] {
+  border-top-color:var(--ci-accent);
+}

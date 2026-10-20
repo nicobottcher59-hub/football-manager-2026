@@ -1,0 +1,87 @@
+{
+  "version": "TS-UI-01A",
+  "title": "Sunderland Home visual/institutional redesign with reusable club identity",
+  "base_archive": "football-manager-2026--BackUp.zip",
+  "base_sha256": "3bfda35c7c3cec35481806b9cc32b3d1f52f5716d0f4278670d5cac54b241c65",
+  "deployment": "Copy the contents of this ZIP directly over the root of the user project with the source backup installed",
+  "notes": [
+    "Visual/institutional identity only; canonical career ID and fictional world untouched",
+    "No saved games, no .git, no Python game services modified",
+    "The club identity catalog is keyed by stable in-game club ID"
+  ],
+  "files": [
+    {
+      "path": "INSTALAR_TS_UI_01A.txt",
+      "change": "added",
+      "sha256": "284ddea5d6547d9618d68136b9ad8451c1a13120bd2948b46d1891f1e1cfe0ce",
+      "bytes": 2294
+    },
+    {
+      "path": "TS_UI_01A_TEST_REPORT.md",
+      "change": "added",
+      "sha256": "ee43b3b710f19e6f2534cd9ef3b7baef5577358c35c6529b9982dcdb459cbef9",
+      "bytes": 3984
+    },
+    {
+      "path": "frontend/portable/assets/clubs/sunderland/crest.png",
+      "change": "added",
+      "sha256": "0193f194002c55b162bf4328e7f22a7d02661547943a65e363649a614121114e",
+      "bytes": 175224
+    },
+    {
+      "path": "frontend/portable/assets/clubs/sunderland/hero.webp",
+      "change": "added",
+      "sha256": "4ed57f8daa4d8c17f03fd47a6ae293f6914569257a84dcd6c838cc093c314511",
+      "bytes": 631822
+    },
+    {
+      "path": "frontend/portable/club_identity.js",
+      "change": "added",
+      "sha256": "b43295a616df76dd2338edb439e6946ca1515877df60736f5bdba9a888fd8a0b",
+      "bytes": 3119
+    },
+    {
+      "path": "frontend/portable/data/club-identities.json",
+      "change": "added",
+      "sha256": "ebcd8951162eb14076c9fefa6e034e911e5e9e139ce10dfe99092e0f0dc190c5",
+      "bytes": 766
+    },
+    {
+      "path": "frontend/portable/index.html",
+      "change": "modified",
+      "sha256": "ece22e0d29dd3f1247a9ac50f3d75a156c7b7bfaea95c1d48311be95d7703bec",
+      "bytes": 39776
+    },
+    {
+      "path": "frontend/portable/news.js",
+      "change": "modified",
+      "sha256": "13e2337aa4772d5a28438ebc08006642085d21292616806c201deeb659a48b61",
+      "bytes": 6320
+    },
+    {
+      "path": "frontend/portable/portable.js",
+      "change": "modified",
+      "sha256": "c7da179c7e041bdbb1439085fe0c9a98e750d773b44868f5128a6764f6871e0c",
+      "bytes": 38184
+    },
+    {
+      "path": "frontend/portable/ui_home.css",
+      "change": "added",
+      "sha256": "40fbfd31ad3783a60859b39b85a85daeaf1f5e453dff8fede6fea411cd18ec10",
+      "bytes": 18637
+    },
+    {
+      "path": "frontend/portable/ui_home.js",
+      "change": "added",
+      "sha256": "e739cafc350cbd4370986a739893cda4ca2f18ba18ac27551561a8da2370642f",
+      "bytes": 23163
+    },
+    {
+      "path": "tests/test_ts_ui_01a_home.py",
+      "change": "added",
+      "sha256": "836eb33a076447614ebc0280229fbf4e9ffdd76804fe8811e0aa8f0039bcd3c5",
+      "bytes": 4050
+    }
+  ],
+  "deletions": []
+}

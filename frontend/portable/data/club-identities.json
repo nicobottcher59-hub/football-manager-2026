@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "notes": "Pure presentation overlay keyed by immutable world club_id. Never mutates squads, leagues, finances or save files.",
+  "clubs": {
+    "northbridge": {
+      "display_name": "Sunderland AFC",
+      "short_name": "Sunderland",
+      "location": "Sunderland, Inglaterra",
+      "founded": 1879,
+      "stadium": "Stadium of Light",
+      "club_type": "Club profesional",
+      "crest": "assets/clubs/sunderland/crest.png",
+      "hero_image": "assets/clubs/sunderland/hero.webp",
+      "primary_color": "#c72838",
+      "secondary_color": "#ffffff",
+      "accent_color": "#d0a66f",
+      "visual_only": true,
+      "image_credit": "Photograph and crest supplied by the project owner",
+      "tagline": "Ha'way the Lads"
+    }
+  }
+}

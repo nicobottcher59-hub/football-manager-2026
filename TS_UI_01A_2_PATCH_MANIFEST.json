@@ -1,0 +1,95 @@
+{
+  "version": "TS-UI-01A.2",
+  "base": "TS-UI-01A.1",
+  "base_patch": "football-manager-TS-UI-01A-1-PARCHE.zip",
+  "base_patch_sha256": "5675ac21f5769a91c98533e0da9215c253f41aafb1134e02d8db62a87b42634a",
+  "apply_to": "project root with TS-UI-01A.1 already installed",
+  "scope": [
+    "shared competition branding on Home and expanded competitions",
+    "two-slot truthful managed cup overview",
+    "richer inbox/news visuals"
+  ],
+  "data_migration": false,
+  "gameplay_changes": false,
+  "deleted_files": [],
+  "files": [
+    {
+      "path": "INSTALAR_TS_UI_01A_2.txt",
+      "change": "new",
+      "bytes": 2660,
+      "sha256": "735a24b51edaf8ac00e107db9efa5b3c7f2ae280fe9886808f439bb37d9cf26b"
+    },
+    {
+      "path": "TS_UI_01A_2_TEST_REPORT.md",
+      "change": "new",
+      "bytes": 2902,
+      "sha256": "11396c65db4f6c8d6b0e447a6c6d01574b85cba7bdeb4bc16b1312be77d5ba5c"
+    },
+    {
+      "path": "frontend/portable/assets/competitions/carabao-cup.png",
+      "change": "new",
+      "bytes": 74050,
+      "sha256": "5d023abacd76e4ccb3ab00990f316a586ff2dbb287ac3ceccc6bdbc2be90c3dc"
+    },
+    {
+      "path": "frontend/portable/assets/competitions/champions-league.png",
+      "change": "new",
+      "bytes": 3643,
+      "sha256": "42f6f20348f007fb90f7df930da267f406e0053eba3dc216d1223df7eaf28f68"
+    },
+    {
+      "path": "frontend/portable/assets/competitions/fa-cup.png",
+      "change": "new",
+      "bytes": 13524,
+      "sha256": "9bc16e7006eb12a8cb52382df17f250746acae6ea3f5a34b44ef007bef909afe"
+    },
+    {
+      "path": "frontend/portable/assets/competitions/premier-league.png",
+      "change": "new",
+      "bytes": 7264,
+      "sha256": "256d00f5bf3d5be48392cf3a649ba88303058daa410c88a941ff1c994fd4db45"
+    },
+    {
+      "path": "frontend/portable/competition_branding.css",
+      "change": "new",
+      "bytes": 12385,
+      "sha256": "3b4f6573e8e5bf0b863e67e023ed1b3f45cb73e79ecdb7f8510e40a0dd914392"
+    },
+    {
+      "path": "frontend/portable/competition_branding.js",
+      "change": "new",
+      "bytes": 1640,
+      "sha256": "62f8bf29de7cc6eac9e3b7c4d552ff24a05ea178d4a6a6c8a7dd167a1c583480"
+    },
+    {
+      "path": "frontend/portable/competitions.js",
+      "change": "modified",
+      "bytes": 39298,
+      "sha256": "2d23b16d73df717f65027d3d8ebd7fac7516acabc1a3b897be6e6ac610d63728"
+    },
+    {
+      "path": "frontend/portable/index.html",
+      "change": "modified",
+      "bytes": 39886,
+      "sha256": "de94e0a98aef8be9921acc529da5f9c9acb70e9c23d070ec8336a945100f03b9"
+    },
+    {
+      "path": "frontend/portable/ui_home.js",
+      "change": "modified",
+      "bytes": 28707,
+      "sha256": "b82aff87a58a07cf128165caa14f740e839343f03663a3f19e561d98c17e1527"
+    },
+    {
+      "path": "tests/test_ts_ui_01a2_branding.py",
+      "change": "new",
+      "bytes": 3356,
+      "sha256": "c9b3fb34a4fcdcf30c11cdda05a34edabaccecb975cc65a38bfa9e9118029f66"
+    },
+    {
+      "path": "tests/ui/test_competition_branding.cjs",
+      "change": "new",
+      "bytes": 1017,
+      "sha256": "968bf5a310895405b8d610a0a2b94ddb80b941e771f7b922a17cc3f84b096d72"
+    }
+  ]
+}

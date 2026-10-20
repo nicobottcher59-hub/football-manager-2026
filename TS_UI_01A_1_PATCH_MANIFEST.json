@@ -1,0 +1,54 @@
+{
+  "version": "TS-UI-01A.1",
+  "title": "Cinematic Home visual polish and verified opponent form",
+  "base_version": "TS-UI-01A",
+  "base_patch": "football-manager-TS-UI-01A-PARCHE.zip",
+  "base_patch_sha256": "e0819feaf5e5abe5d89b16d2775ddeaab628d2280c9371fe602113f4abbd3dce",
+  "apply_to": "Root directory of project with TS-UI-01A already installed",
+  "base_project_archive": "football-manager-2026--BackUp.zip",
+  "notes": [
+    "Frontend visual and additive read-only calendar API changes",
+    "Uses existing club identity catalog, no Sunderland hardcoding in modified source files",
+    "Five outlined placeholders stand for missing results, never actual draws",
+    "No save migration, no save files, no .git, no removals"
+  ],
+  "files": [
+    {
+      "path": "INSTALAR_TS_UI_01A_1.txt",
+      "change": "added",
+      "sha256": "271f3541d2f1d98d778d6d6713536dc1bf5a28058e9eca60138891bd5281f812",
+      "bytes": 2338
+    },
+    {
+      "path": "TS_UI_01A_1_TEST_REPORT.md",
+      "change": "added",
+      "sha256": "5a2cfdbc24264c79b6aef7d9bf76d6f34e0afe082c03530720d21959ff64a6ec",
+      "bytes": 3505
+    },
+    {
+      "path": "frontend/portable/ui_home.css",
+      "change": "modified",
+      "sha256": "dc70c886282a257a6203d3b86a9baa9de7480e6c79203149ab7a2d6254ce493d",
+      "bytes": 29792
+    },
+    {
+      "path": "frontend/portable/ui_home.js",
+      "change": "modified",
+      "sha256": "cb895d50727eec1d43ef7d8bef94865e422cfa436138db1637da500e0836a466",
+      "bytes": 25839
+    },
+    {
+      "path": "src/football_manager/ui_shell/calendar.py",
+      "change": "modified",
+      "sha256": "aa054423a4c99f2f2ae0aec980df9b5329e5c8aac6ca030f4577f53349569350",
+      "bytes": 8798
+    },
+    {
+      "path": "tests/test_ts_ui_01a1_polish.py",
+      "change": "added",
+      "sha256": "9c9f74ac5d88818ed37209d06020027c04982b657353ddc1973c69dd828a5a4e",
+      "bytes": 3590
+    }
+  ],
+  "deletions": []
+}

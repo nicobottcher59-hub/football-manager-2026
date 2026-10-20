@@ -7,7 +7,10 @@ window.FMCompetitions = (() => {
   const hash = s => [...String(s)].reduce((v,c) => (Math.imul(v,31)+c.charCodeAt(0))|0, 17);
   const abbr = s => String(s).split(/[\s-]+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();
   const number = v => Number.isFinite(v) ? String(v) : '–';
-  const competitionColor = id => ({'dev-premier':'#b283f4','dev-championship':'#2ab4ed','dev-league-one':'#28c49e','dev-league-two':'#f2b65a','fa-cup':'#ff6d8c','carabao-cup':'#26cd9c','champions-league':'#9e9bff','europa-league':'#f9a94e','conference-league':'#a2d968','efl-trophy':'#e1acfa'})[id] || '#65b9f8';
+  const ci=id=>window.FMCompetitionBranding?.resolve(id)||{key:'neutral',accent:'#65b9f8'};
+  const ciVars=id=>window.FMCompetitionBranding?.vars(id)||'';
+  const ciLogo=(id,cls)=>window.FMCompetitionBranding?.badge(id,cls)||'🏆';
+  const competitionColor = id => ci(id).accent;
   const fixtureStamp = m => m?.kickoff ? m.kickoff.slice(11,16) + ' UTC' : 'TBD';
   const dayStamp = d => d ? new Intl.DateTimeFormat('en-GB',{month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(d+'T12:00:00Z')) : 'Date TBD';
   let root=null, index=null, data=null, selectedComp=null, stage=null, roundId=null, groupId=null, focus='club', zoomLevel=3, anchorTieId=null;
@@ -44,7 +47,7 @@ window.FMCompetitions = (() => {
   // Only Other Leagues exposes the worldwide directory filters.
   function clubTabs(){
     return `<nav class="cmp-comp-selector" aria-label="Your club competitions">${opts().map(c=>
-      `<button type="button" data-cmp-competition="${h(c.id)}" class="${c.id===data?.id?'active':''}" style="--tab-accent:${competitionColor(c.id)}"><span class="cmp-tab-dot"></span>${h(c.name)}<small>★</small></button>`).join('')}</nav>`;
+      `<button type="button" data-cmp-competition="${h(c.id)}" data-competition-brand="${h(ci(c.id).key)}" class="${c.id===data?.id?'active':''}" style="${ciVars(c.id)}"><span class="cmp-tab-dot"></span>${ciLogo(c.id,'ci-selector-logo')}${h(c.name)}<small>★</small></button>`).join('')}</nav>`;
   }
   // These are discovery choices, not claims that leagues have been simulated.
   // Every competition shown below the filters still comes from the live Python index.
@@ -334,9 +337,9 @@ window.FMCompetitions = (() => {
   function layout(){
     const active=chosenRound();
     const hasSubtabs=data.stages?.length>1;
-    return `<div class="cmp-root" style="--cmp-accent:${competitionColor(data.id)}">
+    return `<div class="cmp-root" data-competition-brand="${h(ci(data.id).key)}" style="${ciVars(data.id)}">
       ${explorerView==='mine'?clubTabs():directoryBrowser()}
-      <div class="cmp-topline"><div class="cmp-title"><div class="cmp-title-emblem">${data.kind==='cup'?'🏆':data.kind==='multi'?'✦':'♛'}</div><div><span class="cmp-kicker">${h(data.kind==='cup'?'KNOCKOUT CUP':data.kind==='league'?'DOMESTIC LEAGUE':data.format==='uefa'?'EUROPEAN COMPETITION':'GROUP + KNOCKOUT')}</span><h2>${h(data.name)}</h2><p>Season ${h(data.season)} · Fictional participants · Real Python data</p></div></div>
+      <div class="cmp-topline"><div class="cmp-title"><div class="cmp-title-emblem">${ciLogo(data.id,'ci-title-logo')}</div><div><span class="cmp-kicker">${h(data.kind==='cup'?'KNOCKOUT CUP':data.kind==='league'?'DOMESTIC LEAGUE':data.format==='uefa'?'EUROPEAN COMPETITION':'GROUP + KNOCKOUT')}</span><h2>${h(data.name)}</h2><p>Season ${h(data.season)} · Fictional participants · Real Python data</p></div></div>
         <div class="cmp-meta"><button type="button" class="ch-primary" data-career-type="competition" data-career-id="${h(data.id)}">Past seasons ↗</button><span><small>SEASON</small><strong>${h(data.season)}</strong></span><span><small>CURRENT VIEW</small><strong>${h(active?.label||'Pending draw')}</strong></span></div></div>
       ${hasSubtabs?`<div class="cmp-stages" role="group" aria-label="Competition stage">${data.stages.map(s=>`<button type="button" data-cmp-stage="${h(s.id)}" class="${s.id===stage?'active':''}" aria-pressed="${s.id===stage}">${h(s.label)}</button>`).join('')}</div>`:''}
       <div class="cmp-round-toolbar"><div><span>SELECT ${isCup()?'ROUND':'MATCHDAY'}</span><select data-cmp-round aria-label="Select ${isCup()?'round':'matchday'}">${rounds().map(r=>`<option value="${h(r.id)}" ${r.id===roundId?'selected':''}>${h(r.label)}${isCup()&&!r.drawn?' · not drawn':''}</option>`).join('')}</select><button type="button" data-cmp-current>Current</button></div>

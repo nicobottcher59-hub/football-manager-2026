@@ -1,0 +1,31 @@
+TS-UI-01A.1 | PULIDO VISUAL DE HOME Y FORMA DE RIVALES
+
+REQUISITO DE INSTALACION
+Este parche es INCREMENTAL. Debes tener ya instalada TS-UI-01A (el primer parche de la Home Sunderland) sobre tu backup del proyecto. No reemplaza al parche anterior ni incluye el juego completo.
+
+INSTALACION
+1. Cierra el juego y haz una copia de seguridad de las partidas guardadas.
+2. Extrae el ZIP TS-UI-01A-1-PARCHE y copia SU CONTENIDO a la carpeta raiz del juego (la que contiene frontend/ y src/).
+3. Conserva las carpetas internas y acepta reemplazar los tres archivos modificados.
+4. Ejecuta INICIAR_INTERFAZ_WINDOWS.bat. Si el navegador estaba abierto, presiona Ctrl + F5.
+5. Para comprobar las formas reales, avanza una parte de la temporada: al principio los casilleros vacios indican que aun no hay resultados suficientes.
+
+NOVEDADES
+- Imagen/cabecera de Sunderland con mayor presencia, mejor contraste y jerarquia.
+- Cuatro widgets mas altos y legibles, sin introducir funcionalidades ficticias.
+- Calendario: proximo rival destacado con escudo, fecha, localia, torneo y forma real.
+- Los cuatro siguientes rivales muestran sus ultimos cinco resultados globales V/E/D.
+- Cinco casilleros vacios (guiones) representan datos todavia no disponibles, NO empates ni resultados inventados.
+- El calculo usa solo resultados disputados y registrados en la partida hasta la fecha actual; tandas de penales resueltas cuentan como V/D.
+- Mejor estado visual de Inbox cuando la carrera tiene pocos mensajes.
+- Adaptacion de Home a pantallas mas angostas; no personalizable.
+
+COMPATIBILIDAD Y ESCALABILIDAD
+- Los componentes se alimentan de los IDs de los clubes. Ningun nombre o imagen del Sunderland esta fijo en el nuevo codigo.
+- El calendario ahora incluye el campo de lectura opponent_form por partido, sin modificar el estado de las carreras.
+- Sin cambios del motor de partidos, economia, contratos, divisiones, temporadas ni SQLite v22.
+- La centralizacion de escudos y nombres en el resto de las pantallas continuara al redisenar cada seccion; NO esta resuelta en este parche.
+- No se requiere eliminar archivos ni instalar nuevas dependencias.
+
+PRUEBAS Y LIMITACIONES
+Ver TS_UI_01A_1_TEST_REPORT.md. El aspecto se valido con Chromium aislado a 1672 y 1366 px. La prueba en Windows del usuario y la simulacion de 20 temporadas siguen pendientes.

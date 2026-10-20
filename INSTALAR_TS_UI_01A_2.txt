@@ -1,0 +1,45 @@
+TS-UI-01A.2 — Branding de competiciones y Home con noticias mejoradas
+===================================================================
+
+REQUISITO: proyecto que ya contiene TS-UI-01A.1 (Home Sunderland + pulido).
+Este ZIP ES UN PARCHE INCREMENTAL. NO contiene juego completo, partidas ni .git.
+
+1. Cerrá el servidor Python y las ventanas del juego.
+2. Hacé una copia de seguridad de tus partidas y carpeta por precaución.
+3. Extraé el contenido del ZIP EN LA CARPETA RAÍZ del proyecto existente.
+4. Aceptá reemplazar los archivos que ya estén presentes.
+5. Volvé a ejecutar INICIAR_INTERFAZ_WINDOWS.bat.
+6. Recargá con Ctrl+F5 (o Ctrl+Shift+R) para evitar CSS/JS en caché.
+
+CONTENIDO
+- logos optimizados a PNG transparente aportados por el usuario:
+  Premier League, FA Cup, Carabao Cup, UEFA Champions League.
+- config única frontend/portable/competition_branding.js para temas por ID;
+  estilos reutilizables en competition_branding.css.
+- Home: próximo rival, calendario y pestañas de competición con identidad,
+  mini copa limitada al partido propio y próxima llave VERIFICADA,
+  Inbox y News con jerarquía visual y estados vacíos cuidados.
+- Competiciones expandida: banner, pestañas, tabla y copa tematizados.
+- tests de assets/configuración + informe.
+
+ACLARACIONES
+- Se mantienen los clubes, ligas, resultados y contratos del universo ficticio.
+- Las copas de este juego se sortean por ronda; un cruce paralelo NO define
+  necesariamente al siguiente rival. Si el nuevo rival no está confirmado,
+  la segunda casilla del minicuadro dice "Sorteo pendiente". No se inventa.
+- Las noticias usan solo registros reales de la partida; los empty states no
+  generan eventos ficticios. Cinco resultados se muestran solo al existir.
+- La integración global de identidad de clubes a otras secciones sigue pendiente.
+- Sin migración SQLite, sin cambios en el simulador o los datos guardados.
+- Los logos facilitados se usan como recursos locales del proyecto. Para una
+  publicación/distribución pública revisá los derechos de las marcas.
+
+GITHUB DESKTOP
+Branch: feat/ts-ui-01a-2-competition-branding
+Summary: feat(ui): competition themes, compact cup paths and lively updates
+Description: Implement a reusable competition branding registry and transparent
+logos for Premier League, FA Cup, Carabao Cup and Champions League. Apply
+competition colors, patterns and marks to the Home calendar and competition
+widget and to the expanded competitions screen. Keep only the managed cup
+tie and a confirmed next tie or pending-draw placeholder. Enhance Inbox/News
+presentation with verified content only, preserving fictional world state.

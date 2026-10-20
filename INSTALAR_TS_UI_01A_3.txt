@@ -1,0 +1,24 @@
+TS-UI-01A.3 — FINAL HOME POLISH
+
+BASE OBLIGATORIA: TS-UI-01A.2 instalada sobre tu proyecto.
+
+1) Cerrá el juego por completo.
+2) Hacé una copia de seguridad de tu carpeta y tus partidas antes de aplicar el parche.
+3) Descomprimí este ZIP directamente en la carpeta principal del proyecto.
+4) Aceptá combinar carpetas y reemplazar los archivos del parche.
+5) Reiniciá el juego y usá Ctrl+F5 si seguís viendo estilos anteriores.
+
+No copies la carpeta TS_UI_01A_3 como un directorio anidado: sus rutas frontend/... y tests/... deben coincidir con las del proyecto.
+No borres ningún archivo. No se incluyen partidas, .git ni el juego completo.
+
+CAMBIOS:
+- Nuevo color de acento en Home según la identidad visual registrada del club, sin alterar competiciones ni resultados.
+- Logos compactos de Premier League, FA Cup y UEFA Champions League, recortados de los PNG que aportaste.
+- Contraste y color de tabs de competiciones mejorados en Home y vista expandida.
+- Altura estable de los cuatro widgets: Inbox/Noticias y Calendario disponen de scroll interno.
+- Documentación para agregar más equipos con el mismo diseño.
+
+COMPATIBILIDAD: SQLite v22, motor Python y partidas guardadas sin cambios.
+VALIDACION PENDIENTE: prueba visual y jugable en Windows sobre tu instalación real.
+
+Consultar TS_UI_01A_3_TEST_REPORT.md para evidencia y limitaciones.
