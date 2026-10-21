@@ -1,0 +1,80 @@
+{
+  "version": "TS-UI-02.8",
+  "base_required": "TS-UI-02.7",
+  "pack_type": "incremental_patch",
+  "branch": "feat/ts-ui-02-8-squad-ux-rebuild",
+  "summary": "feat(ui): TS-UI-02.8 rebuild Squad hero and player directory",
+  "modified_engine": false,
+  "files": [
+    {
+      "path": "frontend/public/squad/embed.html",
+      "sha256": "b722183b4d3e92889c184d78b4a26618e4ed5686cea9b2fe51320e2bd32e131a",
+      "bytes": 1446
+    },
+    {
+      "path": "frontend/public/squad/squad_ui02.js",
+      "sha256": "a6399aefc18a3c7cbe0cb5e0c7740b09b92d41ba8b14e3b716535417b4a70762",
+      "bytes": 40785
+    },
+    {
+      "path": "frontend/public/squad/squad_ui028.css",
+      "sha256": "f4b11727a87112619bf02d06087be4381ad672b2353f5948e841d1e32676fa61",
+      "bytes": 23550
+    },
+    {
+      "path": "frontend/portable/data/club-identities.json",
+      "sha256": "5d87cc014eaa58de207618e8b187b18d48f1ae12d529c661767957183a16fca0",
+      "bytes": 872
+    },
+    {
+      "path": "frontend/portable/assets/clubs/sunderland/home_kit_clean.webp",
+      "sha256": "0ba04cc6664df7835a5d48f27d362acaad4c890693f97aad306031f2088bc98c",
+      "bytes": 115918
+    },
+    {
+      "path": "tests/test_ts_ui_02_3_squad_visual.py",
+      "sha256": "eb842bad80dad41b5acff7207fc23d22fa4320b02c7b48a3f3bb05f09d84f8b4",
+      "bytes": 4589
+    },
+    {
+      "path": "tests/test_ts_ui_02_4_profile.py",
+      "sha256": "0b48a1dd9a250698a749874c8183f767478398c8ba842152e57e3f0645387107",
+      "bytes": 4281
+    },
+    {
+      "path": "tests/test_ts_ui_02_5_squad_polish.py",
+      "sha256": "2adf402717b07f6c54722a844de4395c14ad9bd2b2b1708a88690d9d20a1efa7",
+      "bytes": 4220
+    },
+    {
+      "path": "tests/test_ts_ui_02_6_squad_layout.py",
+      "sha256": "ad5cf53f9e32a3b8735e0c89c190c7ca218e4aff00eac0af115bb087ec6bc3f7",
+      "bytes": 4176
+    },
+    {
+      "path": "tests/test_ts_ui_02_7_squad_polish.py",
+      "sha256": "5aa3118bc94fa362c91f97f7e52885de641816ee13413ab103fe439ec51de844",
+      "bytes": 2816
+    },
+    {
+      "path": "tests/test_ts_ui_02_8_squad_rebuild.py",
+      "sha256": "ebbe5e0e4e7bd3909d1b51c9db167db12332db4fb4cbf9f448fbe006819df4a8",
+      "bytes": 4550
+    },
+    {
+      "path": "docs/TS_UI_02_8_SQUAD_REBUILD.md",
+      "sha256": "de355df4674676c48c92317847558fbe710ff14e6f4f8650e6da93f9c37bd36c",
+      "bytes": 1820
+    },
+    {
+      "path": "TS_UI_02_8_TEST_REPORT.md",
+      "sha256": "e8da1b41d518deefc5795322fb8c5bb9dce71e6119f31e9ff7c8ea128a9bb272",
+      "bytes": 1369
+    },
+    {
+      "path": "INSTALAR_TS_UI_02_8.txt",
+      "sha256": "7b07f68f1b34abc4d41f8b2377692fa8bf76a189828143363c75b464de55fb64",
+      "bytes": 1168
+    }
+  ]
+}

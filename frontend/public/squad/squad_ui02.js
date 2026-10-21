@@ -86,28 +86,24 @@
   // Secondary buttons explicitly open the full profile; row/name select locally.
   // TS-UI-02.7: the directory uses one compact, accessible player card.
   // Dorsal and captain appear only when recorded by the career model.
+  // TS-UI-02.8: clean, player-data-driven player cards. No legacy layout classes.
   function rosterRow(p,data){
     const selected=p.id===state.expanded;
-    const status=p.injury?'Injured':Number(p.suspension)>0?'Suspended':p.available?'Available':'Unavailable';
     const mood=numeric(p.morale)?Number(p.morale):null;
-    const moodLabel=mood==null?'Morale unknown':mood>=75?'Good morale':mood>=55?'Stable morale':'Low morale';
-    const moodIcon=mood==null?'—':`<svg class="s26-mood-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" fill="currentColor"/><circle cx="8.5" cy="9.5" r="1.2" fill="#082532"/><circle cx="15.5" cy="9.5" r="1.2" fill="#082532"/><path d="${mood>=75?'M7 13 Q12 19 17 13':mood>=55?'M7 15 Q12 14 17 15':'M7 17 Q12 11 17 17'}" stroke="#082532" stroke-width="1.65" stroke-linecap="round" fill="none"/></svg>`;
-    const condition=numeric(p.condition)?integer(p.condition)+'%':'—';
-    const number=p.number==null?'':`<span class="s27-row-dorsal" title="Squad number ${html(p.number)}">#${html(p.number)}</span>`;
-    return `<div class="s2-roster-row s25-player-card s26-player-card s27-player-card ${selected?'selected':''} ${p.available?'':'unavailable'}"
-      role="row" tabindex="0" aria-selected="${selected}" data-s2-row="${html(p.id)}" data-roster-expand="${html(p.id)}" aria-label="Select ${html(p.name)}">
-      <span class="s2-row-portrait s26-row-portrait s27-row-portrait">${avatar(p)}<i class="s2-portrait-edge" aria-hidden="true"></i></span>
-      <div class="s2-name-cell s26-name-cell s27-name-cell" role="cell">
-        <div class="s2-name-line s26-name-line s27-name-line"><strong class="s2-player-label">${html(p.name)}</strong>${captainBadge(p,data)}<button type="button" class="s2-profile-shortcut s26-profile-shortcut" data-open-career-player="${html(p.id)}" title="Open full profile of ${html(p.name)}" aria-label="Open full profile of ${html(p.name)}"><span aria-hidden="true">↗</span></button></div>
-        <div class="s2-subline s26-subline s27-subline"><span class="s2-position-tag">${html(p.primary_position||'?')}</span><span class="s27-age">${html(p.age??'—')} yrs</span><span class="s25-nation">${nation(p)}</span>${number}</div>
-      </div>
-      <div class="s27-readiness-group" role="cell">
-        <span class="s2-mood s25-row-morale s26-morale ${mood!=null&&mood<55?'s2-mood-low':mood!=null&&mood<75?'s2-mood-mid':'s2-mood-good'}" title="${html(moodLabel)}" aria-label="${html(moodLabel)}">${moodIcon}</span>
-        <div class="s2-row-readiness s26-condition" aria-label="Condition ${condition}"><span class="s2-mini-track"><i style="--s2-width:${clamp(p.condition)}%" class="${Number(p.condition)<70?'warn':''}"></i></span><small>${condition}</small></div>
-      </div>
-      <div class="s2-row-rating s26-rating" role="cell">${badge(p.act)}</div>
-      ${!p.available?`<span class="s2-row-warning" title="${html(status)}" aria-label="${html(status)}">!</span>`:''}
-      <span class="s2-row-select-chevron s26-chevron" aria-hidden="true">›</span>
+    const moodText=mood==null?'Morale not recorded':mood>=75?'Good morale':mood>=55?'Stable morale':'Low morale';
+    const moodClass=mood==null?'unknown':mood>=75?'positive':mood>=55?'neutral':'negative';
+    const mouth=mood==null?'M7 15h10':mood>=75?'M7 13q5 6 10 0':mood>=55?'M7 15h10':'M7 17q5 -5 10 0';
+    const moodSvg=`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" fill="currentColor"/><circle cx="8.4" cy="9.5" r="1.15" fill="#063044"/><circle cx="15.6" cy="9.5" r="1.15" fill="#063044"/><path d="${mouth}" fill="none" stroke="#063044" stroke-width="1.7" stroke-linecap="round"/></svg>`;
+    const fitness=numeric(p.condition)?`${integer(p.condition)}%`:'—';
+    const number=p.number==null?'<span class="s28-jersey-unassigned" title="Shirt number not assigned">—</span>':`<span class="s28-jersey-number" title="Shirt number ${html(p.number)}">${html(p.number)}</span>`;
+    return `<div class="s29-player-card s28-player-card s2-roster-row ${selected?'selected':''} ${p.available?'':'is-unavailable'}" role="row" tabindex="0" aria-selected="${selected}" data-s2-row="${html(p.id)}" data-roster-expand="${html(p.id)}" aria-label="Select ${html(p.name)}">
+      <div class="s28-row-face" role="cell">${avatar(p)}<span class="s28-face-glow" aria-hidden="true"></span></div>
+      <div class="s28-row-identity" role="cell"><div class="s28-row-title"><strong>${html(p.name)}</strong>${captainBadge(p,data)}<button type="button" class="s28-profile-link" data-open-career-player="${html(p.id)}" title="Open full profile of ${html(p.name)}" aria-label="Open full profile of ${html(p.name)}">↗</button></div>
+        <div class="s28-row-meta">${number}<span class="s28-row-pos">${html(p.primary_position||'—')}</span><span>${html(p.age??'—')} yrs</span><span class="s28-row-nation">${nation(p)}</span></div></div>
+      <span class="s28-morale ${moodClass}" title="${html(moodText)}" aria-label="${html(moodText)}" role="cell">${moodSvg}</span>
+      <span class="s28-row-condition" title="Condition ${fitness}" role="cell"><span class="s28-track"><i style="--s28-progress:${clamp(p.condition)}%" class="${Number(p.condition)<70?'warning':''}"></i></span><span class="s28-condition-value">${fitness}</span></span>
+      <span class="s28-row-overall" role="cell">${badge(p.act)}</span>
+      <span class="s28-row-arrow" aria-hidden="true">›</span>
     </div>`;
   }
   function rosterContents(data){
@@ -117,14 +113,13 @@
   function roster(data){
     const available=data.roster.filter(p=>p.available).length;
     const sortChoices=[['position','Position'],['grl','GRL'],['name','Name']];
-    return `<section class="s2-roster s26-roster" aria-label="Squad player list">
-      <div class="s26-directory-head"><div class="s2-roster-label s26-roster-title"><span class="s2-kicker">SQUAD DIRECTORY</span><h2>Players <span>${data.roster.length}</span></h2></div>
-        <div class="s25-list-tools s26-list-tools"><label class="s25-search s26-search"><span aria-hidden="true">⌕</span><input type="search" data-s2-search aria-label="Search players" placeholder="Search players…" value="${html(view.query)}" autocomplete="off"></label>
-        <label class="s25-sort s26-sort"><span>Sort by</span><select data-s2-sort aria-label="Sort players">${sortChoices.map(([key,label])=>`<option value="${key}" ${key===view.order?'selected':''}>${label}</option>`).join('')}</select></label></div>
-      </div>
-      <div class="s2-list-scroll s26-list-scroll" role="table" aria-label="Squad players">${rosterContents(data)}</div>
-      <footer class="s2-roster-footer s26-roster-footer"><span data-s25-list-count>${allPlayers(data).length} of ${data.roster.length} players</span><span class="s2-scroll-icon" aria-hidden="true">Scroll ↕</span></footer>
-      <span class="s2-roster-progress s26-sr-only" aria-label="${available} players available">${available} available</span>
+    return `<section class="s29-directory s28-directory" aria-label="Squad player list">
+      <header class="s29-directory-head s28-directory-head"><div class="s28-directory-title"><span class="s28-kicker">SQUAD DIRECTORY</span><h2>Players <span class="s28-count">${data.roster.length}</span></h2></div>
+        <div class="s29-tools s28-tools"><label class="s28-search"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg><input type="search" data-s2-search aria-label="Search players" placeholder="Search players…" value="${html(view.query)}" autocomplete="off"></label>
+          <label class="s28-sort"><span class="sr-only">Sort players</span><select data-s2-sort aria-label="Sort players">${sortChoices.map(([key,label])=>`<option value="${key}" ${key===view.order?'selected':''}>Sort: ${label}</option>`).join('')}</select></label></div></header>
+      <div class="s29-list-scroll s28-list-scroll s2-list-scroll" role="table" aria-label="Squad players">${rosterContents(data)}</div>
+      <footer class="s28-directory-footer"><span data-s25-list-count>${allPlayers(data).length} players in your first team</span><span aria-label="Scroll the squad directory">Scroll ↕</span></footer>
+      <span class="s28-screen-reader" aria-label="${available} players available">${available} available</span>
     </section>`;
   }
   // A stylized kit is presentation-only. The badge/number/photo are loaded
@@ -143,26 +138,21 @@
     </svg>`;
   }
   function playerHeader(p,data){
-    const avail=p.injury?'Injured':Number(p.suspension)>0?'Suspended':p.available?'Available':'Unavailable';
-    const theme=view.identities[data.club_id]||{};
-    const crest=safeAsset(theme.crest)?`<img src="/portable/${html(theme.crest)}" alt="" loading="lazy">`:'<span aria-hidden="true">✦</span>';
-    const banner=safeAsset(theme.hero_image)?`style="--s25-hero-photo:url('/portable/${html(theme.hero_image)}')"`:'';
-    const heroNumber=p.number==null?'':html(p.number);
-    const watermarkStyle=safeAsset(theme.crest)?`style="--s27-watermark:url('/portable/${html(theme.crest)}')"`:'';
-    const watermarkClass=safeAsset(theme.crest)?' s27-masked':'';
-    // Context adjustment is not a historical ability gain: label it accurately.
+    const availability=p.injury?'Injured':Number(p.suspension)>0?'Suspended':p.available?'Available':'Unavailable';
+    const identity=view.identities[data.club_id]||{};
+    const crest=safeAsset(identity.crest)?'':`<span class="s28-crest-fallback" aria-hidden="true">✦</span>`;
+    const watermarkStyle=safeAsset(identity.crest)?`style="--s28-watermark:url('/portable/${html(identity.crest)}')"`:'';
     const delta=numeric(p.act)&&numeric(p.base_ovr)?Number(p.act)-Number(p.base_ovr):null;
-    const contextDifference=delta!==null&&Math.abs(delta)>=.05?`<span class="s27-context-delta ${delta<0?'negative':''}" title="Current rating relative to base overall; not a historical gain">${delta>0?'+':''}${delta.toFixed(1)} vs base</span>`:'';
-    return `<header class="s2-player-hero s25-player-hero s26-player-hero s27-player-hero" data-selected-player="${html(p.id)}" ${banner}>
-      <div class="s2-hero-grain" aria-hidden="true"></div><span class="s2-hero-back-number" aria-hidden="true">${heroNumber}</span><span class="s2-hero-ambient" aria-hidden="true"></span>
-      <div class="s2-hero-portrait s26-hero-portrait s27-hero-portrait">${avatar(p,true)}${captainBadge(p,data,true)}</div>
-      <div class="s2-hero-main s26-hero-identity s27-hero-identity"><span class="s2-eyebrow">${html(p.primary_position||'—')} · FIRST TEAM</span><h2 class="s2-player-name">${html(p.name)}</h2>
-        <p class="s2-hero-bio">${nation(p)}<span>${html(p.age??'—')} yrs</span><span>${p.foot?html(nice(p.foot))+' foot':'Foot not recorded'}</span></p>
-        <div class="s2-role-pills s27-role-pills"><span class="s2-position-primary">${html(p.primary_position||'—')}</span>${(p.secondary_positions||[]).slice(0,3).map(pos=>`<span>${html(pos)}</span>`).join('')}<span class="${p.available?'is-good':'is-bad'}">${html(avail)}</span></div>
-        <button type="button" class="s2-hero-open-profile" data-open-career-player="${html(p.id)}" aria-label="Open complete profile of ${html(p.name)}">Full player profile <span aria-hidden="true">→</span></button>
+    const ratingDelta=delta!==null&&Math.abs(delta)>=.05?`<span class="s28-rating-delta ${delta<0?'negative':''}" title="Contextual rating difference; not a permanent ability change">${delta>0?'+':''}${delta.toFixed(1)}</span>`:'';
+    return `<header class="s29-hero s28-hero" data-selected-player="${html(p.id)}">
+      <div class="s29-portrait s28-portrait"><div class="s28-portrait-frame">${avatar(p,true)}${captainBadge(p,data,true)}</div></div>
+      <div class="s29-bio s28-bio"><span class="s28-eyebrow">${html(p.primary_position||'—')} · FIRST TEAM</span><h2 class="s28-player-name">${html(p.name)}</h2>
+        <div class="s28-player-data">${nation(p)}<span>${html(p.age??'—')} years old</span><span>${p.foot?html(nice(p.foot))+' foot':'Foot unrecorded'}</span></div>
+        <div class="s28-badges"><span class="s28-primary-pos">${html(p.primary_position||'—')}</span>${(p.secondary_positions||[]).slice(0,3).map(pos=>`<span class="s28-secondary-pos">${html(pos)}</span>`).join('')}<span class="s28-availability ${p.available?'ready':'alert'}">${html(availability)}</span></div>
+        <button type="button" class="s28-full-profile" data-open-career-player="${html(p.id)}" aria-label="Open complete profile of ${html(p.name)}">Full player profile <span aria-hidden="true">→</span></button>
       </div>
-      <div class="s2-hero-extras s25-shirt-stage s26-kit-stage s27-kit-stage" aria-label="Club home shirt"><div class="s2-hero-club-watermark${watermarkClass}" ${watermarkStyle}>${crest}</div><div class="s26-kit-holder s27-kit-holder">${kitGraphic(p,data)}</div></div>
-      <div class="s2-hero-scores s25-hero-scores s26-hero-scores s27-hero-scores"><div class="s25-dorsal s26-dorsal ${p.number==null?'is-unassigned':''}"><small>SQUAD NUMBER</small><strong>${p.number==null?'—':html(p.number)}</strong></div><div class="s2-score-primary"><small>Current GRL</small>${badge(p.act)}${contextDifference}</div><div><small>Base OVR</small>${badge(p.base_ovr)}</div></div>
+      <div class="s29-kit-stage s28-kit-stage" aria-label="Club home shirt"><div class="s29-crest-silhouette" aria-hidden="true" ${safeAsset(identity.crest)?`style="--s29-crest:url('/portable/${html(identity.crest)}')"`:''}></div><div class="s28-crest-watermark ${safeAsset(identity.crest)?'has-crest':'no-crest'}" ${watermarkStyle}>${crest}</div><div class="s29-kit-holder s28-kit-holder">${kitGraphic(p,data)}</div></div>
+      <div class="s29-metrics s28-metrics"><div class="s28-dorsal-metric"><small>SQUAD NUMBER</small><strong class="${p.number==null?'unassigned':''}">${p.number==null?'—':html(p.number)}</strong></div><div class="s28-current-metric"><small>CURRENT GRL</small>${badge(p.act)}${ratingDelta}</div><div class="s28-base-metric"><small>BASE OVR</small>${badge(p.base_ovr)}</div></div>
     </header>`;
   }
   const pitchPoints={GK:[50,85],RB:[78,69],RCB:[62,72],CB:[50,72],LCB:[38,72],LB:[22,69],RWB:[84,59],LWB:[16,59],DM:[50,59],CDM:[50,59],RDM:[63,58],LDM:[37,58],CM:[50,47],RCM:[63,45],LCM:[37,45],RM:[82,44],LM:[18,44],AM:[50,34],CAM:[50,34],RAM:[65,33],LAM:[35,33],RW:[83,24],LW:[17,24],RF:[68,20],LF:[32,20],CF:[50,18],ST:[50,14],SS:[50,25]};
@@ -369,7 +359,7 @@
     list.innerHTML=rosterContents(view.data);
     list.scrollTop=previous;
     const count=$('[data-s25-list-count]');
-    if(count)count.textContent=`${allPlayers(view.data).length} of ${view.data.roster.length} players`;
+    if(count)count.textContent=`${allPlayers(view.data).length} players in your first team`;
     activateLoadedArt();
     return true;
   }
@@ -392,23 +382,25 @@
       if(crest && safeAsset(entry.crest) && !crest.querySelector('img'))crest.innerHTML=`<img src="/portable/${html(entry.crest)}" alt="">`;
       const head=$('.s2-page-header');
       if(head && safeAsset(entry.hero_image))head.style.setProperty('--s2-banner',`url('/portable/${entry.hero_image}')`);
-      const playerHero=$('.s25-player-hero');
-      if(playerHero && safeAsset(entry.hero_image))playerHero.style.setProperty('--s25-hero-photo',`url('/portable/${entry.hero_image}')`);
-      // A slow identity fetch must also update the selected player's kit and
-      // hero crest. Repaint only these decorations, preserving tab/list scroll.
-      const active=view.data.roster?.find(p=>p.id===state.expanded);
-      const watermark=$('.s2-hero-club-watermark');
+      // TS-UI-02.8: only refresh presentation assets; preserve the active tab
+      // and independently scrolled directory and inspector.
+      const newSilhouette=$('.s29-crest-silhouette');
+      if(newSilhouette && safeAsset(entry.crest))newSilhouette.style.setProperty('--s29-crest',`url('/portable/${entry.crest}')`);
+      const watermark=$('.s28-crest-watermark');
       if(watermark && safeAsset(entry.crest)){
-        watermark.classList.add('s27-masked');
-        watermark.style.setProperty('--s27-watermark',`url('/portable/${entry.crest}')`);
-        if(!watermark.querySelector('img'))watermark.innerHTML=`<img src="/portable/${html(entry.crest)}" alt="" loading="lazy">`;
+        watermark.style.setProperty('--s28-watermark',`url('/portable/${entry.crest}')`);
+        watermark.classList.remove('no-crest');
+        watermark.classList.add('has-crest');
+        watermark.querySelector('.s28-crest-fallback')?.remove();
       }
-      const kit=$('.s26-kit-holder .s2-shirt-art,.s26-kit-holder .s2-shirt-image');
-      if(kit && active && !kit.dataset.identityReady){
-        const holder=document.createElement('div');
-        holder.innerHTML=kitGraphic(active,view.data);
-        const themedKit=holder.firstElementChild;
-        if(themedKit){themedKit.dataset.identityReady='1';kit.replaceWith(themedKit);}
+      const holder=$('.s28-kit-holder');
+      const active=view.data.roster?.find(p=>p.id===state.expanded);
+      if(holder && active && safeAsset(entry.kit_image)){
+        const url=`/portable/${entry.kit_image}`;
+        const current=holder.querySelector('.s2-shirt-image');
+        if(!current || current.getAttribute('src')!==url){
+          holder.innerHTML=kitGraphic(active,view.data);
+        }
       }
     }
     document.querySelectorAll('[data-player-image-key]').forEach(el=>{

@@ -1,0 +1,24 @@
+TS-UI-02.8 - Rebuild visual de Squad
+===================================
+BASE REQUERIDA: TS-UI-02.7 instalada.
+
+INSTALACION:
+1. Cerrar el juego y guardar copia de seguridad de la carpeta del proyecto.
+2. Descomprimir este ZIP directamente en la CARPETA RAIZ del juego.
+3. Aceptar REEMPLAZAR cuando Windows lo solicite. No borrar carpetas.
+4. Reiniciar el juego. Si se ven estilos anteriores: Ctrl+F5.
+
+Incluye SOLO el parche diferencial: interfaz Squad, catalogo visual,
+camiseta transparente del Sunderland, pruebas y documentacion.
+
+ALCANCE:
+- Directorio de jugadores y hero del seleccionado reconstruidos, con
+  estilo independiente s28-*. No se sustituyen datos ni reglas del motor.
+- Camiseta reparada desde la imagen original suministrada, sin fondo roto.
+- Escudo y colores tomados del catalogo del club; fallback para otros clubes.
+- Dorsal real o guion si no esta asignado. Capitan de la alineacion Python.
+- Campo, radar y todos los atributos permanecen en Perfil/Atributos.
+- Las otras pestanas y guardados permanecen intactos.
+
+VALIDACION: 66 tests de interfaz; smoke Chromium 1680/1366/980.
+No hay prueba nativa en Windows. Ver TS_UI_02_8_TEST_REPORT.md.

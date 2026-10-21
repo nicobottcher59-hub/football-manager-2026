@@ -22,12 +22,12 @@ def test_split_view_remains_data_driven():
     assert 'Sunderland' not in code
     assert 's2-roster-row' in code and 's2-inspector' in code
     assert 'data-s2-row' in code
-    assert 's2-roster-progress' in code
+    assert 's28-row-condition' in code
 
 def test_no_competing_name_link_and_row_navigation():
     code=read('frontend/public/squad/squad_ui02.js')
-    assert 's2-player-label' in code
-    assert 's2-profile-shortcut' in code
+    assert 's28-row-title' in code
+    assert 's28-profile-link' in code
     assert 'data-open-career-player="${html(p.id)}"' in code
     assert 'data-roster-expand="${html(p.id)}"' in code
     assert 'class="s2-name-link"' not in code
@@ -39,9 +39,9 @@ def test_no_competing_name_link_and_row_navigation():
 
 def test_rich_header_uses_player_and_club_identity():
     code=read('frontend/public/squad/squad_ui02.js')
-    for token in ('s2-hero-back-number','s2-hero-portrait','s2-shirt-art','kit_style','kit_image','s2-hero-club-watermark'):
+    for token in ('s28-dorsal-metric','s28-portrait-frame','s2-shirt-art','kit_style','kit_image','s28-crest-watermark'):
         assert token in code
-    assert "p.number==null?'':html(p.number)" in code
+    assert "p.number==null?'—':html(p.number)" in code
     assert 'safeAsset(identity.kit_image)' in code
     assert 'kitGraphic(active,view.data)' in code
 

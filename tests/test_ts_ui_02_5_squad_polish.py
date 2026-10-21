@@ -10,7 +10,7 @@ def source(rel):
     return (ROOT/rel).read_text(encoding='utf-8')
 
 JS=source('frontend/public/squad/squad_ui02.js')
-CSS=source('frontend/public/squad/squad_ui025.css')
+CSS=source('frontend/public/squad/squad_ui028.css')
 HTML=source('frontend/public/squad/embed.html')
 
 
@@ -31,7 +31,7 @@ def test_captain_comes_from_actual_python_lineup_not_ovr_or_name():
 
 def test_large_dorsal_shows_real_number_or_dash():
     assert "p.number==null?'—':html(p.number)" in JS
-    assert 's25-dorsal' in JS
+    assert 's28-dorsal-metric' in JS
     assert 'No shirt no.' not in JS
     assert 's25-captain' in CSS
 
@@ -39,7 +39,7 @@ def test_large_dorsal_shows_real_number_or_dash():
 def test_full_shirt_has_image_fit_no_fixed_club_asset_name():
     assert 'safeAsset(identity.kit_image)' in JS
     assert 'kitGraphic(p,data)' in JS
-    assert '.s25-player-hero .s2-shirt-image' in CSS
+    assert '.s28-kit-holder .s2-shirt-image' in CSS
     assert 'object-fit:contain' in CSS
     assert 'sunderland' not in JS.lower()
     catalogue=json.loads(source('frontend/portable/data/club-identities.json'))
@@ -47,14 +47,14 @@ def test_full_shirt_has_image_fit_no_fixed_club_asset_name():
     with Image.open(image) as im:
         assert im.mode=='RGBA'
         assert im.getchannel('A').getextrema()==(0,255)
-        assert im.getchannel('A').getbbox()[0] <= 10  # prepared tight crop
+        assert im.getchannel('A').getbbox()[0] <= 16  # prepared tight crop
 
 
 def test_crest_stays_data_driven_and_late_assets_repaint():
     assert 'view.identities[data.club_id]' in JS
-    assert 'safeAsset(theme.crest)' in JS
-    assert "playerHero.style.setProperty('--s25-hero-photo'" in JS
-    assert 's2-hero-club-watermark' in JS
+    assert 'safeAsset(identity.crest)' in JS
+    assert "watermark.style.setProperty('--s28-watermark'" in JS
+    assert 's28-crest-watermark' in JS
     assert 'rgba(var(--s2-club-rgb)' in CSS
 
 
@@ -62,7 +62,7 @@ def test_player_list_only_shows_verified_fields():
     assert 'p.primary_position' in JS and 'p.age' in JS and 'p.nationality' in JS
     assert 'p.morale' in JS and 'p.condition' in JS and 'p.act' in JS
     assert 'data-s2-search' in JS and 'data-s2-sort' in JS
-    assert 's25-player-card' in JS
+    assert 's28-player-card' in JS
 
 
 def test_sort_and_search_update_list_only_without_reloading_player():

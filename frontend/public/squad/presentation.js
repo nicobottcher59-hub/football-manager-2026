@@ -33,7 +33,7 @@
   const playerKnown=playerValues.every(v=>typeof v==='number'&&Number.isFinite(v));
   const rings=[.25,.5,.75,1].map(k=>`<polygon class="s24-radar-ring" points="${axes.map((_,i)=>point(i,k).join(',')).join(' ')}"/>`).join('');
   const rays=axes.map((axis,i)=>{
-   const [x,y]=point(i,1),[lx,ly]=point(i,1.34);
+   const [x,y]=point(i,1),[lx,ly]=point(i,1.18);
    const align=lx>cx+8?'start':lx<cx-8?'end':'middle';
    const offset=align==='start'?6:align==='end'?-6:0;
    return `<path class="s24-radar-ray" d="M${cx},${cy}L${x},${y}"/><text x="${lx+offset}" y="${ly}" text-anchor="${align}" dominant-baseline="middle">${h(axis.label)}</text>`;
@@ -41,7 +41,7 @@
   const roleShape=`<polygon class="s24-radar-emphasis" points="${poly(roleValues)}"/>`;
   const playerShape=playerKnown?`<polygon class="s24-radar-player" points="${poly(playerValues)}"/>${axes.map((axis,i)=>{const [x,y]=point(i,playerValues[i]/100);return `<circle class="s24-radar-node" cx="${x}" cy="${y}" r="3.4"/>`;}).join('')}`:'';
   const dataRows=axes.map(axis=>`<div class="s24-chart-key-row"><span>${h(axis.label)}</span><strong>${fmt(axis.value)}</strong></div>`).join('');
-  return `${toolbar}<div class="s24-comparison-body"><div class="s24-chart-canvas"><svg class="s24-comparison-radar" viewBox="0 0 610 350" role="img" aria-label="Player ability and relative role weight on the same six selected attributes"><title>Ability values use the 0 to 100 player scale. Role emphasis is the relative weight of attributes in this role, normalized to 100; not a required rating.</title><g>${rings}${rays}</g>${roleShape}${playerShape}</svg></div><div class="s24-comparison-side"><div class="s24-radar-legend"><div><span class="s24-legend-player"></span>Player ability</div><div><span class="s24-legend-role"></span>Role emphasis <span class="s24-help" tabindex="0" title="Role importance is normalized from the engine's attribute weights. It is NOT a required skill level or potential.">i</span></div></div><div class="s24-chart-key-list">${dataRows}</div></div></div>`;
+  return `${toolbar}<div class="s24-comparison-body"><div class="s24-chart-canvas"><svg class="s24-comparison-radar" viewBox="62 0 486 350" role="img" aria-label="Player ability and relative role weight on the same six selected attributes"><title>Ability values use the 0 to 100 player scale. Role emphasis is the relative weight of attributes in this role, normalized to 100; not a required rating.</title><g>${rings}${rays}</g>${roleShape}${playerShape}</svg></div><div class="s24-comparison-side"><div class="s24-radar-legend"><div><span class="s24-legend-player"></span>Player ability</div><div><span class="s24-legend-role"></span>Role emphasis <span class="s24-help" tabindex="0" title="Role importance is normalized from the engine's attribute weights. It is NOT a required skill level or potential.">i</span></div></div><div class="s24-chart-key-list">${dataRows}</div></div></div>`;
  }
  function developmentPanel(d,readonly){
   if(!d?.registered)return `<p class="ts22-history-note">${h(d?.message||'Development not registered.')}</p>`;

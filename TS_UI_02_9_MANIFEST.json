@@ -1,0 +1,39 @@
+{
+  "version": "TS-UI-02.9",
+  "base_required": "TS-UI-02.8",
+  "type": "incremental_patch",
+  "files": {
+    "frontend/public/squad/embed.html": {
+      "sha256": "861ca149fa748b7fea08bfcdb26dc291a04d49a4649377d0e728fc342fe58afc",
+      "bytes": 1495
+    },
+    "frontend/public/squad/squad_ui02.js": {
+      "sha256": "85f8e9fd92ef646b5aaa02de6ff4e8740b9e24c8c0c57e90812e51c9c36cc656",
+      "bytes": 41259
+    },
+    "frontend/public/squad/squad_ui029.css": {
+      "sha256": "38f7f8787312f842920c1370c87c555beb9d6fe0c47f79c5d344b6b7f667a2c2",
+      "bytes": 22287
+    },
+    "frontend/public/squad/presentation.js": {
+      "sha256": "f8e08649671c9606f5dddbe159e6e3234191f06d1051ebff039d0debceb13093",
+      "bytes": 13878
+    },
+    "tests/test_ts_ui_02_9_squad_fidelity.py": {
+      "sha256": "f0c8b1c7331bb63eba07b66cd1c825632f41c92b80eaf1f42363dafbf5d725bf",
+      "bytes": 4146
+    },
+    "docs/TS_UI_02_9_SQUAD_LAYOUT.md": {
+      "sha256": "5782faef1c9e8c49f9263e9560d76cf9f08b66e281f4edad4e9951f23d5c7346",
+      "bytes": 1831
+    },
+    "TS_UI_02_9_TEST_REPORT.md": {
+      "sha256": "c56d5448f1b2e9171d9891f2d24ea4f2545045b07a8ac2422688a389f506a287",
+      "bytes": 1282
+    },
+    "INSTALAR_TS_UI_02_9.txt": {
+      "sha256": "f1f2d06009bddaa77fd18cc14dec18190e189a45cefd4a4f80913de0e320a2cf",
+      "bytes": 1281
+    }
+  }
+}

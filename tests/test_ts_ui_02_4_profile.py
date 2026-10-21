@@ -73,7 +73,7 @@ def test_comparison_uses_real_engine_role_weights_not_made_up_thresholds():
 def test_actual_sunderland_kit_is_in_identity_catalogue_not_js():
     catalogue=json.loads(source('frontend/portable/data/club-identities.json'))
     entry=catalogue['clubs']['northbridge']
-    assert entry['kit_image']=='assets/clubs/sunderland/home_kit.webp'
+    assert entry['kit_image']=='assets/clubs/sunderland/home_kit_clean.webp'
     file=ROOT/'frontend/portable'/entry['kit_image']
     assert file.exists() and file.stat().st_size > 1000
     from PIL import Image

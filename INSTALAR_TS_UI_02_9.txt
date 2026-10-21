@@ -1,0 +1,29 @@
+TS-UI-02.9 — SQUAD: CABECERA, LISTA Y DISTRIBUCION
+
+REQUISITO: Tener TS-UI-02.8 instalado.
+
+1. Cerrar el juego.
+2. Hacer una copia de seguridad del proyecto.
+3. Extraer este ZIP directamente sobre la carpeta raiz del proyecto
+   (la carpeta que contiene frontend/ y tests/).
+4. Aceptar la sustitucion de archivos existentes.
+5. Volver a iniciar el juego. Si se conservan estilos viejos, usar Ctrl+F5.
+
+ESTE ZIP ES SOLO UN PARCHE INCREMENTAL, NO EL JUEGO COMPLETO.
+No borrar carpetas del proyecto ni modificar partidas guardadas.
+No requiere Node.js ni instalar dependencias adicionales.
+
+CAMBIOS:
+- Nuevo modulo CSS aislado para el hero y el directorio de Squad.
+- Componentes de lista mas legibles: retrato, dorsal real, capitan,
+  posicion, edad, nacionalidad, moral, condicion y GRL.
+- Cabecera en cuatro zonas, camiseta completa, escudo en dos capas,
+  y tarjetas de dorsal, ACT y OVR.
+- Mapa de posiciones y radar juntos, con proporciones equilibradas.
+- Etiquetas del radar sin recortes laterales, todos los atributos debajo.
+- Pestañas persistentes y acciones Python sin modificaciones.
+
+VALIDACION:
+- 66 pruebas dirigidas/de regresion aprobadas.
+- Chromium aislado: 1680x940, 1366x830, 980x900.
+- Falta comprobar visualmente el uso nativo de Windows y una partida real.

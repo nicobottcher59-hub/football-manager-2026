@@ -3,7 +3,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 JS = (ROOT / 'frontend/public/squad/squad_ui02.js').read_text(encoding='utf-8')
-CSS = (ROOT / 'frontend/public/squad/squad_ui027.css').read_text(encoding='utf-8')
+CSS = (ROOT / 'frontend/public/squad/squad_ui028.css').read_text(encoding='utf-8')
 EMBED = (ROOT / 'frontend/public/squad/embed.html').read_text(encoding='utf-8')
 
 
@@ -13,8 +13,8 @@ def test_final_stylesheet_loaded_after_existing_versions():
 
 def test_real_player_card_has_dorsal_captain_morale_condition_and_rating():
     part = JS.split('function rosterRow(p,data)', 1)[1].split('function rosterContents', 1)[0]
-    for piece in ('s27-player-card', 's27-row-dorsal', 'p.number==null',
-                  'captainBadge(p,data)', 's26-morale', 's26-condition',
+    for piece in ('s28-player-card', 's28-jersey-number', 'p.number==null',
+                  'captainBadge(p,data)', 's28-morale', 's28-row-condition',
                   'badge(p.act)', 'data-roster-expand=', 'data-open-career-player='):
         assert piece in part
     assert 'No shirt no' not in part
@@ -22,28 +22,28 @@ def test_real_player_card_has_dorsal_captain_morale_condition_and_rating():
 
 def test_hero_has_four_real_data_zones_and_themed_art():
     part = JS.split('function playerHeader(p,data)', 1)[1].split('const pitchPoints=', 1)[0]
-    for piece in ('s27-hero-portrait', 's27-hero-identity', 's27-kit-stage',
-                  's27-hero-scores', 'kitGraphic(p,data)', 'captainBadge(p,data,true)',
+    for piece in ('s28-portrait-frame', 's28-bio', 's28-kit-stage',
+                  's28-metrics', 'kitGraphic(p,data)', 'captainBadge(p,data,true)',
                   "p.number==null?'—':html(p.number)", 'badge(p.act)',
-                  'badge(p.base_ovr)', 'safeAsset(theme.crest)'):
+                  'badge(p.base_ovr)', 'safeAsset(identity.crest)'):
         assert piece in part
     assert '▲ +1.2' not in part
-    assert "title=\"Current rating relative to base overall; not a historical gain\"" in part
+    assert "Contextual rating difference; not a permanent ability change" in part
 
 
 def test_mask_supports_dynamic_club_identity_and_late_catalogue_loading():
-    assert '--s27-watermark' in JS and '--s27-watermark' in CSS
-    assert "watermark.style.setProperty('--s27-watermark'" in JS
-    assert 'background:var(--s2-club-primary)' in CSS
-    assert 'mask-image:var(--s27-watermark)' in CSS
+    assert '--s28-watermark' in JS and '--s28-watermark' in CSS
+    assert "watermark.style.setProperty('--s28-watermark'" in JS
+    assert 'var(--s2-club-primary)' in CSS
+    assert 'background-image:var(--s28-watermark,none)' in CSS
     assert 'sunderland' not in JS.lower()
     assert 'sunderland' not in CSS.lower()
 
 
 def test_pitch_radar_kept_side_by_side_and_all_attributes_still_render():
     assert 's24-profile-top' in CSS
-    assert '@media(min-width:760px)' in CSS
-    assert 'grid-template-columns:minmax(0,.94fr) minmax(0,1.16fr)' in CSS
+    assert '@media(min-width:1110px)' in CSS
+    assert 'grid-template-columns:minmax(0,.93fr) minmax(0,1.17fr)' in CSS
     assert 'function groupedAttributes(p)' in JS
     assert 'Object.entries(p.attributes?.[group]||{})' in JS
     assert 's24-attribute-groups' in JS
