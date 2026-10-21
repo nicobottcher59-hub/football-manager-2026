@@ -55,6 +55,69 @@
    ${d.annual_history?.length?`<details><summary>Annual history</summary><table><tbody>${d.annual_history.map(r=>`<tr><td>${h(r.date)}</td><td>${fmt(r.reference_ovr)}</td></tr>`).join('')}</tbody></table></details>`:''}
    <p class="rt-fam-hint">${h(d.note)}</p></section>`;
  }
+ // Compact development board is used ONLY by Squad's Status & development tab.
+ // Existing presentation panels remain unchanged for any other consumer.
+ // TS-UI-02.14: Five recorded attribute-area snapshots, NOT projected training gains.
+ // Attacking/Defending are subsets of Technical; the selected focus highlights
+ // the matching engine group (balanced/technical/mental/physical).
+ function areaSnapshot(player, focus){
+  const source=player?.attributes||{};
+  const mean=(group,keys)=>{
+   const raw=source[group]||{};
+   const values=(keys||Object.keys(raw)).map(k=>raw[k]).filter(v=>typeof v==='number'&&Number.isFinite(v));
+   return values.length?Math.round(values.reduce((a,b)=>a+b,0)/values.length):null;
+  };
+  const rows=[
+   ['Attacking','technical','attack',mean('technical',['finishing','dribbling','passing','crossing','first_touch','long_shots'])],
+   ['Defending','technical','defence',mean('technical',['tackling','marking','heading'])],
+   ['Physical','physical','physical',mean('physical')],
+   ['Mental','mental','mental',mean('mental')],
+   ['Goalkeeping','goalkeeping','goalkeeping',mean('goalkeeping')]
+  ];
+  return `<div class="s214-training-areas" aria-label="Current recorded attributes by training area"><div class="s214-training-caption"><span>Current abilities</span><span>Focus highlighted · not growth</span></div>
+   ${rows.map(([label,group,tone,value])=>`<div class="s214-training-row s214-tone-${tone} ${focus!=='balanced'&&focus===group?'is-priority':''}" data-s214-training-area data-s214-focus-group="${group}"><div class="s214-training-label"><span>${label}</span><b>${value===null?'—':value}</b></div><div class="s214-training-bar" role="meter" aria-label="${label} recorded ability" aria-valuemin="0" aria-valuemax="100" ${value===null?'aria-valuetext="Not recorded"':`aria-valuenow="${value}"`}><i style="--s214-level:${value===null?0:value}%"></i></div></div>`).join('')}
+  </div>`;
+ }
+ function developmentPanelCompact(d,readonly){
+  const player=arguments[2];
+  if(!d?.registered)return `<div class="s212-development-empty"><span aria-hidden="true">◇</span><div><strong>Development not registered</strong><small>${h(d?.message||'No development record available.')}</small></div></div>`;
+  const history=(Array.isArray(d.history)?d.history:[]).filter(r=>Number.isFinite(Number(r.reference_ovr))&&r.date);
+  let trend='';
+  if(history.length>=2){
+   const numbers=history.map(r=>Number(r.reference_ovr));
+   const minimum=Math.max(0,Math.floor(Math.min(...numbers))-2);
+   const maximum=Math.min(100,Math.ceil(Math.max(...numbers))+2);
+   const range=Math.max(1,maximum-minimum);
+   const points=history.map((r,i)=>({x:18+324*i/(history.length-1),y:95-72*(Number(r.reference_ovr)-minimum)/range}));
+   const path=points.map((p,i)=>`${i?'L':'M'}${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join(' ');
+   const first=history[0],last=history[history.length-1];
+   trend=`<svg class="s212-trend" viewBox="0 0 360 126" role="img" aria-label="Recorded reference OVR from ${h(first.date)} to ${h(last.date)}. Latest ${fmt(last.reference_ovr)}">
+      <path class="s212-trend-grid" d="M18 24H342M18 59H342M18 95H342"/><path class="s212-trend-area" d="${path} L342 95 L18 95 Z"/><path class="s212-trend-line" d="${path}"/>${points.map((p,i)=>`<circle class="s212-trend-dot" cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="${i===points.length-1?3.6:2.6}"/>`).join('')}</svg>
+     <div class="s212-trend-legend"><span>${h(first.date)}</span><strong>${fmt(last.reference_ovr)} reference OVR</strong><span>${h(last.date)}</span></div>`;
+  }else{
+   trend=`<div class="s212-chart-empty s213-chart-empty">
+     <svg viewBox="0 0 320 115" class="s213-review-graphic" aria-hidden="true" focusable="false"><defs><radialGradient id="s213-review-glow"><stop stop-color="#1d7191" stop-opacity=".36"/><stop offset="1" stop-color="#1d7191" stop-opacity="0"/></radialGradient></defs><circle cx="160" cy="56" r="61" fill="url(#s213-review-glow)"/><circle cx="160" cy="56" r="38" stroke="#3c9bb2" stroke-opacity=".21" fill="none"/><circle cx="160" cy="56" r="27" stroke="#59cfe3" stroke-opacity=".24" stroke-dasharray="4 6" fill="none"/><path d="M10 91H310M10 22H310" stroke="#75aec2" stroke-opacity=".12" stroke-dasharray="4 7"/><path d="M82 56H135M185 56H238" stroke="#49a8ca" stroke-opacity=".3" stroke-width="2" stroke-dasharray="4 6"/><circle cx="76" cy="56" r="4" fill="#51b2c9" fill-opacity=".65"/><circle cx="244" cy="56" r="4" fill="#51b2c9" fill-opacity=".65"/><path d="M151 41h18m-18 0v8m18-8v8m-21 3h24v23h-24z" fill="none" stroke="#9be4ed" stroke-width="2" stroke-linejoin="round"/><path d="M153 58h14" stroke="#9be4ed" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/></svg>
+     <div class="s213-review-copy"><span class="s213-review-overline">CAREER DEVELOPMENT</span><strong>${history.length===1?'First review recorded':'First review pending'}</strong><span>${history.length===1?'A trend needs two completed reviews.':'Your first verified monthly review will appear here.'}</span></div>
+   </div>`;
+  }
+  const num=v=>Number.isFinite(Number(v))&&v!==null&&v!==''?Number(v).toLocaleString('en-GB'):'—';
+  const change=d.reference_ovr_delta==null?'Pending':(d.reference_ovr_delta>0?'+':'')+fmt(d.reference_ovr_delta);
+  const focusOptions=(Array.isArray(d.focus_options)?d.focus_options:[]).map(f=>`<option value="${h(f)}" ${f===d.focus?'selected':''}>${h(f.charAt(0).toUpperCase()+f.slice(1))}</option>`).join('');
+  const changes=Object.entries(d.last_changes||{});
+  const details=`${d.message?`<p>${h(d.message)}</p>`:''}${d.career?.message?`<p>${h(d.career.message)}</p>`:''}${d.career?.injury?`<p>${h(d.career.injury.description)} · Return: ${h(d.career.injury.return_on||'Unknown')}</p>`:''}${changes.length?`<p class="s212-changes">${changes.map(([k,v])=>`${h(k.replaceAll('_',' ').replace('.',' / '))}: <b>${v>0?'+':''}${h(v)}</b>`).join(' · ')}</p>`:'<p>No whole attribute changes in the latest review.</p>'}
+   ${history.length?`<details><summary>Monthly reviews (${history.length})</summary><div class="s212-review-list">${history.map(r=>`<div><span>${h(r.date)}</span><b>${fmt(r.reference_ovr)}</b><small>${num(r.minutes)} min</small></div>`).join('')}</div></details>`:''}
+   ${d.annual_history?.length?`<details><summary>Annual reference snapshots</summary><div class="s212-review-list">${d.annual_history.map(r=>`<div><span>${h(r.date)}</span><b>${fmt(r.reference_ovr)}</b></div>`).join('')}</div></details>`:''}<p>${h(d.note||'')}</p>`;
+  return `<div class="s212-development-board s213-development-board">${areaSnapshot(player,d.focus)}<div class="s212-development-main"><div class="s212-development-chart s213-development-chart"><div class="s212-dev-subhead"><strong><span class="s213-sub-icon" aria-hidden="true">↗</span> Player development</strong><small>Reference OVR · not potential</small></div>${trend}</div>
+    <div class="s212-development-focus s213-development-focus"><div class="s212-dev-subhead"><strong><span class="s213-sub-icon" aria-hidden="true">◎</span> Training focus</strong><small>${readonly?'VIEW ONLY':'NEXT MONTHLY REVIEW'}</small></div>
+      <div class="s213-focus-orbit" aria-hidden="true"><span>◎</span></div>
+      <label class="s212-focus-select"><span>Emphasis</span><select data-development-focus ${readonly?'disabled':''} aria-label="Development focus">${focusOptions}</select></label>
+      <div class="s212-focus-highlight"><small>Reference OVR</small><strong>${fmt(d.reference_ovr)}</strong><span>${change==='Pending'?'Last change pending':`Last change ${change}`}</span></div>
+      <span class="s212-focus-status" data-development-status role="status">${readonly?'Read-only rival profile':'Changes apply at the next verified review.'}</span>
+    </div></div>
+    <div class="s212-development-facts s213-development-facts"><div><small>Tracked since</small><b>${h(d.tracking_since||'—')}</b></div><div><small>Next review</small><b>${h(d.next_review||'—')}</b></div><div><small>Minutes this period</small><b>${num(d.period_minutes)}</b></div><div><small>Last OVR change</small><b>${change}</b></div></div>
+    <details class="s212-development-notes"><summary>Review details & methodology</summary><div>${details}</div></details>
+  </div>`;
+ }
  async function hydrate(container,data){
   const el=container.querySelector('[data-player-graphics]');
   if(!el)return;
@@ -74,7 +137,7 @@
    const g=result.graphics;
    const mode=el.dataset.graphicsMode || 'both';
    const charts=`<div class="ts22-chart-head"><strong>Player profile</strong><label>Inspect position <select data-chart-position>${positions.map(v=>`<option value="${h(v)}" ${v===chosen.position?'selected':''}>${h(v)}</option>`).join('')}</select></label><label>Inspect role <select data-chart-role>${g.role_options.map(r=>`<option value="${h(r.id)}" ${r.id===g.role.id?'selected':''}>${h(r.name)}</option>`).join('')}</select></label></div><div class="ts22-charts"><section><h3>Footballing capabilities</h3>${radar(g.general,'General attributes')}</section><section><h3>${h(g.role.name)}</h3>${radar(g.role.axes,'Role attributes')}</section></div><p class="rt-fam-hint">${h(g.note)} Inspecting a role does not change the lineup or tactical assignment.</p><details class="ts22-chart-values"><summary>Chart definitions and attribute values</summary><div>${g.general.map(a=>`<p><b>${h(a.label)}: ${fmt(a.value)}</b><br>${h(a.attributes.join(', '))}</p>`).join('')}${g.role.axes.map(a=>`<p>${h(a.attribute)}: ${fmt(a.value)} (role weight ${a.weight})</p>`).join('')}</div></details>`;
-   const evolution=developmentPanel(g.evolution,!!data.readonly);
+   const evolution=mode==='development'?developmentPanelCompact(g.evolution,!!data.readonly,p):developmentPanel(g.evolution,!!data.readonly);
    const comparison=mode==='comparison'?roleComparison(g,chosen.position,positions,chosen):'';
    el.innerHTML=mode==='comparison'?comparison:mode==='charts'?charts:mode==='development'?evolution:charts+evolution;
    const focus=el.querySelector('[data-development-focus]');
@@ -84,6 +147,7 @@
      const r=await fetch('/api/development/focus',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({player_id:p.id,focus:focus.value})});
      const answer=await r.json();if(!r.ok)throw Error(answer.error||'Focus could not be saved');
      g.evolution.focus=answer.focus;
+     el.querySelectorAll('[data-s214-training-area]').forEach(row=>row.classList.toggle('is-priority',answer.focus!=='balanced'&&row.dataset.s214FocusGroup===answer.focus));
      status.textContent=`Focus set for review on ${answer.effective_review}. Save your career to retain it.`;
     }catch(err){status.textContent=err.message;focus.value=g.evolution.focus;}
     finally{focus.disabled=false;}

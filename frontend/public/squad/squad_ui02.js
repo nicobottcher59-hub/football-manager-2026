@@ -45,6 +45,22 @@
       : '';
   }
   const badge = v => v == null?'—':`<span class="s2-score ${Number(v)>=85?'s2-score-excellent':Number(v)>=75?'s2-score-good':Number(v)>=60?'s2-score-medium':'s2-score-low'}">${one(v)}</span>`;
+  const measurement = (value,unit='') => {
+    if(value==null||value==='') return '—';
+    if(typeof value==='number'&&Number.isFinite(value)) return `${integer(value)}${unit?` ${unit}`:''}`;
+    const raw=String(value).trim();
+    return raw?html(raw):'—';
+  };
+  const bodyMetric = (label,value,unit='') => `<span class="s29-body-metric"><small>${html(label)}</small><strong>${measurement(value,unit)}</strong></span>`;
+  const footBadge = (side,active) => {
+    const short=side==='left'?'L':'R';
+    const label=side==='left'?'Left foot':'Right foot';
+    return `<span class="s29-foot ${side} ${active?'is-active':'is-inactive'}" aria-label="${label}${active?' (preferred)':''}"><span class="s29-foot-icon" aria-hidden="true">👟</span><b>${short}</b></span>`;
+  };
+  const footSwitcher = p => {
+    const preferred=String(p.foot||'').toLowerCase();
+    return `<span class="s29-foot-meta"><small>Foot</small><span class="s29-foot-switch" role="img" aria-label="Preferred foot: ${preferred==='left'?'left':preferred==='right'?'right':'unrecorded'}">${footBadge('left',preferred==='left')}${footBadge('right',preferred==='right')}</span></span>`;
+  };
   const bar = (label,value,type='neutral') => `<div class="s2-measure"><div class="s2-measure-label"><span>${html(label)}</span><strong>${pct(value)}</strong></div><div class="s2-track"><span class="s2-fill ${type}" style="width:${clamp(value)}%"></span></div></div>`;
   const fact = (label,val,sub='') => `<div class="s2-fact"><span>${html(label)}</span><strong>${val}</strong>${sub?`<small>${html(sub)}</small>`:''}</div>`;
   const date = str => {const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(str||''));return m?`${Number(m[3])} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Number(m[2])-1]||m[2]} ${m[1]}`:'—';};
@@ -75,6 +91,7 @@
     return entries.sort((a,b)=>{
       if(view.order==='grl')return (Number(b.act)||0)-(Number(a.act)||0)||String(a.name).localeCompare(b.name);
       if(view.order==='name')return String(a.name).localeCompare(String(b.name));
+      if(view.order==='condition')return (numeric(b.condition)?Number(b.condition):-1)-(numeric(a.condition)?Number(a.condition):-1)||String(a.name).localeCompare(String(b.name));
       const ia=POS_ORDER.indexOf(String(a.primary_position||'')),ib=POS_ORDER.indexOf(String(b.primary_position||''));
       return (ia<0?99:ia)-(ib<0?99:ib)||(Number(b.act)||0)-(Number(a.act)||0)||String(a.name).localeCompare(b.name);
     });
@@ -87,6 +104,8 @@
   // TS-UI-02.7: the directory uses one compact, accessible player card.
   // Dorsal and captain appear only when recorded by the career model.
   // TS-UI-02.8: clean, player-data-driven player cards. No legacy layout classes.
+  // TS-UI-02.10: a three-zone card gives recorded facts a clear hierarchy.
+  // Selection, profile navigation and effective-XI captain remain unchanged.
   function rosterRow(p,data){
     const selected=p.id===state.expanded;
     const mood=numeric(p.morale)?Number(p.morale):null;
@@ -95,15 +114,16 @@
     const mouth=mood==null?'M7 15h10':mood>=75?'M7 13q5 6 10 0':mood>=55?'M7 15h10':'M7 17q5 -5 10 0';
     const moodSvg=`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" fill="currentColor"/><circle cx="8.4" cy="9.5" r="1.15" fill="#063044"/><circle cx="15.6" cy="9.5" r="1.15" fill="#063044"/><path d="${mouth}" fill="none" stroke="#063044" stroke-width="1.7" stroke-linecap="round"/></svg>`;
     const fitness=numeric(p.condition)?`${integer(p.condition)}%`:'—';
+    const conditionTrack=numeric(p.condition)?`<i style="--s28-progress:${clamp(p.condition)}%" class="${Number(p.condition)<70?'warning':''}"></i>`:'';
     const number=p.number==null?'<span class="s28-jersey-unassigned" title="Shirt number not assigned">—</span>':`<span class="s28-jersey-number" title="Shirt number ${html(p.number)}">${html(p.number)}</span>`;
-    return `<div class="s29-player-card s28-player-card s2-roster-row ${selected?'selected':''} ${p.available?'':'is-unavailable'}" role="row" tabindex="0" aria-selected="${selected}" data-s2-row="${html(p.id)}" data-roster-expand="${html(p.id)}" aria-label="Select ${html(p.name)}">
-      <div class="s28-row-face" role="cell">${avatar(p)}<span class="s28-face-glow" aria-hidden="true"></span></div>
-      <div class="s28-row-identity" role="cell"><div class="s28-row-title"><strong>${html(p.name)}</strong>${captainBadge(p,data)}<button type="button" class="s28-profile-link" data-open-career-player="${html(p.id)}" title="Open full profile of ${html(p.name)}" aria-label="Open full profile of ${html(p.name)}">↗</button></div>
-        <div class="s28-row-meta">${number}<span class="s28-row-pos">${html(p.primary_position||'—')}</span><span>${html(p.age??'—')} yrs</span><span class="s28-row-nation">${nation(p)}</span></div></div>
-      <span class="s28-morale ${moodClass}" title="${html(moodText)}" aria-label="${html(moodText)}" role="cell">${moodSvg}</span>
-      <span class="s28-row-condition" title="Condition ${fitness}" role="cell"><span class="s28-track"><i style="--s28-progress:${clamp(p.condition)}%" class="${Number(p.condition)<70?'warning':''}"></i></span><span class="s28-condition-value">${fitness}</span></span>
-      <span class="s28-row-overall" role="cell">${badge(p.act)}</span>
-      <span class="s28-row-arrow" aria-hidden="true">›</span>
+    const form=numeric(p.form)?`<span class="s210-form" title="Recorded form ${one(p.form)} out of 100"><small>FORM</small><strong>${integer(p.form)}</strong></span>`:'';
+    return `<div class="s29-player-card s28-player-card s2-roster-row s210-player-card ${selected?'selected':''} ${p.available?'':'is-unavailable'}" role="row" tabindex="0" aria-selected="${selected}" data-s2-row="${html(p.id)}" data-roster-expand="${html(p.id)}" aria-label="Select ${html(p.name)}">
+      <div class="s28-row-face s210-portrait" role="cell">${avatar(p)}<span class="s210-shirt-number">${number}</span><span class="s28-face-glow" aria-hidden="true"></span></div>
+      <div class="s28-row-identity s210-identity" role="cell"><div class="s28-row-title s210-name-line"><strong title="${html(p.name)}">${html(p.name)}</strong>${captainBadge(p,data)}<button type="button" class="s28-profile-link" data-open-career-player="${html(p.id)}" title="Open full profile of ${html(p.name)}" aria-label="Open full profile of ${html(p.name)}">↗</button></div>
+        <div class="s28-row-meta s210-meta-line"><span class="s28-row-pos">${html(p.primary_position||'—')}</span><span class="s210-age">${html(p.age??'—')} yrs</span><span class="s28-row-nation">${nation(p)}</span></div>
+        <div class="s210-vitals"><span class="s28-row-condition s210-condition" title="Condition ${fitness}"><small>FIT</small><span class="s28-track">${conditionTrack}</span><span class="s28-condition-value">${fitness}</span></span>
+          <span class="s28-morale s210-morale ${moodClass}" title="${html(moodText)}${mood==null?'':` · ${one(p.morale)} / 100`}" aria-label="${html(moodText)}" >${moodSvg}<span class="s210-morale-value">${mood==null?'—':integer(p.morale)}</span></span>${form}</div></div>
+      <div class="s28-row-overall s210-rating" role="cell"><small>GRL</small>${badge(p.act)}<span class="s28-row-arrow" aria-hidden="true">›</span></div>
     </div>`;
   }
   function rosterContents(data){
@@ -112,13 +132,14 @@
   }
   function roster(data){
     const available=data.roster.filter(p=>p.available).length;
-    const sortChoices=[['position','Position'],['grl','GRL'],['name','Name']];
-    return `<section class="s29-directory s28-directory" aria-label="Squad player list">
-      <header class="s29-directory-head s28-directory-head"><div class="s28-directory-title"><span class="s28-kicker">SQUAD DIRECTORY</span><h2>Players <span class="s28-count">${data.roster.length}</span></h2></div>
-        <div class="s29-tools s28-tools"><label class="s28-search"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg><input type="search" data-s2-search aria-label="Search players" placeholder="Search players…" value="${html(view.query)}" autocomplete="off"></label>
+    const sortChoices=[['position','Position'],['grl','GRL'],['condition','Condition'],['name','Name']];
+    return `<section class="s29-directory s28-directory s210-directory" aria-label="Squad player list">
+      <header class="s29-directory-head s28-directory-head s210-head"><div class="s28-directory-title s210-headline"><span class="s28-kicker">FIRST TEAM · SQUAD DIRECTORY</span>
+        <div class="s210-heading"><h2>Players <span class="s28-count">${data.roster.length}</span></h2><span class="s210-available"><i aria-hidden="true"></i>${available} AVAILABLE</span></div></div>
+        <div class="s29-tools s28-tools s210-tools"><label class="s28-search"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg><input type="search" data-s2-search aria-label="Search players" placeholder="Search players or positions…" value="${html(view.query)}" autocomplete="off"></label>
           <label class="s28-sort"><span class="sr-only">Sort players</span><select data-s2-sort aria-label="Sort players">${sortChoices.map(([key,label])=>`<option value="${key}" ${key===view.order?'selected':''}>Sort: ${label}</option>`).join('')}</select></label></div></header>
       <div class="s29-list-scroll s28-list-scroll s2-list-scroll" role="table" aria-label="Squad players">${rosterContents(data)}</div>
-      <footer class="s28-directory-footer"><span data-s25-list-count>${allPlayers(data).length} players in your first team</span><span aria-label="Scroll the squad directory">Scroll ↕</span></footer>
+      <footer class="s28-directory-footer s210-footer"><span data-s25-list-count>${allPlayers(data).length} players in your first team</span><span aria-label="Scroll the squad directory">SCROLL ↕</span></footer>
       <span class="s28-screen-reader" aria-label="${available} players available">${available} available</span>
     </section>`;
   }
@@ -147,7 +168,7 @@
     return `<header class="s29-hero s28-hero" data-selected-player="${html(p.id)}">
       <div class="s29-portrait s28-portrait"><div class="s28-portrait-frame">${avatar(p,true)}${captainBadge(p,data,true)}</div></div>
       <div class="s29-bio s28-bio"><span class="s28-eyebrow">${html(p.primary_position||'—')} · FIRST TEAM</span><h2 class="s28-player-name">${html(p.name)}</h2>
-        <div class="s28-player-data">${nation(p)}<span>${html(p.age??'—')} years old</span><span>${p.foot?html(nice(p.foot))+' foot':'Foot unrecorded'}</span></div>
+        <div class="s28-player-data">${nation(p)}<span>${html(p.age??'—')} years old</span>${bodyMetric('Height',p.height_cm??p.height,'cm')}${bodyMetric('Weight',p.weight_kg??p.weight,'kg')}${footSwitcher(p)}</div>
         <div class="s28-badges"><span class="s28-primary-pos">${html(p.primary_position||'—')}</span>${(p.secondary_positions||[]).slice(0,3).map(pos=>`<span class="s28-secondary-pos">${html(pos)}</span>`).join('')}<span class="s28-availability ${p.available?'ready':'alert'}">${html(availability)}</span></div>
         <button type="button" class="s28-full-profile" data-open-career-player="${html(p.id)}" aria-label="Open complete profile of ${html(p.name)}">Full player profile <span aria-hidden="true">→</span></button>
       </div>
@@ -209,6 +230,8 @@
       <section class="s2-card s2-charts s24-comparison-card"><h3><span class="s2-card-icon">⬡</span> Role comparison <span class="s24-help" tabindex="0" title="Player: actual attributes, scale 0–100. Role emphasis: normalized weights from the selected engine role; not minimum skill thresholds or potential.">i</span></h3><div class="s2-graphics" data-player-graphics="${html(p.id)}" data-graphics-mode="comparison"><div class="s24-chart-loading">Loading comparison…</div></div></section>
     </div><section class="s2-card s2-attributes-card s24-attributes-card"><div class="s24-card-heading"><h3><span class="s2-card-icon">✧</span> Player attributes</h3><span class="s24-count">${groups.reduce((n,g)=>n+g.entries.length,0)} attributes</span></div><div class="s2-attributes-list s24-attribute-groups">${attributes||'<span class="s24-empty">No attributes recorded.</span>'}</div></section>`;
   }
+  // TS-UI-02.14: symmetrical season overview using *only* supported recorded statistics.
+  // Unavailable statistics remain unknown; no inferred trend or fabricated match events.
   function seasonTab(p,data){
     const opt=data.statistics||{};
     const season=state.season||data.stats_selection?.season||opt.current_season||'';
@@ -217,35 +240,130 @@
     const seasons=(opt.seasons||[]).length?opt.seasons:[season];
     const comps=opt.competitions||[];
     const eligible=opt.club_competitions?.[season];
-    const relevant=Array.isArray(eligible) ? comps.filter(c=>eligible.includes(c.id)) : comps;
+    const relevant=Array.isArray(eligible)?comps.filter(c=>eligible.includes(c.id)):comps;
     const options=relevant.some(c=>c.id===comp)?relevant:comp==='all'?relevant:[...relevant,...comps.filter(c=>c.id===comp)];
     const stats=p.season_stats||{},coverage=stats.coverage||{};
-    const supported=opt.supported||[];
-    const available=label=>supported.includes(label);
-    const hero=[['appearances','Apps','♧'],['starts','Starts','▤'],['minutes','Minutes','◷'],['goals','Goals','⚽'],['assists','Assists','↗']];
-    const more=statKeys.filter(([key])=>!hero.some(([heroKey])=>key===heroKey));
-    return `<section class="s2-card s2-season-selector"><div class="s2-season-top"><div><h3><span class="s2-card-icon">▤</span> Season performance</h3><p>Recorded statistics from the active career, not projections.</p></div><div class="s2-season-filters"><label>Season<select data-s2-season aria-label="Statistics season">${seasons.map(s=>`<option value="${html(s)}" ${s===season?'selected':''}>${html(s)}</option>`).join('')}</select></label><label>Competition<select data-s2-competition aria-label="Statistics competition"><option value="all" ${comp==='all'?'selected':''}>All competitions</option>${options.map(c=>`<option value="${html(c.id)}" ${c.id===comp?'selected':''}>${html(c.name)}</option>`).join('')}</select></label></div></div><div class="s2-season-context">${html(season)} <span>·</span> <strong>${html(selectedComp)}</strong></div></section>
-      <section class="s2-season-hero">${hero.map(([key,label,icon])=>`<div class="s2-stat-tile"><span class="s2-stat-icon" aria-hidden="true">${icon}</span><small>${label}</small><strong>${available(key)?integer(stats[key]):'—'}</strong></div>`).join('')}</section>
-      <div class="s2-two-cards s2-season-lower"><section class="s2-card"><h3><span class="s2-card-icon">◉</span> Performance detail</h3><div class="s2-stat-list">${more.map(([key,label])=>`<div><span>${html(label)}</span><strong>${available(key)?key==='pass_completion'?pct(stats[key]):['xg','average_match_rating'].includes(key)?one(stats[key]):integer(stats[key]):'—'}</strong></div>`).join('')}</div></section><section class="s2-card s2-season-coverage"><h3><span class="s2-card-icon">✓</span> Data coverage</h3><div class="s2-coverage-indicator ${coverage.complete_season?'complete':'partial'}">${coverage.complete_season?'Complete tracked season':'Limited historical coverage'}</div><p>${coverage.complete_season?'All tracked matches in this season are included.':'Some earlier matches may not have detailed tracking. Missing values are shown as unknown.'}</p><div class="s2-coverage-facts">${fact('Detailed appearances',integer(coverage.recorded_appearances))}${fact('Recorded since',html(coverage.from||'Unknown'))}</div><p class="s2-muted">${html(opt.clean_sheet_definition||'Match rating is distinct from current GRL.')}</p></section></div>`;
+    const supported=new Set(opt.supported||[]);
+    const stat=(key,style='integer')=>{
+      if(!supported.has(key)||!numeric(stats[key]))return '—';
+      return style==='percent'?`${one(stats[key])}%`:style==='decimal'?one(stats[key]):integer(stats[key]);
+    };
+    const kpis=[
+      ['appearances','Apps','◈','appearances'],['starts','Starts','▶','starts'],
+      ['minutes','Minutes','◷','minutes'],['goals','Goals','⚽','goals'],
+      ['assists','Assists','↗','assists'],['average_match_rating','Avg. rating','★','rating']
+    ];
+    const section=(name,kind,icon,spotlight,spotKey,spotFmt,rows,detail)=>`<section class="s214-season-group s214-${kind}" aria-label="${html(name)}">
+      <header><span class="s214-group-icon" aria-hidden="true">${icon}</span><strong>${html(name)}</strong><span class="s214-group-accent" aria-hidden="true"></span></header>
+      <div class="s214-group-spotlight"><div><small>${html(spotlight)}</small><strong>${stat(spotKey,spotFmt)}</strong></div><span class="s214-spotlight-symbol" aria-hidden="true">${icon}</span></div>
+      <div class="s214-season-rows">${rows.map(([key,label,fmt])=>`<div><span>${html(label)}</span><strong>${stat(key,fmt)}</strong></div>`).join('')}</div>
+      <footer>${html(detail)}</footer>
+    </section>`;
+    return `<div class="s214-season-dashboard" aria-label="Recorded season statistics">
+      <section class="s2-card s2-season-selector s214-season-selector"><div class="s2-season-top"><div><span class="s214-season-eyebrow">CAREER PERFORMANCE</span><h3><span class="s2-card-icon">▤</span> Season performance</h3><p>Verified match statistics · no projections</p></div><div class="s2-season-filters"><label>Season<select data-s2-season aria-label="Statistics season">${seasons.map(s=>`<option value="${html(s)}" ${s===season?'selected':''}>${html(s)}</option>`).join('')}</select></label><label>Competition<select data-s2-competition aria-label="Statistics competition"><option value="all" ${comp==='all'?'selected':''}>All competitions</option>${options.map(c=>`<option value="${html(c.id)}" ${c.id===comp?'selected':''}>${html(c.name)}</option>`).join('')}</select></label></div></div><div class="s214-season-context"><span aria-hidden="true">●</span>${html(season)} <b>·</b> <strong>${html(selectedComp)}</strong></div></section>
+      <div class="s214-kpi-grid" aria-label="Season summary">${kpis.map(([key,label,icon,kind])=>`<div class="s214-kpi s214-kpi-${kind}"><span class="s214-kpi-icon" aria-hidden="true">${icon}</span><small>${label}</small><strong>${stat(key,key==='average_match_rating'?'decimal':'integer')}</strong></div>`).join('')}</div>
+      <div class="s214-season-groups">
+        ${section('Shooting','shooting','◎','Shots','shots','integer', [['shots_on_target','On target'],['xg','Expected goals','decimal'],['goals','Goals scored']],'Finishing · recorded events')}
+        ${section('Passing','passing','↗','Completion','pass_completion','percent', [['assists','Assists'],['appearances','Appearances']],'Possession · verified totals')}
+        ${section('Defence & discipline','discipline','◇','Clean sheets','clean_sheets','integer', [['yellow_cards','Yellow cards'],['red_cards','Red cards']],'Match conduct · recorded events')}
+      </div>
+      <section class="s214-season-coverage" aria-label="Data coverage"><div class="s214-coverage-icon" aria-hidden="true">✓</div><div class="s214-coverage-copy"><strong>${coverage.complete_season?'Complete tracked season':'Partial recorded history'}</strong><span>${coverage.complete_season?'All tracked matches this season are included.':'Missing historical match details remain unknown.'}</span></div><div class="s214-coverage-facts"><span>Detailed apps <b>${numeric(coverage.recorded_appearances)?integer(coverage.recorded_appearances):'—'}</b></span><span>Recorded since <b>${html(coverage.from||'—')}</b></span></div><details class="s214-coverage-note"><summary>Coverage definition</summary>${html(opt.clean_sheet_definition||'Match rating differs from current GRL.')}</details></section>
+    </div>`;
+  }
+  // TS-UI-02.12: the other two Squad tabs are compact dashboard layouts.
+  // Every displayed metric is taken from the active Python read model.
+  function dashboardMetric(label,value,kind='normal'){
+    const recorded=numeric(value);
+    return `<div class="s212-measure ${kind}"><div class="s212-measure-title"><span>${html(label)}</span><b>${recorded?integer(value)+'%':'—'}</b></div><div class="s212-measure-track" role="meter" aria-label="${html(label)}" aria-valuemin="0" aria-valuemax="100" ${recorded?`aria-valuenow="${clamp(value)}"`:'aria-valuetext="Not recorded"'}><i style="--s212-progress:${recorded?clamp(value):0}%"></i></div></div>`;
   }
   function statusTab(p,data){
-    const av=p.injury?'Injured':Number(p.suspension)>0?'Suspended':p.available?'Available':'Unavailable';
-    const fatigue=p.fatigue,morale=numeric(p.morale)?Number(p.morale):null;
-    const mood=morale==null?'No morale recorded':morale>=75?'Good morale':morale>=55?'Stable morale':'Low morale';
-    return `<section class="s2-card s2-morale-feature"><div class="s2-morale-orb" style="--s2-morale:${clamp(p.morale)}%"><span>${morale==null?'—':morale>=75?'☺':morale>=55?'◉':'!'}</span></div><div class="s2-morale-description"><span class="s2-eyebrow">DRESSING ROOM</span><h3>${html(mood)}</h3><p>Recorded morale <strong>${pct(p.morale)}</strong>. Happiness is a separate measure and is never inferred from morale.</p></div><span class="s2-available-pill ${p.available?'is-ready':'is-unavailable'}">${p.available?'✓':'!'} ${html(av)}</span></section>
-      <div class="s2-two-cards s2-status-grid"><section class="s2-card"><h3><span class="s2-card-icon">♥</span> Physical condition</h3>${bar('Condition',p.condition,Number(p.condition)<70?'warn':'good')}${bar('Match sharpness',p.sharpness,Number(p.sharpness)<70?'warn':'good')}${bar('Fatigue',fatigue,'fatigue')}</section>
-      <section class="s2-card"><h3><span class="s2-card-icon">↗</span> Form & squad status</h3>${bar('Morale',p.morale,Number(p.morale)<55?'warn':'good')}${bar('Form',p.form,'form')}<div class="s2-state-line"><span>Happiness</span><strong>${p.happiness==null?'Not separately recorded':html(p.happiness)}</strong></div></section></div>
-      <section class="s2-card s2-development"><h3><span class="s2-card-icon">↗</span> Training & development</h3><div class="s2-graphics" data-player-graphics="${html(p.id)}" data-graphics-mode="development"><p class="s2-muted">Loading the registered development review…</p></div></section>`;
+    const availability=p.injury?'Injured':Number(p.suspension)>0?'Suspended':p.available?'Available':'Unavailable';
+    const morale=numeric(p.morale)?Number(p.morale):null;
+    const mood=morale==null?'Unrecorded':morale>=75?'Good':morale>=55?'Stable':'Low';
+    const moodTone=morale==null?'unknown':morale>=75?'positive':morale>=55?'stable':'low';
+    const fitness=numeric(p.condition)?`${integer(p.condition)}%`:'—';
+    const form=numeric(p.form)?one(p.form):'—';
+    const moodPercent=morale==null?'—':`${integer(morale)}%`;
+    const moodMouth=morale==null?'M18 35H32':morale>=75?'M17 30Q25 39 33 30':morale>=55?'M17 34H33':'M17 38Q25 28 33 38';
+    const moodGraphic=`<svg viewBox="0 0 50 50" fill="none" aria-hidden="true" focusable="false"><circle cx="25" cy="25" r="18" stroke="currentColor" stroke-width="2" opacity=".9"/><circle cx="19.5" cy="21" r="1.8" fill="currentColor"/><circle cx="30.5" cy="21" r="1.8" fill="currentColor"/><path d="${moodMouth}" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+    return `<div class="s212-status-dashboard s213-status-dashboard" aria-label="Player condition and development">
+      <div class="s212-status-overview">
+        <section class="s212-panel s212-condition-panel s213-performance-tile" aria-label="Physical condition"><div class="s213-tile-art" aria-hidden="true"><span>✚</span></div><h3><span class="s212-panel-icon tone-green" aria-hidden="true">✚</span> Physical condition</h3>
+          <div class="s212-condition-content"><div class="s212-ring" style="--s212-progress:${numeric(p.condition)?clamp(p.condition):0}%" role="img" aria-label="Condition: ${fitness}"><div><strong>${fitness}</strong><small>CONDITION</small></div></div>
+            <div class="s212-condition-breakdown">${dashboardMetric('Match sharpness',p.sharpness)}${dashboardMetric('Fatigue',p.fatigue,'fatigue')}</div></div>
+          <span class="s213-tile-footer"><i aria-hidden="true"></i> Live player condition</span>
+        </section>
+        <section class="s212-panel s212-form-panel s213-performance-tile"><div class="s213-tile-art" aria-hidden="true"><span>↗</span></div><h3><span class="s212-panel-icon tone-blue" aria-hidden="true">↗</span> Current form</h3>
+          <div class="s212-form-content"><strong>${form}</strong><span>/ 100</span><small>Recorded player form</small></div>
+          <div class="s212-form-progress" role="meter" aria-label="Form" aria-valuemin="0" aria-valuemax="100" ${numeric(p.form)?`aria-valuenow="${clamp(p.form)}"`:'aria-valuetext="Not recorded"'}><i style="--s212-progress:${numeric(p.form)?clamp(p.form):0}%"></i></div>
+          <span class="s213-tile-footer"><i aria-hidden="true"></i> Current performance index</span>
+        </section>
+        <section class="s212-panel s212-morale-panel s213-performance-tile"><div class="s213-tile-art" aria-hidden="true"><span>♥</span></div><h3><span class="s212-panel-icon tone-amber" aria-hidden="true">♥</span> Morale & status</h3>
+          <div class="s212-morale-content ${moodTone}"><span class="s212-morale-face" aria-hidden="true">${moodGraphic}</span><div><strong>${html(mood)} morale</strong><span>${moodPercent} recorded</span></div></div>
+          <div class="s213-morale-meter" role="meter" aria-label="Morale" aria-valuemin="0" aria-valuemax="100" ${morale!=null?`aria-valuenow="${clamp(morale)}"`:'aria-valuetext="Not recorded"'}><i style="--s213-morale:${morale==null?0:clamp(morale)}%"></i></div>
+          <div class="s212-availability-row"><span class="s212-status-badge ${p.available?'ready':'alert'}">${p.available?'✓':'!'} ${html(availability)}</span><small title="Happiness is separate from morale">${p.happiness==null?'Happiness not recorded':`Happiness: ${html(p.happiness)}`}</small></div>
+        </section>
+      </div>
+      <section class="s212-panel s212-development-card s213-development-card"><div class="s212-development-head"><h3><span class="s212-panel-icon tone-amber" aria-hidden="true">◇</span> Training & development</h3><span class="s212-development-context"><span class="s213-data-light" aria-hidden="true"></span> Verified career reviews</span></div>
+        <div class="s2-graphics s212-development-graphics" data-player-graphics="${html(p.id)}" data-graphics-mode="development"><p class="s212-loading">Loading the recorded development review…</p></div>
+      </section>
+    </div>`;
+  }
+  // Expires on a recorded date; the bar is decorative, never a fabricated
+  // contract completion percentage (contract start dates are not recorded).
+  function contractDaysRemaining(end,asOf){
+    const iso=/^\d{4}-\d{2}-\d{2}$/;
+    if(!iso.test(String(end||''))||!iso.test(String(asOf||'')))return null;
+    const a=Date.parse(end+'T00:00:00Z'),b=Date.parse(asOf+'T00:00:00Z');
+    if(!Number.isFinite(a)||!Number.isFinite(b))return null;
+    return Math.round((a-b)/86400000);
+  }
+  // Custom dark pickers: no OS-native white popup. Native select remains
+  // available for existing action dispatch and automation; no new backend route.
+  function managerPicker(id,label,options,current){
+    const selected=options.find(([key])=>String(key)===String(current))||options[0];
+    return `<div class="s214-picker-field"><span class="s214-picker-label">${html(label)}</span><div class="s214-picker" data-s214-picker>
+      <select id="${id}" data-roster-filter="${id}" aria-label="${html(label)}" tabindex="-1" aria-hidden="true" class="s214-native-select">${options.map(([key,text])=>`<option value="${html(key)}" ${String(key)===String(current)?'selected':''}>${html(text)}</option>`).join('')}</select>
+      <button type="button" class="s214-picker-trigger" data-s214-picker-toggle aria-label="${html(label)}: ${html(selected[1])}" aria-haspopup="listbox" aria-expanded="false"><span data-s214-picker-label>${html(selected[1])}</span><span class="s214-picker-chevron" aria-hidden="true">⌄</span></button>
+      <div class="s214-picker-menu" role="listbox" aria-label="${html(label)}" hidden>${options.map(([key,text])=>`<button type="button" role="option" data-s214-picker-option="${html(key)}" aria-selected="${String(key)===String(current)}">${html(text)}<span aria-hidden="true">✓</span></button>`).join('')}</div>
+    </div></div>`;
+  }
+  function closeManagerPickers(except){
+    document.querySelectorAll('[data-s214-picker]').forEach(picker=>{
+      if(picker===except)return;
+      picker.querySelector('.s214-picker-menu').hidden=true;
+      picker.querySelector('[data-s214-picker-toggle]').setAttribute('aria-expanded','false');
+    });
   }
   function contractTab(p,data){
     const c=p.contract_details||{};
     const market=p.market_value==null?'—':html(p.market_value);
     const status=c.status==='out_of_contract_retained'?'Expired / retained':p.contract_details?'Registered':'Not recorded';
-    return `<div class="s2-management"><section class="s2-card s2-contract-card"><div class="s2-section-heading"><h3><span class="s2-card-icon">▤</span> Contract</h3><span class="s2-status-pill">${html(status)}</span></div><div class="s2-contract-facts">${fact('Weekly wage',c.weekly_wage?html(c.weekly_wage)+'/w':'—')}${fact('Expiration',html(date(c.expires_on)))}${fact('Market valuation',market,'Estimate, not asking price')}${fact('Dorsal',p.number==null?'Not assigned':'#'+html(p.number))}</div><p class="s2-muted">Contract terms and valuation come from the active Python career. Unsupported clauses and bonuses are not invented.</p></section>
-      <section class="s2-card s2-actions-card"><div class="s2-section-heading"><h3><span class="s2-card-icon">⚙</span> Player actions</h3><span class="s2-subtle-label">${data.readonly?'Read-only profile':'Available career / DEV operations'}</span></div>
-       ${data.readonly?`<div class="s2-actions-grid"><button type="button" data-open-transfer-offer="${html(p.id)}" class="s2-action">↗ <span>Make transfer offer</span></button></div>`:
-       `<div class="s2-action-fields"><label>Squad number<select data-roster-filter="rt-player-number" id="rt-player-number" aria-label="Squad number"><option value="" ${p.number==null?'selected':''}>Not assigned</option>${Array.from({length:99},(_,i)=>`<option value="${i+1}" ${Number(p.number)===i+1?'selected':''}>${i+1}</option>`).join('')}</select></label><label>Transfer status<select data-roster-filter="rt-transfer-status" id="rt-transfer-status" aria-label="Transfer status">${Object.entries(transferLabels).map(([key,label])=>`<option value="${key}" ${p.transfer_status===key?'selected':''}>${html(label)}</option>`).join('')}</select></label></div><div class="s2-actions-grid"><button type="button" data-open-finances class="s2-action s2-primary-action"><span aria-hidden="true">▤</span> Open contract negotiations ↗</button><button type="button" data-s2-navigate="Dressing Room" class="s2-action">☏ <span>Player conversations ↗</span></button><button type="button" data-s2-navigate="Training" class="s2-action">◎ <span>Individual training ↗</span></button><button type="button" data-s2-navigate="Tactics" class="s2-action">⚑ <span>Captain & set pieces ↗</span></button><button type="button" data-s2-navigate="Medical Centre" class="s2-action">✚ <span>Medical centre ↗</span></button></div>`}
-       <p class="s2-muted">Squad numbers and transfer flags are DEV roster metadata; real negotiations and conversations open their existing sections.</p></section></div>`;
+    const contractIsActive=!!p.contract_details&&c.status!=='out_of_contract_retained';
+    const remaining=contractDaysRemaining(c.expires_on,data.date);
+    const duration=remaining==null?'End date not recorded':remaining<0?'Contract end date passed':remaining===0?'Expires today':remaining===1?'1 day remaining':`${integer(remaining)} days remaining`;
+    const mini=(icon,label,value,sub='')=>`<div class="s212-contract-fact s213-contract-mini"><span class="s212-fact-icon" aria-hidden="true">${icon}</span><div><small>${html(label)}</small><strong>${value}</strong>${sub?`<em>${html(sub)}</em>`:''}</div></div>`;
+    return `<div class="s212-management s213-management" aria-label="Contract and actions">
+      <div class="s212-contract-overview">
+        <section class="s212-panel s212-contract-main s2-contract-card s213-contract-main" title="Unsupported clauses and bonuses are not invented.">
+          <div class="s213-contract-title"><h3><span class="s212-panel-icon tone-coral" aria-hidden="true">▤</span> Contract overview</h3><span class="s213-contract-subtitle">${data.readonly?'CLUB RECORD · READ ONLY':'ACTIVE CAREER RECORD'}</span></div>
+          <div class="s213-contract-finances"><div class="s213-wage-feature"><span class="s213-feature-symbol" aria-hidden="true">£</span><span class="s213-fact-kicker">WEEKLY WAGE</span><strong>${c.weekly_wage?html(c.weekly_wage):'—'}</strong><small>Per week</small></div>
+            <div class="s213-value-feature"><span class="s213-feature-symbol" aria-hidden="true">↗</span><span class="s213-fact-kicker">MARKET VALUATION</span><strong>${market}</strong><small>Estimate · not asking price</small></div></div>
+          <div class="s212-contract-grid s213-contract-grid">${mini('▦','Contract expires',html(date(c.expires_on)))}${mini('#','Squad number',p.number==null?'Not assigned':'#'+html(p.number))}</div>
+        </section>
+        <section class="s212-panel s212-contract-state s213-contract-state ${contractIsActive?'active':'inactive'}"><h3><span class="s212-panel-icon ${contractIsActive?'tone-green':'tone-amber'}" aria-hidden="true">${contractIsActive?'✓':'!'}</span> Contract status</h3>
+          <div class="s213-contract-seal" aria-hidden="true"><span>▣</span></div>
+          <div class="s212-state-center"><div><strong>${html(status)}</strong><small>${html(duration)}</small></div></div>
+          <div class="s213-contract-expiry"><span aria-hidden="true">◷</span> End date: <strong>${html(date(c.expires_on))}</strong></div>
+        </section>
+      </div>
+      <section class="s212-panel s212-actions-panel s2-actions-card s213-actions-panel"><div class="s212-actions-heading"><h3><span class="s212-panel-icon tone-amber" aria-hidden="true">⚙</span> Manager actions</h3><small>${data.readonly?'Rival club · read only':'YOUR SQUAD · ACTIVE CONTROLS'}</small></div>
+        ${data.readonly?`<div class="s212-quick-actions s213-quick-actions"><button type="button" data-open-transfer-offer="${html(p.id)}" class="s2-action s212-action s212-primary-action s213-action"><span class="s213-action-symbol" aria-hidden="true">↗</span><span class="s213-action-label">Make transfer offer</span><span class="s213-action-corner" aria-hidden="true">↗</span></button></div>`:
+        `<div class="s212-action-controls s213-action-controls s214-action-controls">${managerPicker('rt-player-number','Squad number',[['','Not assigned'],...Array.from({length:99},(_,i)=>[String(i+1),String(i+1)])],p.number==null?'':String(p.number))}
+          ${managerPicker('rt-transfer-status','Transfer status',Object.entries(transferLabels),p.transfer_status)}</div>
+          <div class="s212-quick-actions s213-quick-actions"><button type="button" data-open-finances class="s2-action s212-action s212-primary-action s213-action"><span class="s213-action-symbol" aria-hidden="true">▤</span><span class="s213-action-label">Contract negotiations</span><span class="s213-action-corner" aria-hidden="true">↗</span></button><button type="button" data-s2-navigate="Dressing Room" class="s2-action s212-action s213-action"><span class="s213-action-symbol" aria-hidden="true">☏</span><span class="s213-action-label">Conversations</span><span class="s213-action-corner" aria-hidden="true">↗</span></button><button type="button" data-s2-navigate="Training" class="s2-action s212-action s213-action"><span class="s213-action-symbol" aria-hidden="true">◎</span><span class="s213-action-label">Training</span><span class="s213-action-corner" aria-hidden="true">↗</span></button><button type="button" data-s2-navigate="Tactics" class="s2-action s212-action s213-action"><span class="s213-action-symbol" aria-hidden="true">⚑</span><span class="s213-action-label">Captain & set pieces</span><span class="s213-action-corner" aria-hidden="true">↗</span></button><button type="button" data-s2-navigate="Medical Centre" class="s2-action s212-action s213-action"><span class="s213-action-symbol" aria-hidden="true">✚</span><span class="s213-action-label">Medical centre</span><span class="s213-action-corner" aria-hidden="true">↗</span></button></div>`}
+      </section>
+    </div>`;
   }
   function inspector(p,data){
     const tabs=[['profile','Profile / Attributes','◇'],['season','Season statistics','▥'],['status','Status & development','♥'],['management','Contract & actions','▣']];
@@ -324,6 +442,36 @@
     return true;
   }
   function onClick(button,refresh){
+    if(button.hasAttribute('data-s214-picker-toggle')){
+      const picker=button.closest('[data-s214-picker]');
+      const menu=picker?.querySelector('.s214-picker-menu');
+      if(!menu)return true;
+      const opening=menu.hidden;
+      closeManagerPickers();
+      if(opening){
+        const scroll=picker.closest('.s2-detail-scroll');
+        const room=(scroll?.getBoundingClientRect().bottom||window.innerHeight)-button.getBoundingClientRect().bottom;
+        picker.classList.toggle('s214-drop-up',room<190);
+        menu.hidden=false;button.setAttribute('aria-expanded','true');
+        (menu.querySelector('[aria-selected="true"]')||menu.querySelector('[role="option"]'))?.focus({preventScroll:true});
+      }
+      return true;
+    }
+    if(button.hasAttribute('data-s214-picker-option')){
+      const picker=button.closest('[data-s214-picker]');
+      const select=picker?.querySelector('select');
+      const trigger=picker?.querySelector('[data-s214-picker-toggle]');
+      if(!select||!trigger)return true;
+      const before=select.value;
+      select.value=button.dataset.s214PickerOption;
+      const label=select.selectedOptions?.[0]?.textContent||button.textContent;
+      picker.querySelector('[data-s214-picker-label]').textContent=label;
+      trigger.setAttribute('aria-label',`${select.getAttribute('aria-label')}: ${label}`);
+      picker.querySelectorAll('[data-s214-picker-option]').forEach(option=>option.setAttribute('aria-selected',String(option===button)));
+      closeManagerPickers();trigger.focus({preventScroll:true});
+      if(select.value!==before)select.dispatchEvent(new Event('change',{bubbles:true}));
+      return true;
+    }
     if(button.dataset.s2Tab){if(!switchInspectorTab(button.dataset.s2Tab))refresh();return true;}
     if(button.dataset.s2FocusPosition)return focusPosition(button.dataset.s2FocusPosition);
     if(button.dataset.s2Navigate){
@@ -437,6 +585,24 @@
   fetch('data/player-portraits.json',{cache:'no-store'})
     .then(r=>r.ok?r.json():null).then(x=>{if(x?.schema_version===1&&x.portraits&&typeof x.portraits==='object')view.images=x.portraits;activateLoadedArt();})
     .catch(()=>{});
+  // Keyboard and outside-click support for accessible dark action pickers.
+  document.addEventListener('pointerdown',event=>{
+    if(!event.target.closest('[data-s214-picker]'))closeManagerPickers();
+  });
+  document.addEventListener('keydown',event=>{
+    const picker=event.target.closest?.('[data-s214-picker]');
+    if(!picker)return;
+    const trigger=picker.querySelector('[data-s214-picker-toggle]');
+    const menu=picker.querySelector('.s214-picker-menu');
+    const choices=[...menu.querySelectorAll('[role="option"]')];
+    if(event.key==='Escape'&&!menu.hidden){event.preventDefault();closeManagerPickers();trigger.focus({preventScroll:true});return;}
+    if(!['ArrowDown','ArrowUp','Home','End'].includes(event.key))return;
+    event.preventDefault();
+    if(menu.hidden){onClick(trigger);return;}
+    const index=choices.indexOf(document.activeElement);
+    const next=event.key==='Home'?0:event.key==='End'?choices.length-1:event.key==='ArrowDown'?Math.min(choices.length-1,index+1):Math.max(0,index-1);
+    choices[next]?.focus({preventScroll:true});
+  });
   window.FMRoster={...original,render,onClick,onChange,onInput,state};
   window.FMSquadUI02={render,view,portraitSource:id=>view.images[id]||null,focusPosition};
 })();

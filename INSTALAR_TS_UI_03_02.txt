@@ -1,0 +1,24 @@
+TS-UI-03.02 - Training automation and individual player workloads
+
+BASE REQUIRED: TS-UI-03.01 (which in turn requires Squad TS-UI-02.14).
+No separate photo-only patch is required; the requested photo is included.
+
+1. Back up your career save folder before changing game files. This patch
+   upgrades the manager-graph save schema from 22 to 23; older saves migrate
+   automatically when loaded by the new version.
+2. Stop the Python game server.
+3. Open the root of football-manager-2026 (the folder with frontend/ and src/).
+4. Extract this ZIP directly there, KEEPING internal subfolders. Replace files.
+5. Restart: PYTHONPATH=src python3 -m football_manager.ui_shell
+6. Open Training and hard-refresh (Ctrl+F5).
+7. Set one group or player to Automatic, or click Apply to all groups.
+   Adjust the four linked cutoffs and click Save automatic plans.
+8. Under Individual player training, choose a player and a Personal workload;
+   use Follow squad group to clear the exception. Development focus is shared
+   with Squad and applies at the next monthly review.
+
+Training priority: individual choice > squad group > physical safety cap.
+When automatic energy and performance conditions both apply, energy first.
+The two old physical protection cutoffs still work exactly as before.
+
+Do not run npx vite; use the Python UI shell above.

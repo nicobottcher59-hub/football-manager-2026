@@ -64,26 +64,18 @@ def test_hiring_releasing_and_capacity_are_real(starting):
     session._world_squads.validate()
 
 
-def test_training_groups_and_condition_protection(starting):
-    session = fresh(starting)
-    target = session.home_lineup.starters[0].player
-    target.state.fitness = 60.
-    target.state.fatigue = 40.
-    training_command(session, {'action':'configure','group':'starters','intensity':'intense'})
-    info = next(p for p in training_read_model(session)['players'] if p['id'] == target.id)
-    assert info['group'] == 'starters' and info['effective'] == 'light'
-    protected = deepcopy(session)
-    unprotected = deepcopy(session)
-    training_command(unprotected, {'action':'configure','protection':False})
-    recover_managed_players(protected, days=1)
-    recover_managed_players(unprotected, days=1)
-    p1 = protected.home_club.squad.get(target.id)
-    p2 = unprotected.home_club.squad.get(target.id)
-    assert p1.state.condition > p2.state.condition
-    assert p1.state.fatigue < p2.state.fatigue
-    assert protected._world_squads.club_support[session.home_club.id].training_days[target.id][1] == 1
-    with pytest.raises(ValueError):
-        training_command(session, {'action':'configure','low_condition':90,'medium_condition':70})
+def test_unified_auto_training_and_personal_override(starting):
+    session=fresh(starting)
+    target=session.home_lineup.starters[0].player
+    target.state.fitness=45.;target.state.fatigue=40.
+    info=next(p for p in training_read_model(session)['players'] if p['id']==target.id)
+    assert info['effective']=='light' and info['intensity_source']=='automatic'
+    automatic=deepcopy(session);personal=deepcopy(session)
+    training_command(personal,{'action':'individual','player_id':target.id,'intensity':'intense'})
+    recover_managed_players(automatic,days=1);recover_managed_players(personal,days=1)
+    assert (personal._world_squads.club_support[session.home_club.id].training_days[target.id][0]
+            > automatic._world_squads.club_support[session.home_club.id].training_days[target.id][0])
+    with pytest.raises(ValueError):training_command(session,{'action':'configure','group':'starters','intensity':'intense'})
 
 
 def injured_session(starting, episode_id='ts26-test-episode'):

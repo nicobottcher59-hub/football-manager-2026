@@ -23,7 +23,7 @@ from football_manager.domain.world_runner import WorldSeasonRunner
 
 from .models import SaveIntegrityError, UnsupportedSaveVersionError
 
-GRAPH_VERSION = 22
+GRAPH_VERSION = 24
 # TS-24.13: a fully populated 92-club career already needs ~286k live
 # graph nodes after its first season (TS-24.12 rejected that save). Keep
 # the integrity limit finite but accommodate normal longitudinal growth.
@@ -321,6 +321,18 @@ def restore_manager_graph(data: dict, *, migrate_world: bool = True) -> Developm
                         defaults.update(rating_history={}, individual_awards={})
                     if data['version'] < 19 and node.get('class') == 'football_manager.domain.club_support:ClubSupport':
                         defaults.update(scouting_assignments={}, scouting_reports={})
+                    if node.get('class') == 'football_manager.domain.club_support:TrainingPolicy':
+                        if data['version'] < 24:
+                            # TS-UI-03.03 intentionally retires group-by-XI and
+                            # physical protection fields. Old settings must NOT
+                            # influence current workouts or survive new saves.
+                            for retired in ('starters', 'bench', 'rest', 'protection',
+                                            'low_condition', 'medium_condition'):
+                                values.pop(retired, None)
+                            missing = allowed - set(values)
+                        if data['version'] < 23:
+                            defaults.update(performance_max=50, performance_focus=60,
+                                energy_max=50, energy_focus=60, individual_intensities={})
                     if set(values) - allowed or missing - set(defaults):
                         raise SaveIntegrityError('saved dataclass fields do not match this version')
                 elif cls.__name__ not in {'WorldSeasonRunner', 'WorldCareer', 'SeasonCalendar', 'EnglishCareerTransition', 'FastMatchSimulator'}:

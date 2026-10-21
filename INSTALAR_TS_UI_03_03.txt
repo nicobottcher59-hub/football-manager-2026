@@ -1,0 +1,18 @@
+TS-UI-03.03 - TRAINING UNIFICADO + FIX SELECCION SQUAD
+
+REQUISITOS: proyecto actualizado a TS-UI-03.02.
+
+INSTALACION
+1. Guardar copia de seguridad del save de Football Manager (nueva version de save: 24).
+2. Detener el servidor Python del juego.
+3. Extraer este ZIP en la RAIZ de football-manager-2026, preservando todas las carpetas, aceptando reemplazar archivos.
+4. Iniciar con PYTHONPATH=src python3 -m football_manager.ui_shell (Codespaces/VS Code), o el launcher Python que ya utilices.
+5. Actualizar el navegador con Ctrl+F5.
+
+VERIFICACION SUGERIDA
+- Squad: click en distintas filas de jugadores (foto/nombre fuera de botones internos), y Enter sobre la fila. Comprobar cambio del panel derecho.
+- Training: confirmar que no existen los 3 controles de intensidad por grupo ni el interruptor extra de proteccion fisica.
+- Training: modificar umbrales automaticos, asignar intensidad personalizada a un jugador, quitarla y verificar que el jugador retorna al plan Automatic.
+- Guardar, cerrar y abrir carrera. Comprobar que conservan umbrales y excepciones individuales.
+
+VERSION: TS-UI-03.03, incremental sobre TS-UI-03.02.

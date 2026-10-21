@@ -11,7 +11,6 @@ from math import isfinite
 
 ROLES = ('coach', 'medic', 'fitness', 'scout')
 INTENSITIES = ('auto', 'light', 'balanced', 'intense')
-GROUPS = ('starters', 'bench', 'rest')
 
 
 @dataclass(frozen=True, slots=True)
@@ -36,20 +35,29 @@ class StaffMember:
 
 @dataclass(slots=True)
 class TrainingPolicy:
-    starters: str = 'light'
-    bench: str = 'balanced'
-    rest: str = 'intense'
-    protection: bool = True
-    low_condition: int = 70
-    medium_condition: int = 85
+    """One automatic workload policy for the first team, with ID-keyed exceptions.
+
+    No starter/bench/reserve workload settings and no separate physical
+    protection switch. Existing saved policies are migrated explicitly.
+    """
+    performance_max: int = 50
+    performance_focus: int = 60
+    energy_max: int = 50
+    energy_focus: int = 60
+    individual_intensities: dict[str, str] = field(default_factory=dict)
 
     def validate(self) -> None:
-        if any(getattr(self, group) not in INTENSITIES for group in GROUPS):
-            raise ValueError('unknown group training intensity')
-        if (type(self.protection) is not bool or type(self.low_condition) is not int
-                or type(self.medium_condition) is not int
-                or not 40 <= self.low_condition < self.medium_condition <= 98):
-            raise ValueError('invalid training protection thresholds')
+        for maximum, focused in ((self.performance_max, self.performance_focus),
+                                 (self.energy_max, self.energy_focus)):
+            if (type(maximum) is not int or type(focused) is not int
+                    or not 0 <= maximum < focused <= 100):
+                raise ValueError('automatic training thresholds must be ordered, 0–100')
+        if (not isinstance(self.individual_intensities, dict)
+                or len(self.individual_intensities) > 100
+                or any(not isinstance(player_id, str) or not player_id or len(player_id) > 120
+                       or mode not in INTENSITIES
+                       for player_id, mode in self.individual_intensities.items())):
+            raise ValueError('invalid individual training overrides')
 
 
 @dataclass(slots=True)

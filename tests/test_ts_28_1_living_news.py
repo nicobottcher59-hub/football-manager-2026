@@ -95,7 +95,7 @@ def test_managed_match_is_published_and_survives_save_load(starting):
     fid = session._active_match.fixture.fixture_id
     assert any(item['id']==f'match:{fid}' for item in stories)
     graph = capture_manager_graph(session)
-    assert graph['version'] == GRAPH_VERSION == 22  # TS-28.2 migrates the history ledger to v21.
+    assert graph['version'] == GRAPH_VERSION == 24  # TS-28.2 migrates the history ledger to v21.
     loaded = restore_manager_graph(graph)
     assert home_news_read_model(loaded) == home_news_read_model(session)
 

@@ -125,7 +125,7 @@ def test_new_season_snapshots_are_chronological_and_bounded(initial):
 
 def test_save_v22_round_trip_and_v21_migration(initial):
     graph=capture_manager_graph(initial)
-    assert graph['version']==22
+    assert graph['version']==24
     restored=restore_manager_graph(graph)
     validate_manager_session(restored)
     assert restored._world_squads.rating_history==initial._world_squads.rating_history

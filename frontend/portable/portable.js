@@ -402,6 +402,7 @@
     refreshProgression();
     document.body.classList.toggle('tsui-home-active',home);
     document.body.classList.toggle('tsui-squad-active',page==='Squad');
+    document.body.classList.toggle('tsui-training-active',page==='Training');
     if (home) { refreshHome();window.dispatchEvent(new CustomEvent('fm-ui-home-refresh')); }
     headerTitle.textContent = page;
     headerSubhead.textContent = home
@@ -410,7 +411,7 @@
       : careerPage ? 'Permanent player, club and competition archive. Verified career facts only.'
       : clubInfoPage ? 'Club identity, current squad, staffing capacity, records and verified historical results.'
       : clubPage ? 'Persistent squad, player profiles and recorded club information. Read-only.'
-      : clubSupport ? (page==='Staff'?'Hire coaching, medical and fitness specialists.':page==='Training'?'Configure squad groups and automatic physical protection.':'Injury timelines, recovery treatments and player opinions.')
+      : clubSupport ? (page==='Staff'?'Hire coaching, medical and fitness specialists.':page==='Training'?'Manage one automatic training plan and individual workloads.':'Injury timelines, recovery treatments and player opinions.')
       : inbox ? 'Live club messages, scouting reports, medical news and player conversations.'
       : youthAcademy ? 'U15 preview, automated U17/U21 leagues and quarterly scouting.'
       : negotiationPage ? 'Dedicated negotiation: guaranteed fees, optional clauses and club replies.'

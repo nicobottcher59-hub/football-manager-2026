@@ -155,7 +155,7 @@ def test_pending_and_reports_survive_sqlite_style_graph_roundtrip(starting):
     scouting_command(session, {'action':'assign','player_id':second})
     advance(session, 2)
     graph = capture_manager_graph(session)
-    assert graph['version'] == GRAPH_VERSION == 22
+    assert graph['version'] == GRAPH_VERSION == 24
     restored = restore_manager_graph(graph)
     info = scouting_read_model(restored)
     assert first in {r['player_id'] for r in info['reports']}
@@ -167,7 +167,8 @@ def test_explicit_v18_upgrade_adds_only_scout_without_erasing_existing_staff(sta
     session = setup(starting)
     dept = session._world_squads.club_support[session.home_club.id]
     staff_ids = {m.member_id for m in dept.members.values() if m.role != 'scout'}
-    dept.training.starters = 'intense'
+    dept.training.energy_max = 61
+    dept.training.energy_focus = 75
     graph = capture_manager_graph(session)
     graph['version'] = 18
     # Reproduce the 18-schema records: three departments, no scout and no reports.
@@ -188,7 +189,7 @@ def test_explicit_v18_upgrade_adds_only_scout_without_erasing_existing_staff(sta
     upgraded = restore_manager_graph(graph)
     upgraded_dept = upgraded._world_squads.club_support[session.home_club.id]
     assert staff_ids <= set(upgraded_dept.members)
-    assert upgraded_dept.training.starters == 'intense'
+    assert upgraded_dept.training.energy_max == 61 and upgraded_dept.training.energy_focus == 75
     assert upgraded_dept.capacity['scout'] >= 1
     assert len([m for m in upgraded_dept.members.values() if m.role=='scout']) == 1
     assert upgraded_dept.scouting_assignments == upgraded_dept.scouting_reports == {}
@@ -239,7 +240,7 @@ def test_atomic_http_command_does_not_modify_session_on_bad_player(starting):
     with pytest.raises(ValueError):
         app.command('scouting.command', {'action': 'assign', 'player_id': 'missing-player'})
     assert len(scouting_read_model(runtime.session)['assignments']) == 1
-    assert before == GRAPH_VERSION == 22
+    assert before == GRAPH_VERSION == 24
 
 
 def test_real_http_get_and_post_expose_scouts_without_masking_targets(starting):

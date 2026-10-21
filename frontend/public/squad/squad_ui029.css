@@ -6,37 +6,108 @@
 .is-squad .s2-workspace{grid-template-columns:minmax(435px, 0.98fr) minmax(0,1.78fr);gap:12px;height:calc(100dvh - 161px);min-height:590px}
 .is-squad .s2-page-header{min-height:95px;border:1px solid rgba(var(--s2-club-rgb),.8);background-position:center 40%;box-shadow:0 5px 20px #0004, inset 0 1px #ffffff21}
 
-/* Directory: dense information without tiny type or Excel grid lines. */
-.is-squad .s28-directory.s29-directory{border-color:#37617b;border-top:2px solid var(--s2-club-primary);border-radius:12px;background:linear-gradient(160deg,#102c44,#071b30 90%);box-shadow:0 14px 28px #020b1885, inset 0 1px #ffffff1a}
-.is-squad .s29-directory .s28-directory-head{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;gap:11px;min-height:91px;padding:12px 14px;border-bottom:1px solid #44617977;background:radial-gradient(ellipse at top left,rgba(var(--s2-club-rgb),.13),transparent 68%),#0f2a42}
-.is-squad .s29-directory .s28-directory-title{gap:8px}
-.is-squad .s29-directory .s28-kicker{font-size:10px;letter-spacing:1.2px}
-.is-squad .s29-directory .s28-directory-title h2{font-size:25px;gap:9px;white-space:nowrap;line-height:1.05}
-.is-squad .s29-directory .s28-count{height:31px;min-width:31px;font-size:12px}
-.is-squad .s29-directory .s28-tools{grid-template-columns:minmax(92px,1fr) minmax(96px,116px);gap:7px}
-.is-squad .s29-directory .s28-search,.is-squad .s29-directory .s28-sort select{height:39px;border-radius:7px;font-size:12px}
-.is-squad .s29-directory .s2-list-scroll{padding:8px 8px 14px;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
-.is-squad .s29-directory .s29-player-card.s2-roster-row{display:grid;grid-template-columns:58px minmax(0,1fr) 24px 82px 60px 13px;align-items:center;gap:8px;min-width:0;min-height:71px;height:auto;margin:0 0 5px;padding:6px 9px;border-radius:9px;border:1px solid #305876;background:linear-gradient(105deg,#12354e,#082138 85%);box-shadow:inset 0 1px #ffffff10,0 3px 8px #0004;translate:0 0;transform:none;transition:translate .20s ease,border-color .20s ease,box-shadow .23s ease,background .20s ease}
-.is-squad .s29-directory .s29-player-card.s2-roster-row:nth-child(even){background:linear-gradient(110deg,#102f48,#081f36)}
-.is-squad .s29-directory .s29-player-card.s2-roster-row:hover{translate:3px 0;border-color:rgba(var(--s2-club-rgb),.94);background:linear-gradient(105deg,rgba(var(--s2-club-rgb),.23),#123149 74%);box-shadow:inset 0 1px #ffffff22,0 5px 17px #0009}
-.is-squad .s29-directory .s29-player-card.s2-roster-row.selected,.is-squad .s29-directory .s29-player-card.s2-roster-row.selected:nth-child(even){translate:0 0;border-color:var(--s2-club-primary);background:linear-gradient(102deg,rgba(var(--s2-club-rgb),.43),#223448 71%,rgba(var(--s2-club-rgb),.22));box-shadow:inset 5px 0 var(--s2-club-primary),0 0 0 1px rgba(var(--s2-club-rgb),.68),0 0 18px rgba(var(--s2-club-rgb),.49),0 4px 18px #0007}
-.is-squad .s29-directory .s28-row-face{height:56px}
-.is-squad .s29-directory .s28-row-face .s2-avatar{width:56px;height:57px;max-height:none;border-radius:8px;border:1px solid #4c859f;background:#154062;box-shadow:0 5px 12px #0009}
-.is-squad .s29-directory .s28-row-identity{gap:8px}
-.is-squad .s29-directory .s28-row-title{height:auto;gap:6px}
-.is-squad .s29-directory .s28-row-title strong{font-size:14px;letter-spacing:-.25px;font-weight:860;text-shadow:0 1px 3px #0006}
-.is-squad .s29-directory .s28-row-meta{font-size:11px;gap:7px;line-height:1.1;color:#bed6e6}
-.is-squad .s29-directory .s28-row-pos{height:22px;min-width:26px;padding:0 5px;font-size:10px;border-radius:5px}
-.is-squad .s29-directory .s28-jersey-number{min-width:20px;height:21px;font-size:11px;color:#ffdfa1;border-color:#648199}
-.is-squad .s29-directory .s28-row-nation .fm-nation{font-size:11px;gap:5px}
-.is-squad .s29-directory .s28-morale svg{height:21px;width:21px}
-.is-squad .s29-directory .s28-row-condition{gap:6px}
-.is-squad .s29-directory .s28-row-condition .s28-track{min-width:20px;height:8px}
-.is-squad .s29-directory .s28-condition-value{min-width:31px;font-size:10.5px;color:#e8f6fb}
-.is-squad .s29-directory .s28-row-overall .s2-score{font-size:16px;min-width:59px;min-height:38px;padding:7px 5px;font-variant-numeric:tabular-nums}
-.is-squad .s29-directory .s28-row-arrow{font-size:25px}
-.is-squad .s29-directory .s28-row-title .s28-profile-link{width:19px;height:19px;opacity:.65}
-.is-squad .s29-directory .s28-directory-footer{height:38px;font-size:11px}
+/* TS-UI-02.10 — rebuilt roster directory; edits the existing visual module,
+   not another stylesheet. All content uses the Python read model, and all
+   selection accents inherit the active club catalogue. */
+.is-squad .s28-directory.s29-directory.s210-directory{border-color:#375c75;border-top:2px solid var(--s2-club-primary);border-radius:12px;background:linear-gradient(157deg,#112b42,#071a2d 89%);box-shadow:0 14px 30px #020b1870,inset 0 1px #ffffff13}
+.is-squad .s210-directory .s28-directory-head.s210-head{display:grid;grid-template-columns:minmax(0,1fr);align-content:center;gap:11px;min-height:112px;padding:13px 14px 12px;border-bottom:1px solid #41648165;background:radial-gradient(ellipse at 16% 0,rgba(var(--s2-club-rgb),.22),transparent 65%),linear-gradient(180deg,#142f48,#0d253d)}
+.is-squad .s210-directory .s28-directory-title.s210-headline{display:grid;gap:6px;min-width:0}
+.is-squad .s210-directory .s28-kicker{font-size:9px;letter-spacing:1.45px;font-weight:900;color:var(--s2-club-accent)}
+.is-squad .s210-directory .s210-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+.is-squad .s210-directory .s28-directory-title h2{font-size:23px;line-height:1.05;letter-spacing:-.65px;margin:0;gap:10px;white-space:nowrap}
+.is-squad .s210-directory .s28-count{height:27px;min-width:27px;font-size:11px}
+.is-squad .s210-available{display:inline-flex;flex:none;align-items:center;gap:6px;border:1px solid #326e65;border-radius:99px;background:#103d3e;color:#a6f3d2;padding:5px 9px;font-size:9px;font-weight:900;letter-spacing:.55px;white-space:nowrap}
+.is-squad .s210-available i{width:6px;height:6px;border-radius:50%;background:#4af1ac;box-shadow:0 0 8px #4af1ac8a}
+.is-squad .s210-directory .s28-tools.s210-tools{display:grid;grid-template-columns:minmax(0,1fr) minmax(115px,133px);gap:8px;min-width:0}
+.is-squad .s210-directory .s28-search,.is-squad .s210-directory .s28-sort select{height:36px;min-height:36px;border-radius:7px;font-size:11px}
+.is-squad .s210-directory .s28-search{min-width:0;border-color:#41657e;background:#08233a}
+.is-squad .s210-directory .s28-search input{min-width:0;font-size:11px}
+.is-squad .s210-directory .s2-list-scroll{padding:9px 9px 15px;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+/* One card, three vertical regions: portrait/number, identity/readiness,
+   and contextual GRL. No disconnected floating cells or dead columns. */
+.is-squad .s210-directory .s210-player-card.s2-roster-row{position:relative;display:grid;grid-template-columns:57px minmax(0,1fr) 66px;align-items:center;gap:11px;min-width:0;min-height:88px;height:auto;margin:0 0 7px;padding:9px 10px;border:1px solid #31536e;border-radius:10px;background:linear-gradient(115deg,#12354b 0%,#0b283f 58%,#0a2239 100%);box-shadow:inset 0 1px #ffffff12,0 3px 10px #0003;transform:none;translate:0 0;cursor:pointer;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease,translate .18s ease}
+.is-squad .s210-directory .s210-player-card:nth-child(even){background:linear-gradient(115deg,#102f46,#092237 78%)}
+.is-squad .s210-directory .s210-player-card:hover{border-color:rgba(var(--s2-club-rgb),.9);background:linear-gradient(114deg,rgba(var(--s2-club-rgb),.23),#102d46 83%);box-shadow:inset 0 1px #ffffff20,0 5px 15px #0006;translate:2px 0}
+.is-squad .s210-directory .s210-player-card.selected,.is-squad .s210-directory .s210-player-card.selected:nth-child(even){border-color:var(--s2-club-primary);background:linear-gradient(110deg,rgba(var(--s2-club-rgb),.44),#1b344a 63%,rgba(var(--s2-club-rgb),.18));box-shadow:inset 4px 0 var(--s2-club-primary),0 0 0 1px rgba(var(--s2-club-rgb),.45),0 5px 17px #0005;translate:0 0}
+.is-squad .s210-directory .s210-player-card:focus-visible{outline:2px solid var(--s2-club-accent);outline-offset:2px}
+.is-squad .s210-directory .s28-row-face.s210-portrait{position:relative;height:64px;min-width:0;align-self:center}
+.is-squad .s210-directory .s210-portrait .s2-avatar{display:block;width:57px;height:63px;max-height:none;border:1px solid #4f7e98;border-radius:9px;overflow:hidden;background:linear-gradient(160deg,#215270,#0b2943);box-shadow:0 5px 12px #0007}
+.is-squad .s210-directory .selected .s210-portrait .s2-avatar{border-color:var(--s2-club-accent);box-shadow:0 0 0 1px rgba(var(--s2-club-rgb),.50),0 5px 12px #0009}
+.is-squad .s210-directory .s210-shirt-number{position:absolute;bottom:-4px;left:-5px;z-index:3;display:block;line-height:1}
+.is-squad .s210-directory .s210-shirt-number .s28-jersey-number{display:grid;place-items:center;min-width:24px;height:23px;padding:0 4px;border:1px solid #8a9ba8;border-radius:5px;background:linear-gradient(135deg,#1f3e51,#0b1f32);color:#fff2c6;font-size:11px;font-weight:950;box-shadow:0 2px 7px #0009}
+.is-squad .s210-directory .s210-shirt-number .s28-jersey-unassigned{display:none}
+.is-squad .s210-directory .s28-row-identity.s210-identity{min-width:0;display:grid;align-content:center;gap:6px}
+.is-squad .s210-directory .s28-row-title.s210-name-line{min-width:0;display:flex;align-items:center;gap:6px;height:20px}
+.is-squad .s210-directory .s210-name-line strong{flex:0 1 auto;min-width:0;max-width:100%;font-weight:900;font-size:14px;line-height:1.15;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff;text-shadow:0 1px 4px #0005}
+/* The C ribbon appears only when set_pieces.roles[role=captain].effective_id
+   matches the player. No club-specific assignment or fabricated vice-captain. */
+.is-squad .s210-directory .s210-name-line .s25-captain{flex:none;display:inline-grid;place-items:center;min-width:23px;width:23px;height:22px;padding:0 0 3px;border-radius:3px 3px 1px 1px;background:linear-gradient(155deg,#fff0a5,#daab4e);color:#463008;border:1px solid #ffe2a0;font-size:11px;font-weight:950;clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%);box-shadow:none}
+.is-squad .s210-directory .s210-name-line .s28-profile-link{margin-left:auto;flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:6px;border-color:#4c7590;background:#0d2a41;color:#c6e5f3;font-size:14px;opacity:.82}
+.is-squad .s210-directory .s210-name-line .s28-profile-link:hover,.is-squad .s210-directory .s210-name-line .s28-profile-link:focus-visible{opacity:1;background:rgba(var(--s2-club-rgb),.35);border-color:var(--s2-club-accent);outline-offset:1px}
+.is-squad .s210-directory .s28-row-meta.s210-meta-line{min-width:0;display:flex;align-items:center;gap:8px;overflow:hidden;color:#c1d8e9;white-space:nowrap;font-size:10.5px;line-height:1.2}
+.is-squad .s210-directory .s210-meta-line .s28-row-pos{display:inline-grid;place-items:center;height:18px;min-width:25px;padding:1px 5px;border-radius:4px;font-size:10px;font-weight:900;color:#fff;background:rgba(var(--s2-club-rgb),.3);border:1px solid rgba(var(--s2-club-rgb),.60)}
+.is-squad .s210-directory .s210-age{flex:none;color:#bcd0df}
+.is-squad .s210-directory .s210-meta-line .s28-row-nation{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.is-squad .s210-directory .s210-meta-line .fm-nation{font-size:10px;gap:4px;color:#c1d8e9}
+.is-squad .s210-directory .s210-vitals{display:flex;min-width:0;align-items:center;gap:10px;justify-content:space-between;min-height:17px;border-top:1px solid #68869c2d;padding-top:6px}
+.is-squad .s210-directory .s28-row-condition.s210-condition{display:flex;flex:1 1 auto;min-width:72px;align-items:center;gap:6px;white-space:nowrap}
+.is-squad .s210-directory .s210-condition small,.is-squad .s210-directory .s210-form small{flex:none;font-size:9px;font-weight:850;letter-spacing:.4px;color:#8eb1c7}
+.is-squad .s210-directory .s210-condition .s28-track{flex:1;min-width:14px;height:6px;border-radius:7px;background:#23465d;overflow:hidden}
+.is-squad .s210-directory .s210-condition .s28-track i{display:block;width:var(--s28-progress);height:100%;border-radius:7px;background:linear-gradient(90deg,#1caed4,#42e8b1)}
+.is-squad .s210-directory .s210-condition .s28-track i.warning{background:linear-gradient(90deg,#d58b3f,#f1c36f)}
+.is-squad .s210-directory .s210-condition .s28-condition-value{flex:none;min-width:25px;font-size:10px;color:#edf8fc;font-weight:850;text-align:right}
+.is-squad .s210-directory .s28-morale.s210-morale{display:flex;flex:none;align-items:center;gap:4px;font-size:10px;white-space:nowrap}
+.is-squad .s210-directory .s210-morale svg{height:15px;width:15px;flex:none;filter:drop-shadow(0 0 4px currentColor)}
+.is-squad .s210-directory .s210-morale-value{font-size:10px;font-weight:800;color:#d2e8ef;font-variant-numeric:tabular-nums}
+.is-squad .s210-directory .s210-form{display:flex;flex:none;align-items:center;gap:4px;white-space:nowrap;border-left:1px solid #58748b62;padding-left:9px}
+.is-squad .s210-directory .s210-form strong{font-weight:850;color:#d0f5df;font-size:10px;font-variant-numeric:tabular-nums}
+.is-squad .s210-directory .s28-row-overall.s210-rating{position:relative;align-self:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;border-left:1px solid #55738d55;padding-left:7px}
+.is-squad .s210-directory .s210-rating small{font-size:9px;font-weight:950;letter-spacing:1.3px;color:#a3c3d5}
+.is-squad .s210-directory .s210-rating .s2-score{display:grid;place-items:center;width:100%;min-width:0;min-height:31px;padding:6px 3px;border-radius:7px;font-size:16px;font-weight:950;line-height:1.1;font-variant-numeric:tabular-nums;box-shadow:inset 0 1px #ffffff1b,0 3px 9px #0005}
+.is-squad .s210-directory .s210-rating .s28-row-arrow{position:absolute;right:0;bottom:0;font-size:17px;line-height:1;color:#b3d1e0;opacity:.7}
+.is-squad .s210-directory .s210-player-card:hover .s28-row-arrow,.is-squad .s210-directory .s210-player-card.selected .s28-row-arrow{opacity:1;color:#fff}
+.is-squad .s210-directory .s28-directory-footer.s210-footer{height:37px;min-height:37px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 13px;border-top:1px solid #36536d;background:#091d31;color:#bed7e7;font-size:10px}
+.is-squad .s210-directory .s210-footer span:last-child{color:var(--s2-club-accent);letter-spacing:.6px;font-size:9px;font-weight:850}
+/* Responsive: preserve real fields, reserve room for names, never overflow the card. */
+@media(max-width:1500px){
+ .is-squad .s210-directory .s210-player-card.s2-roster-row{grid-template-columns:52px minmax(0,1fr) 62px;gap:9px;padding:8px 9px;min-height:83px}
+ .is-squad .s210-directory .s210-portrait .s2-avatar{width:52px;height:60px}
+ .is-squad .s210-directory .s28-row-face.s210-portrait{height:60px}
+ .is-squad .s210-directory .s210-name-line strong{font-size:13px}
+ .is-squad .s210-directory .s210-vitals{gap:7px}
+ .is-squad .s210-directory .s210-form{padding-left:6px;gap:3px}
+}
+@media(max-width:1350px) and (min-width:1001px){
+ .is-squad .s210-directory .s210-player-card.s2-roster-row{grid-template-columns:46px minmax(0,1fr) 56px;gap:7px;min-height:79px;padding:7px}
+ .is-squad .s210-directory .s210-portrait .s2-avatar{width:46px;height:55px}
+ .is-squad .s210-directory .s28-row-face.s210-portrait{height:55px}
+ .is-squad .s210-directory .s210-meta-line{gap:5px}
+ .is-squad .s210-directory .s210-form{display:none}
+ .is-squad .s210-directory .s210-name-line strong{font-size:12px}
+ .is-squad .s210-directory .s210-vitals{gap:6px}
+ .is-squad .s210-directory .s210-morale-value{display:none}
+ .is-squad .s210-directory .s28-row-overall.s210-rating{padding-left:4px}
+ .is-squad .s210-directory .s210-rating .s2-score{font-size:13px}
+ .is-squad .s210-directory .s28-tools.s210-tools{grid-template-columns:minmax(0,1fr) 112px}
+}
+@media(max-width:1000px){
+ .is-squad .s210-directory .s210-player-card.s2-roster-row{grid-template-columns:57px minmax(0,1fr) 68px;gap:11px;min-height:88px}
+ .is-squad .s210-directory .s210-portrait .s2-avatar{width:57px;height:63px}
+ .is-squad .s210-directory .s28-row-face.s210-portrait{height:64px}
+}
+@media(max-width:560px){
+ .is-squad .s210-directory .s28-directory-head.s210-head{padding:10px;gap:9px}
+ .is-squad .s210-directory .s210-player-card.s2-roster-row{grid-template-columns:45px minmax(0,1fr) 55px;gap:6px;padding:7px;min-height:81px}
+ .is-squad .s210-directory .s210-portrait .s2-avatar{width:45px;height:55px}
+ .is-squad .s210-directory .s28-row-face.s210-portrait{height:55px}
+ .is-squad .s210-directory .s210-form{display:none}
+ .is-squad .s210-directory .s210-morale-value{display:none}
+ .is-squad .s210-directory .s210-name-line strong{font-size:12px}
+ .is-squad .s210-directory .s210-meta-line{gap:4px;font-size:10px}
+ .is-squad .s210-directory .s28-tools.s210-tools{grid-template-columns:minmax(0,1fr) 111px}
+ .is-squad .s210-directory .s210-rating .s2-score{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){.is-squad .s210-directory .s210-player-card.s2-roster-row,.is-squad .s210-directory .s210-condition .s28-track i{transition:none!important;translate:0!important}}
 
 /* Player hero: one controlled composition, no pseudo overlay on top of the kit. */
 .is-squad .s28-hero.s29-hero{position:relative;isolation:isolate;display:grid;align-items:center;grid-template-columns:clamp(120px,9.1vw,151px) minmax(0,1fr) clamp(204px,15vw,260px) clamp(92px,6vw,104px);grid-template-rows:minmax(0,1fr);gap:clamp(9px,.95vw,16px);height:254px;min-height:254px;max-height:254px;padding:12px 14px 12px 17px;overflow:hidden;border-bottom:2px solid rgba(var(--s2-club-rgb),.95);background:radial-gradient(ellipse at 11% 12%,rgba(var(--s2-club-rgb),.73),transparent 55%),linear-gradient(135deg,rgba(var(--s2-club-rgb),.80),#1a2037 64%,#0c1f36 100%)}
@@ -99,26 +170,9 @@
  .is-squad .s29-hero .s28-eyebrow{font-size:10px}
  .is-squad .s29-hero .s28-badges span{min-width:39px;min-height:34px;padding:6px 9px;font-size:11px}
  .is-squad .s29-hero .s28-badges .s28-availability{min-width:76px}
- .is-squad .s29-directory .s29-player-card.s2-roster-row{grid-template-columns:52px minmax(0,1fr) 21px 70px 56px 12px;gap:6px;min-height:67px;padding:5px 8px}
- .is-squad .s29-directory .s28-row-face,.is-squad .s29-directory .s28-row-face .s2-avatar{height:52px}
- .is-squad .s29-directory .s28-row-face .s2-avatar{width:51px}
- .is-squad .s29-directory .s28-row-title strong{font-size:13px}
- .is-squad .s29-directory .s28-row-meta{font-size:10.5px;gap:5px}
- .is-squad .s29-directory .s28-row-overall .s2-score{font-size:14px;min-width:52px;min-height:36px}
- .is-squad .s29-directory .s28-row-condition{gap:4px}
- .is-squad .s29-directory .s28-condition-value{font-size:10px;min-width:27px}
- .is-squad .s29-directory .s28-directory-head{padding:10px 11px;gap:8px}
- .is-squad .s29-directory .s28-directory-title h2{font-size:21px}
- .is-squad .s29-directory .s28-tools{grid-template-columns:minmax(70px,1fr) minmax(84px,100px)}
 }
 @media(max-width:1250px) and (min-width:1001px){
  .is-squad .s2-workspace{grid-template-columns:minmax(345px,.96fr) minmax(0,1.66fr)}
- .is-squad .s29-directory .s29-player-card.s2-roster-row{grid-template-columns:43px minmax(0,1fr) 18px 55px 46px 10px;gap:4px;min-height:59px}
- .is-squad .s29-directory .s28-row-face,.is-squad .s29-directory .s28-row-face .s2-avatar{height:46px}
- .is-squad .s29-directory .s28-row-face .s2-avatar{width:43px}
- .is-squad .s29-directory .s28-row-title strong{font-size:12px}
- .is-squad .s29-directory .s28-row-meta{font-size:9.5px;gap:3px}
- .is-squad .s29-directory .s28-row-overall .s2-score{min-width:45px;font-size:12px}
  .is-squad .s28-hero.s29-hero{grid-template-columns:94px minmax(0,1fr) 130px 72px;gap:6px;height:230px;min-height:230px;max-height:230px}
  .is-squad .s29-hero .s28-player-name{font-size:25px}
  .is-squad .s29-hero .s28-bio{gap:6px}
@@ -132,8 +186,6 @@
  .is-squad .s29-directory{height:430px}
  .is-squad .s2-inspector{height:730px}
  .is-squad .s28-hero.s29-hero{height:248px;min-height:248px;max-height:248px;grid-template-columns:122px minmax(0,1fr) 196px 82px}
- .is-squad .s29-directory .s29-player-card.s2-roster-row{grid-template-columns:55px minmax(0,1fr) 24px 85px 64px 12px;min-height:68px;gap:8px}
- .is-squad .s29-directory .s28-row-face .s2-avatar{width:54px;height:55px}
  .is-squad .s24-profile-top{grid-template-columns:minmax(0,.94fr) minmax(0,1.11fr)!important}
 }
 @media(max-width:730px){
@@ -152,7 +204,6 @@
 }
 @media(prefers-reduced-motion:reduce){
  .is-squad .s29-hero:before,.is-squad .s29-kit-holder .s2-shirt-image{animation:none!important}
- .is-squad .s29-directory .s29-player-card.s2-roster-row{transition:none!important}
 }
 
 /* Image geometry fix: position the kit against a definite containing block.
@@ -198,4 +249,721 @@
 @media(min-width:1501px){
  .is-squad .s24-profile-top>.s24-positions-card{min-height:365px!important}
  .is-squad .s24-profile-top .s24-pitch{height:288px!important;max-height:288px!important;min-height:288px!important}
+}
+
+/* TS-UI-02.11: final squad directory polish.
+   - cleaner lower attribute cards
+   - richer player header metadata (height, weight, preferred foot)
+   - gentler kit/crest staging to reduce overlap and preserve source detail */
+.is-squad .s29-hero .s28-player-data{gap:8px 10px;align-items:center}
+.is-squad .s29-hero .s28-player-data>span:not(:first-child){display:inline-flex;align-items:center;gap:7px;min-height:24px}
+.is-squad .s29-hero .s29-body-metric small,.is-squad .s29-hero .s29-foot-meta small{font-size:9px;line-height:1;letter-spacing:.55px;color:#b8cad7;text-transform:uppercase;font-weight:850}
+.is-squad .s29-hero .s29-body-metric strong{font-size:12px;line-height:1.05;color:#f6fbff;font-weight:880;font-variant-numeric:tabular-nums}
+.is-squad .s29-hero .s29-foot-meta{display:inline-flex;align-items:center;gap:7px;min-width:0}
+.is-squad .s29-hero .s29-foot-switch{display:inline-flex;align-items:center;gap:6px}
+.is-squad .s29-hero .s29-foot{display:inline-flex;align-items:center;gap:5px;min-height:26px;padding:5px 8px;border-radius:999px;border:1px solid #355a71;background:#091c2f;color:#89a7bb;box-shadow:inset 0 1px #ffffff10}
+.is-squad .s29-hero .s29-foot.left .s29-foot-icon{transform:scaleX(-1)}
+.is-squad .s29-hero .s29-foot-icon{display:inline-grid;place-items:center;font-size:12px;line-height:1;opacity:.95}
+.is-squad .s29-hero .s29-foot b{font-size:10px;letter-spacing:.3px;font-weight:900}
+.is-squad .s29-hero .s29-foot.is-active{border-color:#53dfb6;background:linear-gradient(145deg,#11463e,#0d7c64);color:#ecfff8;box-shadow:0 0 0 1px #ffffff12,inset 0 1px #ffffff1f,0 0 16px rgba(76,226,180,.22)}
+.is-squad .s29-hero .s29-foot.is-active .s29-foot-icon{filter:drop-shadow(0 0 6px rgba(151,255,223,.32))}
+.is-squad .s29-hero .s29-foot.is-inactive{background:#0a1929;color:#7c99ad;border-color:#29465b}
+
+.is-squad .s29-hero .s29-kit-stage{justify-self:end}
+.is-squad .s29-hero .s29-crest-silhouette{inset:4% auto auto -20%!important;width:112%!important;height:96%!important;opacity:.24!important;filter:drop-shadow(0 0 8px rgba(var(--s2-club-rgb),.26))!important}
+.is-squad .s29-hero .s28-crest-watermark.has-crest{left:-18%!important;top:6%!important;width:108%!important;height:90%!important;opacity:.34!important;filter:grayscale(.1) brightness(1.4) saturate(1.02) contrast(.92) drop-shadow(0 0 7px rgba(var(--s2-club-rgb),.34))!important}
+.is-squad .s29-hero .s29-kit-holder .s2-shirt-image,
+.is-squad .s29-hero .s29-kit-holder .s2-shirt-art{transform:scaleX(1.08)!important;object-position:64% center!important;filter:drop-shadow(0 9px 14px #0009)!important}
+
+.is-squad .s24-attributes-card{padding:16px 16px 15px!important;background:linear-gradient(155deg,#0f2e43,#091f31)!important;border:1px solid rgba(var(--s2-club-rgb),.22)!important;box-shadow:0 12px 22px #0005,inset 0 1px #ffffff0c}
+.is-squad .s24-attributes-card .s24-card-heading{margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #2e4e648a}
+.is-squad .s24-attributes-card .s24-card-heading h3{display:flex;align-items:center;gap:8px}
+.is-squad .s24-attributes-card .s24-attribute-groups{gap:11px}
+.is-squad .s24-attributes-card .s24-attribute-group{display:flex;flex-direction:column;min-height:100%;padding:11px 10px 10px;border:1px solid #365c72b0;background:linear-gradient(160deg,#0d293d,#0b2132 80%);box-shadow:0 8px 16px #0004,inset 0 1px #ffffff0e}
+.is-squad .s24-attributes-card .s24-attribute-group h4{margin-bottom:9px;padding-bottom:8px}
+.is-squad .s24-attributes-card .s24-attribute-rows{gap:5px}
+.is-squad .s24-attributes-card .s24-attribute-row{grid-template-columns:minmax(0,1fr) 34px;grid-template-rows:auto 5px;gap:6px 8px;padding:8px 7px 9px;border:1px solid #2d4c6075;border-bottom:0;border-radius:8px;background:linear-gradient(160deg,#0d2232,#112c40);box-shadow:inset 0 1px #ffffff08}
+.is-squad .s24-attributes-card .s24-attribute-label{font-size:10.8px;font-weight:700;line-height:1.16;color:#cae1ec}
+.is-squad .s24-attributes-card .s24-attribute-row strong{font-size:11.5px;align-self:center}
+.is-squad .s24-attributes-card .s24-attribute-meter{height:5px;background:#24485b}
+
+@media(max-width:1250px) and (min-width:1001px){
+ .is-squad .s29-hero .s29-body-metric small,.is-squad .s29-hero .s29-foot-meta small{font-size:8px}
+ .is-squad .s29-hero .s29-foot{padding:4px 7px;min-height:24px}
+}
+@media(max-width:730px){
+ .is-squad .s29-hero .s28-player-data{gap:6px}
+ .is-squad .s29-hero .s29-foot-meta{width:100%;justify-content:flex-start}
+ .is-squad .s29-hero .s29-kit-holder .s2-shirt-image,.is-squad .s29-hero .s29-kit-holder .s2-shirt-art{object-position:center center!important;transform:scaleX(1.04)!important}
+ .is-squad .s24-attributes-card .s24-attribute-groups{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* TS-UI-02.12 — Status/development and Contract/actions only.
+   Season statistics, profile/attributes, hero and directory are intentionally
+   untouched. All panels fit inside the current Squad inspector/scroll area. */
+.is-squad .s212-status-dashboard,.is-squad .s212-management{width:100%;min-width:0;display:grid;gap:11px;animation:s212-reveal .34s cubic-bezier(.2,.75,.2,1) both}
+.is-squad .s212-panel{position:relative;min-width:0;overflow:hidden;padding:13px;border:1px solid #315570;border-radius:11px;background:linear-gradient(148deg,#11324a 0%,#0b263a 62%,#091e30 100%);box-shadow:inset 0 1px #ffffff12,0 8px 18px #0003}
+.is-squad .s212-panel h3{display:flex;align-items:center;gap:8px;margin:0;color:#e8f5ff;font-size:13px;font-weight:900;letter-spacing:-.18px}
+.is-squad .s212-panel-icon{display:inline-grid;flex:none;place-items:center;width:23px;height:23px;border-radius:7px;border:1px solid #55637255;background:#24394d;color:#a7d1e8;font-size:12px;box-shadow:inset 0 1px #ffffff13}
+.is-squad .s212-panel-icon.tone-green{background:#174b46;color:#76f0c8}
+.is-squad .s212-panel-icon.tone-blue{background:#173f62;color:#89caff}
+.is-squad .s212-panel-icon.tone-amber{background:#4a392b;color:#facf8a}
+.is-squad .s212-panel-icon.tone-coral{background:rgba(var(--s2-club-rgb),.23);color:var(--s2-club-accent)}
+.is-squad .s212-status-overview{display:grid;grid-template-columns:1.14fr .9fr 1.14fr;gap:11px;align-items:stretch;min-width:0}
+.is-squad .s212-status-overview>.s212-panel{min-height:163px}
+.is-squad .s212-status-overview>.s212-panel:nth-child(2){animation:s212-reveal .39s .04s cubic-bezier(.2,.75,.2,1) both}
+.is-squad .s212-status-overview>.s212-panel:nth-child(3){animation:s212-reveal .42s .08s cubic-bezier(.2,.75,.2,1) both}
+.is-squad .s212-condition-content{display:flex;align-items:center;gap:14px;margin-top:16px;min-width:0}
+.is-squad .s212-ring{width:90px;height:90px;flex:none;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#49dfb0 var(--s212-progress),#24465c 0);box-shadow:0 0 0 5px #0c293c,inset 0 1px #ffffff38;animation:s212-gauge .6s cubic-bezier(.2,.8,.22,1) both}
+.is-squad .s212-ring>div{width:73px;height:73px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:50%;background:#082838;box-shadow:inset 0 1px #ffffff10}
+.is-squad .s212-ring strong{font-size:20px;color:#eafff8;letter-spacing:-.6px;line-height:1.1}
+.is-squad .s212-ring small{font-size:9px;color:#92bcbd;text-transform:uppercase;letter-spacing:.65px;font-weight:800}
+.is-squad .s212-condition-breakdown{display:grid;align-content:center;gap:13px;min-width:0;flex:1}
+.is-squad .s212-measure{min-width:0;display:grid;gap:6px}
+.is-squad .s212-measure-title{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:10px;color:#a8c9dc}
+.is-squad .s212-measure-title b{color:#eef8ff;font-size:10px;font-weight:900;white-space:nowrap}
+.is-squad .s212-measure-track,.is-squad .s212-form-progress{display:block;overflow:hidden;height:7px;border-radius:30px;background:#284c60;box-shadow:inset 0 1px 2px #0008}
+.is-squad .s212-measure-track i,.is-squad .s212-form-progress i{display:block;width:var(--s212-progress);height:100%;border-radius:30px;background:linear-gradient(90deg,#139ca1,#45e8b6);transform-origin:left center;animation:s212-fill .62s .15s cubic-bezier(.18,.75,.25,1) both}
+.is-squad .s212-measure.fatigue .s212-measure-track i{background:linear-gradient(90deg,#c99243,#f4c769)}
+.is-squad .s212-form-content{display:flex;align-items:baseline;gap:5px;flex-wrap:wrap;margin:17px 0 11px}
+.is-squad .s212-form-content strong{font-size:36px;font-weight:950;letter-spacing:-1.3px;line-height:1;color:#ebf8ff;text-shadow:0 2px 12px #0007}
+.is-squad .s212-form-content>span{font-size:12px;color:#87bcd8}
+.is-squad .s212-form-content small{flex-basis:100%;color:#a7c4d5;font-size:10px}
+.is-squad .s212-form-progress{height:9px}
+.is-squad .s212-form-progress i{background:linear-gradient(90deg,#208dba,#68bcf4)}
+.is-squad .s212-morale-content{display:flex;align-items:center;gap:10px;min-width:0;margin:17px 0 11px}
+.is-squad .s212-morale-face{flex:none;display:grid;place-items:center;width:53px;height:53px;border-radius:50%;font-size:32px;line-height:1;background:#124f46;color:#79f3c6;border:1px solid #3f9f81;box-shadow:inset 0 1px #ffffff16,0 0 15px #25ba8b28}
+.is-squad .s212-morale-content.stable .s212-morale-face{background:#254957;color:#96dcec;border-color:#427892}
+.is-squad .s212-morale-content.low .s212-morale-face{background:#50372e;color:#ffc58f;border-color:#95634b}
+.is-squad .s212-morale-content.unknown .s212-morale-face{background:#263c4c;color:#9bb9ca;border-color:#527083}
+.is-squad .s212-morale-content>div{display:grid;gap:4px;min-width:0}
+.is-squad .s212-morale-content strong{font-size:13px;color:#f2fcff;line-height:1.2}
+.is-squad .s212-morale-content span:not(.s212-morale-face){font-size:11px;color:#afcedc}
+.is-squad .s212-availability-row{display:flex;flex-wrap:wrap;align-items:center;gap:5px 9px;justify-content:space-between;border-top:1px solid #42637a66;padding-top:8px}
+.is-squad .s212-status-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 7px;border-radius:6px;background:#10503e;color:#9ef4ca;border:1px solid #2a9370;font-weight:900;font-size:10px}
+.is-squad .s212-status-badge.alert{background:#50352b;color:#fcd2ad;border-color:#8f6050}
+.is-squad .s212-availability-row>small{font-size:9px;color:#739eb7}
+.is-squad .s212-development-card{padding:12px 13px 11px}
+.is-squad .s212-development-head,.is-squad .s212-actions-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.is-squad .s212-development-context,.is-squad .s212-actions-heading>small{font-size:10px;color:#8ab2c9;text-align:right}
+.is-squad .s212-development-graphics{min-width:0}
+.is-squad .s212-loading{margin:12px;color:#8faec3;font-size:11px}
+.is-squad .s212-development-board{display:grid;gap:9px;min-width:0}
+.is-squad .s212-development-main{display:grid;grid-template-columns:minmax(0,1.47fr) minmax(215px,.9fr);gap:10px;min-width:0}
+.is-squad .s212-development-chart,.is-squad .s212-development-focus{min-width:0;padding:11px 13px;border:1px solid #3058749a;border-radius:9px;background:linear-gradient(155deg,#0b2639,#071e30)}
+.is-squad .s212-dev-subhead{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:9px}
+.is-squad .s212-dev-subhead strong{font-size:11px;color:#e5f8ff}
+.is-squad .s212-dev-subhead small{font-size:9px;color:#76a5c0}
+.is-squad .s212-trend{display:block;width:100%;height:94px;overflow:visible}
+.is-squad .s212-trend-grid{fill:none;stroke:#38556d88;stroke-width:1}
+.is-squad .s212-trend-area{fill:#33a9cd17}
+.is-squad .s212-trend-line{stroke:#4bcbff;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;fill:none;filter:drop-shadow(0 0 4px #28c8f555);animation:s212-line .48s ease-out both}
+.is-squad .s212-trend-dot{fill:#63e3ff;stroke:#133a50;stroke-width:1.4}
+.is-squad .s212-trend-legend{display:flex;justify-content:space-between;align-items:center;gap:7px;font-size:9px;color:#82a6bc}
+.is-squad .s212-trend-legend strong{color:#a1eaff;font-size:9px;white-space:nowrap}
+.is-squad .s212-chart-empty{min-height:98px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;border:1px dashed #41637c88;border-radius:7px;background:linear-gradient(#102b4140,#0b203040)}
+.is-squad .s212-chart-mark{font-size:23px;color:#75b9d7;line-height:1}
+.is-squad .s212-chart-empty strong{font-size:12px;color:#e2f5ff}
+.is-squad .s212-chart-empty>span:last-child{font-size:10px;color:#8aafc4;padding:0 8px}
+.is-squad .s212-development-focus{display:flex;flex-direction:column;gap:8px}
+.is-squad .s212-development-focus .s212-dev-subhead{margin:0}
+.is-squad .s212-focus-select{display:grid;gap:5px;font-size:9px;color:#93b7ca}
+.is-squad .s212-focus-select select{width:100%;height:33px;min-width:0;padding:5px 8px;border-radius:7px;border:1px solid #3a6885;background:#12364d;color:#eaf8ff;font-size:11px;cursor:pointer}
+.is-squad .s212-focus-select select:focus-visible{outline:2px solid #70e4c2;outline-offset:2px}
+.is-squad .s212-focus-select select:disabled{opacity:.6;cursor:default}
+.is-squad .s212-focus-highlight{display:flex;align-items:baseline;justify-content:space-between;gap:5px;flex-wrap:wrap;padding-top:8px;border-top:1px solid #39586d8a}
+.is-squad .s212-focus-highlight small{font-size:9px;color:#98bcd0}
+.is-squad .s212-focus-highlight strong{font-size:16px;color:#b9f5d9;font-weight:900}
+.is-squad .s212-focus-highlight span{flex-basis:100%;color:#8fb5c8;font-size:9px}
+.is-squad .s212-focus-status{font-size:9px;line-height:1.35;color:#83abbd;overflow-wrap:anywhere}
+.is-squad .s212-development-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.is-squad .s212-development-facts>div{min-width:0;display:grid;gap:5px;padding:8px 10px;border:1px solid #2d506a8e;border-radius:7px;background:#0a263a}
+.is-squad .s212-development-facts small{font-size:9px;color:#8eb1c6}
+.is-squad .s212-development-facts b{color:#b7f0d5;font-size:11px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.is-squad .s212-development-notes{border-top:1px solid #395c736a;padding-top:7px;font-size:10px;color:#8db5cd}
+.is-squad .s212-development-notes summary{cursor:pointer;font-weight:800;color:#b5d3e3;outline-offset:4px}
+.is-squad .s212-development-notes>div{padding:8px 4px 0;line-height:1.5}
+.is-squad .s212-development-notes p{margin:6px 0;font-size:10px;color:#96bbcf;line-height:1.5}
+.is-squad .s212-development-notes details{margin:8px 0}
+.is-squad .s212-review-list{display:grid;gap:3px;margin-top:8px}
+.is-squad .s212-review-list>div{display:flex;justify-content:space-between;gap:8px;padding:5px 7px;background:#0c2b40;border-radius:5px}
+.is-squad .s212-review-list b{color:#b1e6dc}
+.is-squad .s212-development-empty{display:flex;gap:12px;align-items:center;padding:14px;border:1px dashed #36627b;border-radius:8px;background:#0b2638}
+.is-squad .s212-development-empty>span{font-size:25px;color:#679bb5}
+.is-squad .s212-development-empty>div{display:grid;gap:6px}
+.is-squad .s212-development-empty strong{font-size:12px;color:#e3f3fc}
+.is-squad .s212-development-empty small{font-size:10px;color:#91b6c9}
+
+/* Contract: paired overview (facts + verified status) and compact shortcuts. */
+.is-squad .s212-contract-overview{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(230px,.9fr);gap:11px;min-width:0}
+.is-squad .s212-contract-main,.is-squad .s212-contract-state{min-height:186px}
+.is-squad .s212-contract-main{border-color:rgba(var(--s2-club-rgb),.43)}
+.is-squad .s212-contract-main h3,.is-squad .s212-contract-state h3{margin-bottom:13px}
+.is-squad .s212-contract-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.is-squad .s212-contract-fact{display:flex;align-items:center;gap:10px;min-width:0;min-height:60px;padding:10px;border:1px solid #2d51698c;border-radius:8px;background:linear-gradient(125deg,#0b293e,#0b2235)}
+.is-squad .s212-fact-icon{display:grid;flex:none;place-items:center;width:29px;height:29px;font-size:16px;color:#9ec4d7;border:1px solid #36617a90;border-radius:7px;background:#16354c}
+.is-squad .s212-contract-fact>div{display:grid;gap:3px;min-width:0}
+.is-squad .s212-contract-fact small{font-size:9px;color:#92b4c9}
+.is-squad .s212-contract-fact strong{font-size:14px;line-height:1.15;color:#f2fbff;font-weight:900;overflow-wrap:anywhere}
+.is-squad .s212-contract-fact em{font-size:9px;color:#72a8be;font-style:normal}
+.is-squad .s212-contract-state{background:linear-gradient(130deg,#0b303a,#102638 75%)}
+.is-squad .s212-state-center{display:flex;gap:12px;align-items:center;margin:23px 0 15px;min-width:0}
+.is-squad .s212-contract-emblem{display:grid;flex:none;place-items:center;width:51px;height:51px;font-size:26px;color:#74f0c2;border:2px solid #36bb8c;border-radius:50%;box-shadow:0 0 0 6px #0b413b77,0 0 16px #2ac79b27}
+.is-squad .s212-contract-state.inactive .s212-contract-emblem{color:#f9cc88;border-color:#bd9153;box-shadow:0 0 0 6px #684a2a50,0 0 16px #b9883622}
+.is-squad .s212-state-center>div{display:grid;gap:5px;min-width:0}
+.is-squad .s212-state-center strong{font-size:16px;font-weight:900;color:#eafff5;overflow-wrap:anywhere}
+.is-squad .s212-state-center small{font-size:10px;color:#a1c5d3}
+.is-squad .s212-state-divider{height:3px;border-radius:7px;background:linear-gradient(90deg,#34d2a1,#246d71 60%,transparent);opacity:.75}
+.is-squad .s212-actions-panel.s2-actions-card{padding:13px!important}
+.is-squad .s212-actions-heading{padding-bottom:10px;border-bottom:1px solid #2f516c85}
+.is-squad .s212-action-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:11px}
+.is-squad .s212-action-controls label{display:grid;gap:5px;color:#93b6cb;font-size:10px;font-weight:800}
+.is-squad .s212-action-controls select{width:100%;min-width:0;height:35px;padding:6px 10px;color:#e5f6ff;background:#0c2b40;border:1px solid #3c6480;border-radius:7px;font-size:11px}
+.is-squad .s212-action-controls select:focus-visible{outline:2px solid #54d4b0;outline-offset:2px}
+.is-squad .s212-quick-actions{display:grid;grid-template-columns:minmax(162px,1.25fr) repeat(4,minmax(0,1fr));gap:8px}
+.is-squad .s212-quick-actions .s212-action.s2-action{display:flex;align-items:center;justify-content:center;gap:7px;min-height:49px;min-width:0;padding:8px 9px;border:1px solid #345972;background:linear-gradient(145deg,#153b50,#0d293d);border-radius:8px;color:#d5e9f7;font-weight:820;font-size:10px;line-height:1.35;text-align:center;white-space:normal;overflow:hidden;transition:background .18s ease,border-color .18s ease,translate .18s ease,box-shadow .18s ease}
+.is-squad .s212-quick-actions .s212-action.s2-action span{flex:none;display:inline-grid;place-items:center;width:21px;height:21px;border-radius:6px;background:#183c52;color:#91c4db;font-size:13px}
+.is-squad .s212-quick-actions .s212-action.s2-action:hover{translate:0 -2px;background:linear-gradient(145deg,#20546c,#13374d);border-color:rgba(var(--s2-club-rgb),.66);box-shadow:0 6px 14px #0005}
+.is-squad .s212-quick-actions .s212-primary-action.s2-action{background:linear-gradient(110deg,rgba(var(--s2-club-rgb),.40),#192b41);border-color:rgba(var(--s2-club-rgb),.76);color:#fff}
+.is-squad .s212-quick-actions .s212-primary-action.s2-action span{background:rgba(var(--s2-club-rgb),.31);color:var(--s2-club-accent)}
+.is-squad .s212-action.s2-action:focus-visible{outline:2px solid #72e5c7;outline-offset:2px}
+.is-squad .s212-quick-actions .s212-action.s2-action:after{display:none}
+
+@keyframes s212-reveal{from{opacity:.35;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@keyframes s212-gauge{from{opacity:.6;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+@keyframes s212-fill{from{transform:scaleX(.06)}to{transform:scaleX(1)}}
+@keyframes s212-line{from{opacity:.12;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:1500px){
+ .is-squad .s212-status-overview{grid-template-columns:1.16fr .88fr 1.08fr;gap:8px}
+ .is-squad .s212-condition-content{gap:10px}
+ .is-squad .s212-ring{width:76px;height:76px}
+ .is-squad .s212-ring>div{width:61px;height:61px}
+ .is-squad .s212-ring strong{font-size:17px}
+ .is-squad .s212-quick-actions{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .is-squad .s212-quick-actions .s212-primary-action.s2-action{grid-column:span 2}
+}
+@media(max-width:1250px) and (min-width:1001px){
+ .is-squad .s212-status-overview{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .is-squad .s212-morale-panel{grid-column:1/-1;min-height:113px!important}
+ .is-squad .s212-morale-content{margin:9px 0}
+ .is-squad .s212-development-main{grid-template-columns:1fr}
+ .is-squad .s212-contract-overview{grid-template-columns:1fr}
+ .is-squad .s212-contract-main,.is-squad .s212-contract-state{min-height:0}
+ .is-squad .s212-state-center{margin:10px 0}
+}
+@media(max-width:1000px){
+ .is-squad .s212-status-overview{grid-template-columns:1.14fr .9fr 1.14fr}
+ .is-squad .s212-contract-overview{grid-template-columns:minmax(0,1.7fr) minmax(230px,.9fr)}
+}
+@media(max-width:730px){
+ .is-squad .s212-status-overview{grid-template-columns:1fr}
+ .is-squad .s212-status-overview>.s212-panel{min-height:0}
+ .is-squad .s212-development-main,.is-squad .s212-contract-overview{grid-template-columns:1fr}
+ .is-squad .s212-contract-main,.is-squad .s212-contract-state{min-height:0}
+ .is-squad .s212-quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .is-squad .s212-quick-actions .s212-primary-action.s2-action{grid-column:span 2}
+ .is-squad .s212-morale-content{margin:11px 0}
+ .is-squad .s212-development-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:450px){
+ .is-squad .s212-contract-grid,.is-squad .s212-action-controls{grid-template-columns:1fr}
+ .is-squad .s212-dev-subhead{justify-content:flex-start}
+ .is-squad .s212-status-dashboard,.is-squad .s212-management{gap:9px}
+}
+@media(prefers-reduced-motion:reduce){
+ .is-squad .s212-status-dashboard,.is-squad .s212-management,.is-squad .s212-status-overview>.s212-panel,.is-squad .s212-ring,.is-squad .s212-measure-track i,.is-squad .s212-form-progress i,.is-squad .s212-trend-line{animation:none!important}
+ .is-squad .s212-quick-actions .s212-action.s2-action{transition:none!important;translate:0!important}
+}
+
+
+
+
+
+/* TS-UI-02.13 — Depth, hierarchy and motion for Status + Contract ONLY.
+   Constrained to existing approved 01C/01D modules; no new CSS layer. */
+.is-squad .s212-status-dashboard.s213-status-dashboard,
+.is-squad .s212-management.s213-management{gap:12px}
+.is-squad .s212-panel.s213-performance-tile,
+.is-squad .s212-panel.s213-development-card,
+.is-squad .s212-panel.s213-contract-main,
+.is-squad .s212-panel.s213-contract-state,
+.is-squad .s212-panel.s213-actions-panel{border-radius:13px;box-shadow:inset 0 1px rgba(224,246,255,.13),0 9px 22px #020e1a70,0 1px 0 rgba(197,226,248,.03);}
+.is-squad .s213-status-dashboard .s212-panel h3,
+.is-squad .s213-management .s212-panel h3{font-size:13px;letter-spacing:-.14px;position:relative;z-index:2}
+.is-squad .s213-status-dashboard .s212-panel-icon,
+.is-squad .s213-management .s212-panel-icon{height:27px;width:27px;border-radius:8px;font-size:14px}
+
+/* Distinct sports instrumentation: green fitness, cyan form, gold morale.
+   Backplates contain only decorative contours; scores remain read-model values. */
+.is-squad .s212-panel.s213-performance-tile{--s213-light:74,235,186;min-height:182px;padding:14px 15px 11px;isolation:isolate;background:linear-gradient(125deg,#113c43,#0c2f3d 57%,#0a2235);border:1px solid #285e60;overflow:hidden;animation:s213-tile-in .42s cubic-bezier(.2,.8,.23,1) both}
+.is-squad .s212-panel.s213-performance-tile:nth-child(2){--s213-light:88,186,244;background:linear-gradient(125deg,#123857,#102a42 55%,#091f38);border-color:#305f84;animation-delay:.055s}
+.is-squad .s212-panel.s213-performance-tile:nth-child(3){--s213-light:255,191,104;background:linear-gradient(125deg,#3c323b,#212b3f 55%,#102439);border-color:#5f4e53;animation-delay:.11s}
+.is-squad .s212-panel.s213-performance-tile:before{content:"";position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 86% 115% at 0% 0%,rgba(var(--s213-light),.20),transparent 78%),repeating-linear-gradient(136deg,transparent 0 39px,rgba(177,229,245,.023) 40px,transparent 41px 88px);pointer-events:none}
+.is-squad .s212-panel.s213-performance-tile:after{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(180deg,rgba(var(--s213-light),.95),rgba(var(--s213-light),.25),transparent 95%);box-shadow:0 0 13px rgba(var(--s213-light),.3);pointer-events:none}
+.is-squad .s213-performance-tile>h3,.is-squad .s213-performance-tile>.s212-condition-content,
+.is-squad .s213-performance-tile>.s212-form-content,.is-squad .s213-performance-tile>.s212-form-progress,
+.is-squad .s213-performance-tile>.s212-morale-content,.is-squad .s213-performance-tile>.s213-morale-meter,
+.is-squad .s213-performance-tile>.s212-availability-row,.is-squad .s213-performance-tile>.s213-tile-footer{position:relative;z-index:2}
+.is-squad .s213-tile-art{position:absolute;inset:-28px -27px auto auto;width:138px;height:138px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle,rgba(var(--s213-light),.10),transparent 68%);border:1px solid rgba(var(--s213-light),.09);pointer-events:none;transform:rotate(-17deg)}
+.is-squad .s213-tile-art:after{content:"";position:absolute;inset:18px;border:1px dashed rgba(var(--s213-light),.11);border-radius:50%}
+.is-squad .s213-tile-art span{font-weight:900;color:rgba(var(--s213-light),.13);font-size:64px;line-height:1}
+.is-squad .s213-performance-tile .s212-panel-icon{background:rgba(var(--s213-light),.17);border:1px solid rgba(var(--s213-light),.19);color:rgb(var(--s213-light));box-shadow:0 0 12px rgba(var(--s213-light),.13)}
+.is-squad .s213-performance-tile .s212-condition-content{margin-top:13px;gap:13px}
+.is-squad .s213-performance-tile .s212-ring{width:100px;height:100px;background:conic-gradient(from 214deg,#4af8c4 var(--s212-progress),#204f5b 0);border:4px solid #123f47;box-shadow:0 0 0 4px #0a2730,inset 0 0 13px #2bf4ab35,0 0 21px #2bd4a82b;flex-shrink:0;animation:s212-gauge .58s cubic-bezier(.12,.9,.24,1) both}
+.is-squad .s213-performance-tile .s212-ring>div{width:76px;height:76px;background:radial-gradient(circle at 43% 33%,#164d50,#062830 80%);box-shadow:inset 0 2px 10px #020f1a99,0 1px #7efbdc28}
+.is-squad .s213-performance-tile .s212-ring strong{font-size:23px;letter-spacing:-.9px;color:#edfff9;text-shadow:0 0 9px #37eaba55}
+.is-squad .s213-performance-tile .s212-ring small{font-size:8px;letter-spacing:1px;color:#90dfc9}
+.is-squad .s213-performance-tile .s212-condition-breakdown{gap:11px}
+.is-squad .s213-performance-tile .s212-measure-title{font-size:10px;color:#c3dce3}
+.is-squad .s213-performance-tile .s212-measure-title b{font-size:11px}
+.is-squad .s213-performance-tile .s212-measure-track{height:7px;background:#15384b;box-shadow:inset 0 1px 3px #011a27a8}
+.is-squad .s213-performance-tile .s212-measure-track i{background:linear-gradient(90deg,#1593b3,#47efb8);box-shadow:0 0 9px #5befbc6c}
+.is-squad .s213-performance-tile .s212-measure.fatigue .s212-measure-track i{background:linear-gradient(90deg,#e49b4d,#ffdc80);box-shadow:0 0 9px #f7c46e6a}
+.is-squad .s213-tile-footer{display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:.25px;color:#95c7c5;margin-top:8px}
+.is-squad .s213-tile-footer i,.is-squad .s213-data-light{display:inline-block;flex:none;width:5px;height:5px;border-radius:50%;background:#4cecc3;box-shadow:0 0 9px #4cecc3}
+.is-squad .s213-form-panel .s212-form-content{margin:17px 0 13px;align-items:baseline;gap:4px}
+.is-squad .s213-form-panel .s212-form-content strong{font-size:49px;font-weight:950;letter-spacing:-2.1px;color:#f0fbff;text-shadow:0 2px 7px #000a,0 0 22px #3aa4df42}
+.is-squad .s213-form-panel .s212-form-content>span{font-size:12px;color:#88ccee}
+.is-squad .s213-form-panel .s212-form-content small{font-size:10px;color:#afd1e5;letter-spacing:.35px}
+.is-squad .s213-form-panel .s212-form-progress{height:10px;background:repeating-linear-gradient(90deg,#183f59 0 9.4%,#0b273d 9.4% 10%);border:1px solid #316b8b55;overflow:hidden;box-shadow:0 0 14px #2d9cc32b}
+.is-squad .s213-form-panel .s212-form-progress i{background:linear-gradient(90deg,#328bd0,#6bd8ff);box-shadow:0 0 14px #4dbbff8b}
+.is-squad .s213-form-panel .s213-tile-footer{color:#99c9e3;margin-top:11px}
+.is-squad .s213-form-panel .s213-tile-footer i{background:#62caff;box-shadow:0 0 8px #62caff}
+.is-squad .s213-morale-panel .s212-morale-content{margin:12px 0 10px;gap:12px}
+.is-squad .s213-morale-panel .s212-morale-face{width:57px;height:57px;border:2px solid #d9a96d;border-radius:50%;background:radial-gradient(circle at 40% 24%,#725543,#342d37);box-shadow:0 0 0 5px #76513636,0 0 16px #f6b56536,inset 0 2px #ffe4ac29;color:#ffd58b;font-size:34px}
+.is-squad .s213-morale-panel .s212-morale-content.positive .s212-morale-face{color:#a4ffcd;background:radial-gradient(circle at 35% 25%,#226e62,#0b4846);border-color:#65dcac;box-shadow:0 0 0 5px #2cbd9944,0 0 17px #33ca9c42}
+.is-squad .s213-morale-panel .s212-morale-content.low .s212-morale-face{color:#ffc68b;background:radial-gradient(circle,#704134,#462d32);border-color:#bd774f}
+.is-squad .s213-morale-panel .s212-morale-content.unknown .s212-morale-face{color:#a7c3d3;background:#1c384c;border-color:#55778b}
+.is-squad .s213-morale-panel .s212-morale-content strong{font-size:15px;letter-spacing:-.35px}
+.is-squad .s213-morale-panel .s212-morale-content span:not(.s212-morale-face){font-size:11px}
+.is-squad .s213-morale-meter{height:7px;border-radius:9px;background:#152e42;overflow:hidden;border:1px solid #4660788f;box-shadow:inset 0 2px 4px #0008;margin:8px 0 10px}
+.is-squad .s213-morale-meter i{display:block;width:var(--s213-morale);height:100%;background:linear-gradient(90deg,#d69b4b,#f0c879);box-shadow:0 0 14px #f0c8798e;border-radius:9px;transform-origin:left;animation:s212-fill .67s .1s both}
+.is-squad .s213-morale-panel:has(.s212-morale-content.positive) .s213-morale-meter i{background:linear-gradient(90deg,#189d87,#67e5b4)}
+.is-squad .s213-morale-panel .s212-availability-row{margin-top:0;border-top:1px solid #a2d3e022;padding-top:8px;gap:6px}
+.is-squad .s213-morale-panel .s212-availability-row>small{font-size:8.5px;max-width:52%;text-align:right;color:#a0b6bf}
+.is-squad .s213-morale-panel .s212-status-badge{padding:5px 9px;border-radius:7px;font-size:10px;box-shadow:0 1px 8px #0005}
+
+/* Development becomes a visual sports workspace, with honest no-review state. */
+.is-squad .s212-panel.s213-development-card{padding:14px;background:linear-gradient(140deg,#102e45 0%,#0a2235 62%,#081c2e 100%);border:1px solid #305875;isolation:isolate}
+.is-squad .s213-development-card:before{content:"";position:absolute;top:-50px;right:0;width:70%;height:170px;opacity:.35;pointer-events:none;background:radial-gradient(ellipse at 100% 10%,rgba(var(--s2-club-rgb),.29),transparent 70%)}
+.is-squad .s213-development-card .s212-development-head{position:relative;z-index:2;margin-bottom:12px}
+.is-squad .s213-development-card .s212-development-context{display:flex;align-items:center;gap:7px;font-size:9px;letter-spacing:.35px;text-transform:uppercase;color:#9ab7ca}
+.is-squad .s213-development-board{position:relative;z-index:2}
+.is-squad .s213-development-board .s212-development-main{grid-template-columns:minmax(0,1.45fr) minmax(208px,.92fr);gap:11px}
+.is-squad .s213-development-board .s212-development-chart,.is-squad .s213-development-board .s212-development-focus{padding:11px 12px;border-radius:10px;border:1px solid #3a68849b;box-shadow:inset 0 1px #f0fbff0e,0 7px 16px #0003}
+.is-squad .s213-development-board .s212-development-chart{background:linear-gradient(135deg,#0d334b,#081f34 65%);position:relative;isolation:isolate;overflow:hidden}
+.is-squad .s213-development-board .s212-development-chart:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.44;background:repeating-linear-gradient(90deg,transparent 0 55px,#5d90aa0b 56px,#5d90aa0b 57px),repeating-linear-gradient(0deg,transparent 0 37px,#5d90aa0d 38px,#5d90aa0d 39px)}
+.is-squad .s213-development-board .s212-development-focus{background:linear-gradient(135deg,#12394c,#0b2a3e 58%,#0d263d);position:relative;overflow:hidden}
+.is-squad .s213-development-board .s212-development-focus:before{content:"";position:absolute;top:-38px;right:-39px;width:142px;height:142px;background:radial-gradient(circle,rgba(var(--s2-club-rgb),.19),transparent 67%);pointer-events:none}
+.is-squad .s213-development-board .s212-dev-subhead{position:relative;z-index:2;margin-bottom:9px;gap:7px}
+.is-squad .s213-development-board .s212-dev-subhead strong{display:flex;gap:6px;align-items:center;font-size:11.5px;color:#eaf6ff}
+.is-squad .s213-development-board .s212-dev-subhead small{font-size:8.5px;letter-spacing:.4px;color:#86bad3}
+.is-squad .s213-sub-icon{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;color:#84dafa;background:#174965;border:1px solid #3977927a;font-size:13px}
+.is-squad .s213-chart-empty{min-height:128px;border-radius:9px;border:1px dashed #45788b6e;position:relative;display:grid;align-content:center;place-items:center;background:radial-gradient(ellipse at 50% 40%,#18506a45,transparent 64%);overflow:hidden;isolation:isolate;gap:0}
+.is-squad .s213-review-graphic{position:absolute;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none;opacity:.92}
+.is-squad .s213-review-copy{display:grid;gap:5px;place-items:center;padding:8px;position:relative;z-index:2;text-align:center;background:radial-gradient(ellipse at center,#0a263be3,transparent 84%)}
+.is-squad .s213-review-overline{font-size:8px;color:#83d9e9;letter-spacing:1.65px;font-weight:850}
+.is-squad .s213-review-copy strong{font-size:15px;letter-spacing:-.25px;color:#e8f9ff;text-shadow:0 2px 9px #000a}
+.is-squad .s213-review-copy>span:last-child{font-size:9.5px;color:#a1bfcb;max-width:240px;line-height:1.35}
+.is-squad .s213-development-board .s212-trend{height:124px}
+.is-squad .s213-development-board .s212-trend-line{stroke:#5bd9fa;stroke-width:3.2;filter:drop-shadow(0 0 6px #36c8ed88)}
+.is-squad .s213-development-board .s212-trend-area{fill:#2ebde822}
+.is-squad .s213-development-board .s212-trend-legend{padding:7px 0 0}
+.is-squad .s213-development-board .s212-focus-select{position:relative;z-index:2;margin-bottom:8px}
+.is-squad .s213-development-board .s212-focus-select span{font-size:9px;letter-spacing:.4px;text-transform:uppercase;font-weight:750}
+.is-squad .s213-development-board .s212-focus-select select{height:37px;font-weight:780;background:#0e3449;border:1px solid #417990;box-shadow:0 2px 9px #0003;padding:7px 10px;font-size:11px}
+.is-squad .s213-focus-orbit{position:absolute;inset:-30px -32px auto auto;width:110px;height:110px;display:grid;place-items:center;border-radius:50%;border:1px solid #6ab9d010;color:#7ae3fb2c;font-size:78px;pointer-events:none}
+.is-squad .s213-focus-orbit:before{content:"";position:absolute;inset:17px;border:1px dashed #6ab9d02b;border-radius:50%}
+.is-squad .s213-development-board .s212-focus-highlight{position:relative;z-index:1;justify-content:space-between;margin-top:5px;padding:10px 0 2px;border-top:1px solid #5689a448}
+.is-squad .s213-development-board .s212-focus-highlight strong{font-size:22px;color:#8df5d3;letter-spacing:-1px;text-shadow:0 0 14px #41cfa846}
+.is-squad .s213-development-board .s212-focus-highlight span{font-size:9px}
+.is-squad .s213-development-board .s212-focus-status{position:relative;font-size:9.5px;color:#a9c6d5;line-height:1.4}
+.is-squad .s213-development-facts{gap:8px;margin-top:9px}
+.is-squad .s213-development-facts>div{position:relative;display:grid;gap:5px;padding:9px 10px 8px;border-radius:8px;border:1px solid #36617a7c;background:linear-gradient(145deg,#10354a,#0b2739)}
+.is-squad .s213-development-facts>div:before{content:"";position:absolute;top:0;left:8px;right:55%;height:2px;border-radius:3px;background:linear-gradient(90deg,#60c7d9,transparent);opacity:.58}
+.is-squad .s213-development-facts small{font-size:9px;color:#a0bece}
+.is-squad .s213-development-facts b{font-size:11px;color:#ddf8f4}
+.is-squad .s213-development-board .s212-development-notes{margin-top:7px}
+
+/* Contract finance hero: large amounts, emblems and a status seal, not a settings form. */
+.is-squad .s213-management .s212-contract-overview{grid-template-columns:minmax(0,1.82fr) minmax(220px,.86fr);gap:12px}
+.is-squad .s212-panel.s213-contract-main{position:relative;overflow:hidden;background:linear-gradient(140deg,#132f48,#0c253b 65%,#091c30);border-color:rgba(var(--s2-club-rgb),.49);padding:14px}
+.is-squad .s213-contract-main:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 100% 0%,rgba(var(--s2-club-rgb),.17),transparent 50%);pointer-events:none}
+.is-squad .s213-contract-title{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:11px;position:relative;z-index:2}
+.is-squad .s213-contract-title h3{margin:0}
+.is-squad .s213-contract-subtitle{font-size:8.5px;letter-spacing:1px;color:#bbd8e2;font-weight:850;text-align:right}
+.is-squad .s213-contract-finances{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:9px}
+.is-squad .s213-wage-feature,.is-squad .s213-value-feature{display:flex;position:relative;min-width:0;flex-direction:column;justify-content:center;gap:4px;isolation:isolate;overflow:hidden;min-height:95px;padding:13px 15px;border:1px solid #52618277;border-radius:10px;background:linear-gradient(132deg,#23334e,#122940 68%);box-shadow:inset 0 1px #e1edff15,0 6px 13px #0003}
+.is-squad .s213-wage-feature:after,.is-squad .s213-value-feature:after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--s2-club-accent),transparent);opacity:.8}
+.is-squad .s213-value-feature{border-color:#286b6c99;background:linear-gradient(125deg,#123f4a,#0b303e 70%)}
+.is-squad .s213-value-feature:after{background:linear-gradient(180deg,#59e7b4,transparent)}
+.is-squad .s213-feature-symbol{position:absolute;right:10px;top:2px;z-index:-1;pointer-events:none;font-size:72px;line-height:1;font-weight:900;color:var(--s2-club-accent);opacity:.11;transform:rotate(-10deg)}
+.is-squad .s213-value-feature .s213-feature-symbol{color:#7defc5;font-size:66px;top:4px;right:8px;opacity:.15}
+.is-squad .s213-fact-kicker{font-size:9px;font-weight:850;color:#b4d0e1;letter-spacing:.85px}
+.is-squad .s213-wage-feature strong,.is-squad .s213-value-feature strong{font-size:clamp(20px,2vw,29px);line-height:1.05;color:#f5fbff;font-weight:950;letter-spacing:-.85px;text-shadow:0 2px 8px #0009;overflow-wrap:anywhere}
+.is-squad .s213-value-feature strong{color:#84f0c8;text-shadow:0 0 16px #4acb9a3c}
+.is-squad .s213-wage-feature small,.is-squad .s213-value-feature small{font-size:9px;color:#a0bfcc}
+.is-squad .s213-contract-grid{gap:8px}
+.is-squad .s213-contract-mini{min-height:52px;padding:8px 10px;background:linear-gradient(135deg,#0e3046,#092538);border-color:#30566f9a}
+.is-squad .s213-contract-mini .s212-fact-icon{font-size:16px;color:#a7d5e6;border-color:#4b728a88;background:#184259}
+.is-squad .s213-contract-mini strong{font-size:12px}
+.is-squad .s212-panel.s213-contract-state{min-height:0;padding:14px 12px 11px;overflow:hidden;isolation:isolate;display:flex;flex-direction:column;align-items:stretch;background:radial-gradient(ellipse at 50% 56%,#155345a8,transparent 80%),linear-gradient(135deg,#0c373d,#0b2939 83%);border-color:#297d75a8}
+.is-squad .s212-panel.s213-contract-state.inactive{background:radial-gradient(ellipse at 50% 56%,#574132aa,transparent 80%),linear-gradient(135deg,#2a303b,#0c2437);border-color:#8a674c86}
+.is-squad .s213-contract-state:before{content:"";position:absolute;left:0;top:0;right:0;bottom:0;z-index:-1;pointer-events:none;background:repeating-linear-gradient(130deg,transparent 0 33px,#d1fef709 34px,transparent 35px 72px)}
+.is-squad .s213-contract-state h3{margin-bottom:3px;white-space:nowrap;font-size:12px}
+.is-squad .s213-contract-seal{position:relative;flex:none;align-self:center;margin:10px auto 5px;display:grid;place-items:center;width:76px;height:76px;border-radius:50%;border:2px solid #43d7a5;box-shadow:0 0 0 6px #42d4a223,0 0 22px #45f1ad34,inset 0 0 20px #0c3e348c;color:#acffdf;background:radial-gradient(circle at 30% 25%,#20745f,#0b353b)}
+.is-squad .s213-contract-seal:before{content:"";position:absolute;inset:8px;border:1px dashed #c3ffe86f;border-radius:50%}
+.is-squad .s213-contract-seal span{font-size:31px;line-height:1;text-shadow:0 0 15px #72f6b29f}
+.is-squad .s213-contract-state.inactive .s213-contract-seal{border-color:#d2a36d;color:#ffe1ab;background:radial-gradient(circle,#8c5639,#3b3137);box-shadow:0 0 0 6px #da925122,0 0 15px #d9a25a35}
+.is-squad .s213-contract-state .s212-state-center{display:grid;place-items:center;text-align:center;margin:4px 0 8px;gap:0}
+.is-squad .s213-contract-state .s212-state-center strong{font-size:17px;line-height:1.1;letter-spacing:-.25px}
+.is-squad .s213-contract-state .s212-state-center small{font-size:10px;color:#b0dacf;line-height:1.4}
+.is-squad .s213-contract-expiry{display:flex;align-items:center;justify-content:center;gap:5px;border-top:1px solid #65c1a52b;padding-top:8px;margin-top:auto;color:#95b9bd;font-size:9px}
+.is-squad .s213-contract-expiry strong{color:#d4ebeb;font-size:9.5px}
+
+/* Distinct clickable game-style actions, retaining real attributes/handlers. */
+.is-squad .s212-panel.s213-actions-panel{padding:14px;background:radial-gradient(ellipse at 100% 0%,rgba(var(--s2-club-rgb),.13),transparent 57%),linear-gradient(144deg,#102f46,#092439);border:1px solid #315875}
+.is-squad .s213-actions-panel .s212-actions-heading{margin-bottom:12px}
+.is-squad .s213-actions-panel .s212-actions-heading small{font-size:9px;letter-spacing:.7px}
+.is-squad .s213-action-controls{gap:10px;margin-bottom:12px}
+.is-squad .s213-action-controls label{gap:6px;color:#b7d0df;font-size:10px;letter-spacing:.35px;text-transform:uppercase}
+.is-squad .s213-action-controls select{height:40px;padding:8px 12px;border-radius:8px;border-color:#426b81;background:linear-gradient(145deg,#12374b,#0d2b41);color:#f1fbff;font-size:11px;font-weight:750;box-shadow:inset 0 1px #d9f1ff0e,0 3px 10px #0004}
+.is-squad .s213-quick-actions.s212-quick-actions{grid-template-columns:minmax(153px,1.15fr) repeat(4,minmax(0,1fr));gap:9px}
+.is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:78px;padding:12px 8px 10px;overflow:hidden;border:1px solid #3c6683;border-radius:10px;background:linear-gradient(150deg,#194359,#0c2c40 72%);box-shadow:inset 0 1px #edf7ff19,0 5px 13px #0005;color:#d9effa;text-align:center;transition:translate .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease}
+.is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action:before{content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at 50% 0%,#62b8ec16,transparent 65%)}
+.is-squad .s213-quick-actions.s212-quick-actions .s212-primary-action.s2-action{background:linear-gradient(130deg,rgba(var(--s2-club-rgb),.48),#162e46 80%);border-color:rgba(var(--s2-club-rgb),.84);box-shadow:inset 0 1px #fff2,0 6px 15px #0005}
+.is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action .s213-action-symbol{display:grid;flex:none;place-items:center;width:32px;height:32px;line-height:1;font-size:20px;border-radius:10px;background:linear-gradient(145deg,#22526a,#143e55);border:1px solid #5a8ba087;color:#a7e1f4;box-shadow:0 4px 9px #001b2e88,inset 0 1px #eafcff20}
+.is-squad .s213-quick-actions.s212-quick-actions .s212-primary-action.s2-action .s213-action-symbol{color:var(--s2-club-accent);background:linear-gradient(125deg,rgba(var(--s2-club-rgb),.44),#20364e);border-color:rgba(var(--s2-club-rgb),.65)}
+.is-squad .s213-quick-actions.s212-quick-actions .s213-action-label{display:block;flex:initial;width:100%;font-size:10.5px;font-weight:850;line-height:1.2;white-space:normal;overflow-wrap:break-word}
+.is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action .s213-action-corner{position:absolute;top:7px;right:8px;display:inline;flex:none;width:auto;height:auto;padding:0;line-height:1;font-size:11px;color:#a9c9de;background:transparent;border:0;opacity:.66}
+.is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action:hover{translate:0 -3px;border-color:#6cb7d4;box-shadow:inset 0 1px #edf7ff23,0 10px 19px #0008,0 0 12px #3da8e129;background:linear-gradient(150deg,#245970,#133b54)}
+.is-squad .s213-quick-actions.s212-quick-actions .s212-primary-action.s2-action:hover{border-color:var(--s2-club-accent);background:linear-gradient(130deg,rgba(var(--s2-club-rgb),.58),#193e53 85%)}
+.is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action:focus-visible{outline:2px solid #75dafa;outline-offset:3px}
+
+@keyframes s213-tile-in{from{opacity:.28;transform:translateY(8px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:1500px){
+ .is-squad .s212-panel.s213-performance-tile{min-height:171px;padding:12px 12px 10px}
+ .is-squad .s213-performance-tile .s212-ring{width:80px;height:80px}
+ .is-squad .s213-performance-tile .s212-ring>div{width:62px;height:62px}
+ .is-squad .s213-performance-tile .s212-ring strong{font-size:18px}
+ .is-squad .s213-form-panel .s212-form-content strong{font-size:43px}
+ .is-squad .s213-morale-panel .s212-morale-face{width:48px;height:48px;font-size:28px}
+ .is-squad .s213-management .s212-contract-overview{grid-template-columns:minmax(0,1.6fr) minmax(215px,.85fr)}
+ .is-squad .s213-quick-actions.s212-quick-actions{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .is-squad .s213-quick-actions.s212-quick-actions .s212-primary-action.s2-action{grid-column:span 2}
+}
+@media(max-width:1250px) and (min-width:1001px){
+ .is-squad .s212-panel.s213-performance-tile{min-height:155px}
+ .is-squad .s213-morale-panel.s213-performance-tile{min-height:116px}
+ .is-squad .s213-development-board .s212-development-main,.is-squad .s213-management .s212-contract-overview{grid-template-columns:1fr}
+ .is-squad .s213-management .s213-contract-seal{width:56px;height:56px;margin:7px auto}
+ .is-squad .s213-management .s213-contract-state{min-height:155px}
+}
+@media(max-width:1000px){
+ .is-squad .s213-management .s212-contract-overview{grid-template-columns:minmax(0,1.72fr) minmax(210px,.86fr)}
+ .is-squad .s213-development-board .s212-development-main{grid-template-columns:minmax(0,1.45fr) minmax(208px,.92fr)}
+ .is-squad .s213-quick-actions.s212-quick-actions{grid-template-columns:repeat(5,minmax(0,1fr))}
+ .is-squad .s213-quick-actions.s212-quick-actions .s212-primary-action.s2-action{grid-column:span 1}
+}
+@media(max-width:730px){
+ .is-squad .s212-panel.s213-performance-tile{min-height:145px}
+ .is-squad .s213-development-board .s212-development-main,.is-squad .s213-management .s212-contract-overview{grid-template-columns:1fr}
+ .is-squad .s213-quick-actions.s212-quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .is-squad .s213-quick-actions.s212-quick-actions .s212-primary-action.s2-action{grid-column:span 2}
+ .is-squad .s213-development-board .s212-development-chart{min-height:182px}
+ .is-squad .s212-panel.s213-contract-state{min-height:192px}
+}
+@media(max-width:450px){
+ .is-squad .s213-contract-finances{grid-template-columns:1fr}
+ .is-squad .s212-panel.s213-contract-main .s213-contract-title{align-items:flex-start}
+ .is-squad .s213-contract-subtitle{max-width:95px}
+ .is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action{min-height:72px}
+}
+@media(prefers-reduced-motion:reduce){
+ .is-squad .s213-status-dashboard .s213-performance-tile,.is-squad .s213-status-dashboard .s213-morale-meter i,
+ .is-squad .s213-management .s213-action{animation:none!important;transition:none!important;translate:0!important}
+}
+/* Fit the approved Squad panel at desktop height: hero + navigation stay visible.
+   No horizontal overflow; only the existing internal tab content scrolls. */
+@media(min-width:1251px){
+ .is-squad .s212-panel.s213-performance-tile{min-height:153px;padding-top:11px;padding-bottom:8px}
+ .is-squad .s213-performance-tile .s212-condition-content{margin-top:9px}
+ .is-squad .s213-performance-tile .s212-ring{width:76px;height:76px}
+ .is-squad .s213-performance-tile .s212-ring>div{width:59px;height:59px}
+ .is-squad .s213-performance-tile .s212-ring strong{font-size:17px}
+ .is-squad .s213-form-panel .s212-form-content{margin:10px 0 9px}
+ .is-squad .s213-form-panel .s212-form-content strong{font-size:38px}
+ .is-squad .s213-morale-panel .s212-morale-content{margin:8px 0 7px}
+ .is-squad .s213-morale-panel .s212-morale-face{width:46px;height:46px;font-size:27px}
+ .is-squad .s213-morale-meter{margin:6px 0 8px}
+ .is-squad .s212-panel.s213-contract-main{padding:11px 12px}
+ .is-squad .s213-contract-title{margin-bottom:7px}
+ .is-squad .s213-wage-feature,.is-squad .s213-value-feature{min-height:78px;padding:10px 12px}
+ .is-squad .s213-contract-mini{min-height:43px;padding:6px 9px}
+ .is-squad .s212-panel.s213-contract-state{padding:11px 10px 8px}
+ .is-squad .s213-contract-seal{width:61px;height:61px;margin:5px auto 3px}
+ .is-squad .s213-contract-seal span{font-size:27px}
+ .is-squad .s212-panel.s213-actions-panel{padding:11px 12px}
+ .is-squad .s213-actions-panel .s212-actions-heading{margin-bottom:8px}
+ .is-squad .s213-action-controls{margin-bottom:9px}
+ .is-squad .s213-action-controls select{height:34px;padding:5px 9px}
+ .is-squad .s213-quick-actions.s212-quick-actions{grid-template-columns:minmax(135px,1.13fr) repeat(4,minmax(0,1fr));gap:7px}
+ .is-squad .s213-quick-actions.s212-quick-actions .s212-primary-action.s2-action{grid-column:span 1}
+ .is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action{min-height:62px;padding:7px 5px;gap:4px}
+ .is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action .s213-action-symbol{width:25px;height:25px;font-size:16px;border-radius:7px}
+ .is-squad .s213-quick-actions.s212-quick-actions .s213-action-label{font-size:10px}
+}
+.is-squad .s212-panel.s213-development-card{padding:10px 12px}
+.is-squad .s213-development-card .s212-development-head{margin-bottom:8px}
+.is-squad .s213-development-board .s212-development-main{align-items:stretch}
+.is-squad .s213-development-board .s212-development-chart,
+.is-squad .s213-development-board .s212-development-focus{padding:8px 10px}
+.is-squad .s213-development-board .s212-dev-subhead{margin-bottom:5px}
+.is-squad .s213-chart-empty{min-height:94px}
+.is-squad .s213-review-copy{gap:3px}
+.is-squad .s213-review-copy strong{font-size:13px}
+.is-squad .s213-review-overline{font-size:7.5px}
+.is-squad .s213-review-copy>span:last-child{font-size:9px}
+.is-squad .s213-development-board .s212-development-focus{display:grid;grid-template-columns:minmax(0,1fr) minmax(100px,.66fr);grid-template-rows:auto auto auto;gap:4px 9px;align-content:space-between}
+.is-squad .s213-development-board .s212-development-focus .s212-dev-subhead{grid-column:1/-1}
+.is-squad .s213-development-board .s212-focus-select{grid-column:1;align-self:center;margin:0}
+.is-squad .s213-development-board .s212-focus-select select{height:34px}
+.is-squad .s213-development-board .s212-focus-highlight{grid-column:2;display:grid;justify-content:stretch;gap:2px;margin:0;padding:2px 0;border-top:0;text-align:right}
+.is-squad .s213-development-board .s212-focus-highlight span{flex-basis:auto;font-size:8px}
+.is-squad .s213-development-board .s212-focus-highlight strong{font-size:19px}
+.is-squad .s213-development-board .s212-focus-status{grid-column:1/-1}
+.is-squad .s213-development-facts{margin-top:7px}
+.is-squad .s213-development-facts>div{gap:3px;padding:6px 9px}
+.is-squad .s213-development-board .s212-development-notes{margin-top:5px}
+@media(max-width:730px){
+ .is-squad .s213-development-board .s212-development-focus{grid-template-columns:minmax(0,1fr) minmax(96px,.65fr)}
+}
+@media(min-width:1251px){
+ /* Keep the fifth manager action visible above the fixed footer at 900px. */
+ .is-squad .s213-wage-feature,.is-squad .s213-value-feature{min-height:67px;padding:8px 11px}
+ .is-squad .s213-contract-mini{min-height:37px;padding:4px 8px}
+ .is-squad .s213-contract-grid{gap:7px}
+ .is-squad .s213-contract-finances{margin-bottom:7px}
+ .is-squad .s212-panel.s213-actions-panel{padding:9px 11px}
+ .is-squad .s213-actions-panel .s212-actions-heading{margin-bottom:6px}
+ .is-squad .s213-action-controls{margin-bottom:6px}
+ .is-squad .s213-action-controls select{height:32px}
+ .is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action{min-height:54px;padding:5px 4px;gap:3px}
+ .is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action .s213-action-symbol{width:22px;height:22px;font-size:15px}
+ .is-squad .s213-quick-actions.s212-quick-actions .s213-action-label{font-size:9.8px}
+}
+/* Old 02.12 icon rules target every span in an action. Restore natural text sizing. */
+.is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action .s213-action-label{display:block;flex:initial;align-self:center;width:100%;height:auto;min-width:0;min-height:0;max-width:100%;padding:0;border:0;border-radius:0;box-shadow:none;background:transparent;color:inherit;line-height:1.15;text-align:center;white-space:normal;font-size:10.1px;overflow-wrap:normal;word-break:normal}
+.is-squad .s213-morale-panel .s212-morale-face svg{display:block;width:39px;height:39px;color:inherit;filter:drop-shadow(0 0 5px currentColor)}
+@media(max-width:1500px){.is-squad .s213-morale-panel .s212-morale-face svg{width:34px;height:34px}}
+.is-squad .s213-review-graphic{opacity:.33;transform:translateY(-7px)}
+.is-squad .s213-review-copy{background:radial-gradient(ellipse at center,#0b293eea 25%,#0b293e85 55%,transparent 89%)}
+
+/* ========================================================================
+   TS-UI-02.14 — final Squad polish
+   01B: six equal KPI blocks, three equal performance families + full-width
+        coverage; no simulated trend, only Python's supported match ledger.
+   01C: recorded attribute snapshots + exact focus highlight; no forecast.
+   01D: restore breathing room and replace native-white administrative menus.
+   Approved 01A, directory, club art, tabs and player hero are untouched.
+   ======================================================================== */
+.is-squad .s214-season-dashboard{display:grid;gap:12px;min-width:0;padding-bottom:8px;animation:s214-reveal .28s ease-out both}
+.is-squad .s214-season-selector{position:relative;min-width:0;padding:13px 15px 11px!important;overflow:hidden;isolation:isolate;border-color:rgba(var(--s2-club-rgb),.46)!important;background:radial-gradient(ellipse at 0 0,rgba(var(--s2-club-rgb),.16),transparent 58%),linear-gradient(120deg,#12374c,#0b263c 76%)!important}
+.is-squad .s214-season-selector:after{content:"";position:absolute;pointer-events:none;right:-40px;top:-54px;width:205px;height:180px;border:1px solid #6bb0c019;border-radius:50%;box-shadow:0 0 0 25px #90dafa07,0 0 0 52px #90dafa06;z-index:-1}
+.is-squad .s214-season-selector .s2-season-top{align-items:center;flex-wrap:nowrap;gap:12px}
+.is-squad .s214-season-selector .s2-season-top h3{font-size:13px;margin:3px 0 4px;line-height:1.2}
+.is-squad .s214-season-eyebrow{color:var(--s2-club-accent);font-size:8.5px;letter-spacing:1.3px;font-weight:950}
+.is-squad .s214-season-selector .s2-season-top p{color:#a8c7d7;font-size:10px}
+.is-squad .s214-season-selector .s2-season-filters{flex:none;gap:9px}
+.is-squad .s214-season-selector .s2-season-filters label{color:#aacbda;font-size:9px;gap:4px}
+.is-squad .s214-season-selector .s2-season-filters select{color-scheme:dark;min-height:34px;border-radius:7px;border:1px solid #4c7b93;background:#102e45;color:#effaff;font-size:11px;box-shadow:inset 0 1px #ffffff0a}
+.is-squad .s214-season-selector .s2-season-filters select option{background:#0b2538;color:#e7f4ff}
+.is-squad .s214-season-context{display:flex;align-items:center;gap:7px;margin-top:10px;padding:6px 10px;min-height:25px;border-radius:6px;background:linear-gradient(90deg,#253a55,#172d46 86%);font-size:10px;color:#bfd8e6}
+.is-squad .s214-season-context>span{color:#52e4ac;font-size:9px}
+.is-squad .s214-season-context b{color:#e3b878}
+.is-squad .s214-season-context strong{color:#f7fbff}
+
+.is-squad .s214-kpi-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;min-width:0}
+.is-squad .s214-kpi{--s214-color:#59a8eb;--s214-rgb:77,175,245;position:relative;min-width:0;display:grid;align-content:end;justify-items:start;gap:4px;min-height:109px;padding:12px 12px 11px;isolation:isolate;overflow:hidden;border:1px solid rgba(var(--s214-rgb),.54);border-radius:11px;background:radial-gradient(ellipse at 100% 0,rgba(var(--s214-rgb),.23),transparent 68%),linear-gradient(135deg,#122d47,#0b2237);box-shadow:inset 0 1px #ffffff13,0 6px 14px #0004;animation:s214-reveal .4s ease-out both;transition:transform .18s,border-color .18s,box-shadow .18s}
+.is-squad .s214-kpi:before{content:"";position:absolute;right:-28px;top:-35px;width:94px;height:94px;border-radius:50%;border:1px solid rgba(var(--s214-rgb),.16);box-shadow:0 0 0 17px rgba(var(--s214-rgb),.07);pointer-events:none}
+.is-squad .s214-kpi-icon{position:absolute;right:12px;top:10px;font-size:21px;line-height:1;color:var(--s214-color);text-shadow:0 0 14px rgba(var(--s214-rgb),.35);opacity:.95}
+.is-squad .s214-kpi small{position:relative;color:#b8d3e4;font-size:10px;font-weight:750}
+.is-squad .s214-kpi strong{position:relative;color:#fff;font-size:26px;line-height:1;font-weight:950;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
+.is-squad .s214-kpi:hover{transform:translateY(-2px);box-shadow:0 9px 18px #0007,inset 0 1px #ffffff18}
+.is-squad .s214-kpi-appearances{--s214-color:#ff607a;--s214-rgb:237,66,102;background-color:#361a36}
+.is-squad .s214-kpi-starts{--s214-color:#63c0ff;--s214-rgb:55,146,255}
+.is-squad .s214-kpi-minutes{--s214-color:#ffd280;--s214-rgb:241,169,57}
+.is-squad .s214-kpi-goals{--s214-color:#5af7bb;--s214-rgb:34,206,132}
+.is-squad .s214-kpi-assists{--s214-color:#c48afc;--s214-rgb:154,86,247}
+.is-squad .s214-kpi-rating{--s214-color:#77d8ef;--s214-rgb:71,205,221}
+
+.is-squad .s214-season-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:stretch;min-width:0}
+.is-squad .s214-season-group{--s214-color:#63c7f7;--s214-rgb:67,175,226;position:relative;isolation:isolate;display:grid;grid-template-rows:auto auto 1fr auto;gap:9px;min-width:0;min-height:180px;padding:12px 12px 10px;border:1px solid rgba(var(--s214-rgb),.39);border-radius:11px;background:radial-gradient(circle at 99% 0%,rgba(var(--s214-rgb),.14),transparent 60%),linear-gradient(147deg,#102e46,#0a2438 85%);box-shadow:0 6px 14px #0004,inset 0 1px #ffffff10}
+.is-squad .s214-season-group header{display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1px solid #6a91a12e}
+.is-squad .s214-group-icon{display:grid;place-items:center;flex:none;width:27px;height:27px;border:1px solid rgba(var(--s214-rgb),.32);border-radius:7px;background:rgba(var(--s214-rgb),.18);color:var(--s214-color);font-size:15px;font-weight:900}
+.is-squad .s214-season-group header strong{color:#eff9ff;font-size:12px;line-height:1.25;font-weight:900}
+.is-squad .s214-group-accent{margin-left:auto;width:26px;height:3px;border-radius:9px;background:var(--s214-color);box-shadow:0 0 9px rgba(var(--s214-rgb),.44)}
+.is-squad .s214-group-spotlight{display:flex;align-items:center;justify-content:space-between;padding:4px 8px 6px 9px;background:linear-gradient(90deg,rgba(var(--s214-rgb),.18),transparent);border-left:2px solid var(--s214-color);border-radius:5px}
+.is-squad .s214-group-spotlight>div{display:grid;gap:3px}
+.is-squad .s214-group-spotlight small{color:#b0cbda;font-size:9.5px}
+.is-squad .s214-group-spotlight strong{color:#fff;font-size:24px;line-height:1.07;letter-spacing:-.4px;font-weight:950}
+.is-squad .s214-spotlight-symbol{font-size:27px;color:var(--s214-color);opacity:.3;line-height:1}
+.is-squad .s214-season-rows{display:grid;align-content:start;gap:0;min-height:0}
+.is-squad .s214-season-rows>div{display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid #55788d30;padding:4px 1px;min-height:22px}
+.is-squad .s214-season-rows>div:last-child{border-bottom:0}
+.is-squad .s214-season-rows>div span{color:#afcadb;font-size:10px}
+.is-squad .s214-season-rows>div strong{color:#f5fdff;font-size:11px;font-weight:850;font-variant-numeric:tabular-nums}
+.is-squad .s214-season-group footer{color:#6d9aad;font-size:8.5px;padding-top:5px;border-top:1px solid #56798b25;min-height:16px}
+.is-squad .s214-shooting{--s214-color:#ff9a7c;--s214-rgb:250,126,96}
+.is-squad .s214-passing{--s214-color:#67ccff;--s214-rgb:73,178,255}
+.is-squad .s214-discipline{--s214-color:#ffc77b;--s214-rgb:231,163,74}
+.is-squad .s214-season-coverage{display:flex;flex-wrap:wrap;align-items:center;gap:11px;min-height:65px;padding:9px 12px;border:1px solid #32657a95;border-radius:10px;background:linear-gradient(100deg,#123a44,#09273b 75%);box-shadow:inset 0 1px #ffffff0c}
+.is-squad .s214-coverage-icon{display:grid;place-items:center;width:34px;height:34px;flex:none;border:1px solid #42d7a696;border-radius:50%;background:#10634f;color:#b1ffe1;font-size:17px;box-shadow:0 0 14px #29dba223}
+.is-squad .s214-coverage-copy{flex:1;display:grid;gap:4px;min-width:170px}
+.is-squad .s214-coverage-copy strong{font-size:11.5px;color:#b4ffe1}
+.is-squad .s214-coverage-copy span{font-size:9.5px;color:#a3bfd0}
+.is-squad .s214-coverage-facts{display:flex;align-items:center;gap:7px}
+.is-squad .s214-coverage-facts span{display:grid;gap:3px;min-width:88px;padding:6px 8px;border:1px solid #3c647590;border-radius:6px;background:#0e3040;color:#a8c7d4;font-size:8.5px}
+.is-squad .s214-coverage-facts b{font-size:10px;color:#e6f7ff}
+.is-squad .s214-coverage-note{flex-basis:100%;margin:0 0 0 46px;color:#a3c7d3;font-size:9px}
+.is-squad .s214-coverage-note summary{cursor:pointer;display:list-item;width:max-content;max-width:100%;font-weight:750;outline-offset:3px}
+.is-squad .s214-coverage-note:not([open]){line-height:1}
+
+/* Development: five current attribute-area bars with focus highlight.
+   The engine has only balanced/technical/mental/physical focus categories;
+   these bars are recorded skill averages, NOT predicted improvement. */
+.is-squad .s213-development-board .s212-development-main{grid-template-columns:minmax(0,1.25fr) minmax(260px,1fr);gap:12px}
+.is-squad .s213-development-board .s212-development-focus{display:flex;flex-direction:column;align-content:stretch;gap:8px;min-height:230px;padding:11px 12px;overflow:hidden}
+.is-squad .s213-development-board .s212-development-focus .s212-dev-subhead{width:100%;flex:none;margin:0;padding:0 0 4px;border-bottom:1px solid #48768c3d}
+.is-squad .s213-development-board .s212-development-focus .s212-focus-select{width:100%;margin:0;display:grid;gap:3px}
+.is-squad .s213-development-board .s212-development-focus .s212-focus-select select{width:100%;height:33px;font-size:11px;color-scheme:dark;background:#102f45;color:#eafbff;border-color:#47809b}
+.is-squad .s213-development-board .s212-development-focus .s212-focus-select select option{background:#10283c;color:#eafbff}
+.is-squad .s213-development-board .s212-development-focus .s212-focus-highlight{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;margin:0;padding:5px 0 0;border-top:1px solid #4f778a45;text-align:left}
+.is-squad .s213-development-board .s212-development-focus .s212-focus-highlight strong{font-size:16px}
+.is-squad .s213-development-board .s212-development-focus .s212-focus-highlight span{font-size:8px}
+.is-squad .s213-development-board .s212-development-focus .s212-focus-status{font-size:9px;line-height:1.2}
+.is-squad .s214-training-areas{position:relative;display:grid;gap:5px;min-width:0;z-index:1}
+.is-squad .s214-training-caption{display:flex;align-items:center;justify-content:space-between;gap:5px;margin:0 0 2px;color:#a7d1df;font-size:8px;letter-spacing:.1px}
+.is-squad .s214-training-caption span:last-child{color:#7ea0b8;text-align:right}
+.is-squad .s214-training-row{--s214-training-color:#59d4f4;display:grid;gap:4px;min-width:0;opacity:.88}
+.is-squad .s214-training-label{display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0}
+.is-squad .s214-training-label span{color:#c4e0ed;font-size:9.5px;font-weight:750;white-space:nowrap}
+.is-squad .s214-training-label b{font-size:10px;color:#e9fcff;line-height:1;min-width:14px;text-align:right;font-variant-numeric:tabular-nums}
+.is-squad .s214-training-bar{display:block;width:100%;height:5px;border-radius:99px;overflow:hidden;background:#193e50;box-shadow:inset 0 1px 3px #0007}
+.is-squad .s214-training-bar i{display:block;width:var(--s214-level);height:100%;border-radius:99px;background:linear-gradient(90deg,color-mix(in srgb,var(--s214-training-color) 65%,#145268),var(--s214-training-color));box-shadow:0 0 9px color-mix(in srgb,var(--s214-training-color) 42%,transparent);animation:s214-meter-in .48s ease-out both}
+.is-squad .s214-tone-attack{--s214-training-color:#4eebd1}
+.is-squad .s214-tone-defence{--s214-training-color:#ff866f}
+.is-squad .s214-tone-physical{--s214-training-color:#ecb76d}
+.is-squad .s214-tone-mental{--s214-training-color:#6ac6fe}
+.is-squad .s214-tone-goalkeeping{--s214-training-color:#b895fb}
+.is-squad .s214-training-row.is-priority{opacity:1}
+.is-squad .s214-training-row.is-priority .s214-training-label span:after{content:"  FOCUS";margin-left:5px;color:var(--s214-training-color);font-weight:950;font-size:7px;letter-spacing:.65px}
+.is-squad .s214-training-row.is-priority .s214-training-bar{box-shadow:0 0 0 1px color-mix(in srgb,var(--s214-training-color) 32%,transparent),0 0 8px color-mix(in srgb,var(--s214-training-color) 15%,transparent)}
+
+/* Contract presentation: reclaim some of the empty space below the actions. */
+.is-squad .s212-management.s213-management{gap:14px}
+.is-squad .s213-management .s212-contract-overview{gap:13px}
+.is-squad .s212-panel.s213-contract-main{padding:16px 17px}
+.is-squad .s213-contract-title{margin-bottom:12px}
+.is-squad .s213-contract-finances{gap:11px;margin-bottom:12px}
+.is-squad .s213-wage-feature,.is-squad .s213-value-feature{min-height:100px;padding:14px 15px}
+.is-squad .s213-contract-mini{min-height:54px;padding:10px 11px}
+.is-squad .s212-panel.s213-contract-state{min-height:228px;padding:17px 15px 13px}
+.is-squad .s213-contract-seal{width:80px;height:80px;margin:12px auto 6px}
+.is-squad .s212-panel.s213-actions-panel{padding:15px 17px 17px}
+.is-squad .s213-actions-panel .s212-actions-heading{margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #52748b4d}
+.is-squad .s214-action-controls.s213-action-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:0 0 15px;position:relative;z-index:3}
+.is-squad .s213-quick-actions.s212-quick-actions{grid-template-columns:minmax(135px,1.16fr) repeat(4,minmax(0,1fr));gap:10px}
+.is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action{min-height:78px;padding:12px 8px;gap:6px}
+.is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action .s213-action-symbol{width:32px;height:32px;font-size:20px}
+.is-squad .s213-quick-actions.s212-quick-actions .s213-action-label{font-size:10.5px}
+
+/* Explicit dark custom popup, not a native select's white OS menu. */
+.is-squad .s214-picker-field{display:grid;gap:6px;min-width:0}
+.is-squad .s214-picker-label{color:#b4cedf;font-size:9px;font-weight:850;letter-spacing:.8px;text-transform:uppercase}
+.is-squad .s214-picker{position:relative;min-width:0;z-index:1}
+.is-squad .s214-picker:has(.s214-picker-menu:not([hidden])){z-index:45}
+.is-squad .s214-native-select{position:absolute!important;width:1px!important;height:1px!important;left:0!important;top:0!important;clip-path:inset(50%)!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
+.is-squad .s214-picker-trigger{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:43px;padding:8px 12px;border:1px solid #4c7892;border-radius:8px;background:linear-gradient(140deg,#14384f,#0a263b);color:#f1fbff;box-shadow:inset 0 1px #ffffff13,0 4px 9px #0003;text-align:left;cursor:pointer;font-size:11.5px;font-weight:780;transition:border-color .18s,box-shadow .18s}
+.is-squad .s214-picker-trigger:hover,.is-squad .s214-picker-trigger[aria-expanded="true"]{border-color:#70c4db;box-shadow:0 0 0 1px #3db9df2d,0 6px 15px #0005}
+.is-squad .s214-picker-trigger:focus-visible{outline:2px solid #68daeb;outline-offset:2px}
+.is-squad .s214-picker-chevron{font-size:18px;line-height:1;color:#a7d5e8}
+.is-squad .s214-picker-menu{position:absolute;left:0;right:0;top:calc(100% + 5px);display:grid;gap:3px;max-height:198px;overflow-y:auto;overscroll-behavior:contain;padding:6px;z-index:60;border:1px solid #518ca7;border-radius:10px;background:#092236;color:#e9f6ff;box-shadow:0 16px 35px #000d,inset 0 1px #ffffff1a;scrollbar-width:thin;scrollbar-color:#477a92 #0c2a3c}
+.is-squad .s214-drop-up .s214-picker-menu{top:auto;bottom:calc(100% + 5px)}
+.is-squad .s214-picker-menu[hidden]{display:none!important}
+.is-squad .s214-picker-menu [role="option"]{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:31px;width:100%;padding:7px 10px;border:1px solid transparent;border-radius:6px;background:#0b2a40;color:#d9f1fc;text-align:left;cursor:pointer;font-size:11px;font-weight:750;outline-offset:1px}
+.is-squad .s214-picker-menu [role="option"] span{opacity:0;color:#78f4ce}
+.is-squad .s214-picker-menu [role="option"][aria-selected="true"]{color:#b4ffdf;border-color:#277f77;background:#174a4b}
+.is-squad .s214-picker-menu [role="option"][aria-selected="true"] span{opacity:1}
+.is-squad .s214-picker-menu [role="option"]:hover,.is-squad .s214-picker-menu [role="option"]:focus-visible{background:#20516a;border-color:#6ebfd7;color:#fff;outline:none}
+
+@keyframes s214-reveal{from{opacity:.65;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes s214-meter-in{from{width:0}to{width:var(--s214-level)}}
+@media(min-width:1251px){
+ /* Restore proportion after the old TS-UI-02.13 desktop compaction rules. */
+ .is-squad .s212-panel.s213-contract-main{padding:15px 16px}
+ .is-squad .s213-contract-title{margin-bottom:11px}
+ .is-squad .s213-wage-feature,.is-squad .s213-value-feature{min-height:98px;padding:13px 14px}
+ .is-squad .s213-contract-mini{min-height:52px;padding:9px 11px}
+ .is-squad .s212-panel.s213-contract-state{padding:16px 14px 12px}
+ .is-squad .s213-contract-seal{width:79px;height:79px;margin:10px auto 5px}
+ .is-squad .s212-panel.s213-actions-panel{padding:15px 16px 16px}
+ .is-squad .s213-actions-panel .s212-actions-heading{margin-bottom:13px}
+ .is-squad .s213-quick-actions.s212-quick-actions{gap:9px}
+ .is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action{min-height:76px;padding:10px 7px;gap:6px}
+ .is-squad .s213-quick-actions.s212-quick-actions .s212-action.s2-action .s213-action-symbol{width:30px;height:30px;font-size:19px}
+ .is-squad .s213-quick-actions.s212-quick-actions .s213-action-label{font-size:10.5px}
+}
+@media(max-width:1500px){
+ .is-squad .s214-kpi{min-height:96px;padding:10px}
+ .is-squad .s214-kpi strong{font-size:24px}
+ .is-squad .s214-season-group{min-height:163px;padding:10px}
+ .is-squad .s214-group-spotlight strong{font-size:21px}
+}
+@media(max-width:1250px) and (min-width:1001px){
+ .is-squad .s213-development-board .s212-development-main{grid-template-columns:1fr}
+ .is-squad .s213-management .s212-contract-overview{grid-template-columns:1fr}
+ .is-squad .s213-quick-actions.s212-quick-actions{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .is-squad .s213-quick-actions.s212-quick-actions .s212-primary-action.s2-action{grid-column:span 2}
+}
+@media(max-width:1000px){
+ .is-squad .s213-development-board .s212-development-main{grid-template-columns:minmax(0,1.2fr) minmax(245px,.95fr)}
+}
+@media(max-width:730px){
+ .is-squad .s214-season-selector .s2-season-top{flex-wrap:wrap}
+ .is-squad .s214-kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .is-squad .s214-season-groups{grid-template-columns:1fr}
+ .is-squad .s214-season-group{min-height:0}
+ .is-squad .s213-development-board .s212-development-main{grid-template-columns:1fr}
+ .is-squad .s213-management .s212-contract-overview{grid-template-columns:1fr}
+ .is-squad .s213-quick-actions.s212-quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .is-squad .s213-quick-actions.s212-quick-actions .s212-primary-action.s2-action{grid-column:span 2}
+}
+@media(max-width:480px){
+ .is-squad .s214-season-selector .s2-season-filters{width:100%;display:grid;grid-template-columns:minmax(95px,.75fr) minmax(0,1.2fr)}
+ .is-squad .s214-season-selector .s2-season-filters label{min-width:0}
+ .is-squad .s214-season-selector .s2-season-filters select{width:100%;max-width:none}
+ .is-squad .s214-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .is-squad .s214-action-controls.s213-action-controls{grid-template-columns:1fr}
+ .is-squad .s214-coverage-note{margin-left:0}
+ .is-squad .s214-coverage-facts{width:100%}
+ .is-squad .s214-coverage-facts span{flex:1;min-width:0}
+}
+@media(prefers-reduced-motion:reduce){
+ .is-squad .s214-kpi,.is-squad .s214-season-dashboard,.is-squad .s214-training-bar i,.is-squad .s214-picker-trigger{animation:none!important;transition:none!important;transform:none!important}
+}
+/* Place the five truthful training-area bars high enough to be seen in the
+   default 900px Squad viewport, rather than burying them below both panels. */
+.is-squad .s213-development-board>.s214-training-areas{grid-template-columns:repeat(5,minmax(0,1fr));gap:7px 8px}
+.is-squad .s213-development-board>.s214-training-areas .s214-training-caption{grid-column:1/-1;margin:0 0 1px;font-size:8.5px}
+.is-squad .s213-development-board>.s214-training-areas .s214-training-row{padding:8px 8px 9px;min-width:0;min-height:53px;gap:7px;justify-content:center;border:1px solid #3b668093;border-radius:8px;background:linear-gradient(145deg,#102e43,#0a253a);box-shadow:inset 0 1px #ffffff13,0 3px 10px #0003}
+.is-squad .s213-development-board>.s214-training-areas .s214-training-row.is-priority{border-color:var(--s214-training-color);background:linear-gradient(150deg,#154657,#0d3245)}
+.is-squad .s213-development-board>.s214-training-areas .s214-training-label span{overflow:hidden;text-overflow:ellipsis}
+.is-squad .s213-development-board>.s214-training-areas .s214-training-bar{height:6px}
+.is-squad .s213-development-board .s212-development-main{margin-top:2px}
+@media(max-width:730px){
+ .is-squad .s213-development-board>.s214-training-areas{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:450px){
+ .is-squad .s213-development-board>.s214-training-areas{grid-template-columns:repeat(2,minmax(0,1fr))}
 }

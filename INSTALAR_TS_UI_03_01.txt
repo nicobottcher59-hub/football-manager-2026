@@ -1,0 +1,18 @@
+TS-UI-03.01 — TRAINING CENTRE
+
+REQUISITO: tener instalado Squad TS-UI-02.14.
+
+1. Cerrar el juego y detener el servidor Python.
+2. Abrir la carpeta raiz del repositorio football-manager-2026.
+3. Extraer el ZIP encima de esa carpeta, manteniendo las subcarpetas y reemplazando archivos.
+   Importante: verificar frontend/portable/club_support.js y src/football_manager/services/club_support.py.
+4. Iniciar nuevamente el servidor Python con el procedimiento habitual.
+5. Presionar Ctrl+F5 en el navegador.
+6. Verificar Training (intensidad, umbrales, proteccion y filtros) y despues Squad.
+
+GitHub Desktop:
+Rama: wip/squad-01a-redesign (si aun estas trabajando ahi)
+Summary: feat(ui): TS-UI-03.01 redesign Training centre
+Description: Redesign Training with club-scalable visuals, live Python squad metrics, grounded protection summaries, dark selectors, player roster cards and filters. Preserve TS-26 training commands, saves, staff and medical views, and approved Squad UI.
+
+No se requiere ningun paquete ni imagen nueva.

@@ -378,7 +378,7 @@
       // TS-UI-02.2: the entire list row opens the inspector; player names
       // remain separate buttons leading to the full player history/profile.
       const row=screen==='squad'?event.target.closest('[data-s2-row]'):null;
-      if(row)window.FMRoster.onClick({dataset:{rosterExpand:row.dataset.s2Row}},refreshKeepingTable);
+      if(row)window.FMRoster.onClick(row,refreshKeepingTable);
       return;
     }
     if(button.hasAttribute('data-open-career-player')) {
@@ -437,7 +437,7 @@
     const card=event.target.closest('[data-s2-row]');
     if(!card)return;
     event.preventDefault();
-    window.FMRoster.onClick({dataset:{rosterExpand:card.dataset.s2Row}},refreshKeepingTable);
+    window.FMRoster.onClick(card,refreshKeepingTable);
     $('.s2-roster-row.selected')?.focus({preventScroll:true});
   });
   root.addEventListener('change',event=>{

@@ -6,9 +6,9 @@ from datetime import date, timedelta
 from hashlib import sha256
 
 from football_manager.domain.club_support import (
-    ROLES, GROUPS, INTENSITIES, ClubSupport, StaffMember, MedicalDecision, TrainingPolicy,
+    ROLES, INTENSITIES, ClubSupport, StaffMember, MedicalDecision, TrainingPolicy,
 )
-from football_manager.domain.player_development import stable_random
+from football_manager.domain.player_development import stable_random, FOCUSES
 from football_manager.services.player_condition import recover_player_between_matches
 
 NAMES = ('Alex Morgan', 'Jordan Reed', 'Sam Bennett', 'Robin Ellis', 'Taylor Walsh',
@@ -117,30 +117,69 @@ def department_bonus(dept: ClubSupport | None, role: str, day: date) -> float:
     return max(-.15, min(1.0, quality * .65 + coverage))
 
 
-def training_group(session, player_id: str) -> str:
-    if any(e.player.id == player_id for e in session.home_lineup.starters):
-        return 'starters'
-    if any(p.id == player_id for p in session.home_lineup.bench):
-        return 'bench'
-    return 'rest'
+def _auto_training_profile(policy: TrainingPolicy, condition: float,
+                           fatigue: float, days_to_match: int | None,
+                           sharpness: float | None) -> tuple[str, str]:
+    """Single automatic plan, independent of the selected XI or substitutes.
+
+    Recovery/energy thresholds win when sharpness and condition both call for
+    adjustments. Near a match, never schedule the maximum-performance workout.
+    """
+    if condition < policy.energy_max:
+        return 'light', 'energy_max'
+    if condition < policy.energy_focus:
+        return 'balanced', 'energy_focus'
+    if sharpness is not None:
+        if sharpness < policy.performance_max and (days_to_match is None or days_to_match > 2):
+            return 'intense', 'performance_max'
+        if sharpness < policy.performance_focus:
+            return 'balanced', 'performance_focus'
+    if condition < 76 or fatigue > 50 or (days_to_match is not None and days_to_match <= 2):
+        return 'light', 'match_or_fatigue'
+    return 'balanced', 'balanced'
 
 
-def effective_intensity(policy: TrainingPolicy, group: str, condition: float, fatigue: float,
-                        days_to_match: int | None) -> str:
+def effective_intensity(policy: TrainingPolicy, condition: float, fatigue: float,
+                        days_to_match: int | None, *, player_id: str | None = None,
+                        sharpness: float | None = None) -> str:
+    """Personal workload > shared automatic plan; injured players skip training.
+
+    The removed group policy and removed safety override cannot silently
+    override a player's manual selection. Automatic still recovers low-energy
+    players before choosing performance intensity.
+    """
     policy.validate()
-    mode = getattr(policy, group)
-    if mode == 'auto':
-        mode = ('light' if condition < 76 or fatigue > 50 or
-                (days_to_match is not None and days_to_match <= 2)
-                else 'intense' if group == 'rest' and condition > 90 and fatigue < 20
-                and (days_to_match is None or days_to_match > 4)
-                else 'balanced')
-    if policy.protection:
-        if condition < policy.low_condition:
-            mode = 'light'
-        elif condition < policy.medium_condition and mode == 'intense':
-            mode = 'balanced'
-    return mode
+    specific = policy.individual_intensities.get(player_id) if player_id else None
+    if specific is not None and specific != 'auto':
+        return specific
+    return _auto_training_profile(policy, condition, fatigue, days_to_match, sharpness)[0]
+
+
+def _ordered_training_thresholds(policy: TrainingPolicy, updates: dict, changed: str | None) -> dict[str, int]:
+    """Push the adjacent boundary automatically rather than crossing ranges.
+
+    The edited handle wins whenever feasible. Both server and browser apply
+    this rule so hand-crafted API calls cannot persist overlapping bands.
+    """
+    keys = ('performance_max', 'performance_focus', 'energy_max', 'energy_focus')
+    if not isinstance(updates, dict) or not updates or set(updates) - set(keys):
+        raise ValueError('invalid automatic training thresholds')
+    if changed is not None and (changed not in keys or changed not in updates):
+        raise ValueError('invalid edited threshold')
+    if any(type(v) is not int or not 0 <= v <= 100 for v in updates.values()):
+        raise ValueError('automatic training thresholds must be whole numbers from 0 to 100')
+    values = {key: getattr(policy, key) for key in keys}
+    values.update(updates)
+    for low, high in (('performance_max', 'performance_focus'), ('energy_max', 'energy_focus')):
+        if values[low] < values[high]:
+            continue
+        if changed == high:
+            values[high] = max(1, values[high])
+            values[low] = values[high] - 1
+        else:
+            values[low] = min(99, values[low])
+            values[high] = values[low] + 1
+    return values
 
 
 # Small training penalties/rewards are applied to the existing daily recovery.
@@ -176,8 +215,8 @@ def recover_managed_players(session, *, days: int, start_date: date | None = Non
             if player.state.injury:
                 recover_player_between_matches(player, days=1)
                 continue
-            group = training_group(session, player.id)
-            mode = effective_intensity(dept.training, group, player.state.condition, player.state.fatigue, till)
+            mode = effective_intensity(dept.training, player.state.condition, player.state.fatigue,
+                                       till, player_id=player.id, sharpness=player.state.match_sharpness)
             before = player.state.condition
             fatigue = player.state.fatigue
             recover_player_between_matches(player, days=1)
@@ -279,42 +318,67 @@ def training_read_model(session) -> dict:
     till = (fixture.match_date - session.current_date).days if fixture else None
     players = []
     for player in session.home_club.squad.players:
-        group = training_group(session, player.id)
-        mode = effective_intensity(dept.training, group, player.state.condition, player.state.fatigue, till)
-        score, count = dept.training_days.get(player.id, (0., 0))
-        players.append({'id': player.id, 'name': player.full_name, 'group': group,
-                        'condition': round(player.state.condition, 1), 'fatigue': round(player.state.fatigue, 1),
-                        'effective': mode, 'individual_focus': player.development.focus if player.development else 'balanced',
+        mode = effective_intensity(dept.training, player.state.condition, player.state.fatigue,
+                                   till, player_id=player.id, sharpness=player.state.match_sharpness)
+        _score, count = dept.training_days.get(player.id, (0., 0))
+        specific = dept.training.individual_intensities.get(player.id)
+        automatic = specific is None or specific == 'auto'
+        plan = (_auto_training_profile(dept.training, player.state.condition,
+                 player.state.fatigue, till, player.state.match_sharpness)[1] if automatic else None)
+        players.append({'id': player.id, 'name': player.full_name,
+                        'position': player.primary_position.value,
+                        'condition': round(player.state.condition, 1),
+                        'sharpness': round(player.state.match_sharpness, 1),
+                        'fatigue': round(player.state.fatigue, 1),
+                        'effective': mode, 'individual_intensity': specific,
+                        'focus_editable': bool(player.development),
+                        'intensity_source': 'individual' if specific is not None else 'automatic',
+                        'automatic_plan': plan,
+                        'individual_focus': player.development.focus if player.development else 'balanced',
                         'days_trained': count, 'injured': bool(player.state.injury)})
     policy = dept.training
-    return {'date': session.current_date.isoformat(), 'policy': {group: getattr(policy, group) for group in GROUPS},
-            'protection': policy.protection, 'low_condition': policy.low_condition,
-            'medium_condition': policy.medium_condition, 'players': players,
-            'next_match_days': till,
-            'note': 'Group assignments reflect current selection. Training is applied during actual date progression.'}
+    return {'club_id': session.home_club.id, 'club': session.home_club.name,
+            'date': session.current_date.isoformat(),
+            'focus_options': list(FOCUSES),
+            'auto_thresholds': {key: getattr(policy, key) for key in
+                                ('performance_max', 'performance_focus', 'energy_max', 'energy_focus')},
+            'individual_override_count': sum(p['individual_intensity'] is not None for p in players),
+            'players': players, 'next_match_days': till,
+            'note': 'One automatic workload plan for every player unless an individual exception is saved. Actual training is applied during date progression.'}
 
 
 def training_command(session, command: dict) -> dict:
     dept = session._world_squads.club_support[session.home_club.id]
-    if command.get('action') != 'configure':
+    action = command.get('action')
+    # Validate a replacement first; rejected commands leave career state intact.
+    policy = replace(dept.training, individual_intensities={pid: mode for pid, mode in
+                     dept.training.individual_intensities.items() if session.home_club.squad.contains(pid)})
+    if action == 'individual':
+        if set(command) - {'action', 'player_id', 'intensity'}:
+            raise ValueError('invalid training command fields')
+        player_id = command.get('player_id')
+        choice = command.get('intensity')
+        if (not isinstance(player_id, str) or not session.home_club.squad.contains(player_id)
+                or choice not in (*INTENSITIES, 'default')):
+            raise ValueError('invalid managed-player training override')
+        if choice == 'default':
+            policy.individual_intensities.pop(player_id, None)
+        else:
+            policy.individual_intensities[player_id] = choice
+    elif action == 'configure':
+        if set(command) - {'action', 'auto_thresholds', 'changed_field'} or 'auto_thresholds' not in command:
+            raise ValueError('Only automatic thresholds can be configured')
+        thresholds = _ordered_training_thresholds(policy, command['auto_thresholds'],
+                                                   command.get('changed_field'))
+        for key, value in thresholds.items():
+            setattr(policy, key, value)
+    else:
         raise ValueError('Unsupported training operation')
-    group, intensity = command.get('group'), command.get('intensity')
-    if group is not None:
-        if group not in GROUPS or intensity not in INTENSITIES:
-            raise ValueError('Invalid training group or intensity')
-        setattr(dept.training, group, intensity)
-    if 'protection' in command:
-        if type(command['protection']) is not bool:
-            raise ValueError('Physical protection must be enabled or disabled')
-        dept.training.protection = command['protection']
-    if 'low_condition' in command or 'medium_condition' in command:
-        low = command.get('low_condition', dept.training.low_condition)
-        medium = command.get('medium_condition', dept.training.medium_condition)
-        if type(low) is not int or type(medium) is not int:
-            raise ValueError('Protection thresholds must be integers')
-        dept.training.low_condition, dept.training.medium_condition = low, medium
-    dept.training.validate()
-    return {'configured': True, 'policy': training_read_model(session)['policy']}
+    policy.validate()
+    dept.training = policy
+    model = training_read_model(session)
+    return {'configured': True, 'auto_thresholds': model['auto_thresholds'],
+            'individual_override_count': model['individual_override_count']}
 
 
 def treatment_preference(player) -> str:
