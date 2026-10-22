@@ -21,10 +21,10 @@ from .models import (
     EntityKey, EntityLink, SaveDocument, SaveIntegrityError, SaveSection,
     UnsupportedSaveVersionError,
 )
-from .session_codec import capture_manager_graph, restore_manager_graph
+from .session_codec import GRAPH_VERSION, capture_manager_graph, restore_manager_graph
 from .sqlite_repository import SQLiteSaveRepository
 
-MANAGER_STATE_VERSION = 22
+MANAGER_STATE_VERSION = GRAPH_VERSION
 _UI_STATE_VERSION = 1
 
 # Explicit contract for the current disposable session. When a later version
@@ -248,7 +248,14 @@ def load_manager_career(repository: SQLiteSaveRepository, slot_id: str) -> Loade
         raise UnsupportedSaveVersionError('unsupported manager career section version')
     try:
         payload = sections['manager_state'].payload
-        if payload.get('version') != sections['manager_state'].version:
+        section_version = sections['manager_state'].version
+        graph_version = payload.get('version')
+        # TS-UI-03.02/03.03 updated GRAPH_VERSION to 23/24 without updating
+        # the enclosing SQLite section marker (22). Permit ONLY that historic
+        # mismatch; the graph decoder, entity index and full session validator
+        # still verify the recovered career. New saves use matching versions.
+        legacy_marker_mismatch = (section_version == 22 and graph_version in (23, 24))
+        if graph_version != section_version and not legacy_marker_mismatch:
             raise SaveIntegrityError('manager section and graph version disagree')
         legacy = payload['version'] < 5
         session = restore_manager_graph(payload, migrate_world=False)

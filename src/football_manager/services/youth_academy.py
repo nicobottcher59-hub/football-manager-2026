@@ -356,8 +356,10 @@ def _month_scout_reports(registry, youth: YouthSystem, boundary: date) -> int:
                     age=rng.choice((15,16,17)),source=f'scout-{region}')
                 youth.candidates[player.player_id] = YouthScoutingCandidate(
                     player,when,scout.scout_id,scout.quality)
+            # Every unsigned discovery is followed automatically: no manual
+            # 'Keep scouting' decision or hidden watchlist priority.
             for candidate in youth.candidates.values():
-                if candidate.scout_id==scout.scout_id and candidate.status=='watching' \
+                if candidate.scout_id==scout.scout_id and candidate.status in ('available','watching') \
                         and candidate.discovered_on < when:
                     candidate.confidence=min(97,candidate.confidence+10)
             scout.reports_sent += 1
@@ -694,7 +696,23 @@ def _potential_band(preview: YouthPreview, seed: int, confidence: int) -> list[i
             max(1,min(99,int(middle+uncertainty)))]
 
 
-def _player_data(player, on_date: date) -> dict:
+def _academy_potential_range(player, seed: int) -> list[int] | None:
+    """Imperfect academy appraisal. Saved actual potential remains private.
+
+    The result is deterministic for a player across tabs/saves and deliberately
+    wider than a point estimate. The model never sends hidden PA to the UI.
+    """
+    development = getattr(player, 'development', None)
+    if development is None:
+        return None
+    rng = _rng(seed, player.id, 'academy-potential-appraisal-v1')
+    centre = float(development.potential) + rng.uniform(-9, 9)
+    uncertainty = 11 + rng.randint(0, 6)
+    return [max(1, min(99, int(round(centre - uncertainty)))),
+            max(1, min(99, int(round(centre + uncertainty))))]
+
+
+def _player_data(player, on_date: date, seed: int) -> dict:
     history=player.development.history if player.development else ()
     recent=list(history)[-3:]
     delta=sum(float(row.ability_gain) for row in recent)
@@ -704,6 +722,8 @@ def _player_data(player, on_date: date) -> dict:
             'sharpness':round(player.state.match_sharpness,1),
             'projection':'On track' if delta>.05 else 'Adapting' if not recent else 'Stable',
             'development_delta':round(delta,2),
+            'potential_range':_academy_potential_range(player,seed),
+            'potential_confidence':'Approximate',
             'minutes':player.development.exposure.minutes if player.development else 0}
 
 
@@ -720,6 +740,7 @@ def youth_read_model(session, club_id: str | None = None) -> dict:
          'birth_date':p.birth_date.isoformat(),'country':p.nationality,
          'position':p.position.value,'ovr':round(p.initial_ovr,1),
          'projection':_projection(p,registry.seed),
+         'potential_range':_potential_band(p,registry.seed,58),
          'upcoming':p.age_on(on_date)>=15}
         for p in academy.u15.values()
     ]
@@ -765,8 +786,8 @@ def youth_read_model(session, club_id: str | None = None) -> dict:
         'club_id':cid,'club_name':registry.clubs[cid].name,'date':on_date.isoformat(),
         'managed':cid==session.home_club.id,'season':youth.season_label,
         'u15':sorted(previews,key=lambda p:(-p['ovr'],p['name'])),
-        'u17':sorted(({**_player_data(p,on_date), **player_market_view(registry,p,on_date)} for p in academy.u17.values()),key=lambda p:-p['ovr']),
-        'u21':sorted(({**_player_data(p,on_date), **player_market_view(registry,p,on_date)} for p in academy.u21.values()),key=lambda p:-p['ovr']),
+        'u17':sorted(({**_player_data(p,on_date,registry.seed), **player_market_view(registry,p,on_date)} for p in academy.u17.values()),key=lambda p:-p['ovr']),
+        'u21':sorted(({**_player_data(p,on_date,registry.seed), **player_market_view(registry,p,on_date)} for p in academy.u21.values()),key=lambda p:-p['ovr']),
         'league_tables':{'u17':table('u17'),'u21':table('u21')},
         'standings':{'u17':league_standings('u17'),'u21':league_standings('u21')},
         'fixtures':{},'scouts':[],'candidates':[],
@@ -780,6 +801,7 @@ def youth_read_model(session, club_id: str | None = None) -> dict:
         latest = [f for f in games if f.home_goals is not None][-3:]
         data['fixtures'][level]=[{
             'date':f.match_date.isoformat(),
+            'opponent_club_id':f.away_club_id if f.home_club_id==cid else f.home_club_id,
             'opponent':registry.clubs[f.away_club_id if f.home_club_id==cid else f.home_club_id].name,
             'home':f.home_club_id==cid,
             # Scores are displayed from the selected club's perspective.
@@ -819,6 +841,80 @@ def youth_read_model(session, club_id: str | None = None) -> dict:
     return data
 
 
+YOUTH_SCOUT_CONTRACT_YEARS = (1, 2, 3, 4)
+
+
+def _scout_contract_offer(session, command: dict) -> dict:
+    """Staff-style negotiation using the EXISTING youth recruitment budget.
+
+    Scouts are paid from the academy recruitment allocation, not senior club
+    payroll. No alternative instant-hire path remains available.
+    """
+    if set(command) != {'action', 'offer_id', 'scout_id', 'monthly_wage', 'years', 'signing_fee'}:
+        raise ValueError('Scout offer needs candidate, salary, term and signing fee')
+    wage, years, bonus = (command['monthly_wage'], command['years'], command['signing_fee'])
+    if (type(wage) is not int or type(years) is not int or type(bonus) is not int
+            or not 100 <= wage <= 100_000 or years not in YOUTH_SCOUT_CONTRACT_YEARS
+            or not 0 <= bonus <= 200_000):
+        raise ValueError('Invalid youth scout contract terms')
+    registry = session._world_squads
+    youth = registry.youth
+    today = session.current_date
+    offer_id, scout_id = command['offer_id'], command['scout_id']
+    existing = None
+    if scout_id is not None:
+        if offer_id is not None or not isinstance(scout_id, str):
+            raise ValueError('Choose a single youth scout to renegotiate')
+        existing = youth.scouts.get(scout_id)
+        if existing is None or (existing.contract_until is not None and existing.contract_until < today):
+            raise ValueError('Youth scout contract not available')
+        demand = max(100, int(round(existing.monthly_wage * 1.09 / 100) * 100))
+        identity = existing.scout_id
+        name, quality = existing.name, existing.quality
+    else:
+        if not isinstance(offer_id, str):
+            raise ValueError('Select a youth scout candidate')
+        if len(youth.scouts) >= MAX_HIRED_SCOUTS:
+            raise ValueError('No free youth scout slot')
+        market = {m['id']:m for m in scout_market(youth)}
+        offer = market.get(offer_id)
+        if offer is None or any(m.name == offer['name'] for m in youth.scouts.values()):
+            raise ValueError('Scout offer is no longer available')
+        demand = offer['monthly_wage']
+        identity = offer['id']
+        name, quality = offer['name'], offer['quality']
+    if youth.recruitment_funds < bonus + 2 * wage:
+        raise ValueError('Insufficient academy recruitment budget for signing and two months of wages')
+    variation = _rng(youth.seed, youth.managed_club_id, identity, 'scout-expectation-v1').randint(-5, 8)
+    threshold = max(100, int(round(demand * (0.96 + variation/100 - (years - 1)*.014) / 100) * 100))
+    # Up-front money is worth less to the scout than recurring wages.
+    bonus_credit = min(bonus / (12 * years), wage * .18)
+    if wage + bonus_credit < threshold:
+        counter = max(100, int(round((threshold - bonus_credit + 50) / 100) * 100))
+        return {'accepted':False, 'counter_monthly_wage':counter,
+                'name':name, 'message':'Offer declined. The scout is seeking better terms.'}
+    until = date(today.year + years, today.month, min(today.day,28))
+    if existing is not None and existing.contract_until and existing.contract_until > today:
+        expiry = existing.contract_until
+        until = date(expiry.year + years, expiry.month, min(expiry.day,28))
+    if existing is None:
+        slot = next(f'scout-{i}' for i in range(1,MAX_HIRED_SCOUTS+1)
+                    if f'scout-{i}' not in youth.scouts)
+        new_scout = YouthScout(slot, quality, name=name, hired_on=today,
+                               contract_until=until, signing_fee=bonus,monthly_wage=wage)
+    else:
+        slot = scout_id
+        new_scout = replace(existing,monthly_wage=wage,contract_until=until,signing_fee=bonus)
+    # Mutate only after all validations and the acceptance decision.
+    youth.recruitment_funds -= bonus
+    youth.recruitment_spent += bonus
+    youth.scouts[slot] = new_scout
+    return {'accepted':True,'scout_id':slot,'name':name,
+            'kind':'renewal' if existing is not None else 'appointment',
+            'monthly_wage':wage,'signing_fee_paid':bonus,
+            'until':until.isoformat(),'message':'Scout contract accepted.'}
+
+
 def youth_command(session, command: dict) -> dict:
     """Explicit UI actions; caller clones the session for atomic publication."""
     registry = session._world_squads
@@ -830,26 +926,9 @@ def youth_command(session, command: dict) -> dict:
     today = session.current_date
     action=command.get('action')
     if action=='hire_scout':
-        if len(youth.scouts)>=MAX_HIRED_SCOUTS:
-            raise ValueError('No free youth scout slot')
-        offers={offer['id']:offer for offer in scout_market(youth)}
-        offer=offers.get(command.get('offer_id'))
-        if offer is None or any(s.name==offer['name'] for s in youth.scouts.values()):
-            raise ValueError('Scout offer is no longer available')
-        if youth.recruitment_funds < offer['signing_fee'] + offer['monthly_wage']:
-            raise ValueError('Insufficient academy recruitment budget for signing and initial wage')
-        slot=next(f'scout-{i}' for i in range(1,MAX_HIRED_SCOUTS+1)
-                  if f'scout-{i}' not in youth.scouts)
-        from datetime import timedelta
-        term=date(today.year+2,today.month,min(today.day,28))
-        scout=YouthScout(slot,offer['quality'],name=offer['name'],
-                         hired_on=today,contract_until=term,
-                         signing_fee=offer['signing_fee'],monthly_wage=offer['monthly_wage'])
-        youth.scouts[slot]=scout
-        youth.recruitment_funds-=offer['signing_fee']
-        youth.recruitment_spent+=offer['signing_fee']
-        return {'hired':True,'scout_id':slot,'name':scout.name,
-                'signing_fee':scout.signing_fee,'monthly_wage':scout.monthly_wage}
+        raise ValueError('Youth scout appointments require a negotiated contract offer')
+    if action=='offer_scout':
+        return _scout_contract_offer(session, command)
     if action=='fire_scout':
         scout=youth.scouts.get(command.get('scout_id'))
         if scout is None: raise ValueError('Unknown scout')
@@ -870,20 +949,18 @@ def youth_command(session, command: dict) -> dict:
         scout.started_on=today
         scout.next_report=_quarter_after(today)
         return {'assigned':True,'scout_id':scout.scout_id,'next_report':scout.next_report.isoformat()}
-    if action in ('watch','dismiss','sign'):
+    if action in ('watch','dismiss'):
+        raise ValueError('Youth prospects are followed automatically; only Sign to U17 is available')
+    if action=='sign':
         prospect=youth.candidates.get(command.get('player_id'))
         if prospect is None or prospect.status not in ('available','watching'):
             raise ValueError('Candidate unavailable')
-        if action=='watch':
-            prospect.watched+=1;prospect.status='watching'
-            return {'watching':True,'player_id':prospect.preview.player_id}
-        if action=='dismiss':
-            prospect.status='dismissed'
-            return {'dismissed':True,'player_id':prospect.preview.player_id}
         # Scouting generates players; signing makes one persistent academy Player.
-        target='u17' if prospect.preview.age_on(today) <=17 else 'u21'
-        roster=getattr(academy,target)
-        cap=MAX_U17 if target=='u17' else MAX_U21
+        if prospect.preview.age_on(today) > 17:
+            raise ValueError('Prospect is over the U17 age limit')
+        target='u17'
+        roster=academy.u17
+        cap=MAX_U17
         if len(roster)>=cap:
             raise ValueError('Youth squad is full; release or promote a player first')
         p=_preview_to_player(prospect.preview,academy,registry,today)

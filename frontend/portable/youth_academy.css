@@ -194,3 +194,308 @@
 @media(max-width:1260px){.ya-formation-pitch{height:515px}.ya-formation-chip{width:115px;flex-basis:115px;padding:7px 6px}.ya-chip-rating{min-width:38px;padding:3px 5px}.ya-chip-rating strong{font-size:12px}}
 @media(max-width:930px){.ya-formation-pitch{height:525px}.ya-formation-chip{width:112px;flex-basis:112px}}
 @media(max-width:650px){.ya-formation-pitch{height:470px}.ya-formation-chip{width:72px;flex-basis:72px;min-height:72px;padding:5px;gap:3px}.ya-formation-row{left:1%;right:1%;gap:3px}.ya-roster-portrait{width:24px;height:27px;flex-basis:24px}.ya-chip-upper{gap:2px}.ya-chip-rating{min-width:31px;padding:2px 3px}.ya-chip-rating strong{font-size:10px}.ya-chip-rating small{font-size:7px}.ya-chip-lower strong{font-size:9px}.ya-chip-lower span{font-size:8px}}
+
+/* TS-UI-07.01 — approved Youth Academy four-view design, club-scalable.
+ * The photographic asset has no club identity baked in. Escutcheon/name/palette
+ * are supplied by FMClubIdentity, the same catalogue as Squad and Staff. */
+.fm-youth-academy-screen {
+  --ya-club: var(--ui-club-highlight,#3dc5ea);
+  --ya-club-faint: rgba(var(--ui-club-rgb,25,147,205),.12);
+  --ya-club-line: rgba(var(--ui-club-highlight-rgb,47,171,213),.44);
+  --ya-cyan:var(--ya-club);
+  --ya-border:#274e67;
+  padding: 0 0 30px;
+}
+.fm-youth-academy-screen .ya-layout{display:grid;gap:13px;min-width:0}
+.fm-youth-academy-screen .ya-club-hero{
+  position:relative;isolation:isolate;overflow:hidden;min-height:174px;
+  display:grid;grid-template-columns:minmax(0,1.15fr) minmax(420px,.85fr);
+  gap:17px;align-items:center;padding:21px 24px;border:1px solid var(--ya-club-line);
+  border-radius:12px;color:#f6fbff;
+  background-image:
+    linear-gradient(90deg,rgba(var(--ui-club-rgb,20,135,216),.42) 0%,rgba(5,20,33,.91) 9%,rgba(5,20,35,.70) 40%,rgba(7,23,40,.47) 78%,rgba(5,21,35,.84) 100%),
+    linear-gradient(0deg,#04121eda 0%,transparent 64%),
+    url('assets/youth/academy-training-ground.webp');
+  background-size:cover; background-position:center 51%;
+  box-shadow:inset 0 1px #ffffff22,0 11px 32px #0003;
+}
+.fm-youth-academy-screen .ya-club-hero::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;
+  background:repeating-linear-gradient(132deg,transparent 0 118px,rgba(var(--ui-club-rgb,20,135,216),.13) 120px,transparent 122px)}
+.fm-youth-academy-screen .ya-club-hero::after{content:"";position:absolute;top:0;left:0;width:46%;height:2px;background:linear-gradient(90deg,var(--ya-club),transparent)}
+.ya-hero-identity{display:flex;align-items:center;gap:17px;min-width:0}
+.ya-hero-crest{flex:0 0 79px;width:79px;height:86px;display:grid;place-items:center;border:1px solid var(--ya-club-line);border-radius:12px;background:#08192cb7;box-shadow:0 6px 22px #0007;overflow:hidden}
+.ya-hero-crest img{width:90%;height:90%;object-fit:contain;filter:drop-shadow(0 3px 6px #0008)}
+.ya-club-fallback{font-size:29px;color:#e3faff}
+.ya-hero-overline{color:var(--ya-club);font-size:10px;letter-spacing:1.4px;font-weight:850;text-transform:uppercase;line-height:1.4}
+.ya-hero-copy{min-width:0}
+.ya-hero-copy h2{font-size:clamp(23px,2.15vw,30px);line-height:1.07;margin:6px 0 10px;letter-spacing:-.6px;color:white;text-shadow:0 2px 12px #000a}
+.ya-hero-copy p{font-size:11px;line-height:1.5;color:#e0eef7;margin:0;max-width:435px;text-shadow:0 2px 7px #000}
+.ya-club-hero-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;min-width:0}
+.ya-hero-kpi{min-width:0;min-height:84px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;padding:8px 5px;background:#082237df;border:1px solid #396079a8;border-radius:9px;box-shadow:0 3px 13px #0004}
+.ya-hero-kpi i{font-style:normal;font-size:20px;color:var(--ya-club)}
+.ya-hero-kpi strong{font-size:19px;font-weight:850;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;color:#f7fcff;font-variant-numeric:tabular-nums}
+.ya-hero-kpi small{font-size:9px;color:#b4d3e7;text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.fm-youth-academy-screen .ya-tabs{margin:0;gap:8px}
+.fm-youth-academy-screen .ya-tabs button{border-color:#2d536d;padding:10px 17px;background:#0d2b42}
+.fm-youth-academy-screen .ya-tabs button[aria-selected="true"]{border-color:var(--ya-club-line);background:linear-gradient(115deg,rgba(var(--ui-club-rgb,24,135,214),.75),rgba(var(--ui-club-rgb,24,135,214),.39));box-shadow:inset 0 -2px var(--ya-club),0 3px 12px var(--ya-club-faint)}
+.fm-youth-academy-screen .ya-body{gap:13px}
+.fm-youth-academy-screen .ya-panel,.fm-youth-academy-screen .ya-scout-card,.fm-youth-academy-screen .ya-pathway{border-color:#284f6b;background:linear-gradient(147deg,#0d2c45,#082238 89%)}
+/* Keep the match/results sidebar and scrolling surfaces tied to the active club. */
+.fm-youth-academy-screen .ya-league-rail .ya-rail-card{border-top:2px solid var(--ya-club-line)}
+.fm-youth-academy-screen .ya-opp-icon{border-color:var(--ya-club-line);color:var(--ya-club);background:var(--ya-club-faint)}
+.fm-youth-academy-screen .ya-standing.is-own{box-shadow:inset 3px 0 var(--ya-club);background:var(--ya-club-faint);color:#eaf8ff}
+body.tsui-youth-active,.fm-youth-academy-screen .ya-table-scroll,.fm-youth-academy-screen .ya-bench-list{scrollbar-color:var(--ui-club-highlight,#3dc5ea) #0c263b}
+body.tsui-youth-active::-webkit-scrollbar-thumb,.fm-youth-academy-screen ::-webkit-scrollbar-thumb{background:rgba(var(--ui-club-rgb,22,135,217),.72);border-radius:10px}
+.fm-youth-academy-screen .ya-main-grid{gap:13px}
+.fm-youth-academy-screen .ya-roster-layout{grid-template-columns:minmax(0,2.07fr) minmax(295px,.85fr)}
+.fm-youth-academy-screen .ya-intake-layout{grid-template-columns:minmax(0,1.9fr) minmax(320px,.86fr)}
+.fm-youth-academy-screen .ya-formation-pitch{height:clamp(440px,33vw,510px)}
+.fm-youth-academy-screen .ya-field{min-height:575px}
+.fm-youth-academy-screen .ya-section-title{align-items:center}
+.fm-youth-academy-screen .ya-section-title h3{font-size:16px;margin-bottom:4px}
+.fm-youth-academy-screen .ya-standings .is-own,
+.fm-youth-academy-screen .ya-standing.is-own{border-left:2px solid var(--ya-club);background:var(--ya-club-faint);color:#fff}
+.fm-youth-academy-screen .ya-league-rail{gap:11px}
+.fm-youth-academy-screen .ya-rail-card{border-left:2px solid var(--ya-club-line)}
+.fm-youth-academy-screen .ya-roster-stack{gap:13px}
+.fm-youth-academy-screen .ya-youth-squad-panel{width:100%}
+.fm-youth-academy-screen .ya-roster-toolbar{justify-content:flex-end}
+.fm-youth-academy-screen .ya-roster-toolbar input{flex:1;min-width:200px}
+.ya-roster-cards{display:grid;gap:7px;min-width:0}
+.ya-roster-card{display:grid;grid-template-columns:minmax(210px,1.2fr) minmax(290px,1.15fr) minmax(290px,1fr);align-items:center;gap:16px;min-height:92px;
+  padding:13px 14px;border:1px solid #2b5370;border-radius:10px;background:linear-gradient(105deg,#15334d,#0a2940);transition:border-color .15s,transform .15s,box-shadow .15s}
+.ya-roster-card:hover{border-color:var(--ya-club-line);box-shadow:0 8px 22px #0002;transform:translateY(-1px)}
+.ya-roster-card[hidden]{display:none}
+.ya-roster-main{display:flex;gap:11px;align-items:center;min-width:0}
+.ya-roster-main .ya-roster-portrait{width:48px;height:55px;flex-basis:48px;border-radius:8px;border:1px solid #3b7290}
+.ya-roster-name{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}
+.ya-roster-name strong{color:#fff;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ya-roster-name small,.ya-card-ovr small,.ya-roster-metrics small{color:#95bad0;font-size:10px}
+.ya-roster-main .ya-position-pill{padding:4px 7px;font-size:10px}
+.ya-card-ovr{display:flex;align-items:center;flex-direction:column;gap:2px;min-width:48px}
+.ya-card-ovr strong{font-size:18px;color:#65e6c4;font-variant-numeric:tabular-nums}
+.ya-roster-metrics{display:grid;grid-template-columns:minmax(85px,1.17fr) minmax(74px,.93fr) minmax(100px,1fr);gap:10px;align-items:center}
+.ya-roster-metrics>span{display:flex;min-width:0;flex-direction:column;gap:5px}
+.ya-roster-metrics strong{font-size:11px;color:#e3f8ff;white-space:nowrap}
+.ya-approx strong{display:flex;align-items:center;flex-wrap:wrap;gap:5px}
+.ya-stars{color:#ffcf60;letter-spacing:1px;font-size:13px;white-space:nowrap;font-weight:850}
+.ya-stars>span{color:#415a6a}
+.ya-card-development strong{color:#97e7d0}
+.ya-card-rhythm i,.ya-confidence-meter{display:block;width:100%;height:6px;border-radius:999px;overflow:hidden;background:#25475e}
+.ya-card-rhythm i>b,.ya-confidence-meter>span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#26b5dc,#52e3b6);transition:width .35s}
+.ya-roster-actions{display:flex;justify-content:end;gap:6px;align-items:center;flex-wrap:wrap}
+.ya-roster-actions .ya-btn{font-size:10px;padding:10px 9px;white-space:nowrap;min-width:0}
+.ya-roster-actions .ya-btn-primary{background:linear-gradient(115deg,rgba(var(--ui-club-rgb,20,135,216),.85),rgba(var(--ui-club-rgb,20,135,216),.5));border-color:var(--ya-club-line)}
+.ya-roster-actions .ya-btn-release{border-color:#643c51;color:#ecb0b8;background:#3823376b}
+.ya-btn-soft{color:#b2e7ff;border-color:#3c6682;background:#133e59}
+.ya-feedback{padding:10px 14px;border-radius:8px;border:1px solid #227d70;background:#12483e;color:#98ffe0;font-size:12px}
+.ya-u15-card .ya-stars{font-size:10px;grid-column:1/-1;text-align:center}
+.ya-bench-row .ya-stars{font-size:10px;white-space:nowrap}
+.fm-youth-academy-screen .ya-pathway{border-top:2px solid var(--ya-club-line);padding:18px 20px}
+.fm-youth-academy-screen .ya-pathway-track span.is-current{background:rgba(var(--ui-club-rgb,20,135,216),.63);border-color:var(--ya-club-line)}
+.ya-scout-grid .ya-scout-card{min-height:290px;border-top:2px solid var(--ya-club-line)}
+.ya-scout-person{width:50px;height:55px;flex:0 0 50px;display:grid;place-items:center;font-size:29px;color:var(--ya-club);border:1px solid #346782;border-radius:10px;background:linear-gradient(145deg,#1c445e,#0d2d45)}
+.ya-scout-person-large{width:66px;height:70px;flex-basis:66px;font-size:35px}
+.ya-scout-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}
+.ya-scout-actions .ya-btn{font-size:10px;white-space:nowrap;padding:9px 5px}
+.ya-scout-card .ya-scout-deadline{font-size:11px}
+.ya-scout-open .ya-btn-primary,.ya-sign-btn{background:linear-gradient(135deg,rgba(var(--ui-club-rgb,20,135,216),.8),rgba(var(--ui-club-rgb,20,135,216),.46));border-color:var(--ya-club-line)}
+.fm-youth-academy-screen .ya-prospects-section{min-width:0}
+.fm-youth-academy-screen .ya-prospect-table{min-width:1170px}
+.fm-youth-academy-screen .ya-prospect-table th{font-size:9px}
+.fm-youth-academy-screen .ya-prospect-table td{padding:13px 9px}
+.ya-prospect-person{width:34px;height:39px;flex:0 0 34px;display:grid;place-items:center;color:#9cbacf;font-size:23px;border:1px solid #315e74;border-radius:7px;background:linear-gradient(145deg,#21465e,#0c3046)}
+.ya-prospect-potential{display:flex;align-items:flex-start;flex-direction:column;gap:4px;min-width:125px}
+.ya-prospect-potential b{color:#84e4c0;font-size:12px}
+.ya-prospect-potential small{color:#8baec1;font-size:10px}
+.ya-confidence-meter{min-width:75px;max-width:105px;margin-bottom:5px}
+.ya-prospect-table .ya-risk{display:inline-flex;padding:5px 9px;border-radius:5px;background:#1f3648;border:1px solid #35526b}
+.ya-prospect-table .ya-risk-high{background:#672c3459;border-color:#9c4554}
+.ya-prospect-table .ya-risk-medium{background:#604c2352;border-color:#896929}
+.ya-prospect-table .ya-risk-low{background:#205a4747;border-color:#38725b}
+.ya-sign-btn{white-space:nowrap;font-size:11px}
+.ya-market-person{display:flex;align-items:center;gap:14px;padding:13px;margin-bottom:16px;border:1px solid #315b72;border-radius:10px;background:#15324c}
+.ya-market-person h3{margin:3px 0 7px;color:#fff;font-size:18px}
+.ya-market-person small,.ya-market-person p{color:#afd0e4;font-size:11px;margin:0}
+.ya-negotiation-form{display:grid;gap:11px}
+.ya-negotiation-form h3{font-size:15px;margin:0 0 4px}
+.ya-negotiation-form>label{display:flex;align-items:center;justify-content:space-between;gap:15px;color:#dbeefa;border-bottom:1px solid #2b4f68;padding-bottom:9px;font-size:12px}
+.ya-negotiation-form input,.ya-negotiation-form select{background:#0b2a41;border:1px solid #426c85;color:#ebfbff;border-radius:7px;padding:9px;width:min(190px,50%);min-width:0}
+.ya-negotiation-actions{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.ya-budget-note{margin:0;color:#b8cfdd;font-size:11px;line-height:1.5}
+.ya-offer-response{display:grid;gap:8px;padding:12px;background:#54451a55;border:1px solid #887329;border-radius:9px;color:#f8e7b3;font-size:12px}
+.ya-offer-response .ya-btn{justify-self:start}
+.ya-offer{grid-template-columns:1fr 150px 145px 148px;}
+.ya-offer .ya-btn{font-size:11px;padding:9px 8px}
+.fm-youth-academy-screen .ya-modal{border-color:var(--ya-club-line)}
+body.tsui-youth-active .sidebar{background:linear-gradient(175deg,#071420,#06111c 55%,var(--ui-club-soft) 160%);border-right-color:var(--ya-club-line,rgba(var(--ui-club-highlight-rgb),.22))}
+body.tsui-youth-active .sidebar::before{background:repeating-linear-gradient(38deg,transparent 0 45px,rgba(var(--ui-club-rgb),.10) 46px 48px),radial-gradient(ellipse at 25% 94%,rgba(var(--ui-club-rgb),.20),transparent 67%)}
+body.tsui-youth-active .sidebar .nav-item.is-active{background:linear-gradient(105deg,rgba(var(--ui-club-rgb),.38),#102d44 91%);border-color:rgba(var(--ui-club-highlight-rgb),.65);box-shadow:inset 3px 0 var(--ui-club-highlight),0 6px 15px #0004}
+body.tsui-youth-active .sidebar .nav-item.is-active svg{color:var(--ui-club-highlight)}
+@media(max-width:1420px){.ya-roster-card{grid-template-columns:minmax(190px,.9fr) minmax(270px,1.1fr)}.ya-roster-actions{grid-column:1/-1;justify-content:flex-start}.ya-club-hero{grid-template-columns:minmax(0,1fr) minmax(380px,1fr)}}
+@media(max-width:1250px){.fm-youth-academy-screen .ya-club-hero{grid-template-columns:1fr;gap:14px}.ya-club-hero-kpis{max-width:720px}.fm-youth-academy-screen .ya-roster-layout{grid-template-columns:1fr}.fm-youth-academy-screen .ya-intake-layout{grid-template-columns:1fr}.fm-youth-academy-screen .ya-league-rail{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:980px){.ya-roster-card{grid-template-columns:1fr}.ya-roster-actions{grid-column:auto;justify-content:flex-start}.fm-youth-academy-screen .ya-league-rail{grid-template-columns:1fr}.ya-roster-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.ya-hero-kpi{min-height:65px}}
+@media(max-width:690px){.fm-youth-academy-screen .ya-club-hero{padding:16px;min-height:0}.ya-hero-identity{align-items:flex-start;gap:10px}.ya-hero-crest{width:53px;height:60px;flex-basis:53px}.ya-hero-copy h2{font-size:22px}.ya-hero-copy p{font-size:10px}.ya-club-hero-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.ya-hero-kpi{min-height:60px}.fm-youth-academy-screen .ya-roster-toolbar{justify-content:stretch}.ya-roster-card{padding:11px;gap:12px}.ya-roster-metrics{gap:9px}.ya-roster-actions .ya-btn{flex:1}.ya-scout-actions{grid-template-columns:1fr}.ya-offer{grid-template-columns:1fr 1fr}.ya-offer .ya-person-cell{grid-column:1/-1}.ya-negotiation-form>label{flex-wrap:wrap}}
+@media(max-width:420px){.ya-roster-metrics{grid-template-columns:1fr 1fr}.ya-card-rhythm{grid-column:1/-1}.ya-roster-actions{display:grid;grid-template-columns:1fr 1fr}.ya-roster-actions .ya-btn-release{grid-column:1/-1}.ya-roster-main .ya-position-pill{font-size:9px}.fm-youth-academy-screen .ya-tabs button{padding:9px 11px}}
+@media(prefers-reduced-motion:reduce){.ya-roster-card,.ya-card-rhythm i>b,.ya-confidence-meter>span{transition:none}}
+/* The eleven on a pitch need genuine space. At very narrow widths the pitch
+ * scrolls inside its own panel; the app itself never acquires horizontal scroll. */
+@media(max-width:650px){
+  .fm-youth-academy-screen .ya-squad-board-panel{overflow-x:auto;overscroll-behavior-x:contain}
+  .fm-youth-academy-screen .ya-formation-pitch{min-width:340px}
+}
+@media(max-width:650px){
+ .fm-youth-academy-screen .ya-roster-main{flex-wrap:wrap}
+ .fm-youth-academy-screen .ya-roster-main .ya-roster-name{flex:1 1 calc(100% - 70px);min-width:0}
+ .fm-youth-academy-screen .ya-roster-metrics{grid-template-columns:minmax(0,1fr);gap:9px}
+ .fm-youth-academy-screen .ya-card-rhythm{grid-column:auto}
+ .fm-youth-academy-screen .ya-roster-toolbar input{flex:1 1 100%;width:100%;min-width:0}
+ .fm-youth-academy-screen .ya-roster-toolbar .ya-filter{flex:1 1 100%;min-width:0;width:100%}
+ .fm-youth-academy-screen .ya-roster-actions{display:flex;flex-direction:column;align-items:stretch}
+ .fm-youth-academy-screen .ya-roster-actions .ya-btn{white-space:normal;width:100%;overflow-wrap:anywhere}
+}
+.ya-scout-person svg,.ya-prospect-person svg{width:27px;height:27px;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.ya-scout-person-large svg{width:39px;height:39px}
+
+/* TS-UI-07.02 — club identities everywhere, denser player management and
+ * semantically consistent academy actions. No club names or kits are embedded. */
+.fm-youth-academy-screen .ya-hero-overline{
+  display:flex;align-items:baseline;gap:6px 10px;flex-wrap:wrap;min-width:0;
+  max-width:100%;overflow-wrap:anywhere;
+}
+.fm-youth-academy-screen .ya-hero-club-name{
+  display:inline-block;max-width:100%;min-width:0;
+  color:var(--ya-club);font-size:clamp(10px,.89vw,13px);line-height:1.4;
+  letter-spacing:.7px;overflow-wrap:anywhere;
+}
+.fm-youth-academy-screen .ya-hero-context{
+  display:inline-block;flex-shrink:0;color:#bfd7e7;font-size:9px;
+  letter-spacing:1.05px;font-weight:750;
+}
+.fm-youth-academy-screen .ya-standing{
+  grid-template-columns:21px minmax(0,1fr) 34px 47px;
+  padding:8px 6px;gap:5px;
+}
+.fm-youth-academy-screen .ya-standing-identity{display:flex;gap:7px;align-items:center;min-width:0}
+.fm-youth-academy-screen .ya-standing-identity strong{
+  display:block;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:inherit;
+}
+.fm-youth-academy-screen .ya-standing .ya-table-crest{
+  width:19px;height:21px;object-fit:contain;flex:0 0 19px;filter:drop-shadow(0 1px 3px #0008);
+}
+.fm-youth-academy-screen .ya-standing.is-own{
+  border-left:3px solid var(--ya-club);padding-left:5px;
+  background:linear-gradient(90deg,var(--ya-club-faint),transparent 98%);
+}
+.fm-youth-academy-screen .ya-standing.is-own .ya-standing-identity strong{color:#fff}
+.fm-youth-academy-screen .ya-opp-icon .ya-table-crest{width:33px;height:34px;object-fit:contain}
+.fm-youth-academy-screen .ya-roster-cards{gap:9px}
+.fm-youth-academy-screen .ya-roster-card{
+  grid-template-columns:minmax(225px,290px) minmax(410px,1fr) max-content;
+  gap:12px;min-height:109px;padding:12px 14px;
+  border-color:#36607a;
+  background:linear-gradient(108deg,#183a54,#0c2940 64%,#09263c);
+  box-shadow:inset 3px 0 rgba(var(--ui-club-highlight-rgb,47,171,213),.38),inset 0 1px #ffffff0b;
+}
+.fm-youth-academy-screen .ya-roster-card:hover{
+  box-shadow:inset 3px 0 var(--ya-club),0 8px 22px #0004;
+}
+.fm-youth-academy-screen .ya-roster-main{gap:10px}
+.fm-youth-academy-screen .ya-roster-main .ya-roster-portrait{
+  width:53px;height:59px;flex-basis:53px;
+}
+.fm-youth-academy-screen .ya-roster-name{gap:4px}
+.fm-youth-academy-screen .ya-roster-name strong{font-size:13px}
+.fm-youth-academy-screen .ya-roster-group{
+  display:inline-block;align-self:flex-start;font-size:9px;font-weight:750;
+  color:#afd3e6;letter-spacing:.15px;
+}
+.fm-youth-academy-screen .ya-card-ovr{min-width:46px}
+.fm-youth-academy-screen .ya-card-ovr strong{font-size:19px;color:#56edc2}
+.fm-youth-academy-screen .ya-roster-metrics{
+  grid-template-columns:minmax(145px,1.3fr) minmax(110px,1.05fr) minmax(74px,.70fr) minmax(105px,1fr);
+  align-items:stretch;gap:6px;
+}
+.fm-youth-academy-screen .ya-roster-metrics>span{
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  min-width:0;gap:5px;padding:8px 9px;
+  border:1px solid #31546b75;border-radius:7px;background:#071f32a3;
+}
+.fm-youth-academy-screen .ya-roster-metrics small{
+  font-size:9px;font-weight:750;letter-spacing:.18px;color:#b5d7e7;
+}
+.fm-youth-academy-screen .ya-roster-metrics strong{
+  font-size:11px;overflow-wrap:anywhere;white-space:normal;
+}
+.fm-youth-academy-screen .ya-roster-metrics em{
+  color:#87aabc;font-size:9px;font-style:normal;white-space:nowrap;
+}
+.fm-youth-academy-screen .ya-approx strong{gap:4px}
+.fm-youth-academy-screen .ya-stars{font-size:12px;letter-spacing:0}
+.fm-youth-academy-screen .ya-card-minutes strong{font-size:15px;color:#efffff}
+.fm-youth-academy-screen .ya-card-rhythm i{height:7px}
+.fm-youth-academy-screen .ya-card-rhythm strong{color:#d6f8e9}
+.fm-youth-academy-screen .ya-roster-actions{
+  display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:nowrap;
+}
+.fm-youth-academy-screen .ya-roster-actions .ya-btn{
+  min-height:40px;padding:10px 12px;font-size:10px;font-weight:800;
+  border-radius:7px;box-shadow:inset 0 1px #ffffff2c,0 3px 10px #0003;
+  white-space:nowrap;
+}
+.fm-youth-academy-screen .ya-roster-actions .ya-btn-academy{
+  color:white;background:linear-gradient(128deg,#087bc5,#149ff1);
+  border-color:#35b8ff;
+}
+.fm-youth-academy-screen .ya-roster-actions .ya-btn-academy:hover:not(:disabled){
+  background:linear-gradient(128deg,#138ede,#23b5ff);
+}
+.fm-youth-academy-screen .ya-roster-actions .ya-btn-first{
+  color:white;background:linear-gradient(128deg,#098a64,#11bb84);
+  border-color:#35d6a4;
+}
+.fm-youth-academy-screen .ya-roster-actions .ya-btn-first:hover:not(:disabled){
+  background:linear-gradient(128deg,#0da575,#1cd89a);
+}
+.fm-youth-academy-screen .ya-roster-actions .ya-btn-release{
+  color:#ffedf0;background:linear-gradient(128deg,#81213a,#ab3348);
+  border-color:#d65f73;
+}
+.fm-youth-academy-screen .ya-roster-actions .ya-btn-release:hover:not(:disabled){
+  background:linear-gradient(128deg,#a32e4b,#cf4359);
+}
+.fm-youth-academy-screen .ya-age-note{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:38px;max-width:100px;padding:5px 9px;text-align:center;
+  border-radius:7px;border:1px solid #617181;color:#c4d4dc;
+  background:#2740558a;font-size:10px;font-weight:750;line-height:1.2;
+}
+@media(max-width:1480px){
+  .fm-youth-academy-screen .ya-roster-card{
+    grid-template-columns:minmax(220px,.9fr) minmax(415px,1.45fr);
+  }
+  .fm-youth-academy-screen .ya-roster-actions{
+    grid-column:1/-1;justify-content:flex-end;border-top:1px solid #ffffff18;padding-top:8px;
+  }
+}
+@media(max-width:990px){
+  .fm-youth-academy-screen .ya-roster-card{grid-template-columns:minmax(0,1fr)}
+  .fm-youth-academy-screen .ya-roster-actions{grid-column:1/-1;justify-content:flex-start}
+  .fm-youth-academy-screen .ya-roster-metrics{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .fm-youth-academy-screen .ya-roster-metrics em{white-space:normal}
+}
+@media(max-width:690px){
+  .fm-youth-academy-screen .ya-hero-context{font-size:8px}
+  .fm-youth-academy-screen .ya-roster-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fm-youth-academy-screen .ya-roster-actions{flex-wrap:wrap;flex-direction:row;align-items:center}
+  .fm-youth-academy-screen .ya-roster-actions .ya-btn{flex:1 1 140px;white-space:normal}
+  .fm-youth-academy-screen .ya-roster-actions .ya-btn-release{flex:1 1 100%}
+  .fm-youth-academy-screen .ya-age-note{flex:1 1 130px;max-width:none}
+}
+@media(max-width:420px){
+  .fm-youth-academy-screen .ya-roster-actions{display:grid;grid-template-columns:minmax(0,1fr)}
+  .fm-youth-academy-screen .ya-roster-actions .ya-btn,
+  .fm-youth-academy-screen .ya-age-note{width:100%;max-width:none}
+  .fm-youth-academy-screen .ya-roster-actions .ya-btn-release{grid-column:auto}
+}

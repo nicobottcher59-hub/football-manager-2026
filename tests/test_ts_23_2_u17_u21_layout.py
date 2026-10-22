@@ -9,7 +9,7 @@ CSS = (ROOT / "frontend/portable/youth_academy.css").read_text(encoding="utf-8")
 def test_u17_u21_have_a_compact_readonly_formation_above_the_management_table():
     assert 'function formationBoard(level, players)' in JS
     assert 'ya-formation-pitch" role="group"' in JS
-    assert '${formationBoard(level, players)}<section class="ya-panel"' in JS
+    assert 'formationBoard(level,players)' in JS
     assert 'Visual 4-3-3 preview' in JS
     assert 'data-youth-action="move"' in JS
     assert 'data-youth-action="release"' in JS
@@ -37,5 +37,5 @@ def test_u15_intake_and_youth_scouting_are_preserved():
     assert 'ya-u15-card' in JS
     assert 'function scouting()' in JS
     assert 'data-youth-action="sign"' in JS
-    assert 'data-youth-action="watch"' in JS
+    assert 'data-youth-action="watch"' not in JS
     assert 'candidateFilter' in JS

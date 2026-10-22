@@ -219,7 +219,8 @@ def test_sqlite_save_and_load_persist_real_scout_reports(starting, tmp_path):
     repository = SQLiteSaveRepository(tmp_path / 'career.sqlite3')
     save_manager_career(repository, slot_id='test-career', display_name='Test career',
                         session=session, expected_revision=0)
-    assert MANAGER_STATE_VERSION == 22
+    from football_manager.persistence.session_codec import GRAPH_VERSION
+    assert MANAGER_STATE_VERSION == GRAPH_VERSION
     restored = load_manager_career(repository, 'test-career').session
     assert pid in restored._world_squads.club_support[restored.home_club.id].scouting_reports
     assert any(m.source_key.startswith('professional-scout:report:') for m in restored.manager_inbox.messages)

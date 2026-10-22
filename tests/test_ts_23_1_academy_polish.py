@@ -15,6 +15,12 @@ from football_manager.persistence.session_codec import capture_manager_graph, re
 from football_manager.services import youth_academy as svc
 
 
+def negotiated_hire(session, offer):
+    return svc.youth_command(session,{'action':'offer_scout','offer_id':offer['id'],
+        'scout_id':None,'monthly_wage':offer['monthly_wage']*2,
+        'years':2,'signing_fee':offer['signing_fee']})
+
+
 @pytest.fixture(scope='module')
 def starting():
     return DevelopmentSession()
@@ -37,12 +43,12 @@ def test_hires_charge_budget_and_hiring_more_than_three_is_rejected(starting):
     offers=svc.scout_market(youth)
     initial=youth.recruitment_funds
     for i in range(3):
-        result=svc.youth_command(session,{'action':'hire_scout','offer_id':offers[i]['id']})
+        result=negotiated_hire(session,offers[i])
         assert result['scout_id']==f'scout-{i+1}'
     assert len(youth.scouts)==3
     assert youth.recruitment_funds == initial - sum(o['signing_fee'] for o in offers[:3])
     with pytest.raises(ValueError,match='slot'):
-        svc.youth_command(session,{'action':'hire_scout','offer_id':offers[3]['id']})
+        negotiated_hire(session,offers[3])
     exit_cost=youth.scouts['scout-1'].monthly_wage
     result=svc.youth_command(session,{'action':'fire_scout','scout_id':'scout-1'})
     assert result['termination_fee']==exit_cost and len(youth.scouts)==2
@@ -52,12 +58,12 @@ def test_hires_charge_budget_and_hiring_more_than_three_is_rejected(starting):
 def test_monthly_wages_are_charged_once_and_never_negative(starting):
     session=deepcopy(starting);youth=session._world_squads.youth
     offer=svc.scout_market(youth)[0]
-    svc.youth_command(session,{'action':'hire_scout','offer_id':offer['id']})
+    negotiated_hire(session,offer)
     before=youth.recruitment_funds
     svc._pay_scouts(youth,date(2026,9,1))
-    assert youth.recruitment_funds == before-offer['monthly_wage']
+    assert youth.recruitment_funds == before-offer['monthly_wage']*2
     svc._pay_scouts(youth,date(2026,9,1))
-    assert youth.recruitment_funds == before-offer['monthly_wage']
+    assert youth.recruitment_funds == before-offer['monthly_wage']*2
     youth.recruitment_funds=0
     svc._pay_scouts(youth,date(2026,10,1))
     assert not youth.scouts and youth.recruitment_funds==0
@@ -66,10 +72,11 @@ def test_monthly_wages_are_charged_once_and_never_negative(starting):
 def test_scout_offer_rejects_bad_or_unaffordable_contracts(starting):
     session=deepcopy(starting)
     with pytest.raises(ValueError,match='offer'):
-        svc.youth_command(session,{'action':'hire_scout','offer_id':'bogus'})
+        svc.youth_command(session,{'action':'offer_scout','offer_id':'bogus',
+            'scout_id':None,'monthly_wage':4000,'years':2,'signing_fee':0})
     session._world_squads.youth.recruitment_funds=1
     with pytest.raises(ValueError,match='Insufficient'):
-        svc.youth_command(session,{'action':'hire_scout','offer_id':svc.scout_market(session._world_squads.youth)[0]['id']})
+        negotiated_hire(session,svc.scout_market(session._world_squads.youth)[0])
 
 
 def test_poaching_moves_the_same_id_to_a_rival_and_is_rollback_safe(starting,monkeypatch):
@@ -77,7 +84,7 @@ def test_poaching_moves_the_same_id_to_a_rival_and_is_rollback_safe(starting,mon
     registry=session._world_squads;youth=registry.youth
     scout_id='scout-1'
     offer=svc.scout_market(youth)[-1]
-    svc.youth_command(session,{'action':'hire_scout','offer_id':offer['id']})
+    negotiated_hire(session,offer)
     # Discovered player is unsigned and has had ample time to attract rival bids.
     prev=svc._talent(registry.seed,'scout-world','known-prospect',2,
                      on_date=date(2026,6,1),country='Brazil',position=Position.ST,age=16,source='scout-Brazil')
@@ -103,9 +110,9 @@ def test_poaching_moves_the_same_id_to_a_rival_and_is_rollback_safe(starting,mon
 
 def test_old_v10_save_migrates_scouts_without_retroactive_charges(starting):
     session=deepcopy(starting)
-    svc.youth_command(session,{'action':'hire_scout','offer_id':svc.scout_market(session._world_squads.youth)[0]['id']})
+    negotiated_hire(session,svc.scout_market(session._world_squads.youth)[0])
     graph=capture_manager_graph(session)
-    assert graph['version']==GRAPH_VERSION==17
+    assert graph['version']==GRAPH_VERSION
     previous=deepcopy(graph);previous['version']=10
     for node in previous['nodes']:
         if node.get('class')=='football_manager.domain.youth_academy:YouthSystem':
@@ -126,8 +133,8 @@ def test_frontend_assets_show_real_operations_and_zero_build_requirement():
     root=Path(__file__).resolve().parents[1]
     script=(root/'frontend/portable/youth_academy.js').read_text(encoding='utf-8')
     css=(root/'frontend/portable/youth_academy.css').read_text(encoding='utf-8')
-    assert 'data-youth-hire' in script and 'data-youth-action="sign"' in script
-    assert 'poaching_risk' in script and 'data-youth-action="watch"' in script
+    assert 'data-youth-negotiate-offer' in script and 'data-youth-action="sign"' in script
+    assert 'poaching_risk' in script and 'data-youth-action="watch"' not in script
     assert 'Next academy intake' in script and 'Recent results' in script
     assert '.ya-field' in css and '.ya-scout-grid' in css and '.ya-prospect-table' in css
     assert 'window.FMYouthAcademy' in script

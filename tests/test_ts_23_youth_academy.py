@@ -17,7 +17,9 @@ from football_manager.services.youth_academy import (
 def hire_test_scout(session, *, strong=False):
     offers=scout_market(session._world_squads.youth)
     offer=max(offers,key=lambda o:o['quality']) if strong else offers[0]
-    return youth_command(session,{'action':'hire_scout','offer_id':offer['id']})['scout_id']
+    return youth_command(session,{'action':'offer_scout','offer_id':offer['id'],
+        'scout_id':None,'monthly_wage':offer['monthly_wage']*2,
+        'years':2,'signing_fee':offer['signing_fee']})['scout_id']
 
 
 @pytest.fixture(scope='module')
@@ -84,8 +86,9 @@ def test_scout_quarterly_reports_are_country_specific_and_have_new_ids(starting)
     assert all(c.scout_id==sid for c in candidates)
     first=candidates[0].preview
     assert first.player_id not in session.home_club.squad._players
-    result=youth_command(session,{'action':'watch','player_id':first.player_id})
-    assert result['watching']
+    # Automatic scouting follows the discovery; no manual watch action.
+    with pytest.raises(ValueError,match='automatically'):
+        youth_command(session,{'action':'watch','player_id':first.player_id})
     signed=youth_command(session,{'action':'sign','player_id':first.player_id})
     assert signed['signed'] and signed['player_id']==first.player_id
     academy=session._world_squads.youth.academies[session.home_club.id]
@@ -119,7 +122,7 @@ def test_v9_save_upgrade_and_v10_roundtrip_do_not_modify_original_players(starti
     original={p.id:(p.identity.birth_date,p.attributes,p.development.potential)
               for c in session._world_squads.clubs.values() for p in c.squad.players}
     graph=capture_manager_graph(session)
-    assert graph['version']==GRAPH_VERSION==17
+    assert graph['version']==GRAPH_VERSION
     restored=restore_manager_graph(graph)
     assert restored._world_squads.youth is restored._world.football_world.youth
     assert restored._world_squads.youth.check_unique(restored._world_squads) is None
@@ -170,7 +173,9 @@ def test_live_python_http_youth_route_and_scout_action(starting):
         assert 'window.FMYouthAcademy' in js
         offers=before['market_offers']
         hire_req=Request(host+'/api/youth',method='POST',headers={'Content-Type':'application/json'},
-            data=json.dumps({'action':'hire_scout','offer_id':offers[0]['id']}).encode())
+            data=json.dumps({'action':'offer_scout','offer_id':offers[0]['id'],
+                'scout_id':None,'monthly_wage':offers[0]['monthly_wage']*2,
+                'years':2,'signing_fee':offers[0]['signing_fee']}).encode())
         with urlopen(hire_req,timeout=60) as resp:
             hired=json.load(resp)
         request=Request(host+'/api/youth',method='POST',headers={'Content-Type':'application/json'},

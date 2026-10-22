@@ -1,0 +1,27 @@
+TS-UI-07.02 - Youth Academy: visual club identities, denser player cards, action colours
+
+PREREQUISITE
+- Apply over TS-UI-07.01 (which itself is based on TS-UI-06.02).
+- This archive is a small incremental patch, NOT the full game.
+
+INSTALL
+1. Back up your current career save and close the Python UI server.
+2. Unzip TS-UI-07.02-Youth-Academy-Identidad-Filas-PARCHE.zip at the root
+   of football-manager-2026, preserving the internal folder structure.
+3. Allow the archive to overwrite existing files.
+4. Restart the real Python UI shell (NOT the standalone Vite demo).
+5. In your browser use Ctrl+F5 for fresh JS and CSS.
+
+VERIFY IN GAME
+- U17 and U21 league tables identify the managed club through FMClubIdentity.
+  Northbridge is a stable Python ID whose visual catalogue maps to Sunderland;
+  the Python competition tables and results remain unchanged.
+- The club name and crest in the hero and the league's own row match.
+- Promotions between U17/U21 are blue; promotion to first team is green;
+  Release is red. U21 players over 17 display an informative, non-actionable
+  age-limit label rather than a broken Move to U17 button.
+- Player rows now show approximate potential, recent development, cumulative
+  youth minutes and sharpness, with better spacing.
+- Academy intake/scouting/negotiation logic remains as in TS-UI-07.01.
+
+No save migration, reset, or reinstallation needed.
