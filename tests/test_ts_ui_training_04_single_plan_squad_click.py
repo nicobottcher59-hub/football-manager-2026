@@ -76,9 +76,9 @@ def test_v23_career_migrates_without_legacy_group_or_protection_fields(baseline)
     ident=s.home_club.squad.players[0].id
     training_command(s, {'action':'individual','player_id':ident,'intensity':'light'})
     training_command(s, {'action':'configure','auto_thresholds':{'performance_max':78},'changed_field':'performance_max'})
-    assert GRAPH_VERSION == 24
+    assert GRAPH_VERSION == 25
     graph = capture_manager_graph(s)
-    assert graph['version'] == 24
+    assert graph['version'] == 25
     found = 0
     for node in graph['nodes']:
         if node.get('class') == 'football_manager.domain.club_support:TrainingPolicy':

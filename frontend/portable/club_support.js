@@ -222,7 +222,7 @@
   }
   function trainingPortrait(player){
     const fallback=window.FMPortraits?.portrait?.(player,'tr-player-face')||`<span class="tr-face-fallback">${esc(String(player.name||'?').slice(0,1))}</span>`;
-    const photo=trainingPhotoSources.get(String(player.id));
+    const photo=window.FMEntityAssets?.getPhoto?.(player.id)?null:trainingPhotoSources.get(String(player.id));
     return fallback+(photo?`<img class="tr-real-photo" src="/public/squad/${esc(photo)}" alt="" loading="lazy" decoding="async">`:'');
   }
   const autoBandFields=[
@@ -424,7 +424,8 @@
     const medical=mdCount(staffing.medical),fitness=mdCount(staffing.fitness);
     const identity=window.FMClubIdentity?.resolve?.(d.club_id,d.club)||{display_name:d.club||'Club',crest:null};
     const crest=identity.crest?`<img src="${esc(identity.crest)}" alt="" loading="lazy">`:trIcon('shield',34);
-    const brand=identity.crest==='assets/clubs/sunderland/crest.png'?'md-sunderland':'md-generic';
+    const medicalPhoto=window.FMEntityAssets?.safePath?.(identity.medical_image) ? window.FMEntityAssets.url(identity.medical_image) : null;
+    const medicalBackground=medicalPhoto ? `style="--md-photo:url('${esc(medicalPhoto)}')"` : '';
     const kp=(icon,title,value,caption,kind)=>`<div class="md-stat md-stat-${kind}"><span class="md-stat-icon">${trIcon(icon,19)}</span><span><strong>${value}</strong><b>${title}</b><small>${esc(caption)}</small></span></div>`;
     const rosterRows=cases.map(p=>{
       const status=p.days_left===null?'Return date not recorded':`${p.days_left} days remaining`;
@@ -457,7 +458,7 @@
     const high=mdCount(bands.high),medium=mdCount(bands.medium),low=mdCount(bands.low);
     const condition=d.average_condition==null?'—':`${Number(d.average_condition).toFixed(1)}%`;
     host.innerHTML=`<div class="md-shell">
-      <section class="md-hero ${brand}" aria-label="Medical Centre">
+      <section class="md-hero" ${medicalBackground} aria-label="Medical Centre">
         <div class="md-hero-main"><div class="md-club-crest">${crest}</div><div class="md-hero-copy"><span class="md-overline">${esc(identity.display_name||d.club||'Club')} · FIRST TEAM</span><h2>Medical centre</h2><p>Monitor injuries, support recovery and manage treatment decisions with your medical team.</p></div></div>
         <div class="md-hero-stats">
           ${kp('activity','Unavailable',cases.length,'Players currently sidelined','unavailable')}
@@ -498,7 +499,9 @@
     if(!host)return;
     const tick=++serial;
     try{const response=await fetch(api[screen],{cache:'no-store'});const payload=await response.json();if(!response.ok)throw Error(payload.error||`HTTP ${response.status}`);
-      if(tick!==serial)return;state=payload;render();}
+      if(tick!==serial)return;state=payload;
+      window.FMClubIdentity?.applyShell?.(payload.club_id,payload.club);
+      render();}
     catch(error){if(tick===serial)host.innerHTML=`<div class="cs-panel"><h3>Unable to load ${esc(screen)}</h3><p>${esc(error.message)}</p><button type="button" data-cs-action="refresh">Retry</button></div>`;}
   }
   async function send(payload){

@@ -123,7 +123,7 @@ def test_simulation_and_persistence(world):
     result = session.quick_simulate()
     assert result.home_goals >= 0
     graph = capture_manager_graph(session)
-    assert graph['version'] == GRAPH_VERSION == 24
+    assert graph['version'] == GRAPH_VERSION == 25
     recovered = restore_manager_graph(graph)
     assert recovered.set_piece_orders['captain'][0] == player.id
     validate_manager_session(recovered)

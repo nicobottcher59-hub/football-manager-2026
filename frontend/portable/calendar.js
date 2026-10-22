@@ -8,10 +8,13 @@ window.FMCalendar = (() => {
   const shortWeekdays=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   const competitionKind=id=>({'dev-premier':'league',league:'league','fa-cup':'fa','carabao-cup':'carabao','champions-league':'champions','europa-league':'europa','conference-league':'conference','efl-trophy':'trophy'})[id]||'other';
   const hash=s=>[...String(s)].reduce((v,c)=>(Math.imul(v,31)+c.charCodeAt(0))|0,17);
-  const badge=(name,managed=false)=>{
-    const hue=managed?204:Math.abs(hash(name))%360;
-    const abbr=managed?'N':String(name).split(/[\s-]+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();
-    return `<span class="cal-crest ${managed?'cal-crest-managed':''}" style="--crest-hue:${hue}" role="img" aria-label="Fictional ${html(name)} crest"><span>${html(abbr||'?')}</span></span>`;
+  const shownClub=(id,name)=>window.FMClubIdentity?.resolve?.(id,name)?.display_name||name||id||'Club';
+  const badge=(name,id,managed=false)=>{
+    const item=window.FMClubIdentity?.resolve?.(id,name);
+    if(item?.crest)return `<img data-fm-asset="optional" class="cal-crest cal-crest-real" src="${html(window.FMEntityAssets?.url(item.crest)||item.crest)}" alt="" loading="lazy">`;
+    const hue=Math.abs(hash(id||name))%360;
+    const abbr=String(name||id||'?').split(/[\s-]+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();
+    return `<span class="cal-crest ${managed?'cal-crest-managed':''}" style="--crest-hue:${hue}" aria-label="${html(shownClub(id,name))} crest"><span>${html(abbr||'?')}</span></span>`;
   };
   const parseUTC=s=>new Date(`${s}T12:00:00Z`);
   const monthOf=date=>date.slice(0,7);
@@ -48,10 +51,10 @@ window.FMCalendar = (() => {
   function fixture(g){
     const picked=g.id===selectedId;
     const cls=outcomeClass(g.outcome);
-    return `<button type="button" data-cal-match="${html(g.id)}" class="cal-fixture cal-comp-${competitionKind(g.competition_id)} cal-${cls}${picked?' cal-selected':''}" aria-pressed="${picked}" aria-label="${html(g.competition)}: ${html(g.opponent)} ${g.home?'home':'away'} ${html(g.score?scoreText(g):'upcoming')}" title="${html(g.competition)} · ${html(g.round)}">
+    return `<button type="button" data-cal-match="${html(g.id)}" class="cal-fixture cal-comp-${competitionKind(g.competition_id)} cal-${cls}${picked?' cal-selected':''}" aria-pressed="${picked}" aria-label="${html(g.competition)}: ${html(shownClub(g.opponent_id,g.opponent))} ${g.home?'home':'away'} ${html(g.score?scoreText(g):'upcoming')}" title="${html(g.competition)} · ${html(g.round)}">
       <span class="cal-fixture-top"><span class="cal-comp-dot"></span><span>${html(g.competition)}</span></span>
-      <span class="cal-fixture-main">${badge(g.home_club,isManaged(g.home_club))}${badge(g.away_club,isManaged(g.away_club))}<span class="cal-venue">${g.home?'H':'A'}</span><strong class="cal-fixture-score">${html(tileScore(g))}</strong></span>
-      <span class="cal-fixture-opponent" role="link" tabindex="0" data-cal-club="${html(g.opponent_id)}">${html(g.opponent)}</span>
+      <span class="cal-fixture-main">${badge(g.home_club,g.home_id,isManaged(g.home_club))}${badge(g.away_club,g.away_id,isManaged(g.away_club))}<span class="cal-venue">${g.home?'H':'A'}</span><strong class="cal-fixture-score">${html(tileScore(g))}</strong></span>
+      <span class="cal-fixture-opponent" role="link" tabindex="0" data-cal-club="${html(g.opponent_id)}">${html(shownClub(g.opponent_id,g.opponent))}</span>
       ${g.score?`<span class="cal-outcome-label cal-outcome-${cls}">${outcomeLabel(g.outcome)}${g.penalties?' · pens':''}</span>`:''}
     </button>`;
   }
@@ -92,9 +95,9 @@ window.FMCalendar = (() => {
     return `<section class="cal-detail-card panel cal-comp-${competitionKind(g.competition_id)}">
       <div class="cal-side-title"><span>${html(g.competition)} · ${html(g.round)}</span><span class="cal-side-source">${html(g.source.toUpperCase())} pairing</span></div>
       <div class="cal-detail-stadium"><div class="cal-detail-teams">
-        <div><button type="button" class="ts22-club-link" data-club-id="${html(g.home_id)}">${badge(g.home_club,isManaged(g.home_club))}<strong>${html(g.home_club)}</strong></button><small>Home</small></div>
+        <div><button type="button" class="ts22-club-link" data-club-id="${html(g.home_id)}">${badge(g.home_club,g.home_id,isManaged(g.home_club))}<strong>${html(shownClub(g.home_id,g.home_club))}</strong></button><small>Home</small></div>
         <span class="cal-vs">${g.score?`${g.score.home} : ${g.score.away}`:'VS'}</span>
-        <div><button type="button" class="ts22-club-link" data-club-id="${html(g.away_id)}">${badge(g.away_club,isManaged(g.away_club))}<strong>${html(g.away_club)}</strong></button><small>Away</small></div>
+        <div><button type="button" class="ts22-club-link" data-club-id="${html(g.away_id)}">${badge(g.away_club,g.away_id,isManaged(g.away_club))}<strong>${html(shownClub(g.away_id,g.away_club))}</strong></button><small>Away</small></div>
       </div></div>
       <div class="cal-detail-meta"><span>▦ ${html(fmtDay(g.date))}</span><span>◷ ${html(kickoff(g.kickoff))}</span></div>
       <div class="cal-detail-body">
@@ -103,7 +106,7 @@ window.FMCalendar = (() => {
         ${g.rescheduled&&g.original_date?`<div class="cal-stage-row"><span>Rescheduled from</span><strong>${html(fmtDay(g.original_date))}</strong></div>`:''}
         ${g.score?`<div class="cal-result-panel cal-result-${resultClass}"><strong>${html(outcomeLabel(g.outcome))} · ${html(scoreText(g))}</strong><small>${g.penalties?`Penalty shootout ${g.penalties.home}–${g.penalties.away} · winner determines result colour`:'Score of this individual match'}</small></div>`:'<div class="cal-fixture-pending">Match not played yet. No result has been registered in Python.</div>'}
         ${aggInfo}
-        <div class="cal-truth-note">Fixture from the current fictional Python season. Club crests are provisional. Stadium, referee and match preview are not yet connected.</div>
+        <div class="cal-truth-note">Fixture from the current fictional Python season. Stadium, referee and match preview are not yet connected.</div>
       </div>
     </section>`;
   }
@@ -112,7 +115,7 @@ window.FMCalendar = (() => {
     const past=target<today();
     const beyond=target>(window.FMProgression?.state()?.season_cutoff||'9999-12-31');
     return `<section class="cal-sim-card panel"><div class="cal-sim-heading"><span>Selected day</span><strong>${html(fmtDay(target))}</strong></div>
-      <p>Auto-simulates every fixture, including Northbridge matches, until this day. Only a real intervention event would pause it (those events are not yet implemented).</p>
+      <p>Auto-simulates every fixture, including your club's matches, until this day. Only a real intervention event would pause it (those events are not yet implemented).</p>
       <button type="button" data-cal-simulate="${html(target)}" ${past||beyond||simulating?'disabled':''}>
       ${simulating?'Simulating...':past?'Past date':beyond?'Outside current season':'Simulate to this date →'}</button>
       <small>DEV session only · Results are not saved when the server closes.</small>
@@ -120,7 +123,7 @@ window.FMCalendar = (() => {
   }
   function upcoming(){
     const list=snapshot.matches.filter(g=>!g.score&&g.status==='scheduled'&&g.date>=today()).slice(0,6);
-    return `<section class="cal-next-card panel"><div class="cal-next-heading"><h3>Upcoming fixtures</h3><small>From Python</small></div>${list.length?list.map(g=>`<button type="button" data-cal-upcoming="${html(g.id)}"><span class="cal-next-date">${html(g.date.slice(8,10))} ${html(names[Number(g.date.slice(5,7))-1].slice(0,3))}</span><span class="cal-next-comp cal-comp-${competitionKind(g.competition_id)}"></span>${badge(g.opponent)}<span class="cal-next-team">${html(g.opponent)}<small>${html(g.competition)}</small></span><span class="cal-next-venue">${g.home?'H':'A'}</span></button>`).join(''):'<p class="cal-empty-upcoming">No future fixtures are scheduled.</p>'}</section>`;
+    return `<section class="cal-next-card panel"><div class="cal-next-heading"><h3>Upcoming fixtures</h3><small>From Python</small></div>${list.length?list.map(g=>`<button type="button" data-cal-upcoming="${html(g.id)}"><span class="cal-next-date">${html(g.date.slice(8,10))} ${html(names[Number(g.date.slice(5,7))-1].slice(0,3))}</span><span class="cal-next-comp cal-comp-${competitionKind(g.competition_id)}"></span>${badge(g.opponent,g.opponent_id)}<span class="cal-next-team">${html(shownClub(g.opponent_id,g.opponent))}<small>${html(g.competition)}</small></span><span class="cal-next-venue">${g.home?'H':'A'}</span></button>`).join(''):'<p class="cal-empty-upcoming">No future fixtures are scheduled.</p>'}</section>`;
   }
   function render(){
     if(!root)return;
@@ -128,7 +131,7 @@ window.FMCalendar = (() => {
     selectBest();
     const [y,m]=month.split('-').map(Number);
     const opts=[{id:'all',name:'All competitions'},...snapshot.competitions];
-    root.innerHTML=`<div class="cal-root" role="region" aria-label="Northbridge FC calendar">
+    root.innerHTML=`<div class="cal-root" role="region" aria-label="Managed club calendar">
       <div class="cal-toolbar"><div class="cal-month-controls"><button type="button" data-cal-action="prev" aria-label="Previous month">‹</button><span aria-live="polite">${names[m-1]} ${y}</span><button type="button" data-cal-action="next" aria-label="Next month">›</button><button class="cal-today-button" type="button" data-cal-action="today">Today</button></div>
       <div class="cal-filter-tabs" role="group" aria-label="Filter by competition">${opts.map(c=>`<button type="button" data-cal-filter="${html(c.id)}" class="cal-filter-chip cal-comp-${competitionKind(c.id)} ${filter===c.id?'active':''}" aria-pressed="${filter===c.id}"><span class="cal-comp-dot"></span>${html(c.name)}</button>`).join('')}</div></div>
       <div class="cal-layout"><div class="cal-month panel">${grid()}<footer class="cal-legend"><span><i class="win"></i>Win</span><span><i class="draw"></i>Draw</span><span><i class="loss"></i>Loss</span><small>Background = competition · Border = result · All dates/results from Python</small></footer></div><aside class="cal-sidebar">${simulateBox()}${detail()}${upcoming()}</aside></div>

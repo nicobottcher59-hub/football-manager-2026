@@ -1,0 +1,26 @@
+TS-UI-08.01 - SCOUTING HUB, BUSQUEDA Y SHORTLIST
+
+BASE REQUERIDA: TS-UI-07.02 ya aplicada.
+
+1. Respalda tu partida.
+2. Detene el servidor Python.
+3. Extrae este ZIP en la RAIZ de football-manager-2026.
+4. Conserva la estructura de carpetas; reemplaza solo los archivos listados.
+5. Reinicia el juego usando el servidor Python habitual:
+   PYTHONPATH=src python3 -m football_manager.ui_shell
+6. Hace Ctrl+F5 para renovar scripts y estilos.
+7. En Scouting, revisa: Hub > Player Search > Shortlist > Scout Network.
+8. Para negociar o contratar ojeadores profesionales, usa Staff. Los reportes
+   terminados se notifican en el Inbox del juego.
+
+No ejecuta migracion manual de guardados. El grafo de partida sube a v25 y
+admite las partidas anteriores v24. La interfaz Squad no se reemplaza.
+
+GitHub Desktop
+Branch sugerida: wip/scouting-08a-redesign
+Summary: feat(scouting): TS-UI-08.01 free search, scout network and shortlist
+Description: Add professional scouting hub with worldwide public-data search,
+report-gated estimated player ratings and values, shared Squad portraits,
+career-persistent shortlist and scout territory assignments. Preserve the
+existing scouting calendar, Inbox and transfer negotiations, plus dynamic
+club identity and responsive layouts.

@@ -17,7 +17,10 @@
     const key = player?.id || player?.name || 'unknown';
     const h = hash(key), skin = skins[h % skins.length], hair = hairs[(h >>> 4) % hairs.length];
     const keeper = ['GK'].includes(player?.primary_position || player?.position);
-    const kit = keeper ? '#e7aa43' : shirts[(h >>> 7) % shirts.length];
+    const clubId=player?.club_id||player?.team_id||player?.clubId;
+    const identity=clubId?window.FMClubIdentity?.resolve?.(clubId,player?.club):null;
+    const themed=identity?.primary_color||document.documentElement.style.getPropertyValue('--club-primary').trim();
+    const kit = keeper ? '#e7aa43' : /^#[0-9a-fA-F]{6}$/.test(themed) ? themed : shirts[(h >>> 7) % shirts.length];
     const side = (h % 7) - 3, style = (h >>> 9) % 6, beard = (h >>> 12) % 4;
     const fringe = [
       'M18 35Q15 9 43 11Q70 11 72 35Q63 28 56 24Q40 33 18 35Z',
@@ -28,7 +31,9 @@
       'M20 35Q14 19 30 12Q58 3 72 30L68 38Q63 22 55 23Q43 24 20 35Z',
     ][style];
     const beardMarkup = beard===0 ? '' : `<path d="M30 63Q36 ${68+beard*2} 45 69Q54 ${68+beard*2} 61 63Q59 76 45 78Q31 76 30 63Z" fill="${hair}" opacity="${beard===1?'.21':'.62'}"/><path d="M38 63Q45 60 52 63" stroke="${hair}" stroke-width="${beard===1?'1.5':'3'}" fill="none" opacity=".7"/>`;
-    return `<span class="fm-face ${esc(classes)}" role="img" aria-label="Illustrated placeholder portrait: ${esc(player?.name || 'Player')}">
+    const imported=window.FMEntityAssets?.getPhoto?.(player?.id);
+    return `<span class="fm-face ${esc(classes)}" role="img" aria-label="Player portrait: ${esc(player?.name || 'Player')}">
+      ${imported?`<img class="fm-photo-real" data-fm-asset="optional" src="${esc(window.FMEntityAssets.url(imported))}" alt="" loading="lazy" decoding="async">`:''}
       <svg viewBox="0 0 90 104" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
         <rect width="90" height="104" rx="7" fill="#123555"/><path d="M0 0H90L57 104H0Z" fill="#205c82" opacity=".46"/><path d="M4 95L86 12" stroke="#67dbef" stroke-width="1.6" opacity=".13"/>
         <path d="M3 104Q4 84 22 79L36 76H54L70 80Q87 84 87 104Z" fill="${kit}"/><path d="M6 102Q11 88 28 84L22 104ZM84 102Q79 88 62 84L68 104Z" fill="#092b55" opacity=".32"/>

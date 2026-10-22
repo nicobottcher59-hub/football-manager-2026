@@ -10,7 +10,7 @@
     'champions-league':{key:'champions',accent:'#638eff',glow:'99,142,255',shade:'#122d70',logo:'assets/competitions/champions-league.png',icon:'assets/competitions/champions-league-icon.png'},
   });
   const neutral=Object.freeze({key:'neutral',accent:'#79bce4',glow:'121,188,228',shade:'#173447',logo:null,icon:null});
-  const resolve=id=>themes[String(id)]||neutral;
+  const resolve=id=>{const base=themes[String(id)]||neutral;const imported=window.FMEntityAssets?.getCompetition?.(id);return imported?{...base,logo:imported,icon:imported}:base;};
   function vars(id) {
     const t=resolve(id);
     return `--ci-accent:${t.accent};--ci-rgb:${t.glow};--ci-shade:${t.shade};--ci-logo:${t.logo?`url('${t.logo}')`:'none'};--ci-symbol:${t.icon?`url('${t.icon}')`:'none'};`;
@@ -21,7 +21,7 @@
     // a long competition wordmark into a 20px-high chip.
     const useFull=className.includes('ci-full-logo');
     const image=useFull?t.logo:t.icon;
-    return image?`<img class="${className}" src="${image}" alt="" loading="lazy" draggable="false">`:
+    return image?`<img data-fm-asset="optional" class="${className}" src="${window.FMEntityAssets?.url(image)||image}" alt="" loading="lazy" draggable="false">`:
       `<span class="ci-generic-logo ${className}" aria-hidden="true">✦</span>`;
   }
   window.FMCompetitionBranding=Object.freeze({resolve,vars,badge});

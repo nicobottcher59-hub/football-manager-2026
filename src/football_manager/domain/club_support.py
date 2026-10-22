@@ -135,6 +135,9 @@ class ClubSupport:
     training_days: dict[str, tuple[float, int]] = field(default_factory=dict)
     scouting_assignments: dict[str, ProfessionalScoutAssignment] = field(default_factory=dict)
     scouting_reports: dict[str, ProfessionalScoutReport] = field(default_factory=dict)
+    # TS-UI-08: career-persistent independent shortlist and scout territories.
+    scouting_shortlist: dict[str, str] = field(default_factory=dict)
+    scouting_destinations: dict[str, str] = field(default_factory=dict)
     capacity_source: str = 'provisional-original-division-v1'
     baseline_weekly_gbp: int = 0  # Staff cost included in the original overhead proxy.
 
@@ -163,6 +166,17 @@ class ClubSupport:
             report.validate()
             if player_id != report.player_id:
                 raise ValueError('professional scouting report mismatch')
+        if (not isinstance(self.scouting_shortlist, dict) or len(self.scouting_shortlist) > 300
+                or any(not isinstance(pid, str) or not pid or len(pid) > 160
+                       or priority not in ('top', 'future', 'monitor')
+                       for pid, priority in self.scouting_shortlist.items())):
+            raise ValueError('invalid professional scouting shortlist')
+        if (not isinstance(self.scouting_destinations, dict) or len(self.scouting_destinations) > 8
+                or any(not isinstance(mid, str) or not mid or len(mid) > 160
+                       or not isinstance(region, str) or len(region) > 100
+                       or not (region == 'all' or region.startswith(('country:', 'league:')))
+                       for mid, region in self.scouting_destinations.items())):
+            raise ValueError('invalid scout destinations')
         for player_id, (score, days) in self.training_days.items():
             if not player_id or not isfinite(score) or type(days) is not int or days < 0 or days > 370:
                 raise ValueError('invalid accumulated training days')

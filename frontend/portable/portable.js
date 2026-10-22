@@ -218,7 +218,7 @@
     if(youthPanel.style.display!=='none')window.FMYouthAcademy?.refresh();
       if(youthPanel.style.display!=='none')window.FMYouthAcademy?.refresh();
       if(financesPanel.style.display!=='none')window.FMFinances?.refresh();
-      if(transfersPanel.style.display!=='none')window.FMTransfers?.refresh();
+      if(transfersPanel.style.display!=='none'){if(routeState.page==='Scouting')window.FMScouting?.refresh();else window.FMTransfers?.refresh();}
       if(competitionPanel.style.display!=='none'){
         const other=$('.sidebar .nav-item.is-active span')?.textContent.trim()==='Other Leagues';
         window.FMCompetitions?.mount(competitionPanel,other?'other':'mine');
@@ -362,7 +362,9 @@
     if(inbox)window.FMInbox?.mount(inboxPanel,extra.player||null);
     youthPanel.style.display = youthAcademy ? 'block' : 'none';
     transfersPanel.style.display = transfers ? 'block' : 'none';
-    if(transfers)window.FMTransfers?.mount(transfersPanel,{view:negotiationPage?'negotiation':'scouting',
+    transfersPanel.classList.toggle('is-scouting',page==='Scouting');
+    if(page==='Scouting')window.FMScouting?.mount(transfersPanel);
+    else if(negotiationPage)window.FMTransfers?.mount(transfersPanel,{view:'negotiation',
       playerId:extra.player||null,dealId:extra.deal||null,tab:extra.tab||null});
     financesPanel.style.display = finances ? 'block' : 'none';
     if(finances) window.FMFinances?.mount(financesPanel);
@@ -402,6 +404,9 @@
     refreshProgression();
     document.body.classList.toggle('tsui-home-active',home);
     document.body.classList.toggle('tsui-squad-active',page==='Squad');
+    document.body.classList.toggle('tsui-youth-active',youthAcademy);
+    document.body.classList.toggle('tsui-scouting-active',page==='Scouting');
+    document.body.classList.toggle('tsui-medical-active',page==='Medical Centre');
     document.body.classList.toggle('tsui-training-active',page==='Training');
     document.body.classList.toggle('tsui-staff-active',page==='Staff');
     document.body.classList.toggle('tsui-dressing-active',dressingRoom);
@@ -417,7 +422,7 @@
       : inbox ? 'Live club messages, scouting reports, medical news and player conversations.'
       : youthAcademy ? 'U15 preview, automated U17/U21 leagues and quarterly scouting.'
       : negotiationPage ? 'Dedicated negotiation: guaranteed fees, optional clauses and club replies.'
-      : transfers ? 'Search professional players and manage your club negotiations.'
+      : transfers ? 'Search worldwide, assign professional scouts, and manage your shortlist.'
       : finances ? 'Club cash, transfer allocation, wage budget and registered player contracts.'
       : dressingRoom ? 'Automatic hierarchy, working relationships and quiet squad dynamics. No micromanagement required.'
       : calendar ? 'View club fixtures and recorded results. Dates and opponents come from the Python world calendar.'
@@ -450,7 +455,7 @@
     if(supportPanel.style.display!=='none')window.FMSupport?.refresh();
     if(youthPanel.style.display!=='none')window.FMYouthAcademy?.refresh();
     if(financesPanel.style.display!=='none')window.FMFinances?.refresh();
-      if(transfersPanel.style.display!=='none')window.FMTransfers?.refresh();
+      if(transfersPanel.style.display!=='none'){if(routeState.page==='Scouting')window.FMScouting?.refresh();else window.FMTransfers?.refresh();}
     if(competitionPanel.style.display!=='none'){
       const other=$('.sidebar .nav-item.is-active span')?.textContent.trim()==='Other Leagues';
       window.FMCompetitions?.mount(competitionPanel, other?'other':'mine');
@@ -462,7 +467,7 @@
     if(supportPanel.style.display!=='none')window.FMSupport?.refresh();
     if(youthPanel.style.display!=='none')window.FMYouthAcademy?.refresh();
     if(financesPanel.style.display!=='none')window.FMFinances?.refresh();
-      if(transfersPanel.style.display!=='none')window.FMTransfers?.refresh();
+      if(transfersPanel.style.display!=='none'){if(routeState.page==='Scouting')window.FMScouting?.refresh();else window.FMTransfers?.refresh();}
   });
   navButtons.forEach(button => button.addEventListener('click', () => navigate($('span',button).textContent.trim())));
   $('button.action-green', placeholder).addEventListener('click', () => navigate('Home'));

@@ -1,0 +1,13 @@
+TS-UI-08.02 / TS-CORE-01 - Incremental patch
+
+REQUIRES: Football Manager 2026 with TS-UI-08.01 already installed.
+1. Back up the career save and stop the Python game server.
+2. Extract this ZIP into the football-manager-2026 repository root.
+3. Preserve directory paths; overwrite corresponding files.
+4. Restart the Python game server and use Ctrl+F5 to refresh.
+
+Changes include Scouting sorting/wage/elite visibility and an optional global
+ID-based image registry. No save format migration is required.
+The real-world football database and its licensed assets are not bundled.
+See docs/TS_CORE_ENTITY_ASSETS_08_02.md for future asset import instructions.
+See TS_UI_08_02_TEST_REPORT.md for verified tests and limitations.

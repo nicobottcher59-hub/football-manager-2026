@@ -145,3 +145,5 @@ html,body{background:radial-gradient(ellipse at 58% -20%,#1b3a54,#081a2c 42%,#05
 .rt-admin-section .rt-admin-actions button:not(:disabled):hover{background:linear-gradient(#18425c,#0d2e48);border-color:#57bfff;transform:translateY(-1px)}
 .rt-admin-section .rt-admin-actions button:not(:disabled) .rt-action-icon{background:#14507c;color:#86dbff}
 @media(max-width:980px){.rt-season-layout,.rt-management-layout{grid-template-columns:1fr}.rt-season-cards,.rt-season-grid,.rt-admin-facts{grid-template-columns:1fr}}
+
+.fm-face{position:relative}.fm-face>.fm-photo-real{position:absolute;z-index:2;inset:0;width:100%;height:100%;object-fit:cover;border:0;border-radius:inherit}

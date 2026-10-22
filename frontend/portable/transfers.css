@@ -127,3 +127,15 @@ body.tr-negotiation-open .fm-transfers-screen{padding-bottom:0}
 .tr-scout-card,.tr-scout-report{align-items:center}
 .tr-scout-summary{color:#c0d2df;font-size:12px;line-height:1.6;margin:9px 0}
 .tr-prospect-actions button[disabled]{opacity:.43;cursor:default}
+
+/* TS-UI-08.03 — selling club crest and local, ID-keyed accent in Transfers. */
+.tr-prospect-name small{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tr-small-club-image{display:inline-flex;align-items:center;justify-content:center;object-fit:contain;width:22px;height:24px;flex:0 0 22px;font-size:13px}
+.tr-neg-club-image{display:block;width:65px;height:65px;max-width:84%;max-height:84%;object-fit:contain;font-size:31px}
+.tr-club-placeholder{color:#91b3c8}
+.tr-neg-hero[data-fm-club-theme]{padding:18px 18px 22px;margin-left:-12px;margin-right:-12px;border-radius:11px;
+  background:radial-gradient(ellipse at 11% 15%,rgba(var(--player-club-rgb,20,135,216),.43),transparent 55%),linear-gradient(115deg,rgba(var(--player-club-rgb,20,135,216),.15),#081f32 87%);
+  border:1px solid rgba(var(--player-club-rgb,20,135,216),.58)}
+.tr-neg-hero[data-fm-club-theme] .tr-neg-crest{border-color:var(--player-club-highlight,#47a8ed);background:rgba(var(--player-club-rgb,20,135,216),.20)}
+.tr-neg-hero[data-fm-club-theme] .tr-kicker{color:var(--player-club-highlight,#47a8ed)}
+@media(max-width:650px){.tr-neg-hero[data-fm-club-theme]{margin:0 0 18px;padding:14px}.tr-neg-club-image{width:46px;height:46px}}

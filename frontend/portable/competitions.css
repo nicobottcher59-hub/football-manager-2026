@@ -228,3 +228,5 @@
 .cmp-directory-note{color:#82a7bf;font-size:10px;line-height:1.45;margin:10px 0 0}
 .cmp-filter-field select{cursor:pointer;position:relative;z-index:2}
 .cmp-filter-field select option{background:#102c43;color:#f2f9ff}
+
+.cmp-crest.cmp-crest-real{clip-path:none!important;background:transparent!important;border:0!important;box-shadow:none!important;object-fit:contain!important;padding:0!important;filter:drop-shadow(0 2px 3px #0009)}

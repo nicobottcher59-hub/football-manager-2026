@@ -44,3 +44,5 @@
 .fm-home-live-player .ovr-tag.fm-grade-good{background:linear-gradient(#6be6d9,#34b7ae);border-color:#a6fff1;color:#053b39}
 .fm-home-live-player .ovr-tag.fm-grade-mid{background:linear-gradient(#f6d488,#dda742);border-color:#ffe0a1;color:#493116}
 .fm-home-live-player .ovr-tag.fm-grade-low{background:linear-gradient(#a8b9c9,#7f93a8);border-color:#dbe4ea;color:#25394e}
+
+.fm-face{position:relative}.fm-face>.fm-photo-real{position:absolute;z-index:2;inset:0;width:100%;height:100%;object-fit:cover;border:0;border-radius:inherit}

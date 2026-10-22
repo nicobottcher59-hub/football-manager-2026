@@ -124,3 +124,6 @@
 .cal-fifa-mark:hover{opacity:1;filter:saturate(1)}
 .cal-day.cal-past .cal-fifa-mark{opacity:.48}
 .cal-day-label>small + .cal-fifa-mark{margin-left:2px}
+
+/* Universal art: real crests must retain their native silhouette. */
+.cal-crest.cal-crest-real{clip-path:none!important;background:transparent!important;box-shadow:none!important;border:0!important;object-fit:contain;padding:0;filter:drop-shadow(0 2px 3px #0008)}

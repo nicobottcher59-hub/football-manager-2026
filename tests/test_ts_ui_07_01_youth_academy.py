@@ -156,4 +156,4 @@ def test_frontend_uses_shared_identity_one_recruitment_action_and_no_staff_photo
 def test_sqlite_manager_section_and_graph_versions_are_aligned():
     from football_manager.persistence.manager_career import MANAGER_STATE_VERSION
     from football_manager.persistence.session_codec import GRAPH_VERSION
-    assert MANAGER_STATE_VERSION == GRAPH_VERSION == 24
+    assert MANAGER_STATE_VERSION == GRAPH_VERSION == 25

@@ -18,7 +18,7 @@
   const projection = s => `<span class="ya-tag ya-tag-${projectionClass(s)}">${esc(s||'Developing')}</span>`;
   const personIcon = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2c0-4.5 3-7 8-7s8 2.5 8 7v2"/></svg>`;
   const initials = full => String(full||'?').split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase();
-  const portrait = (p, big=false) => `<span class="ya-avatar${big?' ya-avatar-lg':''}" aria-hidden="true"><span class="ya-avatar-figure"><span class="ya-avatar-head"></span><span class="ya-avatar-body"></span></span><span class="ya-avatar-badge">${esc(initials(p.name))}</span></span>`;
+  const portrait = (p, big=false) => {const path=window.FMEntityAssets?.getPhoto?.(p.id);return `<span class="ya-avatar${big?' ya-avatar-lg':''}" aria-hidden="true"><span class="ya-avatar-figure"><span class="ya-avatar-head"></span><span class="ya-avatar-body"></span></span><span class="ya-avatar-badge">${esc(initials(p.name))}</span>${path?window.FMEntityAssets.image(path,'fm-photo-real ya-asset-photo'):''}</span>`;};
   const youthPortrait = p => `<span class="ya-roster-portrait">${window.FMPortraits?.portrait?.(p, 'ya-roster-face') || portrait(p)}</span>`;
   // Stable club IDs belong to the Python football world. Display names, crests
   // and colours are resolved independently through the shared club catalogue.
@@ -86,7 +86,7 @@
     });
     function token(i){
       const p=eleven[i];if(!p)return '<div class="ya-u15-card ya-u15-placeholder">Vacant</div>';
-      return `<div class="ya-u15-card" title="${esc(p.name)} · ${esc(p.projection)} · Potential ${esc(potentialLabel(p))}"><span class="ya-pitch-avatar">${esc(initials(p.name))}</span><div><span class="ya-u15-position">${esc(order[i])}</span><strong>${esc(p.name.split(' ').slice(-1)[0])}</strong><small>${p.age} yrs</small></div>${potentialStars(p)}${projection(p.projection==='Limited projection'?'Limited':p.projection)}</div>`;
+      return `<div class="ya-u15-card" title="${esc(p.name)} · ${esc(p.projection)} · Potential ${esc(potentialLabel(p))}"><span class="ya-pitch-avatar">${esc(initials(p.name))}${window.FMEntityAssets?.getPhoto?.(p.id)?window.FMEntityAssets.image(window.FMEntityAssets.getPhoto(p.id),'fm-photo-real ya-u15-photo'): ''}</span><div><span class="ya-u15-position">${esc(order[i])}</span><strong>${esc(p.name.split(' ').slice(-1)[0])}</strong><small>${p.age} yrs</small></div>${potentialStars(p)}${projection(p.projection==='Limited projection'?'Limited':p.projection)}</div>`;
     }
     const fieldLine = (...positions) => `<div class="ya-field-line">${positions.map(token).join('')}</div>`;
     const eligible = state.u15.filter(p=>p.upcoming).length;

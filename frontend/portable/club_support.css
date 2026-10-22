@@ -371,9 +371,7 @@ body.tsui-training-active .sidebar .nav-item.is-active svg{color:var(--ui-club-h
   min-height:236px;overflow:hidden;border-color:rgba(var(--ui-club-highlight-rgb,66,155,222),.60);background:#10283b}
 .md-hero::before{content:"";z-index:-2;position:absolute;inset:0;
   background:linear-gradient(90deg,#06182deF 0%,#061a30ed 26%,#0a223a66 51%,#06142530 79%,#05152698 100%),
-    url('assets/medical/medical-suite-generic.webp') center 52% / cover no-repeat}
-.md-hero.md-sunderland::before{background:linear-gradient(90deg,#06182dea 0%,#061a30e8 27%,#061d3499 52%,#07152646 77%,#071321a6 100%),
-    url('assets/medical/sunderland-physio-suite.webp') center 48% / cover no-repeat}
+    var(--md-photo,url('assets/medical/medical-suite-generic.webp')) center 52% / cover no-repeat}
 .md-hero::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;
   background:radial-gradient(ellipse at 0% 0%,rgba(var(--md-club-rgb),.31),transparent 54%),
     repeating-linear-gradient(134deg,transparent 0 115px,rgba(var(--md-club-rgb),.04) 116px 117px,transparent 118px 170px)}

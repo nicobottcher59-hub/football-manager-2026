@@ -78,7 +78,7 @@ def test_real_match_records_club_season_and_player_stats(starting):
     assert history['seasons'][0]['statistics']['appearances'] >= 1
     validate_manager_session(session)
     graph = capture_manager_graph(session)
-    assert graph['version'] == GRAPH_VERSION == 24
+    assert graph['version'] == GRAPH_VERSION == 25
     restored = restore_manager_graph(graph)
     validate_manager_session(restored)
     assert player_career_read_model(restored,candidate.id) == history

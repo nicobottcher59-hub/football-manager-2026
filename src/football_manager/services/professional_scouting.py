@@ -1,9 +1,8 @@
-"""TS-26.1: bounded first-team scouting reports, without hiding player data.
+"""Professional scouting, career calendar reports, worldwide discovery and shortlist.
 
-This is a work queue, not a replacement for the transfer search or youth
-academy. More scouts provide more simultaneous observation slots; higher
-quality scouts work faster and, at 78+, cover a second player. Reports only
-summarize already-public attributes, and confer no negotiation advantage.
+The transfer engine owns bids; scouting owns discovery, observation capacity
+and estimated knowledge. Higher-quality staff progress faster. The Hub masks
+confidential statistics until a report, without altering actual player ratings.
 """
 from __future__ import annotations
 
@@ -108,15 +107,42 @@ def scouting_read_model(session) -> dict:
     return {'scout_count': len(employees), 'capacity': total, 'occupied': len(projects),
             'free_slots': max(0, total - len(projects)), 'assignments': projects,
             'reports': reports,
-            'note': 'Attributes remain fully visible. Professional scouts add optional reports; they do not unlock stats or change transfer odds.'}
+            'note': 'The Scouting Hub shows public details; estimated ability and value require completed observations. Reports do not modify transfer odds.'}
 
 
 def scouting_command(session, command: dict) -> dict:
     dept = session._world_squads.club_support[session.home_club.id]
     today = session.current_date
     action, player_id = command.get('action'), command.get('player_id')
+    if action == 'destination':
+        scout_id, destination = command.get('scout_id'), command.get('destination')
+        people = {m.member_id for m in active_staff(dept, 'scout', today)}
+        if scout_id not in people or not isinstance(destination, str):
+            raise ValueError('Choose an active club scout and destination')
+        permitted = {'all'}
+        for _, _, player, _, league in _available_search_players(session):
+            permitted.add('country:' + player.identity.nationality)
+            permitted.add('league:' + league)
+        if destination not in permitted:
+            raise ValueError('Destination is not a recognised country or league')
+        dept.scouting_destinations[scout_id] = destination
+        return {'assigned_destination': destination, 'scout_id': scout_id}
     if not isinstance(player_id, str) or not player_id or len(player_id) > 160:
-        raise ValueError('Choose a valid player to scout')
+        raise ValueError('Choose a valid player')
+    if action in ('shortlist_add', 'shortlist_remove', 'shortlist_priority'):
+        if _target(session, player_id) is None:
+            raise ValueError('This player is no longer available for scouting')
+        if action == 'shortlist_remove':
+            dept.scouting_shortlist.pop(player_id, None)
+        else:
+            priority = command.get('priority', 'monitor')
+            if priority not in _PRIORITIES:
+                raise ValueError('Unknown shortlist priority')
+            if (player_id not in dept.scouting_shortlist
+                    and len(dept.scouting_shortlist) >= 300):
+                raise ValueError('Shortlist is full')
+            dept.scouting_shortlist[player_id] = priority
+        return {'player_id': player_id, 'shortlist_priority': dept.scouting_shortlist.get(player_id)}
     if action == 'cancel':
         if player_id not in dept.scouting_assignments:
             raise ValueError('No observation is active for this player')
@@ -178,3 +204,182 @@ def advance_professional_scouting(session, today: date) -> int:
             del dept.scouting_reports[item.player_id]
     _rebalance(dept, today)
     return completed
+
+# TS-UI-08 — Career scouting hub. The transfer engine remains authoritative for
+# bids. This public read-model MUST NOT expose hidden ability or price before a
+# report exists. Scout reports are deliberately APPROXIMATE, never latent PA.
+_LEAGUES = {1: 'Premier League', 2: 'Championship', 3: 'League One',
+            4: 'League Two', 0: 'Outside the four divisions'}
+_PRIORITIES = {'top', 'future', 'monitor'}
+
+
+def _available_search_players(session):
+    world = session._world_squads
+    for pid, cid, player in _targets(world, session.home_club.id):
+        club = world.clubs[cid]
+        yield pid, cid, player, club, _LEAGUES[world.identities[cid].tier]
+
+
+def _search_public(pid, cid, player, club, league, today):
+    return {
+        'id': pid, 'name': player.full_name, 'club_id': cid, 'club': club.name,
+        'league': league, 'country': club.country,
+        'nationality': player.identity.nationality,
+        'age': player.age_on(today), 'position': player.primary_position.value,
+        'positions': [player.primary_position.value] + [p.value for p in player.secondary_positions],
+        'foot': player.identity.dominant_foot.value,
+        # This domain doesn't record measurements. Never synthesize them.
+        'height_cm': None, 'weight_kg': None,
+    }
+
+
+def _estimation(source, quality, player_id, name, maximum=100):
+    """Grounded but imprecise estimate, with deterministic observer noise."""
+    from hashlib import sha256
+    token = sha256(f'{player_id}|{name}|{quality}'.encode('utf-8')).digest()
+    jitter = (token[0] % 11) - 5
+    spread = max(5, 15 - quality // 13)
+    centre = source + jitter
+    return [max(1, min(maximum, round(centre - spread))),
+            max(1, min(maximum, round(centre + spread)))]
+
+
+def scouting_hub_read_model(session) -> dict:
+    """Global player directory with public facts and report-gated knowledge.
+
+    Reads do not mutate game state. All names are registered professional rivals
+    from the transfer engine's existing eligibility filter. The view may be
+    filtered freely by country, league, club, position or age in the browser.
+    """
+    world = session._world_squads
+    dept = world.club_support[session.home_club.id]
+    now = session.current_date
+    employees = sorted(active_staff(dept, 'scout', now), key=lambda s: (-s.quality, s.name))
+    active = {m.member_id: m for m in employees}
+    existing = list(_available_search_players(session))
+    projects = dept.scouting_assignments
+    reports = dept.scouting_reports
+    public = []
+    for pid, cid, player, club, league in existing:
+        item = _search_public(pid, cid, player, club, league, now)
+        item['priority'] = dept.scouting_shortlist.get(pid)
+        # Contract salary/expiry are public employment facts. They are not scouting
+        # knowledge; ability, private attributes and undisclosed value remain gated.
+        contract = world.contracts.get(pid)
+        item['weekly_wage_gbp'] = contract.weekly_wage_gbp if contract else None
+        item['contract_until'] = contract.expires_on.isoformat() if contract else None
+        item['public_profile'] = None
+        if player.overall_rating >= 85:
+            # World-class players are publicly known. This NEVER turns into a
+            # synthetic completed scout report or discloses hidden PA.
+            from football_manager.services.transfer_negotiation import _quote
+            attributes = []
+            candidates = []
+            for group in ('technical', 'mental', 'physical', 'goalkeeping'):
+                bundle = getattr(player.attributes, group, None)
+                if bundle is None:
+                    continue
+                for field_item in fields(bundle):
+                    rating = getattr(bundle, field_item.name)
+                    if not isinstance(rating, (int, float)):
+                        continue
+                    label = field_item.name.replace('_', ' ').title()
+                    attributes.append({'group': group, 'name': label, 'value': rating})
+                    candidates.append((rating, label))
+            item['public_profile'] = {
+                'overall': round(player.overall_rating, 1),
+                'market_value_gbp': _quote(world, player).value_gbp,
+                # Reputation does not confer knowledge of latent potential.
+                # This is a broad age-sensitive projection from known OVR only.
+                'potential_range': [round(player.overall_rating),
+                                    min(100, round(player.overall_rating + max(3, (28-item['age'])*.55+4)))],
+                'attributes': attributes,
+                'strengths': [name for _, name in sorted(candidates, reverse=True)[:3]],
+            }
+        report = reports.get(pid)
+        assignment = projects.get(pid)
+        if report:
+            quality = active[report.scout_id].quality if report.scout_id in active else 55
+            ability = _estimation(report.overall, quality, pid, 'overall')
+            # PA is private. Estimate an intentionally wide, uncertain band,
+            # never the raw player.development.potential value.
+            latent = player.development.potential if player.development else player.overall_rating
+            potential = _estimation(max(report.overall, latent), quality, pid, 'ceiling')
+            potential[0] = min(potential[0], potential[1]); potential[1] = max(potential[1], ability[1])
+            uncertainty = max(.13, .31 - quality / 600)
+            value = [round(report.value_gbp * (1-uncertainty), -3),
+                     round(report.value_gbp * (1+uncertainty), -3)]
+            # Only scout-judged ranges, not the authoritative attribute integers.
+            # Reuse real recorded values, but preserve uncertainty and cap detail.
+            attribute_estimates = []
+            for group in ('technical', 'mental', 'physical'):
+                attrs = getattr(player.attributes, group, None)
+                if attrs is None:
+                    continue
+                for field_item in fields(attrs):
+                    raw = getattr(attrs, field_item.name)
+                    bounds = _estimation(raw, quality, pid, group + '.' + field_item.name, maximum=100)
+                    attribute_estimates.append({'group': group, 'name': field_item.name.replace('_', ' ').title(),
+                                                'range': bounds})
+            item['report'] = {
+                'date': report.completed_on.isoformat(),
+                'scout': active[report.scout_id].name if report.scout_id in active else 'Former scout',
+                'confidence': max(48, min(94, int(quality * .80 + 21))),
+                'overall_range': ability, 'potential_range': potential,
+                'value_range_gbp': value, 'strengths': list(report.strengths),
+                'verdict': report.verdict,
+                # Explicitly unavailable: no synthetic weaknesses or attributes.
+                'attributes': attribute_estimates, 'weaknesses': None,
+            }
+        elif assignment:
+            item['scouting'] = {
+                'progress': assignment.progress_points,
+                'scout': active[assignment.scout_id].name if assignment.scout_id in active else 'Awaiting scout',
+                'days_left': ceil((100-assignment.progress_points)/_daily_points(active[assignment.scout_id]))
+                if assignment.scout_id in active else None,
+            }
+        public.append(item)
+    public.sort(key=lambda entry: (entry['club'], entry['name'], entry['id']))
+
+    # Geographic discovery follows each staff member's retained assignment.
+    # Recommendations are leads, not reports; NEVER attach hidden OVR to them.
+    already=set()
+    recommendations=[]
+    for scout in employees:
+        destination = dept.scouting_destinations.get(scout.member_id, 'all')
+        eligible = []
+        for pid, cid, player, club, league in existing:
+            if destination.startswith('country:') and player.identity.nationality != destination[8:]:
+                continue
+            if destination.startswith('league:') and league != destination[7:]:
+                continue
+            if pid in already: continue
+            age=player.age_on(now)
+            if age > 29: continue
+            # This ranking is only used privately to identify interesting leads.
+            grade=player.overall_rating + max(0, 25-age)*.65
+            from hashlib import sha256
+            tie=int.from_bytes(sha256(f'{world.seed}|{pid}|{scout.member_id}|{now.year}-{now.month}'.encode()).digest()[:4], 'big')
+            eligible.append((-grade, tie, pid))
+        eligible.sort()
+        for _,_,pid in eligible[:3]:
+            already.add(pid)
+            recommendations.append({'player_id':pid, 'scout_id':scout.member_id,
+                                    'scout':scout.name, 'destination':destination})
+
+    assigned_counts={m.member_id:sum(a.scout_id==m.member_id for a in projects.values()) for m in employees}
+    scouts=[{'id':m.member_id,'name':m.name,'quality':m.quality,
+             'capacity':_slots(m), 'occupied':assigned_counts[m.member_id],
+             'destination':dept.scouting_destinations.get(m.member_id, 'all')}
+            for m in employees]
+    locations=sorted({p['nationality'] for p in public})
+    leagues=sorted({p['league'] for p in public})
+    clubs=sorted(({'id':cid, 'name':club.name, 'league':_LEAGUES[world.identities[cid].tier]}
+                  for cid,club in world.clubs.items() if cid!=session.home_club.id), key=lambda x:x['name'])
+    return {'schema_version':1,'club_id':session.home_club.id,'club':session.home_club.name,
+            'date':now.isoformat(),'season':world.season_label,
+            'scouts':scouts,'capacity':sum(s['capacity'] for s in scouts),
+            'occupied':len(projects),'free_slots':max(0,sum(s['capacity'] for s in scouts)-len(projects)),
+            'reports_completed':len(reports),'recommendations':recommendations,
+            'shortlisted':len([p for p in public if p['priority']]),
+            'players':public,'countries':locations,'leagues':leagues,'clubs':clubs}

@@ -1,0 +1,9 @@
+TS-UI-08.03 — APPLY OVER TS-UI-08.02
+
+1. Stop the Python game server and back up your career save.
+2. Unzip into the root of football-manager-2026, preserving all internal directories.
+3. Replace matching files; do not copy the parent ZIP filename as a directory.
+4. Restart with PYTHONPATH=src python3 -m football_manager.ui_shell as usual.
+5. Hard refresh the browser (Ctrl+F5).
+
+No game save migration, no dependency install, no full repo replacement.

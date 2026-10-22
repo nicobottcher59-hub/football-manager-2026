@@ -222,3 +222,9 @@
 .fm-ts27-preview-grid strong{color:#77d9ec}.fm-ts27-preview-grid p{margin:6px 0}
 .fm-ts27-prematch small{font-size:10px;color:#9bbfd3}
 @media(max-width:680px){.fm-ts27-preview-grid{grid-template-columns:1fr}}
+
+/* Native proportions for true team artwork, independent of the fallback crest. */
+.fm-crest.fm-crest-real{clip-path:none!important;border:0!important;background:none!important;box-shadow:none!important;object-fit:contain!important;filter:drop-shadow(0 4px 8px #0009)}
+.fm-jersey .fm-match-kit-image{position:absolute;z-index:1;inset:0;width:100%;height:100%;object-fit:contain}.fm-jersey strong{z-index:2}
+
+.fm-jersey[data-team][data-kit="default"]{color:var(--fm-default-kit,#1b2d40)}

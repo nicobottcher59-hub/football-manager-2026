@@ -269,6 +269,11 @@ class FootballUIHandler(BaseHTTPRequestHandler):
                     return
                 self._json(200, payload)
             return
+        if path == '/api/scouting/hub':
+            from football_manager.services.professional_scouting import scouting_hub_read_model
+            with self.runtime.lock:
+                self._json(200, scouting_hub_read_model(self.runtime.session))
+            return
         if path == '/api/scouting':
             from football_manager.services.professional_scouting import scouting_read_model
             with self.runtime.lock:

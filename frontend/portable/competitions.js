@@ -20,10 +20,13 @@ window.FMCompetitions = (() => {
   let filters=freshFilters();
   let indexSerial=0, detailSerial=0, dragState=null;
 
+  const shownClub=(id,name)=>window.FMClubIdentity?.resolve?.(id,name)?.display_name||name||id||'Club';
   function crest(name, id, large=false) {
-    const managed = data?.managed_id && data.managed_id === id;
-    const hue = Math.abs(hash(id||name)) % 360;
-    return `<span class="cmp-crest ${managed?'cmp-crest-managed':''} ${large?'cmp-crest-large':''}" style="--cmp-hue:${hue}" role="img" aria-label="Fictional crest: ${h(name)}">${h(managed?'N':abbr(name)||'?')}</span>`;
+    const entry=window.FMClubIdentity?.resolve?.(id,name);
+    if(entry?.crest)return `<img data-fm-asset="optional" class="cmp-crest cmp-crest-real ${large?'cmp-crest-large':''}" src="${h(window.FMEntityAssets?.url(entry.crest)||entry.crest)}" loading="lazy" alt="">`;
+    const managed=data?.managed_id===id;
+    const hue=Math.abs(hash(id||name))%360;
+    return `<span class="cmp-crest ${managed?'cmp-crest-managed':''} ${large?'cmp-crest-large':''}" style="--cmp-hue:${hue}" role="img" aria-label="${h(shownClub(id,name))} crest">${h(abbr(name)||'?')}</span>`;
   }
   function opts() { return explorerView==='mine' ? (index?.competitions||[]) : (index?.other_competitions||[]); }
   function filteredOptions() {
@@ -144,10 +147,10 @@ window.FMCompetitions = (() => {
     const selected=m.managed;
     const extra=m.penalties?`<small class="cmp-pen-note">Pens ${m.penalties.home}–${m.penalties.away}</small>`:'';
     const agg=tie?.aggregate && tie.legs?.length>1 ? `<small class="cmp-agg-note">Aggregate ${tie.aggregate.a}–${tie.aggregate.b}${tie.complete?' · qualified: '+h(tie.winner_id===tie.club_a_id?tie.club_a:tie.club_b):' · pending'}</small>`:'';
-    return `<div class="cmp-fixture-row ${selected?'cmp-highlight':''}" title="${h(m.home)} vs ${h(m.away)} · ${h(dayStamp(m.date))}">
-      <div class="cmp-side-club"><button type="button" class="ts22-club-link" data-club-id="${h(m.home_id)}">${crest(m.home,m.home_id)}<span>${h(m.home)}</span></button></div>
+    return `<div class="cmp-fixture-row ${selected?'cmp-highlight':''}" title="${h(shownClub(m.home_id,m.home))} vs ${h(shownClub(m.away_id,m.away))} · ${h(dayStamp(m.date))}">
+      <div class="cmp-side-club"><button type="button" class="ts22-club-link" data-club-id="${h(m.home_id)}">${crest(m.home,m.home_id)}<span>${h(shownClub(m.home_id,m.home))}</span></button></div>
       <div class="cmp-game-score"><strong class="${matchOutcome(m)}">${h(matchStatus(m))}</strong>${extra}${agg}</div>
-      <div class="cmp-side-club cmp-away"><button type="button" class="ts22-club-link" data-club-id="${h(m.away_id)}">${crest(m.away,m.away_id)}<span>${h(m.away)}</span></button></div>
+      <div class="cmp-side-club cmp-away"><button type="button" class="ts22-club-link" data-club-id="${h(m.away_id)}">${crest(m.away,m.away_id)}<span>${h(shownClub(m.away_id,m.away))}</span></button></div>
     </div>`;
   }
   function tieForFixture(round,fixtureId){ return round?.ties?.find(t=>t.legs.some(m=>m.id===fixtureId)); }
@@ -174,7 +177,7 @@ window.FMCompetitions = (() => {
         <button type="button" data-cmp-step="1" aria-label="Next round" ${current>=rounds().length-1?'disabled':''}>›</button></div></div>
       <div class="cmp-fixture-counter">${list.length} ${list.length===1?'match':'matches'} · ${played} played · All clubs${knockout?' · Leg scores shown individually':''}</div>
       <div class="cmp-fixtures-scroll">${items||`<div class="cmp-empty">${h(empty)}</div>`}</div>
-      <div class="cmp-side-bottom">${knockout?'Rounds and results from real Python draw history.':'Standings show the current world state, not a historic table for the selected matchday.'}<br/>Fictional crests · Kickoffs in UTC</div>
+      <div class="cmp-side-bottom">${knockout?'Rounds and results from real Python draw history.':'Standings show the current world state, not a historic table for the selected matchday.'}<br/>Crests from club identity catalog when available · Kickoffs in UTC</div>
     </section>`;
   }
   function table(){
@@ -185,7 +188,7 @@ window.FMCompetitions = (() => {
     return `<div class="cmp-main-panel panel"><div class="cmp-panel-top"><div><span class="cmp-kicker">${data.kind==='multi'?(data.format==='uefa'?'36-TEAM LEAGUE PHASE':'GROUP STANDINGS'):'LEAGUE TABLE'}</span><h3>${h(data.kind==='multi'?(data.format==='uefa'?'League Phase':'Group Stage'):data.name)}</h3></div>${group}</div>
       <div class="cmp-table-wrap"><table class="cmp-table"><thead><tr><th>POS</th><th>TEAM</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>PTS</th></tr></thead><tbody>
       ${tableRows.map(r=>`<tr class="${r.managed?'cmp-my-team':''} ${cls(r.route)?'cmp-zone-'+cls(r.route):''}" title="${h(r.route||'Current league position')}">
-        <td class="cmp-pos">${r.position}</td><td><span class="cmp-team-cell"><button type="button" class="ts22-club-link" data-club-id="${h(r.club_id)}">${crest(r.club,r.club_id)}<strong>${h(r.club)}</strong></button>${r.managed?'<small>YOU</small>':''}</span></td>
+        <td class="cmp-pos">${r.position}</td><td><span class="cmp-team-cell"><button type="button" class="ts22-club-link" data-club-id="${h(r.club_id)}">${crest(r.club,r.club_id)}<strong>${h(shownClub(r.club_id,r.club))}</strong></button>${r.managed?'<small>YOU</small>':''}</span></td>
         <td>${number(r.played)}</td><td>${number(r.won)}</td><td>${number(r.drawn)}</td><td>${number(r.lost)}</td><td>${number(r.gf)}</td><td>${number(r.ga)}</td><td class="${r.gd>0?'cmp-positive':r.gd<0?'cmp-negative':''}">${r.gd>0?'+':''}${number(r.gd)}</td><td class="cmp-points">${number(r.points)}</td>
       </tr>`).join('')}</tbody></table></div>
       <div class="cmp-table-foot">${data.qualifications_note?h(data.qualifications_note):'Current league standings'} · Generated fictional clubs · ${data.table.length} total entrants</div>
@@ -218,10 +221,10 @@ window.FMCompetitions = (() => {
     const details = [legText, tie.penalties?'Penalties':''].filter(Boolean).join(' · ');
     return `<div class="cmp-bilateral-tie ${tie.managed?'cmp-tie-managed':''} ${tie.complete?'cmp-tie-complete':''}"
       data-cmp-tie="${h(tie.id)}" data-cmp-round="${h(round.id)}" data-cmp-side="${side}"
-      title="${h(round.label)}: ${h(tie.club_a)} vs ${h(tie.club_b)} · ${h(outcome)}">
-      <span class="cmp-bilateral-team ${winner===tie.club_a_id?'cmp-tie-winner':''}"><button type="button" class="ts22-club-link ts22-bracket-club" data-club-id="${h(tie.club_a_id)}">${crest(tie.club_a,tie.club_a_id)}<span class="cmp-bilateral-name">${h(tie.club_a)}</span></button></span>
+      title="${h(round.label)}: ${h(shownClub(tie.club_a_id,tie.club_a))} vs ${h(shownClub(tie.club_b_id,tie.club_b))} · ${h(outcome)}">
+      <span class="cmp-bilateral-team ${winner===tie.club_a_id?'cmp-tie-winner':''}"><button type="button" class="ts22-club-link ts22-bracket-club" data-club-id="${h(tie.club_a_id)}">${crest(tie.club_a,tie.club_a_id)}<span class="cmp-bilateral-name">${h(shownClub(tie.club_a_id,tie.club_a))}</span></button></span>
       <button type="button" class="cmp-bilateral-score ts22-tie-details" data-cmp-tie="${h(tie.id)}" data-cmp-round="${h(round.id)}" data-cmp-side="${side}">${h(outcome)}<small>${h(details|| (tie.complete?'Final result':'Scheduled'))}</small></button>
-      <span class="cmp-bilateral-team ${winner===tie.club_b_id?'cmp-tie-winner':''}"><button type="button" class="ts22-club-link ts22-bracket-club" data-club-id="${h(tie.club_b_id)}">${crest(tie.club_b,tie.club_b_id)}<span class="cmp-bilateral-name">${h(tie.club_b)}</span></button></span>
+      <span class="cmp-bilateral-team ${winner===tie.club_b_id?'cmp-tie-winner':''}"><button type="button" class="ts22-club-link ts22-bracket-club" data-club-id="${h(tie.club_b_id)}">${crest(tie.club_b,tie.club_b_id)}<span class="cmp-bilateral-name">${h(shownClub(tie.club_b_id,tie.club_b))}</span></button></span>
     </div>`;
   }
 

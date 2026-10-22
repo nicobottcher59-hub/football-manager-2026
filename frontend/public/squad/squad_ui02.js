@@ -29,7 +29,7 @@
   const safeColor = s => typeof s==='string' && /^#[0-9A-Fa-f]{6}$/.test(s);
   const avatar = (player, big=false) => {
     const fallback=window.FMPortraits?.portrait(player,big?'s2-avatar-art s2-avatar-large':'s2-avatar-art') || '<span class="s2-avatar-art">♟</span>';
-    const photo=view.images[player.id];
+    const photo=window.FMEntityAssets?.getPhoto?.(player.id) ? null : view.images[player.id];
     return `<span class="s2-avatar ${big?'s2-big':''}" data-player-image-key="${html(player.id)}">${fallback}${safeAsset(photo)?`<img class="s2-real-photo" src="${html(photo)}" alt="" loading="lazy">`:''}</span>`;
   };
   const nation = p => window.FMPortraits?.nation(p.nationality) || html(p.nationality||'Unrecorded');
@@ -65,9 +65,16 @@
   const fact = (label,val,sub='') => `<div class="s2-fact"><span>${html(label)}</span><strong>${val}</strong>${sub?`<small>${html(sub)}</small>`:''}</div>`;
   const date = str => {const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(str||''));return m?`${Number(m[3])} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Number(m[2])-1]||m[2]} ${m[1]}`:'—';};
   const notice = text => `<p class="s2-muted s2-info"><span aria-hidden="true">ⓘ</span> ${html(text)}</p>`;
+  // Keep Squad's already-loaded catalogue as a safety net while the shared
+  // resolver starts inside an iframe. Imported, ID-keyed assets always win.
+  const squadIdentity=(id,name)=>({
+    ...(window.FMClubIdentity?.resolve?.(id,name)||{}),
+    ...(view.identities[id]||{}),
+    ...(window.FMEntityAssets?.getClub?.(id)||{})
+  });
   function clubTheme(data) {
     const id=data.club_id;
-    const entry=view.identities[id]||{};
+    const entry=squadIdentity(id,data.club);
     const primary=safeColor(entry.primary_color)?entry.primary_color:'#1487d8';
     const accent=safeColor(entry.accent_color)?entry.accent_color:'#d5ad70';
     const root=document.documentElement;
@@ -146,7 +153,7 @@
   // A stylized kit is presentation-only. The badge/number/photo are loaded
   // from player and club identities, never tied to a specific club or fabricated IDs.
   function kitGraphic(p,data,illustrated=false){
-    const identity=view.identities[data.club_id]||{};
+    const identity=squadIdentity(data.club_id,data.club);
     if(!illustrated && safeAsset(identity.kit_image))return `<img class="s2-shirt-image" src="/portable/${html(identity.kit_image)}" alt="" loading="lazy">`;
     const stripes=identity.kit_style==='vertical_stripes';
     return `<svg class="s2-shirt-art" viewBox="0 0 130 146" aria-hidden="true" focusable="false">
@@ -160,7 +167,7 @@
   }
   function playerHeader(p,data){
     const availability=p.injury?'Injured':Number(p.suspension)>0?'Suspended':p.available?'Available':'Unavailable';
-    const identity=view.identities[data.club_id]||{};
+    const identity=squadIdentity(data.club_id,data.club);
     const crest=safeAsset(identity.crest)?'':`<span class="s28-crest-fallback" aria-hidden="true">✦</span>`;
     const watermarkStyle=safeAsset(identity.crest)?`style="--s28-watermark:url('/portable/${html(identity.crest)}')"`:'';
     const delta=numeric(p.act)&&numeric(p.base_ovr)?Number(p.act)-Number(p.base_ovr):null;
@@ -519,7 +526,7 @@
   }
   function activateLoadedArt(){
     if(!view.rendered)return;
-    const id=view.data?.club_id,entry=view.identities[id];
+    const id=view.data?.club_id,entry=id?squadIdentity(id,view.data?.club):null;
     if(entry){
       clubTheme(view.data);
       // Late-loaded club identity must update its displayed name, not only art.
@@ -585,6 +592,8 @@
   fetch('data/player-portraits.json',{cache:'no-store'})
     .then(r=>r.ok?r.json():null).then(x=>{if(x?.schema_version===1&&x.portraits&&typeof x.portraits==='object')view.images=x.portraits;activateLoadedArt();})
     .catch(()=>{});
+  window.addEventListener('fm-identity-ready',activateLoadedArt);
+  window.addEventListener('fm-assets-ready',activateLoadedArt);
   // Keyboard and outside-click support for accessible dark action pickers.
   document.addEventListener('pointerdown',event=>{
     if(!event.target.closest('[data-s214-picker]'))closeManagerPickers();
@@ -604,5 +613,5 @@
     choices[next]?.focus({preventScroll:true});
   });
   window.FMRoster={...original,render,onClick,onChange,onInput,state};
-  window.FMSquadUI02={render,view,portraitSource:id=>view.images[id]||null,focusPosition};
+  window.FMSquadUI02={render,view,portraitSource:id=>window.FMEntityAssets?.getPhoto?.(id)||view.images[id]||null,focusPosition};
 })();

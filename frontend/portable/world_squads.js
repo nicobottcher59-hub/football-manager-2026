@@ -4,6 +4,7 @@ window.FMWorldSquads = (() => {
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c =>
     ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const remembered = new Map();
+  const shownClub=(id,name)=>window.FMClubIdentity?.resolve?.(id,name)?.display_name||name||id||'Club';
   async function get(url, signal) {
     const response = await fetch(url, {cache:'no-store', signal});
     const data = await response.json();
@@ -18,7 +19,7 @@ window.FMWorldSquads = (() => {
         <dl>${g.rows.map(r => `<dt>${esc(r.name)}</dt><dd>${esc(r.value)}</dd>`).join('')}</dl></details>`).join('')}</div></details>`;
   }
   function detail(data) {
-    return `<div class="ws-summary"><h3><button type="button" class="ts22-club-link" data-club-id="${esc(data.club_id)}">${esc(data.name)}</button></h3><span>${data.count} players</span>
+    return `<div class="ws-summary"><h3><button type="button" class="ts22-club-link" data-club-id="${esc(data.club_id)}">${esc(shownClub(data.club_id,data.name))}</button></h3><span>${data.count} players</span>
       <span>Tier ${data.tier}</span><span>XI OVR in role: ${esc(data.mean_xi_ovr ?? '-')}</span>
       <span>${data.coverage.complete?'Two complete XIs covered':'Coverage needs attention'}</span>
       ${data.squad_planning?`<span>Squad planning: XI ${data.squad_planning.starters_covered}/11 · Backups ${data.squad_planning.backups_covered}/11 · Third GK ${data.squad_planning.third_keeper_covered?'yes':'needed'}</span>`:''}</div>
@@ -50,7 +51,7 @@ window.FMWorldSquads = (() => {
       root.innerHTML = `<div class="ws-header"><div><h2>Club squads &amp; tactical identities</h2>
         <p>${index.club_count} persistent clubs / ${index.player_count} players across England</p></div>
         <label>Inspect club<select data-ws-club aria-label="Inspect club squad">${league.clubs.map(c =>
-          `<option value="${esc(c.id)}" ${c.id===selected?'selected':''}>${esc(c.name)} (${c.count})</option>`).join('')}</select></label></div>
+          `<option value="${esc(c.id)}" ${c.id===selected?'selected':''}>${esc(shownClub(c.id,c.name))} (${c.count})</option>`).join('')}</select></label></div>
         <div data-ws-detail aria-live="polite"></div>`;
       const target = root.querySelector('[data-ws-detail]');
       async function load(id) {

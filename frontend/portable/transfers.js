@@ -24,6 +24,16 @@
     return `<button class="tr-btn" type="button" data-tr-scout-assign="${esc(id)}" ${scoutInfo().free_slots<=0?'disabled':''} title="${scoutInfo().free_slots<=0?'All scouting places are occupied':'Start a professional scouting report'}">Scout player</button>`;
   };
   const opponent=d=>d.direction==='outgoing'?d.seller:d.buyer;
+  const ownerId = d => d?.status==='completed' ? d.buyer_id : d?.seller_id;
+  const ownerName = d => d?.status==='completed' ? d.buyer : d?.seller;
+  const clubVisual = (clubId, name) => window.FMClubIdentity?.resolve?.(clubId,name)||{display_name:name||clubId||'Club',crest:null};
+  const transferCrest=(clubId,name,big=false)=>{
+    const item=clubVisual(clubId,name),asset=item.crest;
+    const source=asset&&(window.FMEntityAssets?.url?.(asset)||'/portable/'+asset);
+    const kind=big?'tr-neg-club-image':'tr-small-club-image';
+    return source?`<img class="${kind}" src="${esc(source)}" alt="" data-fm-asset="optional" loading="lazy">`:
+      `<span class="${kind} tr-club-placeholder" aria-hidden="true">⚽</span>`;
+  };
   const nav=()=>window.FMNavigation;
   const controls=(name,value,note)=>`<div class="tr-stat"><small>${esc(name)}</small><strong>${esc(value)}</strong><span>${esc(note)}</span></div>`;
   const selectedFilters=()=>{
@@ -35,7 +45,7 @@
   };
   function offerEntry(d,inbox=false){
     return `<article class="tr-discussion-card"><div class="tr-discussion-primary"><span class="tr-kicker">${d.direction==='outgoing'?'YOUR OFFER':'OFFER RECEIVED'} ${inbox?'\u00b7 INBOX':''}</span>
-       <strong>${esc(d.player)}</strong><small>${esc(opponent(d))} \u00b7 ${esc(d.updated_on)}</small></div>
+       <strong>${esc(d.player)}</strong><small>${transferCrest(ownerId(d),ownerName(d))} ${esc(clubVisual(ownerId(d),ownerName(d)).display_name)} \u00b7 ${esc(d.updated_on)}</small></div>
        <div class="tr-discussion-price"><strong>${brief(d.fixed_gbp)}</strong><span>Guaranteed \u00b7 ${brief(d.valuation.headline_gbp)} possible</span></div>
        <div class="tr-discussion-status"><strong class="${d.status==='agreed'?'tr-ok':''}">${esc(statuses[d.status]||d.status)}</strong><small>${esc(d.reason||'')}</small></div>
        <button class="tr-btn tr-btn-primary" type="button" data-tr-deal="${esc(d.id)}">Open negotiation \u2192</button></article>`;
@@ -65,7 +75,7 @@
            <label><span>Minimum GRL</span><select id="tr-min-ovr">${[['','Any level'],['55','55+'],['65','65+'],['70','70+'],['75','75+'],['80','80+'],['85','85+']].map(([a,b])=>opt(a,b,minOvr)).join('')}</select></label>
            <label><span>Maximum age</span><select id="tr-max-age">${[['','Any age'],['18','18'],['21','21'],['24','24'],['29','29'],['34','34']].map(([a,b])=>opt(a,b,maxAge)).join('')}</select></label></div>
          <div class="tr-scout-count">${Math.min(list.length,80)} shown of ${list.length} results \u00b7 Affordable players first, then highest GRL</div>
-         <div class="tr-discover-list">${list.slice(0,80).map(p=>`<article class="tr-prospect"><div class="tr-prospect-badge">${esc(p.position)}</div><div class="tr-prospect-name"><strong><button type="button" class="ch-link" data-career-type="player" data-career-id="${esc(p.id)}">${esc(p.name)}</button></strong><small><button type="button" class="ch-link" data-career-type="club" data-career-id="${esc(p.club_id)}">${esc(p.club)}</button> \u00b7 ${p.age} years \u00b7 Contract until ${esc(p.contract_until)}</small></div><div class="tr-prospect-rating"><strong>${p.ovr.toFixed(1)}</strong><small>GRL</small></div><div class="tr-prospect-value"><strong>${brief(p.value_gbp)}</strong><small>Market estimate</small></div><div class="tr-prospect-actions">${scoutButton(p.id)}<button class="tr-btn" type="button" data-tr-profile="${esc(p.id)}">Profile</button><button class="tr-btn tr-btn-primary" type="button" data-tr-player="${esc(p.id)}">${openDeal(p.id)?'Open negotiation':'Make offer'} \u2192</button></div></article>`).join('')}
+         <div class="tr-discover-list">${list.slice(0,80).map(p=>`<article class="tr-prospect"><div class="tr-prospect-badge">${esc(p.position)}</div><div class="tr-prospect-name"><strong><button type="button" class="ch-link" data-career-type="player" data-career-id="${esc(p.id)}">${esc(p.name)}</button></strong><small>${transferCrest(p.club_id,p.club)} <button type="button" class="ch-link" data-career-type="club" data-career-id="${esc(p.club_id)}">${esc(clubVisual(p.club_id,p.club).display_name)}</button> \u00b7 ${p.age} years \u00b7 Contract until ${esc(p.contract_until)}</small></div><div class="tr-prospect-rating"><strong>${p.ovr.toFixed(1)}</strong><small>GRL</small></div><div class="tr-prospect-value"><strong>${brief(p.value_gbp)}</strong><small>Market estimate</small></div><div class="tr-prospect-actions">${scoutButton(p.id)}<button class="tr-btn" type="button" data-tr-profile="${esc(p.id)}">Profile</button><button class="tr-btn tr-btn-primary" type="button" data-tr-player="${esc(p.id)}">${openDeal(p.id)?'Open negotiation':'Make offer'} \u2192</button></div></article>`).join('')}
            ${!list.length?'<div class="tr-empty">No players match those filters.</div>':''}</div>
        </section>`:`<section class="tr-panel tr-negotiations-list"><div class="tr-heading-row"><div><h3>${tab==='received'?'Offers received':'Your negotiations'}</h3><p>Open any discussion to review the offer and its full history.</p></div></div>${shown.length?shown.map(d=>offerEntry(d,tab==='received')).join(''):'<div class="tr-empty">No offers here yet. Browse players to start a negotiation.</div>'}</section>`}
        <p class="tr-footnote">New bids open during January, July and August. Professional scout reports are now available and optional. Knowledge limits remain planned for TS-27. Club offers reserve money until player and agent agree personal terms; a completed deal moves the player and money.</p>
@@ -170,13 +180,16 @@
   function negotiationView(){
     const d=deal(),p=player(),reference=p?.value_gbp||d?.market_value_gbp||0;
     if(!p&&!d)return `<div class="tr-immersive"><button class="tr-btn" data-tr-back>\u2190 Back to Scouting</button><p class="tr-empty">This player or discussion is no longer available. Try the Scouting search.</p></div>`;
-    const label=d?.player||p?.name,club=d?opponent(d):p.club;
+    const label=d?.player||p?.name;
+    const belongingId=p?.club_id||ownerId(d);
+    const belongingName=p?.club||ownerName(d);
+    const club=clubVisual(belongingId,belongingName).display_name;
     const status=d?statuses[d.status]||d.status:'Preparing a first offer';
     const previous=openDeal(p?.id);
     const editable=!d && !previous || countering&&d?.may_answer;
     const actions=d&&d.may_answer&&!countering ? `<section class="tr-panel tr-reply"><div><strong>It is your turn to decide</strong><p>Review the club's current proposal before replying.</p></div><div class="tr-reply-buttons"><button type="button" class="tr-btn tr-btn-primary" data-tr-accept="${esc(d.id)}">Accept club terms</button><button type="button" class="tr-btn" data-tr-counter="${esc(d.id)}">Counteroffer</button><button type="button" class="tr-btn tr-btn-danger" data-tr-reject="${esc(d.id)}">Reject</button></div></section>`:'';
     return `<div class="tr-immersive"><header class="tr-immersive-header"><button type="button" class="tr-back" data-tr-back>\u2190 Back to ${window.FMNavigation?.previousLabel?.()||'Scouting'}</button><div class="tr-immersive-tag">TS-24.4 \u00b7 TRANSFER NEGOTIATION</div></header>
-      <section class="tr-neg-hero"><div class="tr-neg-crest">\u2694</div><div class="tr-neg-title"><div class="tr-kicker">${esc(model.club)} \u00b7 ${esc(club)}</div><h2>${esc(label)}</h2><p>${p?`${p.age} years old \u00b7 ${esc(p.position)} \u00b7 ${p.ovr.toFixed(1)} GRL`:esc(d?.direction==='incoming'?'You are the selling club':'Transfer proposal')}</p><span class="tr-current-status">${esc(status)}</span></div><div class="tr-neg-stats">${controls('Market estimate',brief(reference),'Not an asking price')}${controls('Available to spend',brief(model.available_transfer_budget_gbp),'Guaranteed fee budget')}${controls('Current proposal',d?brief(d.fixed_gbp):'New','Guaranteed payment')}</div></section>
+      <section class="tr-neg-hero" data-fm-club-theme="${esc(belongingId)}" data-fm-club-name="${esc(belongingName)}"><div class="tr-neg-crest">${transferCrest(belongingId,belongingName,true)}</div><div class="tr-neg-title"><div class="tr-kicker">${esc(club)} · TRANSFER NEGOTIATION</div><h2>${esc(label)}</h2><p>${p?`${p.age} years old \u00b7 ${esc(p.position)} \u00b7 ${p.ovr.toFixed(1)} GRL`:esc(d?.direction==='incoming'?'You are the selling club':'Transfer proposal')}</p><span class="tr-current-status">${esc(status)}</span></div><div class="tr-neg-stats">${controls('Market estimate',brief(reference),'Not an asking price')}${controls('Available to spend',brief(model.available_transfer_budget_gbp),'Guaranteed fee budget')}${controls('Current proposal',d?brief(d.fixed_gbp):'New','Guaranteed payment')}</div></section>
       ${d?.status==='agreed'?`<div class="tr-accepted-banner">Club terms agreed. The next step is the player and agent. No fee has been paid yet.</div>`:''}
       ${actions}
       <div class="tr-neg-layout"><div class="tr-neg-main">${d?.status==='agreed'?personalPane(d):''}${d?.status==='completed'?`<section class="tr-panel tr-personal-complete"><div class="tr-kicker">REGISTRATION CONFIRMED</div><h3>Transfer completed</h3><p>${esc(d.player)} has joined ${esc(d.buyer)}. ${brief(d.fixed_gbp)} guaranteed was paid to ${esc(d.seller)}.</p><p>${d.personal_terms?`${money(d.personal_terms.weekly_wage_gbp)} per week · ${d.personal_terms.years} years · ${esc(d.personal_terms.role)}`:''}</p><p>Conditional bonuses and buyback conditions remain saved for future settlement.</p></section>`:''}${previous&&!d?`<section class="tr-panel tr-locked"><div class="tr-kicker">EXISTING DISCUSSION</div><h3>Club conversation in progress</h3><p>There is already an active proposal for this player. Continue it instead of submitting a duplicate offer.</p><button type="button" class="tr-btn tr-btn-primary" data-tr-deal="${esc(previous.id)}">Continue negotiation →</button></section>`:editable?compose(d):(d?.status==='agreed'||d?.status==='completed')?'':d?`<section class="tr-panel tr-locked"><div class="tr-kicker">CURRENT CLUB TERMS</div><h3>${brief(d.fixed_gbp)} guaranteed</h3><p>Maximum headline: ${brief(d.valuation.headline_gbp)} \u00b7 Risk-adjusted: ${brief(d.valuation.risk_adjusted_gbp)}</p>${d.status==='manager_turn'&&!d.may_answer?'<p>Awaiting the other club.</p>':''}${d.status==='manager_turn'&&!d.may_answer?`<button class="tr-btn tr-btn-danger" type="button" data-tr-withdraw="${esc(d.id)}">Withdraw proposal</button>`:''}</section>`:''}
@@ -187,6 +200,7 @@
   function draw(){
     if(!host||!model)return;
     host.innerHTML=view==='negotiation'?negotiationView():searchView();
+    window.FMClubIdentity?.paintWithin?.(host);
     host.setAttribute('aria-busy',String(busy));
   }
   function validateTerms(){
@@ -234,7 +248,7 @@
   }
   async function refresh(){
     if(!host)return;
-    try{const response=await fetch('/api/transfers',{cache:'no-store'});if(!response.ok)throw Error(`HTTP ${response.status}`);model=await response.json();draw();}
+    try{const response=await fetch('/api/transfers',{cache:'no-store'});if(!response.ok)throw Error(`HTTP ${response.status}`);model=await response.json();await window.FMClubIdentity?.ready;draw();}
     catch(error){host.innerHTML=`<section class="tr-panel"><h3>Scouting unavailable</h3><p>${esc(error.message)}</p><button class="tr-btn" type="button" data-tr-refresh>Retry</button></section>`;}
   }
   function mount(element,options={}){
