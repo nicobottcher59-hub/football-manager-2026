@@ -404,6 +404,7 @@
     document.body.classList.toggle('tsui-squad-active',page==='Squad');
     document.body.classList.toggle('tsui-training-active',page==='Training');
     document.body.classList.toggle('tsui-staff-active',page==='Staff');
+    document.body.classList.toggle('tsui-dressing-active',dressingRoom);
     if (home) { refreshHome();window.dispatchEvent(new CustomEvent('fm-ui-home-refresh')); }
     headerTitle.textContent = page;
     headerSubhead.textContent = home
