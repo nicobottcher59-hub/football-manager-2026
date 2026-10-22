@@ -45,18 +45,19 @@ def test_hiring_releasing_and_capacity_are_real(starting):
     data = staff_read_model(session)
     role = next(role for role in ROLES if data['capacity'][role] > 1)
     first = data['market'][role][0]['id']
-    hired = staff_command(session, {'action':'hire','member_id':first})
-    assert hired['hired'] == first
+    demanded = data['market'][role][0]['wage_demand_weekly_gbp']
+    hired = staff_command(session, {'action':'offer','member_id':first,'weekly_wage_gbp':min(50000,demanded+750),'years':2,'signing_bonus_gbp':0})
+    assert hired['accepted'] and hired['member_id'] == first
     assert len([m for m in staff_read_model(session)['members'] if m['role'] == role]) == 2
-    with pytest.raises(ValueError):
-        staff_command(session, {'action':'hire','member_id':first})
+    assert first not in {m['id'] for m in staff_read_model(session)['market'][role]}
     while len([m for m in staff_read_model(session)['members'] if m['role'] == role]) < dept.capacity[role]:
         ident = next(m['id'] for m in staff_read_model(session)['market'][role] if m['id'] not in dept.members)
-        staff_command(session, {'action':'hire','member_id':ident})
+        terms=next(m for m in staff_read_model(session)['market'][role] if m['id']==ident)
+        assert staff_command(session, {'action':'offer','member_id':ident,'weekly_wage_gbp':min(50000,terms['wage_demand_weekly_gbp']+750),'years':2,'signing_bonus_gbp':0})['accepted']
     next_ident = next((m['id'] for m in staff_read_model(session)['market'][role] if m['id'] not in dept.members), None)
     if next_ident:
         with pytest.raises(ValueError,match='places'):
-            staff_command(session, {'action':'hire','member_id':next_ident})
+            staff_command(session, {'action':'offer','member_id':next_ident,'weekly_wage_gbp':10000,'years':2,'signing_bonus_gbp':0})
     balance = session._world_squads.club_finances[session.home_club.id].cash_gbp
     released = staff_command(session, {'action':'release','member_id':first})
     assert released['settlement_gbp'] > 0

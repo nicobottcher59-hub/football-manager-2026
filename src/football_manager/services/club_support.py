@@ -235,10 +235,43 @@ def _candidate(registry, cid: str, role: str, index: int, year: int, on_date: da
     code = _seed_value('staff-market-v1', registry.seed, cid, role, index, year)
     tier = registry.identities[cid].initial_tier
     quality = 48 + code % 40
-    name = NAMES[(code // 3) % len(NAMES)]
+    # Unique names within each current role market; stable under refresh.
+    name = NAMES[(_seed_value('staff-name', registry.seed, cid, role, year) + index) % len(NAMES)]
     ident = f'candidate:{cid}:{role}:{year}:{index}'
     return StaffMember(ident, cid, name, role, quality, staff_wage(quality, tier),
                        on_date, on_date + timedelta(days=730))
+
+
+STAFF_MARKET_SIZE = 8
+STAFF_CONTRACT_YEARS = (1, 2, 3, 4)
+
+
+def _staff_target_wage(registry, member: StaffMember, *, existing: bool, day: date) -> int:
+    """Reproducible expectations. Extensions demand more than the old salary.
+
+    Never expose the exact private acceptance threshold to the browser.
+    Quoted demand is visible and reproducible across saves and refreshes.
+    """
+    if not existing:
+        return member.wage_weekly_gbp
+    premium = 1.08 + max(0, member.quality - 70) / 400
+    if (member.contract_until - day).days < 120:
+        premium += .04
+    return min(50_000, max(100, int(round(member.wage_weekly_gbp * premium / 25) * 25)))
+
+
+def _staff_market(registry, cid: str, role: str, day: date) -> list[StaffMember]:
+    return [candidate for idx in range(STAFF_MARKET_SIZE)
+            if (candidate := _candidate(registry, cid, role, idx, day.year, day)).member_id
+                not in registry.club_support[cid].members]
+
+
+def _staff_terms(registry, employee: StaffMember, *, existing: bool, day: date) -> dict:
+    demand = _staff_target_wage(registry, employee, existing=existing, day=day)
+    return {'id': employee.member_id, 'name': employee.name, 'role': employee.role,
+            'quality': employee.quality, 'wage_weekly_gbp': employee.wage_weekly_gbp,
+            'wage_demand_weekly_gbp': demand, 'preferred_years': 2,
+            'until': employee.contract_until.isoformat()}
 
 
 def staff_read_model(session) -> dict:
@@ -249,19 +282,29 @@ def staff_read_model(session) -> dict:
     market = {}
     for role in ROLES:
         employees = active_staff(dept, role, day)
-        staff.extend({'id': m.member_id, 'name': m.name, 'role': role, 'quality': m.quality,
-                      'wage_weekly_gbp': m.wage_weekly_gbp, 'until': m.contract_until.isoformat()}
-                     for m in employees)
-        market[role] = [{'id': candidate.member_id, 'name': candidate.name,
-                         'quality': candidate.quality, 'wage_weekly_gbp': candidate.wage_weekly_gbp,
-                         'until': candidate.contract_until.isoformat()}
-                        for i in range(3)
-                        if (candidate := _candidate(registry, cid, role, i, day.year, day)).member_id not in dept.members]
-    return {'date': day.isoformat(), 'capacity': dict(dept.capacity), 'capacity_source': dept.capacity_source,
-            'members': staff, 'market': market,
-            'weekly_payroll_gbp': sum(m['wage_weekly_gbp'] for m in staff),
+        staff.extend(_staff_terms(registry, employee, existing=True, day=day)
+                     for employee in employees)
+        market[role] = [_staff_terms(registry, candidate, existing=False, day=day)
+                        for candidate in _staff_market(registry, cid, role, day)]
+    account = registry.club_finances[cid]
+    weekly = sum(m['wage_weekly_gbp'] for m in staff)
+    return {'club_id': cid, 'club': session.home_club.name, 'date': day.isoformat(),
+            'capacity': dict(dept.capacity), 'capacity_source': dept.capacity_source,
+            'members': staff, 'market': market, 'weekly_payroll_gbp': weekly,
+            'cash_gbp': account.cash_gbp,
             'bonuses': {role: round(department_bonus(dept, role, day), 3) for role in ROLES},
-            'note': 'Staff effects are intentionally small. Capacity is provisional until club facilities exist.'}
+            'note': 'Staff improvements influence the real training, medical and scouting calculations. Contract offers alter club finances.'}
+
+
+def _staff_acceptance_threshold(registry, member: StaffMember, target: int,
+                                years: int, day: date) -> int:
+    """Deterministic individual expectations, adjusted for long-term security.
+
+    The bonus counts at a capped fraction, so wages remain the main component.
+    """
+    variation = _seed_value('staff-expectation-v2', registry.seed, member.member_id) % 13
+    ratio = .93 + variation / 100 - min(3, years - 1) * .012
+    return max(100, int(round(target * ratio / 25) * 25))
 
 
 def staff_command(session, command: dict) -> dict:
@@ -269,47 +312,77 @@ def staff_command(session, command: dict) -> dict:
     registry = session._world_squads
     dept = registry.club_support[session.home_club.id]
     action, ident = command.get('action'), command.get('member_id')
-    if action == 'hire':
-        candidate = next((candidate for role in ROLES for i in range(3)
-                          if (candidate := _candidate(registry, dept.club_id, role, i, day.year, day)).member_id == ident), None)
-        if candidate is None or ident in dept.members:
-            raise ValueError('This candidate is no longer available')
-        if len(active_staff(dept, candidate.role, day)) >= dept.capacity[candidate.role]:
+    if action in ('hire', 'renew'):
+        # Retired immediate actions are not an alternative API bypass.
+        raise ValueError('Staff appointments and extensions require a negotiated contract offer')
+    if action == 'offer':
+        if set(command) != {'action','member_id','weekly_wage_gbp','years','signing_bonus_gbp'}:
+            raise ValueError('Offer must include salary, term and signing bonus')
+        wage, years, bonus = (command['weekly_wage_gbp'], command['years'], command['signing_bonus_gbp'])
+        if (type(wage) is not int or type(years) is not int or type(bonus) is not int
+                or wage < 100 or wage > 50_000 or years not in STAFF_CONTRACT_YEARS
+                or bonus < 0 or bonus > 200_000):
+            raise ValueError('Invalid staff contract offer')
+        current = dept.members.get(ident)
+        existing = current is not None and current.contract_until >= day
+        if current is not None and not existing:
+            raise ValueError('Expired staff must be recruited through the market')
+        member = (current if existing else next((candidate for role in ROLES
+                  for candidate in _staff_market(registry, dept.club_id, role, day)
+                  if candidate.member_id == ident), None))
+        if member is None:
+            raise ValueError('This staff candidate is no longer available')
+        if not existing and len(active_staff(dept, member.role, day)) >= dept.capacity[member.role]:
             raise ValueError('The department has no free staff places')
         account = registry.club_finances[dept.club_id]
-        if account.cash_gbp < candidate.wage_weekly_gbp * 8:
+        # Two months of staff salary reserve, plus any up-front commitment.
+        if account.cash_gbp < bonus + wage * 8:
             raise ValueError('Club cash is insufficient for this staff contract')
-        dept.members[ident] = candidate
-        if candidate.role == 'scout':
+        demand = _staff_target_wage(registry, member, existing=existing, day=day)
+        minimum = _staff_acceptance_threshold(registry, member, demand, years, day)
+        bonus_credit = min(bonus / max(1, years * 26), wage * .15)
+        if wage + bonus_credit < minimum:
+            counter = max(100, min(50_000, int(round((minimum - bonus_credit + 24) / 25) * 25)))
+            return {'accepted': False, 'member_id': ident, 'name': member.name,
+                    'counter_wage_weekly_gbp': counter,
+                    'message': 'The offer was declined. The candidate is seeking improved terms.'}
+        end = (max(day, member.contract_until) + timedelta(days=365 * years)
+               if existing else day + timedelta(days=365 * years))
+        updated = replace(member, wage_weekly_gbp=wage,
+                          hired_on=member.hired_on if existing else day, contract_until=end)
+        updated.validate()
+        # Atomic application: validate everything before changing cash/member.
+        if bonus:
+            from dataclasses import replace as replace_account
+            new_cash = account.cash_gbp - bonus
+            registry.club_finances[dept.club_id] = replace_account(account,
+                cash_gbp=new_cash, transfer_budget_gbp=min(account.transfer_budget_gbp,max(0,new_cash)))
+        dept.members[ident] = updated
+        if member.role == 'scout' and not existing:
             from football_manager.services.professional_scouting import _rebalance
             _rebalance(dept, day)
-        return {'hired': ident, 'name': candidate.name}
+        return {'accepted': True, 'member_id': ident, 'name': member.name,
+                'kind': 'extension' if existing else 'appointment',
+                'weekly_wage_gbp': wage, 'signing_bonus_paid_gbp': bonus,
+                'until': updated.contract_until.isoformat(),
+                'message': 'Contract agreed. The weekly wage is now included in the club finances.'}
     if action == 'release':
+        if set(command) != {'action', 'member_id'}:
+            raise ValueError('Invalid release command')
         if ident not in dept.members:
             raise ValueError('Staff member not found')
         member = dept.members.pop(ident)
-        # Small immediate settlement for an active commitment; no free resets.
         settlement = member.wage_weekly_gbp * 2 if member.contract_until >= day else 0
         account = registry.club_finances[dept.club_id]
         from dataclasses import replace as replace_account
-        registry.club_finances[dept.club_id] = replace_account(account, cash_gbp=account.cash_gbp - settlement,
+        registry.club_finances[dept.club_id] = replace_account(account,
+            cash_gbp=account.cash_gbp - settlement,
             transfer_budget_gbp=min(account.transfer_budget_gbp, max(0, account.cash_gbp - settlement)))
         if member.role == 'scout':
             from football_manager.services.professional_scouting import _rebalance
             _rebalance(dept, day)
         return {'released': ident, 'settlement_gbp': settlement}
-    if action == 'renew':
-        member = dept.members.get(ident)
-        if member is None:
-            raise ValueError('Staff member not found')
-        if member.contract_until < day:
-            raise ValueError('Expired staff must be replaced')
-        updated = replace(member, contract_until=max(day, member.contract_until) + timedelta(days=365),
-                          wage_weekly_gbp=min(50_000, int(round(member.wage_weekly_gbp * 1.05 / 25) * 25)))
-        dept.members[ident] = updated
-        return {'renewed': ident, 'until': updated.contract_until.isoformat()}
     raise ValueError('Unsupported staff command')
-
 
 def training_read_model(session) -> dict:
     dept = session._world_squads.club_support[session.home_club.id]
@@ -337,8 +410,15 @@ def training_read_model(session) -> dict:
                         'individual_focus': player.development.focus if player.development else 'balanced',
                         'days_trained': count, 'injured': bool(player.state.injury)})
     policy = dept.training
+    # TS-UI-04.01: actual active staff contracts, not presentation estimates.
+    staff_counts = {role: len(active_staff(dept, role, session.current_date))
+                    for role in ('coach', 'fitness')}
     return {'club_id': session.home_club.id, 'club': session.home_club.name,
             'date': session.current_date.isoformat(),
+            'training_staff': {'coaches': staff_counts['coach'],
+                               'fitness': staff_counts['fitness'],
+                               'total': sum(staff_counts.values()),
+                               'capacity': dept.capacity['coach'] + dept.capacity['fitness']},
             'focus_options': list(FOCUSES),
             'auto_thresholds': {key: getattr(policy, key) for key in
                                 ('performance_max', 'performance_focus', 'energy_max', 'energy_focus')},
@@ -415,9 +495,32 @@ def medical_read_model(session) -> dict:
                       'treatment_available': remaining is not None and remaining >= 7 and not active,
                       'estimated_aggressive_risk_pct': round(100 * base_risk),
                       'caution': 'Earlier availability carries a chance of a longer setback.'})
-    return {'date': session.current_date.isoformat(), 'cases': sorted(cases, key=lambda c: (c['days_left'] is None, -(c['days_left'] or 0))),
+    players = session.home_club.squad.players
+    # Counts/conditions come from the same live squad used by Training and Squad.
+    # Never extrapolate injuries or invent an injury-risk forecast.
+    conditions = [max(0., min(100., float(player.state.condition))) for player in players]
+    current_ids = {player.id: player.full_name for player in players}
+    decisions = sorted((decision for pid, decision in dept.treatments.items()
+                        if pid in current_ids), key=lambda decision: decision.decided_on, reverse=True)
+    staff_count = {role: len(active_staff(dept, role, session.current_date))
+                   for role in ('medic', 'fitness')}
+    return {'club_id': session.home_club.id, 'club': session.home_club.name,
+            'date': session.current_date.isoformat(),
+            'squad_size': len(players), 'available_count': len(players) - len(cases),
+            'average_condition': round(sum(conditions) / len(conditions), 1) if conditions else None,
+            'condition_bands': {'high': sum(x >= 90 for x in conditions),
+                                'medium': sum(75 <= x < 90 for x in conditions),
+                                'low': sum(x < 75 for x in conditions)},
+            'staffing': {'medical': staff_count['medic'], 'medical_capacity': dept.capacity['medic'],
+                         'fitness': staff_count['fitness'], 'fitness_capacity': dept.capacity['fitness']},
+            'recent_treatments': [
+                {'player_id': d.player_id, 'player': current_ids[d.player_id],
+                 'decided_on': d.decided_on.isoformat(), 'method': d.method,
+                 'planned_return': d.planned_return.isoformat(), 'status': d.status}
+                for d in decisions[:8]],
+            'cases': sorted(cases, key=lambda c: (c['days_left'] is None, -(c['days_left'] or 0))),
             'medical_bonus': round(department_bonus(dept, 'medic', session.current_date), 2),
-            'medical_staff_count': len(active_staff(dept, 'medic', session.current_date)),
+            'medical_staff_count': staff_count['medic'],
             'note': 'Treatments are offered for significant dated injuries, once per episode. Estimates are game probabilities.'}
 
 

@@ -58,7 +58,7 @@ def test_more_scouts_increase_concurrent_player_capacity(starting):
     with pytest.raises(ValueError, match='occupied'):
         scouting_command(session, {'action': 'assign', 'player_id': second})
     candidate = staff_read_model(session)['market']['scout'][0]
-    staff_command(session, {'action': 'hire', 'member_id': candidate['id']})
+    assert staff_command(session, {'action':'offer','member_id': candidate['id'],'weekly_wage_gbp':min(50000,candidate['wage_demand_weekly_gbp']+750),'years':2,'signing_bonus_gbp':0})['accepted']
     status = scouting_read_model(session)
     assert status['scout_count'] == 2 and status['capacity'] >= 2
     scouting_command(session, {'action': 'assign', 'player_id': second})
@@ -123,8 +123,9 @@ def test_release_or_expiry_pauses_then_reassigns_without_losing_progress(startin
     advance(session, 2)
     assert dept.scouting_assignments[player_id].progress_points == points
     assert scouting_read_model(session)['assignments'][0]['days_left'] is None
-    replacement = staff_read_model(session)['market']['scout'][0]['id']
-    staff_command(session, {'action': 'hire', 'member_id': replacement})
+    replacement_candidate=staff_read_model(session)['market']['scout'][0]
+    replacement=replacement_candidate['id']
+    assert staff_command(session, {'action':'offer','member_id':replacement,'weekly_wage_gbp':min(50000,replacement_candidate['wage_demand_weekly_gbp']+750),'years':2,'signing_bonus_gbp':0})['accepted']
     advance(session, 1)
     assert dept.scouting_assignments[player_id].progress_points > points
     assert dept.scouting_assignments[player_id].scout_id == replacement

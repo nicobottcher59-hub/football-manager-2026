@@ -351,3 +351,245 @@ body.tsui-training-active .sidebar .nav-item.is-active svg{color:var(--ui-club-h
 .tr-kpi-custom{color:#ffc66b}
 .tr-auto-footer>.tr-save{margin-left:auto}
 @media(max-width:620px){.tr-auto-footer>.tr-save{width:100%}}
+
+/* TS-UI-04.01 — Medical Centre / real injury and staff overview.
+ * Own namespace: no Staff, Squad, Training, or simulation style changes.
+ * Team-specific photograph is confined to the Sunderland identity; other
+ * clubs use a crest-free crop and the central dynamic club palette. */
+.fm-club-support-screen.is-medical{
+  box-sizing:border-box;width:100%;max-width:none;padding:5px 0 24px;min-width:0;
+  --md-club-rgb:var(--ui-club-rgb,20,135,216);
+  --md-club-highlight:var(--ui-club-highlight,#53a3e4);
+  color:#eef8ff;
+}
+.fm-club-support-screen.is-medical *,
+.fm-club-support-screen.is-medical *::before,
+.fm-club-support-screen.is-medical *::after{box-sizing:border-box}
+.md-shell{display:grid;gap:12px;min-width:0}
+.md-hero,.md-panel{min-width:0;border:1px solid #254b67;border-radius:11px;box-shadow:0 10px 27px #0004,inset 0 1px #fff1}
+.md-hero{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;
+  min-height:236px;overflow:hidden;border-color:rgba(var(--ui-club-highlight-rgb,66,155,222),.60);background:#10283b}
+.md-hero::before{content:"";z-index:-2;position:absolute;inset:0;
+  background:linear-gradient(90deg,#06182deF 0%,#061a30ed 26%,#0a223a66 51%,#06142530 79%,#05152698 100%),
+    url('assets/medical/medical-suite-generic.webp') center 52% / cover no-repeat}
+.md-hero.md-sunderland::before{background:linear-gradient(90deg,#06182dea 0%,#061a30e8 27%,#061d3499 52%,#07152646 77%,#071321a6 100%),
+    url('assets/medical/sunderland-physio-suite.webp') center 48% / cover no-repeat}
+.md-hero::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 0% 0%,rgba(var(--md-club-rgb),.31),transparent 54%),
+    repeating-linear-gradient(134deg,transparent 0 115px,rgba(var(--md-club-rgb),.04) 116px 117px,transparent 118px 170px)}
+.md-hero-main{display:flex;align-items:center;gap:18px;padding:24px 27px 16px;min-width:0;min-height:142px}
+.md-club-crest{flex:0 0 62px;width:62px;height:65px;display:grid;place-items:center;
+  border:1px solid rgba(var(--ui-club-highlight-rgb,66,155,222),.73);background:#081c32e8;border-radius:11px;
+  box-shadow:0 5px 21px #0009;color:var(--md-club-highlight)}
+.md-club-crest img{max-height:89%;max-width:90%;object-fit:contain;filter:drop-shadow(0 4px 7px #000a)}
+.md-hero-copy{min-width:0;max-width:690px}
+.md-overline{font-size:9px;font-weight:900;letter-spacing:1.25px;text-transform:uppercase;color:#ffcf8c}
+.md-hero h2{font-size:clamp(26px,2.5vw,37px);letter-spacing:-1.25px;line-height:1.1;margin:4px 0 8px;color:#fff}
+.md-hero p{font-size:11px;color:#d0e1ed;line-height:1.5;margin:0;max-width:440px;text-shadow:0 1px 6px #0009}
+.md-hero-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:0 13px 13px;
+  background:linear-gradient(115deg,#071b30ea,#0c2a42e8);border:1px solid #30526b;border-radius:9px;overflow:hidden;backdrop-filter:blur(6px)}
+.md-stat{display:flex;align-items:center;gap:10px;padding:11px 15px;min-height:77px;min-width:0;position:relative}
+.md-stat:not(:last-child)::after{content:"";position:absolute;top:19px;right:0;bottom:19px;width:1px;background:#38618191}
+.md-stat-icon{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:9px;background:#173a56;border:1px solid #315574;color:#5fbbfa}
+.md-stat-unavailable .md-stat-icon{color:#ff6478;background:#4a2538}
+.md-stat-squad .md-stat-icon{color:#56e1b0;background:#104139}
+.md-stat-fitness .md-stat-icon{color:#ffe099;background:#3d3540}
+.md-stat>span:last-child{display:grid;gap:3px;min-width:0}
+.md-stat strong{font-size:23px;line-height:1;font-weight:900;letter-spacing:-.6px;color:#f7fcff}
+.md-stat b{font-size:11px;font-weight:760;color:#e2f1fc}
+.md-stat small{font-size:9px;color:#8fb6cb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.md-major-grid,.md-bottom-grid{display:grid;grid-template-columns:minmax(0,1.34fr) minmax(365px,.96fr);gap:12px;min-width:0}
+.md-panel{background:linear-gradient(156deg,#122f49 0%,#0b243a 65%,#0a2237 100%);overflow:hidden}
+.md-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 17px 12px;min-height:64px;min-width:0}
+.md-panel-head>div{min-width:0}
+.md-panel h3{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.22;margin:0 0 5px;letter-spacing:-.1px;color:#f6fbff}
+.md-panel h3 svg{color:#5db6ee;flex:none}
+.md-injuries h3 svg{color:#ff647c}
+.md-panel-head p{font-size:10px;line-height:1.35;color:#9cbed0;margin:0}
+.md-count-pill{display:inline-flex;align-items:center;white-space:nowrap;font-size:10px;font-weight:850;color:#ace1f6;background:#0b3652;border:1px solid #346780;border-radius:6px;padding:5px 7px}
+.md-injury-body{padding:0 13px 13px;height:calc(100% - 64px)}
+.md-empty{min-height:215px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:22px 14px;
+  background:linear-gradient(145deg,#0b253bb5,#071d30b8);border:1px solid #294b60;border-radius:8px;position:relative;overflow:hidden}
+.md-empty::after{content:"";position:absolute;left:10%;right:10%;top:32%;height:1px;background:linear-gradient(90deg,transparent,#2a53704f,transparent);pointer-events:none}
+.md-empty-symbol{display:grid;place-items:center;width:65px;height:65px;flex:none;border-radius:50%;border:2px solid #39bcad7a;background:radial-gradient(circle at 50% 50%,#175d56a8,#0a3040);color:#70efca;box-shadow:0 0 24px #21c79a25}
+.md-empty strong{font-size:17px;color:#fff}
+.md-empty p{font-size:11px;line-height:1.5;max-width:360px;color:#b0cbd9;margin:0}
+.md-available-label{display:flex;align-items:center;gap:8px;border:1px solid #266a5c;background:#0c433f9c;padding:8px 12px;border-radius:6px;
+  font-size:10px;color:#9cf1d3;font-weight:750;margin-top:7px}
+.md-right-stack{display:grid;gap:12px;min-width:0;grid-template-rows:auto 1fr}
+.md-right-stack .md-panel{min-width:0}
+.fm-club-support-screen.is-medical .md-link{display:flex;gap:4px;align-items:center;border:0!important;padding:5px 0!important;background:transparent!important;color:#65c7ff;
+  font-size:10px;font-weight:800;white-space:nowrap}
+.fm-club-support-screen.is-medical .md-link:hover{color:white!important}
+.md-staff-rows{padding:0 12px 12px;display:grid;gap:5px}
+.md-staff-role{display:grid;grid-template-columns:35px minmax(0,1fr) auto;gap:9px;align-items:center;padding:9px 10px;
+  background:#0a263d;border:1px solid #274d67;border-radius:7px;min-width:0}
+.md-role-icon{color:#5cbbf4;border-radius:7px;background:#103e5d;display:grid;place-items:center;width:33px;height:32px}
+.md-staff-role>span:nth-child(2){display:grid;gap:3px;min-width:0}
+.md-staff-role strong{font-size:11px;color:#e6f5ff}.md-staff-role small{font-size:9px;color:#8aafc6}
+.md-staff-role b{color:#6ae2be;font-size:15px;font-weight:900;white-space:nowrap}.md-staff-role em{font-size:11px;font-weight:550;color:#96b2c6;font-style:normal}
+.md-return-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:3px 15px 8px;align-items:end}
+.md-return-col{display:flex;align-items:center;flex-direction:column;gap:6px;min-width:0}
+.md-return-col b{font-size:13px;color:#e5f3fc}
+.md-return-track{display:flex;flex-direction:column;justify-content:flex-end;width:44%;min-width:17px;height:38px;border:1px solid #224b62;background:#0b273e;border-radius:4px 4px 2px 2px;overflow:hidden}
+.md-return-track i{display:block;height:var(--bar);min-height:2px;background:linear-gradient(#5ce6c3,#1da995);border-radius:3px 3px 0 0;animation:md-rise .6s ease-out}
+.md-return-col small{font-size:9px;color:#9cbfd3;white-space:nowrap}
+.md-calendar-note{margin:5px 15px 12px;border-top:1px solid #29465c;padding-top:9px;font-size:9px;color:#88acc2;line-height:1.45}
+.md-injury-list{display:grid;gap:7px;max-height:370px;overflow-y:auto;scrollbar-color:#42647c #0a1d2f;scrollbar-width:thin}
+.md-injury-item{display:grid;grid-template-columns:minmax(150px,1.1fr) minmax(140px,.8fr);gap:8px;padding:13px 14px;background:#0c283e;border:1px solid #30536a;border-radius:8px}
+.md-injury-info{display:flex;gap:9px;align-items:center;min-width:0}.md-injury-mark{flex:none;color:#ff7f91}
+.fm-club-support-screen.is-medical .md-player-link{display:inline-flex;gap:4px;align-items:center;border:0!important;background:transparent!important;padding:0!important;color:#f2f9ff!important;font-size:12px;font-weight:900;text-align:left}
+.md-injury-info p{font-size:10px;color:#ffadad;margin:3px 0 0}
+.md-injury-return{display:grid;align-items:center;justify-items:end;gap:4px}.md-injury-return strong{color:#ffd09e;font-size:11px}.md-injury-return small{color:#93c0d7;font-size:9px}
+.md-opinion,.md-treatment-saved,.md-treatment-choice{grid-column:1/-1;margin:4px 0 0;font-size:10px;color:#a7c9db}
+.md-opinion strong{color:#fff}.md-treatment-saved{color:#77eac0;display:flex;align-items:center;gap:5px}
+.md-treatment-choice{padding-top:9px;border-top:1px solid #34546a;display:grid;gap:7px}
+.md-treatment-buttons{display:flex;flex-wrap:wrap;gap:7px}
+.fm-club-support-screen.is-medical .md-treatment-buttons button{padding:8px 10px;font-size:10px;color:#e4f8ff;border:1px solid #427a86;background:#154c58}
+.fm-club-support-screen.is-medical .md-treatment-buttons button.cs-danger{background:#4b2a3e;border-color:#9c4d65;color:#ffe4eb}
+.md-bottom-grid{grid-template-columns:minmax(0,1fr) minmax(365px,.96fr)}
+.md-history-rows{padding:0 14px 15px;max-height:240px;overflow-y:auto;scrollbar-color:#42647c #0a1d2f;scrollbar-width:thin}
+.md-history-empty{min-height:157px;border:1px solid #28495f;border-radius:8px;background:#09243b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;color:#729eb6}
+.md-history-empty strong{font-size:12px;color:#e4f3ff}.md-history-empty span{font-size:10px;color:#97b5c8}
+.md-history-row{display:flex;align-items:center;gap:9px;border-top:1px solid #284d64;padding:10px 4px}.md-history-row:first-child{border-top:0}
+.md-log-icon{color:#5daee9;flex:none}.md-history-row>span:nth-child(2){flex:1;min-width:0;display:grid;gap:4px}
+.md-history-row strong{font-size:11px;color:#eaf5ff}.md-history-row small{font-size:10px;color:#a6c3d3}
+.md-log-status{padding:5px;border:1px solid #386a72;border-radius:5px;color:#81e5c8;font-size:10px;text-transform:capitalize}
+.md-condition-inner{display:flex;align-items:center;gap:16px;padding:8px 18px 13px}
+.md-condition-gauge{display:flex;flex:none;width:109px;height:109px;flex-direction:column;justify-content:center;align-items:center;border-radius:50%;
+  background:radial-gradient(closest-side,#0b283d 82%,transparent 83% 100%),conic-gradient(#4ae5b6 var(--level),#1f465d var(--level));box-shadow:0 0 16px #11b8ac1d}
+.md-condition-gauge strong{font-size:21px;letter-spacing:-.4px;color:#fff}.md-condition-gauge span{font-size:9px;color:#9fc7d9}
+.md-condition-bands{flex:1;display:grid;gap:10px;min-width:0}
+.md-band{display:grid;grid-template-columns:58px minmax(0,1fr) 19px;gap:8px;align-items:center;font-size:10px;color:#a5c3d5}
+.md-band strong{text-align:right;color:#e6f9ff}.md-track{height:8px;min-width:20px;background:#173f59;border-radius:6px;overflow:hidden}
+.md-track i{display:block;height:100%;width:var(--bar);background:linear-gradient(90deg,#22b99d,#70f1ca);border-radius:7px;animation:md-width .5s ease-out}
+.md-track i.medium{background:linear-gradient(90deg,#2888cc,#71cfff)}.md-track i.low{background:linear-gradient(90deg,#d3883b,#ffd075)}
+.md-condition-note{display:flex;align-items:center;gap:6px;border-top:1px solid #2b4c63;margin:0 16px;padding:10px 0;font-size:10px;color:#93dabf}
+.md-footer{font-size:10px;line-height:1.5;color:#819fb2;padding:0 2px;margin:0 0 4px}
+.tr-hero-meta{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:11px}
+.tr-hero-meta .tr-next-match{margin-top:0}
+.tr-staff-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid rgba(var(--tr-highlight-rgb),.35);border-radius:5px;background:#10283cc9;color:#c4e8f8;font-size:10px;font-weight:700}
+.tr-staff-chip svg{color:#65d5f4}
+@keyframes md-rise{from{height:0}to{height:var(--bar)}}
+@keyframes md-width{from{width:0}to{width:var(--bar)}}
+@media(max-width:1250px){
+  .md-hero-main{padding:20px 22px 13px}.md-major-grid,.md-bottom-grid{grid-template-columns:minmax(0,1.16fr) minmax(310px,1fr)}
+  .md-stat{padding:9px;gap:7px}.md-stat-icon{width:31px;height:33px}.md-stat strong{font-size:21px}
+  .md-condition-inner{gap:10px;padding:7px 12px 13px}.md-condition-gauge{width:88px;height:88px}.md-condition-gauge strong{font-size:17px}
+}
+@media(max-width:900px){
+  .md-major-grid,.md-bottom-grid{grid-template-columns:1fr}
+  .md-right-stack{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto;align-items:stretch}
+  .md-right-stack .md-panel{height:100%}
+  .md-empty{min-height:170px}.md-hero{min-height:229px}
+}
+@media(max-width:680px){
+  .fm-club-support-screen.is-medical{padding:0 0 20px}
+  .md-hero-main{min-height:140px;padding:18px 14px 12px;gap:11px}
+  .md-club-crest{width:47px;height:50px;flex-basis:47px}.md-hero h2{font-size:25px}.md-hero p{font-size:10px}
+  .md-hero-stats{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 8px 8px}
+  .md-stat{min-height:66px}.md-stat:nth-child(2):after{display:none}.md-stat:nth-child(-n+2){border-bottom:1px solid #2b4c68}
+  .md-right-stack{grid-template-columns:1fr}
+  .md-panel-head{padding:13px 12px 10px}.md-injury-body{padding:0 9px 10px}
+  .md-condition-inner{padding:9px 12px;gap:12px}.md-condition-gauge{width:92px;height:92px}
+}
+@media(max-width:400px){
+  .md-hero-main{align-items:flex-start}.md-hero h2{font-size:23px}
+  .md-stat b{font-size:10px}.md-stat small{font-size:8px}
+  .md-injury-item{grid-template-columns:1fr}.md-injury-return{justify-items:start}
+  .md-panel-head{flex-wrap:wrap}.md-return-grid{gap:4px}.md-return-col small{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){
+  .fm-club-support-screen.is-medical *,
+  .fm-club-support-screen.is-medical *::before{animation:none!important;transition:none!important}
+}
+/* TS-UI-05.01 — Staff management; shared club identity, real staff economy.
+   Scoped to Staff: Training, Medical, Squad and the match UI remain unchanged. */
+body.tsui-staff-active .sidebar{background:linear-gradient(176deg,#071420,#06111c 59%,var(--ui-club-soft,#132b40) 180%);border-right-color:rgba(var(--ui-club-highlight-rgb,70,160,218),.24)}
+body.tsui-staff-active .sidebar::before{background:repeating-linear-gradient(40deg,transparent 0 46px,rgba(var(--ui-club-rgb,20,135,216),.09) 47px 49px),radial-gradient(ellipse at 23% 96%,rgba(var(--ui-club-rgb,20,135,216),.24),transparent 70%)}
+body.tsui-staff-active .sidebar .nav-item.is-active{background:linear-gradient(102deg,rgba(var(--ui-club-rgb,20,135,216),.34),#12283b 95%);color:white;border-color:rgba(var(--ui-club-highlight-rgb,70,160,218),.60);box-shadow:inset 3px 0 var(--ui-club-highlight,#4da7e2),0 6px 17px #0003}
+.fm-club-support-screen.is-staff{max-width:none;width:100%;padding:4px 0 24px;min-width:0;color:#eaf6ff;--st-club:var(--ui-club-rgb,20,135,216);--st-highlight:var(--ui-club-highlight-rgb,70,160,218)}
+.fm-club-support-screen.is-staff *{box-sizing:border-box}
+.fm-club-support-screen.is-staff :is(button,input,select){font:inherit;color-scheme:dark}
+.fm-club-support-screen.is-staff :is(button,input,select):focus-visible{outline:2px solid #62d0ff;outline-offset:2px}
+.fm-club-support-screen.is-staff button{cursor:pointer}
+.fm-club-support-screen.is-staff button:disabled{opacity:.45;cursor:default}
+.st-shell{width:100%;display:grid;gap:11px;min-width:0}
+.st-hero{position:relative;isolation:isolate;overflow:hidden;min-height:160px;border:1px solid rgba(var(--st-highlight),.56);border-radius:10px;display:flex;align-items:center;padding:25px 26px;background:#071b2e;box-shadow:0 9px 23px #0003}
+.st-hero::before{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,rgba(3,15,29,.97) 0%,rgba(6,23,38,.88) 27%,rgba(6,21,38,.32) 56%,rgba(6,22,39,.24) 100%),url('assets/staff/football-analysis-room.webp') 65% center/cover no-repeat}
+.st-hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 0% 18%,rgba(var(--st-club),.54),transparent 53%),repeating-linear-gradient(132deg,transparent 0 73px,rgba(var(--st-highlight),.055) 74px 75px,transparent 76px 131px),linear-gradient(0deg,rgba(5,18,30,.34),transparent 66%)}
+.st-hero-left{display:flex;align-items:center;gap:21px;min-width:0;max-width:810px}
+.st-club-crest{width:83px;height:93px;flex-shrink:0;display:grid;place-items:center;color:var(--ui-club-highlight,#6ac6ed);background:#091c30bc;border-radius:13px;border:1px solid rgba(var(--st-highlight),.65);box-shadow:inset 0 1px #ffffff12,0 8px 25px #0005}
+.st-club-crest img{max-width:90%;max-height:91%;object-fit:contain;filter:drop-shadow(0 5px 8px #0008)}
+.st-overline{display:block;font-size:10px;letter-spacing:1.2px;font-weight:900;text-transform:uppercase;color:#a3deff;margin-bottom:5px}
+.st-hero h2{font-size:clamp(24px,2.6vw,35px);line-height:1.04;letter-spacing:-.8px;margin:0 0 7px;color:white;font-weight:900}
+.st-hero p{margin:0;font-size:12px;line-height:1.55;color:#c8dbe8;max-width:510px}
+.st-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.st-kpi{display:flex;align-items:center;min-width:0;min-height:80px;gap:12px;padding:12px;border:1px solid #274866;border-radius:9px;background:linear-gradient(150deg,#102d45,#071c31);box-shadow:inset 0 1px #ffffff0a}
+.st-kpi-icon{display:grid;place-items:center;flex:none;width:44px;height:43px;border-radius:9px;background:#17415d;color:#62c5ed}
+.st-kpi-coach .st-kpi-icon{color:#58bdf9;background:#103b61}.st-kpi-medic .st-kpi-icon{color:#ff7285;background:#4c2037}.st-kpi-fitness .st-kpi-icon{color:#3de4ad;background:#123e42}.st-kpi-scout .st-kpi-icon{color:#b095ff;background:#2c234d}.st-kpi-wage .st-kpi-icon{color:#59cbf8;background:#164e7b}
+.st-kpi>span:last-child{display:grid;gap:3px;min-width:0}
+.st-kpi small{font-size:10px;color:#a3bfd1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st-kpi strong{font-size:23px;line-height:1.05;color:#fff;font-weight:900;letter-spacing:-.5px;white-space:nowrap}
+.st-kpi em{font-size:10px;font-style:normal;color:#91b0c5;white-space:nowrap}
+.st-departments{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:stretch}
+.st-department{--st-role:#5dbdff;--st-rgb:56,145,228;display:flex;flex-direction:column;gap:10px;min-width:0;padding:15px 16px;background:linear-gradient(145deg,#0e2941,#081f34 78%);border:1px solid #24516b;border-left:3px solid var(--st-role);border-radius:10px;box-shadow:0 8px 20px #0002}
+.st-department-medic{--st-role:#ff607d;--st-rgb:238,72,103}.st-department-fitness{--st-role:#46d9ae;--st-rgb:42,205,153}.st-department-scout{--st-role:#a584fa;--st-rgb:152,116,239}
+.st-department-head{display:flex;justify-content:space-between;align-items:center;gap:8px;min-width:0}
+.st-title-line{display:flex;align-items:center;gap:8px;min-width:0}
+.st-role-symbol{display:grid;place-items:center;color:var(--st-role);width:25px;flex-shrink:0}
+.st-title-line h3{color:#f2f8ff;font-size:17px;margin:0;line-height:1.2;font-weight:850;white-space:nowrap}
+.st-count{white-space:nowrap;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:900;color:var(--st-role);border:1px solid rgba(var(--st-rgb),.4);background:rgba(var(--st-rgb),.11)}
+.fm-club-support-screen.is-staff .st-recruit-btn,.fm-club-support-screen.is-staff .st-action,.fm-club-support-screen.is-staff .st-back{border:1px solid rgba(var(--st-highlight),.60);background:linear-gradient(145deg,#133955,#0a2946);border-radius:7px;color:#ebf7ff;font-size:11px;font-weight:750;padding:9px 12px;display:inline-flex;gap:7px;align-items:center;justify-content:center;min-height:34px;transition:filter .15s,transform .15s}
+.fm-club-support-screen.is-staff .st-recruit-btn{white-space:nowrap;background:linear-gradient(125deg,rgba(var(--st-club),.61),#0a3257)}
+.fm-club-support-screen.is-staff :is(.st-recruit-btn,.st-action,.st-back):hover:not(:disabled){filter:brightness(1.24);transform:translateY(-1px)}
+.st-department-detail{color:#9cbed1;font-size:11px;line-height:1.45;margin:0;min-height:30px;max-width:510px}
+.st-employees{display:grid;gap:7px;flex:1}
+.st-employed{display:grid;grid-template-columns:43px minmax(112px,1fr) auto auto;gap:10px;align-items:center;min-width:0;min-height:75px;background:linear-gradient(125deg,#0c2238,#091e33);border:1px solid #20435d;border-radius:8px;padding:9px}
+.st-person{display:grid;place-items:center;flex-shrink:0;width:43px;height:43px;color:#59bffe;background:linear-gradient(140deg,#104770,#092644);border:1px solid #215f8c;border-radius:10px}
+.st-person-medic{color:#ff758c;background:linear-gradient(135deg,#56293e,#281b31);border-color:#78394f}.st-person-fitness{color:#46e8af;background:linear-gradient(135deg,#124e40,#102f35);border-color:#2b735d}.st-person-scout{color:#b495ff;background:linear-gradient(135deg,#382a63,#1b2642);border-color:#644d94}.st-person-large{width:65px;height:65px}
+.st-employee-name{display:grid;gap:3px;min-width:0}.st-employee-name strong,.st-candidate-name strong{font-size:13px;color:#f3f9ff;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.st-employee-name>span,.st-candidate-name small{font-size:11px;color:#b6cfe0}.st-employee-name small{font-size:9.5px;color:#93b1c7;overflow-wrap:anywhere}
+.st-quality{min-width:31px;min-height:28px;display:inline-grid;place-items:center;padding:4px 6px;font-size:14px;font-weight:850;color:#fbeab8;background:#39351a;border:1px solid #e5b647;border-radius:8px;font-variant-numeric:tabular-nums}
+.st-quality-high{color:#97ffe0;background:#0a4a3f;border-color:#31d9ae}.st-quality-good{color:#ffe7a9;background:#41331a;border-color:#e5b647}.st-quality-mid{color:#ffd3b7;background:#50311e;border-color:#ec9057}.st-quality-low{color:#ffb7c6;background:#4c2030;border-color:#f16982}
+.st-employee-actions{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.fm-club-support-screen.is-staff .st-dismiss{border-color:#835065;color:#ffd4dd;background:#1b2539}
+.st-vacancies{display:flex;gap:10px;align-items:center;min-width:0;padding:10px;border:1px dashed #345776;border-radius:8px;background:#0a2134bb;margin-top:auto}
+.st-vacancy-icon{display:grid;place-items:center;width:40px;height:40px;border:1px solid #295479;border-radius:50%;color:#7ba6c8;flex-shrink:0}
+.st-vacancies>span:nth-child(2){display:grid;gap:4px;flex:1;min-width:0}.st-vacancies strong{font-size:11px;color:#e5f5ff}.st-vacancies small{font-size:10px;color:#88a9bf}
+.st-footer{font-size:10px;color:#829fb7;line-height:1.55;margin:0}
+.st-feedback{font-size:12px;padding:12px 14px;border-radius:8px;display:grid;gap:6px}.st-feedback-ok{border:1px solid #2d8169;background:#0e3935;color:#b6ffe0}.st-feedback-warn{border:1px solid #a97943;background:#32291d;color:#ffe5bd}
+.fm-club-support-screen.is-staff .st-feedback button{justify-self:start;background:#614322;border:1px solid #b58b54;border-radius:5px;padding:5px 9px;color:#fff5d6}
+.st-recruit-menu{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.st-recruit-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.fm-club-support-screen.is-staff .st-recruit-tabs button{display:flex;align-items:center;gap:6px;font-size:11px;padding:10px 13px;border:1px solid #254963;border-radius:6px;background:#0c2840;color:#acccdf}
+.fm-club-support-screen.is-staff .st-recruit-tabs button.is-active{border-color:rgba(var(--st-highlight),.8);color:white;box-shadow:inset 0 -2px rgba(var(--st-highlight),.8);background:linear-gradient(110deg,rgba(var(--st-club),.3),#16344e)}
+.st-finance-forecast{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.st-finance-forecast>div{min-height:72px;padding:12px 15px;border:1px solid #28526c;border-radius:8px;display:grid;gap:5px;background:linear-gradient(140deg,#0e2a41,#0a2036)}
+.st-finance-forecast small{color:#91b5cc;font-size:10px}.st-finance-forecast strong{color:#f0fbff;font-size:20px;font-weight:850;font-variant-numeric:tabular-nums}
+.st-recruit-grid{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(360px,.82fr);align-items:start;gap:12px}
+.st-candidate-panel,.st-negotiation-panel{border:1px solid #285570;border-radius:10px;background:linear-gradient(150deg,#0e2c44,#081e32 85%);min-width:0;padding:15px}
+.st-negotiation-panel{border-left:3px solid rgba(var(--st-highlight),.8);position:sticky;top:10px}
+.st-panel-head{display:flex;gap:8px;justify-content:space-between;align-items:start;margin-bottom:14px}.st-panel-head h3{font-size:16px;margin:0 0 5px;color:#f7fbff}.st-panel-head p{font-size:11px;line-height:1.45;color:#95b5c9;margin:0}
+.st-candidate-controls{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(140px,.8fr);gap:9px;margin-bottom:10px}.st-candidate-controls label,.st-offer-form label{display:grid;gap:6px;color:#a2c4d8;font-size:11px;font-weight:720}
+.fm-club-support-screen.is-staff :is(.st-candidate-controls input,.st-candidate-controls select,.st-offer-form input,.st-offer-form select){background:#071e33;border:1px solid #325875;color:#eff9ff;border-radius:6px;width:100%;padding:9px 10px;min-height:37px;font-size:12px}
+.st-candidate-list{display:grid;gap:7px;max-height:495px;overflow-y:auto;padding-right:3px}
+.fm-club-support-screen.is-staff .st-candidate{padding:10px;display:grid;grid-template-columns:43px minmax(0,1.3fr) auto minmax(90px,.8fr) minmax(80px,.7fr) auto;gap:11px;align-items:center;text-align:left;min-width:0;background:linear-gradient(110deg,#0b253c,#092039);color:#eaf7ff;border:1px solid #244862;border-radius:8px;min-height:72px;transition:border-color .14s,background .14s}
+.fm-club-support-screen.is-staff .st-candidate:hover,.fm-club-support-screen.is-staff .st-candidate.is-selected{border-color:#4ac5f7;background:linear-gradient(110deg,#104068,#09243e)}
+.st-candidate[hidden]{display:none!important}.st-candidate-name{min-width:0;display:grid;gap:3px}
+.st-candidate-salary,.st-candidate-term{display:grid;gap:4px;min-width:0}.st-candidate-salary small,.st-candidate-term small{font-size:9px;color:#83a8c2}.st-candidate-salary strong,.st-candidate-term strong{font-size:11px;color:#e9f5ff;white-space:nowrap}
+.st-candidate-footer{color:#91b8cf;font-size:10px;margin:11px 4px 0}
+.st-offer-person{display:flex;align-items:center;gap:11px;padding:12px;border:1px solid #2a506a;background:#0a2239;border-radius:8px;margin-bottom:13px}.st-offer-person>span:nth-child(2){display:grid;gap:4px;flex:1;min-width:0}.st-offer-person>span:nth-child(2)>strong{color:white;font-size:15px}.st-offer-person>span:nth-child(2)>small{font-size:10px;color:#a0bbcd}
+.st-demand{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px;padding:10px 12px;border:1px solid #24435b;border-radius:7px;background:#11293d;font-size:11px;color:#9ebed0}.st-demand strong{color:#f5fbff;font-size:14px}
+.st-offer-form{display:grid;gap:12px}.st-offer-form label{font-size:11px}
+.st-offer-note{padding:12px;background:#10273b;border:1px solid #27516b;border-radius:7px;color:#a3bfce;font-size:10px;line-height:1.55}
+.fm-club-support-screen.is-staff .st-offer-submit{display:flex;gap:7px;justify-content:center;align-items:center;min-height:42px;background:linear-gradient(120deg,rgba(var(--st-club),.86),#0d4f91);border:1px solid rgba(var(--st-highlight),.85);color:#fff;border-radius:7px;font-size:13px;font-weight:850}
+.fm-club-support-screen.is-staff .st-offer-submit:hover{filter:brightness(1.2)}
+.st-extension-target{display:flex;align-items:center;gap:10px;padding:15px;background:#0b243b;border:1px solid #285270;border-radius:8px;min-width:0}.st-extension-target>strong{color:#fff;font-size:13px}.st-extension-target>small{margin-left:auto;color:#a6bfd2;font-size:11px}
+.st-empty{padding:22px 10px;color:#9abbd0;text-align:center;font-size:12px}
+@media(max-width:1350px){.st-hero{min-height:153px}.st-employed{grid-template-columns:39px minmax(80px,1fr) auto;gap:7px}.st-employee-actions{grid-column:2 / -1;justify-content:flex-end}.st-person{width:39px;height:39px}.st-recruit-grid{grid-template-columns:minmax(0,1.05fr) minmax(305px,.95fr)}.st-kpi{gap:7px;padding:10px}.st-kpi-icon{width:36px;height:36px}.st-kpi strong{font-size:19px}}
+@media(max-width:1000px){.st-departments{grid-template-columns:1fr}.st-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.st-recruit-grid{grid-template-columns:1fr}.st-negotiation-panel{position:static}.st-employed{grid-template-columns:43px minmax(100px,1fr) auto auto}.st-employee-actions{grid-column:auto}.st-hero::before{background-position:center 35%}}
+@media(max-width:690px){.st-hero{padding:18px 15px;min-height:151px}.st-hero-left{gap:11px}.st-club-crest{width:49px;height:62px}.st-hero h2{font-size:23px}.st-hero p{font-size:10px}.st-overline{font-size:9px}.st-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.st-kpi{min-height:66px}.st-kpi strong{font-size:19px}.st-department{padding:13px 11px}.st-department-head{flex-wrap:wrap}.st-employed{grid-template-columns:37px minmax(0,1fr) auto}.st-employee-actions{grid-column:1 / -1;justify-content:flex-end}.st-recruit-btn{margin-left:auto}.st-candidate{grid-template-columns:36px minmax(0,1fr) auto!important}.st-candidate-salary,.st-candidate-term{grid-column:2 / 3}.st-candidate-term{display:none}.st-candidate>.st-quality{grid-column:3 / 4;grid-row:1 / 2}.st-candidate>svg{grid-column:3 / 4}.st-finance-forecast{grid-template-columns:1fr 1fr}.st-recruit-menu{align-items:stretch}.st-recruit-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.st-extension-target{flex-wrap:wrap}.st-extension-target>small{margin-left:0;flex:1 0 100%}}
+@media(prefers-reduced-motion:reduce){.st-department .st-action,.st-recruit-btn,.st-candidate{transition:none!important}}
+
+/* Very narrow windows can retain the full desktop sidebar: collapse controls. */
+@media(max-width:480px){.st-kpi{gap:5px;padding:8px}.st-kpi-icon{width:29px;height:30px}.st-kpi strong{font-size:16px}.st-kpi small,.st-kpi em{white-space:normal;overflow-wrap:anywhere}.st-title-line{flex-wrap:wrap}.st-department-head .st-recruit-btn{width:100%}.st-employee-actions{flex-wrap:wrap;justify-content:start}.st-employee-actions .st-action{flex:1 1 auto;white-space:normal;min-width:0}.st-vacancies{flex-wrap:wrap}.st-vacancies .st-action{width:100%}.st-candidate-controls,.st-finance-forecast{grid-template-columns:1fr}.st-recruit-tabs{grid-template-columns:1fr}.st-hero-left{align-items:flex-start}.st-hero p{overflow-wrap:anywhere}}

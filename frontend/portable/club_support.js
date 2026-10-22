@@ -7,6 +7,7 @@
   const modes={auto:'Automatic',light:'Light',balanced:'Balanced',intense:'Intense'};
   const preference={aggressive:'Wants a quicker return',conservative:'Prefers a cautious recovery',neutral:'No strong preference'};
   let host=null,screen='staff',state=null,busy=false,serial=0;
+  const staffView={page:'overview',role:'coach',targetId:null,sort:'quality',search:'',offerWage:0,offerYears:2,offerBonus:0,feedback:null};
   const trainingView={search:'',plan:'all',focus:'all',playerId:null,lastThreshold:null};
   // The same optional ID-keyed photo catalogue read by the approved Squad screen.
   // Keep illustrated portraits as a stable fallback when a photo is absent.
@@ -29,17 +30,155 @@
   const api={staff:'/api/staff',training:'/api/training',medical:'/api/medical'};
   const panel=(heading,inner,extra='')=>`<section class="cs-panel ${extra}"><h3>${heading}</h3>${inner}</section>`;
   const banner=(title,detail)=>`<header class="cs-heading"><div><span class="cs-eyebrow">CAREER OPERATIONS · TS-26</span><h2>${title}</h2><p>${detail}</p></div></header>`;
-  function staff(){
-    const data=state;
-    const summary=`<div class="cs-metrics"><div><span>Weekly staff wages</span><strong>${pay(data.weekly_payroll_gbp)}</strong></div>${Object.entries(roleNames).map(([role,label])=>`<div><span>${label}</span><strong>${data.members.filter(m=>m.role===role).length} / ${data.capacity[role]}</strong></div>`).join('')}</div>`;
-    const sections=Object.entries(roleNames).map(([role,label])=>{
-      const members=data.members.filter(m=>m.role===role);
-      const vacant=data.capacity[role]-members.length;
-      return panel(`${label} <small>· ${members.length}/${data.capacity[role]} places</small>`,
-        `<div class="cs-row-list">${members.map(m=>`<div class="cs-row"><div><strong>${esc(m.name)}</strong><small>Quality ${m.quality}/100 · ${pay(m.wage_weekly_gbp)} / week · Contract to ${esc(m.until)}</small></div><div class="cs-actions"><button type="button" data-cs-action="renew" data-id="${esc(m.id)}">Extend</button><button type="button" class="cs-danger" data-cs-action="release" data-id="${esc(m.id)}">Release</button></div></div>`).join('')||'<p class="cs-muted">No active staff contracts.</p>'}</div>
-        ${vacant>0?`<div class="cs-market"><h4>Available candidates</h4>${data.market[role].map(m=>`<div class="cs-row"><div><strong>${esc(m.name)}</strong><small>Quality ${m.quality}/100 · ${pay(m.wage_weekly_gbp)} / week</small></div><button type="button" class="cs-primary" data-cs-action="hire" data-id="${esc(m.id)}">Hire</button></div>`).join('')||'<p class="cs-muted">No candidates left this year.</p>'}</div>`:'<p class="cs-muted">Department is full. Future facilities can expand its capacity.</p>'}`);
+  // TS-UI-05.01: Staff management and deterministic salary negotiations.
+  // Photo is a neutral background; crest and colours always come from the club catalog.
+  const staffRoles={
+    coach:{name:'Coaches',single:'Coach',icon:'people',detail:'Support technical development and tactical familiarity.'},
+    medic:{name:'Medical staff',single:'Medical specialist',icon:'heart',detail:'Help your players recover and manage recorded injuries.'},
+    fitness:{name:'Fitness coaches',single:'Fitness coach',icon:'bolt',detail:'Support squad conditioning and player recovery.'},
+    scout:{name:'Professional scouts',single:'Scout',icon:'search',detail:'Increase first-team scouting capacity and report speed.'},
+  };
+  const staffRolesOrder=['coach','medic','fitness','scout'];
+  const stIcon=(name,size=18)=>trIcon(name,size);
+  const staffPerson=(role,large=false)=>`<span class="st-person st-person-${esc(role)}${large?' st-person-large':''}" aria-hidden="true">${stIcon('people',large?31:23)}</span>`;
+  const staffQuality=quality=>`<span class="st-quality ${quality>=80?'st-quality-high':quality>=65?'st-quality-good':quality>=55?'st-quality-mid':'st-quality-low'}" aria-label="Quality ${quality} out of 100">${quality}</span>`;
+  const staffIdentity=()=>{
+    const data=state||{};
+    const identity=window.FMClubIdentity?.resolve?.(data.club_id,data.club)||{display_name:data.club||'Club',crest:null};
+    return {name:identity.display_name||data.club||'Club',crest:identity.crest};
+  };
+  function staffHeader(isRecruit){
+    const id=staffIdentity();
+    const crest=id.crest?`<img src="${esc(id.crest)}" alt="" loading="lazy">`:stIcon('shield',34);
+    return `<header class="st-hero" aria-label="Staff management"><div class="st-hero-left"><span class="st-club-crest">${crest}</span>
+      <div><span class="st-overline">${esc(id.name)} · STAFF DEPARTMENT</span><h2>${isRecruit?'Recruit staff':'Coaching & staff'}</h2>
+      <p>${isRecruit?'Review real candidates, negotiate their salary and improve your club’s workforce.':'Build a high-performance environment with the right people. Manage coaches, medical specialists, fitness staff and professional scouts.'}</p></div></div></header>`;
+  }
+  function staffStat(icon,label,value,sub,kind){
+    return `<div class="st-kpi st-kpi-${kind}"><span class="st-kpi-icon">${stIcon(icon,22)}</span><span><small>${esc(label)}</small><strong>${esc(value)}</strong><em>${esc(sub)}</em></span></div>`;
+  }
+  function staffOverview(){
+    const d=state;
+    const summary=`<div class="st-kpis">${staffStat('chart','Weekly staff wages',pay(d.weekly_payroll_gbp),'Active contracts','wage')}
+      ${staffRolesOrder.map(role=>{
+        const n=d.members.filter(m=>m.role===role).length,capacity=d.capacity[role],details=staffRoles[role];
+        return staffStat(details.icon,details.name,`${n} / ${capacity}`,`${Math.max(0,capacity-n)} positions available`,role);
+      }).join('')}</div>`;
+    const cards=staffRolesOrder.map(role=>{
+      const info=staffRoles[role],members=d.members.filter(m=>m.role===role),max=d.capacity[role],vacant=Math.max(0,max-members.length);
+      const employees=members.map(m=>`<div class="st-employed">
+          ${staffPerson(role)}<div class="st-employee-name"><strong>${esc(m.name)}</strong><span>${esc(info.single)}</span>
+            <small>${pay(m.wage_weekly_gbp)} / week · Contract until ${esc(m.until)}</small></div>
+          ${staffQuality(m.quality)}<div class="st-employee-actions"><button type="button" class="st-action" data-st-negotiation="${esc(m.id)}" data-st-role="${role}">Open negotiations</button>
+          <button type="button" class="st-action st-dismiss" data-st-dismiss="${esc(m.id)}" data-st-name="${esc(m.name)}">Dismiss</button></div>
+        </div>`).join('');
+      return `<section class="st-department st-department-${role}"><div class="st-department-head">
+        <div class="st-title-line"><span class="st-role-symbol">${stIcon(info.icon,23)}</span><h3>${esc(info.name)}</h3><span class="st-count">${members.length} / ${max}</span></div>
+        <button type="button" class="st-recruit-btn" data-st-recruit="${role}">Recruit ${esc(info.name)} ${stIcon('chevron',15)}</button>
+      </div><p class="st-department-detail">${esc(info.detail)}</p>
+      <div class="st-employees">${employees||'<div class="st-vacant-only">No active appointments in this department.</div>'}</div>
+      <div class="st-vacancies"><span class="st-vacancy-icon">${stIcon('people',22)}</span>
+        <span><strong>${vacant?`${vacant} ${vacant===1?'position':'positions'} available`:'All positions filled'}</strong><small>${vacant?'Review candidates and negotiate a contract.':'Contracts can still be renegotiated with current employees.'}</small></span>
+        <button type="button" class="st-action" data-st-recruit="${role}" ${vacant?'':'disabled'}>View candidates ${stIcon('chevron',14)}</button></div>
+      </section>`;
     }).join('');
-    host.innerHTML=banner('Coaching & staff','Coaches, medics, fitness staff and professional scouts. Scouts increase report capacity and speed; player stats remain visible.')+summary+sections+`<p class="cs-footer">${esc(data.note)} Professional scouts produce optional first-team reports in Scouting, independently of youth scouting. Releasing staff incurs a two-week settlement. Hiring requires club cash.</p>`;
+    host.innerHTML=`<div class="st-shell">${staffHeader(false)}${summary}
+      ${staffView.feedback?`<div class="st-feedback st-feedback-ok" role="status">${esc(staffView.feedback.message||staffView.feedback)}</div>`:''}
+      <div class="st-departments">${cards}</div>
+      <p class="st-footer">${esc(d.note)} Dismissing staff incurs the existing two-week settlement. Department capacities are provisional.</p></div>`;
+  }
+  function staffTarget(){
+    const items=staffView.page==='extension'?(state?.members||[]):(state?.market?.[staffView.role]||[]);
+    return items.find(item=>item.id===staffView.targetId)||null;
+  }
+  function selectStaffTarget(member, role, extension){
+    staffView.role=role;
+    staffView.page=extension?'extension':'recruit';
+    staffView.targetId=member?.id||null;
+    staffView.offerWage=member?.wage_demand_weekly_gbp||member?.wage_weekly_gbp||0;
+    staffView.offerYears=member?.preferred_years||2;
+    staffView.offerBonus=0;
+    staffView.feedback=null;
+    render();
+  }
+  function openStaffRecruit(role){
+    staffView.role=staffRoles[role]?role:'coach';
+    staffView.page='recruit';staffView.search='';staffView.feedback=null;
+    const choices=state?.market?.[staffView.role]||[];
+    const featured=[...choices].sort((a,b)=>b.quality-a.quality||a.wage_demand_weekly_gbp-b.wage_demand_weekly_gbp)[0];
+    selectStaffTarget(featured,staffView.role,false);
+  }
+  function staffOfferSummary(){
+    const previous=staffTarget();
+    const after=Math.max(0,(state?.weekly_payroll_gbp||0) + staffView.offerWage - (staffView.page==='extension'?(previous?.wage_weekly_gbp||0):0));
+    return `<div class="st-finance-forecast"><div><small>Current weekly staff wages</small><strong>${pay(state.weekly_payroll_gbp)}</strong></div>
+      <div><small>Projected after acceptance</small><strong data-st-projected>${pay(after)}</strong></div>
+      <div><small>Current club cash</small><strong>${pay(state.cash_gbp)}</strong></div></div>`;
+  }
+  function staffRecruit(){
+    const role=staffView.role;
+    const info=staffRoles[role];
+    const isExtension=staffView.page==='extension';
+    const target=staffTarget();
+    const full=(state.members||[]).filter(m=>m.role===role).length>=Number(state.capacity?.[role]||0);
+    const raw=state?.market?.[role]||[];
+    const items=raw.filter(m=>m.name.toLowerCase().includes(staffView.search.toLowerCase()));
+    items.sort((a,b)=>staffView.sort==='wage'?a.wage_demand_weekly_gbp-b.wage_demand_weekly_gbp||b.quality-a.quality:b.quality-a.quality||a.wage_demand_weekly_gbp-b.wage_demand_weekly_gbp);
+    const candidateRows=items.map(m=>`<button class="st-candidate ${target?.id===m.id?'is-selected':''}" type="button" data-st-candidate="${esc(m.id)}">
+      ${staffPerson(role)}<span class="st-candidate-name"><strong>${esc(m.name)}</strong><small>${esc(info.single)}</small></span>
+      ${staffQuality(m.quality)}<span class="st-candidate-salary"><small>Wage demand</small><strong>${pay(m.wage_demand_weekly_gbp)} / wk</strong></span>
+      <span class="st-candidate-term"><small>Suggested term</small><strong>${m.preferred_years} years</strong></span>${stIcon('chevron',16)}</button>`).join('');
+    const negotiation=target?`<div class="st-offer-person">${staffPerson(role,true)}<span><strong>${esc(target.name)}</strong><small>${esc(info.single)} · Quality ${target.quality}/100</small></span>${staffQuality(target.quality)}</div>
+      <div class="st-demand"><span>${isExtension?'Renewal wage demand':'Candidate wage demand'}</span><strong>${pay(target.wage_demand_weekly_gbp)} / week</strong></div>
+      <form class="st-offer-form" data-st-offer-form><label>Weekly salary offer
+        <input type="number" min="100" max="50000" step="25" name="weekly_wage_gbp" value="${staffView.offerWage}" required></label>
+        <label>Contract extension / duration
+          <select name="years">${[1,2,3,4].map(n=>`<option value="${n}" ${staffView.offerYears===n?'selected':''}>${n} ${n===1?'year':'years'}</option>`).join('')}</select></label>
+        <label>Signing bonus (optional)
+          <input type="number" min="0" max="200000" step="25" name="signing_bonus_gbp" value="${staffView.offerBonus}" required></label>
+        ${full&&!isExtension?'<div class="st-feedback st-feedback-warn" role="status">Department full. Dismiss an employee before making a new appointment.</div>':''}
+        <div class="st-offer-note">An offer below the expected terms can be declined. A signing bonus is paid immediately if accepted; wages are charged by the existing monthly finance system.</div>
+        ${staffView.feedback?`<div class="st-feedback ${staffView.feedback.accepted?'st-feedback-ok':'st-feedback-warn'}" role="status"><strong>${esc(staffView.feedback.message)}</strong>${staffView.feedback.counter_wage_weekly_gbp?`<span>Suggested salary: ${pay(staffView.feedback.counter_wage_weekly_gbp)} / week.</span><button type="button" data-st-counter="${staffView.feedback.counter_wage_weekly_gbp}">Use counteroffer</button>`:''}</div>`:''}
+        <button class="st-offer-submit" type="submit" ${busy||(full&&!isExtension)?'disabled':''}>Send ${isExtension?'renewal':'contract'} offer ${stIcon('chevron',16)}</button>
+      </form>`:'<div class="st-empty">Select a candidate to negotiate a contract.</div>';
+    host.innerHTML=`<div class="st-shell">${staffHeader(true)}<div class="st-recruit-menu">
+      <button type="button" class="st-back" data-st-back>${stIcon('chevron',14)} Back to staff</button>
+      <div class="st-recruit-tabs">${staffRolesOrder.map(r=>`<button type="button" class="${r===role?'is-active':''}" data-st-recruit="${r}">${stIcon(staffRoles[r].icon,16)} ${esc(staffRoles[r].name)}</button>`).join('')}</div>
+    </div>${staffOfferSummary()}
+    <div class="st-recruit-grid"><section class="st-candidate-panel"><div class="st-panel-head"><div><h3>${isExtension?'Contract extension':`${esc(info.name)} candidates`}</h3>
+      <p>${isExtension?'Negotiate improved terms with an active employee.':'Compare available professionals by recorded quality and wage expectations.'}</p></div></div>
+      ${isExtension?`<div class="st-extension-target">${staffPerson(role)}<strong>${esc(target?.name||'Staff member unavailable')}</strong><small>Current contract: ${pay(target?.wage_weekly_gbp||0)} / week · Until ${esc(target?.until||'—')}</small></div>`:
+      `<div class="st-candidate-controls"><label>Search<input type="search" data-st-search placeholder="Search candidates" value="${esc(staffView.search)}"></label><label>Sort by<select data-st-sort><option value="quality" ${staffView.sort==='quality'?'selected':''}>Highest quality</option><option value="wage" ${staffView.sort==='wage'?'selected':''}>Lowest wage demand</option></select></label></div><div class="st-candidate-list">${candidateRows||'<p class="st-empty">No candidates match your search.</p>'}</div>
+       <div class="st-candidate-footer">${items.length} visible · ${raw.length} available in ${esc(info.name)}</div>`}
+    </section><section class="st-negotiation-panel"><div class="st-panel-head"><div><h3>${isExtension?'Renewal negotiation':'Negotiate contract'}</h3>
+      <p>Agree salary, term and any signing bonus before an appointment becomes active.</p></div>${stIcon('people',23)}</div>
+      ${negotiation}</section></div></div>`;
+  }
+  function staff(){
+    if(!state)return;
+    if(staffView.page==='overview')staffOverview();
+    else staffRecruit();
+  }
+  function staffUpdateProjected(){
+    const current=staffTarget();
+    const total=Number(state?.weekly_payroll_gbp||0)+staffView.offerWage-(staffView.page==='extension'?Number(current?.wage_weekly_gbp||0):0);
+    const indicator=host?.querySelector('[data-st-projected]');if(indicator)indicator.textContent=pay(total);
+  }
+  async function sendStaffOffer(){
+    if(busy||!staffTarget()||!Number.isInteger(staffView.offerWage)||!Number.isInteger(staffView.offerBonus))return;
+    const id=staffView.targetId;
+    busy=true;host?.setAttribute('aria-busy','true');
+    try{
+      const response=await fetch('/api/staff',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({action:'offer',member_id:id,weekly_wage_gbp:staffView.offerWage,
+          years:staffView.offerYears,signing_bonus_gbp:staffView.offerBonus})});
+      const result=await response.json();if(!response.ok)throw Error(result.error||`HTTP ${response.status}`);
+      if(result.accepted){
+        staffView.page='overview';staffView.feedback=result;
+        await refresh();window.FMFinances?.refresh?.();
+      }else{staffView.feedback=result;render();}
+    }catch(error){staffView.feedback={accepted:false,message:error.message||String(error)};render();}
+    finally{busy=false;host?.setAttribute('aria-busy','false');}
   }
   // Training visual read model: all aggregations below use the live Python payload.
   // No historic progress, risk prediction or future match readiness is inferred.
@@ -227,10 +366,12 @@
     const workBars=['light','balanced','intense'].map(k=>`<div class="tr-work-column tr-work-${k}"><div class="tr-work-vessel"><i style="--bar:${size?100*workCounts[k]/size:0}%"></i></div><strong>${workCounts[k]}</strong><span>${modes[k]}</span></div>`).join('');
     const focusBars=focusCounts.map(([key,n],i)=>`<div class="tr-focus-row"><span class="tr-focus-key"><i class="tr-focus-swatch" style="--focus-idx:${i}"></i>${esc(key)}</span><span class="tr-focus-bar"><i style="--bar:${100*n/maxFocus}%;--focus-idx:${i}"></i></span><strong>${n}</strong></div>`).join('');
     const match=d.next_match_days===null?'Next fixture date unavailable':d.next_match_days===0?'Match day today':d.next_match_days===1?'Next match tomorrow':`Next match in ${d.next_match_days} days`;
+    const staff=d.training_staff;
+    const staffLabel=staff?`${staff.total} active · ${staff.coaches} coach${staff.coaches===1?'':'es'} + ${staff.fitness} fitness coach${staff.fitness===1?'':'es'}`:'Training staff unavailable';
     host.classList.add('is-training');
     host.innerHTML=`<div class="tr-shell">
       <section class="tr-hero" aria-label="Training centre dashboard">
-        <div class="tr-hero-identity"><span class="tr-brand-crest">${crest}</span><div><span class="tr-kicker">${esc(identity.display_name||d.club||'Club')} · FIRST TEAM</span><h2>Training centre</h2><p>Set one automatic workload plan for your whole squad and personalize players when needed. Every session uses real career data.</p><span class="tr-next-match">${trIcon('calendar',13)}${esc(match)}</span></div></div>
+        <div class="tr-hero-identity"><span class="tr-brand-crest">${crest}</span><div><span class="tr-kicker">${esc(identity.display_name||d.club||'Club')} · FIRST TEAM</span><h2>Training centre</h2><p>Set one automatic workload plan for your whole squad and personalize players when needed. Every session uses real career data.</p><span class="tr-hero-meta"><span class="tr-next-match">${trIcon('calendar',13)}${esc(match)}</span><span class="tr-staff-chip" title="Staff numbers reflect active contracts in Staff">${trIcon('people',13)}Training staff: ${esc(staffLabel)}</span></span></div></div>
         <div class="tr-hero-kpis">
           ${kpi('heart','Average condition',avg('condition')===null?'—':trNum(avg('condition'))+'%','Current first team','condition')}
           ${kpi('bolt','Average sharpness',avg('sharpness')===null?'—':trNum(avg('sharpness'))+'%','Match sharpness','sharpness')}
@@ -265,18 +406,94 @@
     drawIndividualTraining();
     showThresholdBands();
   }
+  // TS-UI-04.01 — Medical dashboard. All metrics and scheduled returns are
+  // read from the live Python session; no fabricated risk or future injuries.
+  const mdDate=iso=>{
+    if(!iso||!/^\d{4}-\d{2}-\d{2}$/.test(String(iso)))return 'Not recorded';
+    const [year,month,day]=String(iso).split('-');
+    return `${day}/${month}/${year}`;
+  };
+  const mdCount=value=>Number.isFinite(Number(value))?Math.max(0,Number(value)):0;
+  const mdBand=(name,n,max,klass)=>`<div class="md-band"><span>${esc(name)}</span><div class="md-track"><i class="${klass}" style="--bar:${max?Math.min(100,100*n/max):0}%"></i></div><strong>${n}</strong></div>`;
   function medical(){
     const d=state;
-    const cards=d.cases.length?d.cases.map(p=>panel(`<button type="button" class="ch-link" data-career-type="player" data-career-id="${esc(p.id)}">${esc(p.name)}</button>`,
-      `<div class="cs-med-details"><span>${esc(p.injury)}</span><strong>${p.days_left===null?'Recovery date not recorded':p.days_left+' days remaining'}</strong><small>Estimated return: ${esc(p.return_on||'Unknown')}</small></div>
-       ${p.treatment?`<p class="cs-note">${esc(p.treatment)} treatment selected · ${esc(p.treatment_status)}</p>`:''}
-       ${p.treatment_available?`<div class="cs-med-choice"><p>Player opinion: <strong>${esc(preference[p.preference])}</strong>. You can make one decision for this injury.</p><div class="cs-actions"><button type="button" data-cs-action="conservative" data-player="${esc(p.id)}">Conservative · standard return, no added risk</button><button type="button" class="cs-danger" data-cs-action="aggressive" data-player="${esc(p.id)}">Aggressive · earlier, ~${p.estimated_aggressive_risk_pct}% setback risk</button></div></div>`:''}`,'cs-med-case')).join(''):
-      panel('No active injuries','<p class="cs-muted">Your first-team squad currently has no recorded medical absences.</p>');
-    host.innerHTML=banner('Medical centre','Monitor actual injuries and intervene only when a major treatment decision is useful.')+
-      `<div class="cs-med-overview"><span>${d.cases.length} players currently unavailable</span><span>Doctors available: ${d.medical_staff_count}</span></div>`+cards+
-      `<p class="cs-footer">${esc(d.note)} Players may react to the choice through the existing Inbox and trust systems.</p>`;
+    const cases=Array.isArray(d.cases)?d.cases:[];
+    const size=mdCount(d.squad_size);
+    const available=mdCount(d.available_count);
+    const staffing=d.staffing||{};
+    const medical=mdCount(staffing.medical),fitness=mdCount(staffing.fitness);
+    const identity=window.FMClubIdentity?.resolve?.(d.club_id,d.club)||{display_name:d.club||'Club',crest:null};
+    const crest=identity.crest?`<img src="${esc(identity.crest)}" alt="" loading="lazy">`:trIcon('shield',34);
+    const brand=identity.crest==='assets/clubs/sunderland/crest.png'?'md-sunderland':'md-generic';
+    const kp=(icon,title,value,caption,kind)=>`<div class="md-stat md-stat-${kind}"><span class="md-stat-icon">${trIcon(icon,19)}</span><span><strong>${value}</strong><b>${title}</b><small>${esc(caption)}</small></span></div>`;
+    const rosterRows=cases.map(p=>{
+      const status=p.days_left===null?'Return date not recorded':`${p.days_left} days remaining`;
+      const opinion=p.preference?`<p class="md-opinion">Player preference: <strong>${esc(preference[p.preference]||'No strong preference')}</strong></p>`:'';
+      const controls=p.treatment_available?`<div class="md-treatment-choice"><span>Choose one treatment for this recorded injury:</span>
+        <div class="md-treatment-buttons"><button type="button" data-cs-action="conservative" data-player="${esc(p.id)}">Conservative · standard return</button>
+        <button type="button" class="cs-danger" data-cs-action="aggressive" data-player="${esc(p.id)}">Aggressive · earlier, ${p.estimated_aggressive_risk_pct}% estimated setback risk</button></div></div>`:'';
+      return `<article class="md-injury-item"><div class="md-injury-info">
+        <span class="md-injury-mark">${trIcon('activity',21)}</span><div><button type="button" class="md-player-link" data-career-type="player" data-career-id="${esc(p.id)}">${esc(p.name)} ${trIcon('chevron',14)}</button>
+        <p>${esc(p.injury)}</p></div></div><div class="md-injury-return"><strong>${esc(status)}</strong><small>Estimated return: ${esc(mdDate(p.return_on))}</small></div>
+        ${p.treatment?`<p class="md-treatment-saved">${trIcon('check',13)} ${esc(p.treatment)} treatment · ${esc(p.treatment_status||'recorded')}</p>`:''}${opinion}${controls}</article>`;
+    }).join('');
+    const empty=`<div class="md-empty"><span class="md-empty-symbol">${trIcon('shield',34)}</span><strong>No active injuries</strong><p>Your first-team squad currently has no recorded medical absences.</p>
+      <div class="md-available-label">${trIcon('check',14)} All ${available} first-team players currently available</div></div>`;
+    const staffRole=(icon,title,number,capacity,detail)=>`<div class="md-staff-role"><span class="md-role-icon">${trIcon(icon,20)}</span><span><strong>${esc(title)}</strong><small>${esc(detail)}</small></span><b>${number}<em> / ${mdCount(capacity)}</em></b></div>`;
+    // Counts refer exclusively to recorded dated injuries. Unknown dates are
+    // reported separately; they are never plotted at an invented return time.
+    const returnCounts=[0,0,0,0],undated=[];
+    cases.forEach(item=>{
+      if(item.days_left==null){undated.push(item);return;}
+      const days=Math.max(0,Number(item.days_left)||0);
+      returnCounts[days<=7?0:days<=14?1:days<=28?2:3]++;
+    });
+    const maxReturn=Math.max(1,...returnCounts);
+    const schedule=['0–7 days','8–14 days','15–28 days','29+ days'].map((label,index)=>`<div class="md-return-col"><b>${returnCounts[index]}</b><span class="md-return-track"><i style="--bar:${(100*returnCounts[index]/maxReturn)}%"></i></span><small>${label}</small></div>`).join('');
+    const log=Array.isArray(d.recent_treatments)?d.recent_treatments:[];
+    const history=log.length?log.map(t=>`<div class="md-history-row"><span class="md-log-icon">${trIcon('calendar',16)}</span><span><strong>${esc(t.player)}</strong><small>${esc(mdDate(t.decided_on))} · ${esc(t.method)} treatment</small></span><span class="md-log-status">${esc(t.status)}</span></div>`).join(''):
+      `<div class="md-history-empty">${trIcon('calendar',25)}<strong>No treatment decisions recorded</strong><span>Decisions will appear here after a real injury is treated.</span></div>`;
+    const bands=d.condition_bands||{};
+    const high=mdCount(bands.high),medium=mdCount(bands.medium),low=mdCount(bands.low);
+    const condition=d.average_condition==null?'—':`${Number(d.average_condition).toFixed(1)}%`;
+    host.innerHTML=`<div class="md-shell">
+      <section class="md-hero ${brand}" aria-label="Medical Centre">
+        <div class="md-hero-main"><div class="md-club-crest">${crest}</div><div class="md-hero-copy"><span class="md-overline">${esc(identity.display_name||d.club||'Club')} · FIRST TEAM</span><h2>Medical centre</h2><p>Monitor injuries, support recovery and manage treatment decisions with your medical team.</p></div></div>
+        <div class="md-hero-stats">
+          ${kp('activity','Unavailable',cases.length,'Players currently sidelined','unavailable')}
+          ${kp('shield','Doctors',medical,`Active / ${mdCount(staffing.medical_capacity)} places`,'doctors')}
+          ${kp('people','Fitness staff',fitness,`Active / ${mdCount(staffing.fitness_capacity)} places`,'fitness')}
+          ${kp('check','Squad available',available,`${size} first-team players`,'squad')}
+        </div>
+      </section>
+      <div class="md-major-grid">
+        <section class="md-panel md-injuries"><div class="md-panel-head"><div><h3>${trIcon('activity',19)} Active injuries</h3><p>Recorded absences, estimated returns and real treatment decisions</p></div><span class="md-count-pill">${cases.length} active</span></div>
+          <div class="md-injury-body">${cases.length?`<div class="md-injury-list">${rosterRows}</div>`:empty}</div>
+        </section>
+        <div class="md-right-stack">
+          <section class="md-panel md-staff"><div class="md-panel-head"><div><h3>${trIcon('people',19)} Medical &amp; fitness staff</h3><p>Active contracts in the current club</p></div><button class="md-link" type="button" data-md-open-staff>Manage staff ${trIcon('chevron',14)}</button></div>
+            <div class="md-staff-rows">
+              ${staffRole('shield','Medical staff',medical,staffing.medical_capacity,'Doctors and treatment decisions')}
+              ${staffRole('bolt','Fitness coaches',fitness,staffing.fitness_capacity,'Recovery and physical conditioning')}
+            </div>
+          </section>
+          <section class="md-panel md-calendar"><div class="md-panel-head"><div><h3>${trIcon('calendar',19)} Recorded returns</h3><p>When currently injured players are due back</p></div><span class="md-count-pill">${cases.filter(p=>p.days_left!==null).length} dated</span></div>
+            <div class="md-return-grid">${schedule}</div><p class="md-calendar-note">${undated.length?`${undated.length} injury record(s) without a return date.`:'Only known injuries are shown; future injuries are not predicted.'}</p>
+          </section>
+        </div>
+      </div>
+      <div class="md-bottom-grid">
+        <section class="md-panel md-history"><div class="md-panel-head"><div><h3>${trIcon('calendar',19)} Recent treatment decisions</h3><p>Recorded choices from your club's medical department</p></div></div><div class="md-history-rows">${history}</div></section>
+        <section class="md-panel md-condition"><div class="md-panel-head"><div><h3>${trIcon('heart',19)} Squad physical snapshot</h3><p>Real current condition, not a predicted injury-risk score</p></div></div>
+          <div class="md-condition-inner"><div class="md-condition-gauge" style="--level:${trPct(d.average_condition)}%"><strong>${condition}</strong><span>Avg condition</span></div>
+            <div class="md-condition-bands">${mdBand('90–100%',high,size,'high')}${mdBand('75–89%',medium,size,'medium')}${mdBand('Below 75%',low,size,'low')}</div></div>
+          <div class="md-condition-note">${trIcon('check',14)} ${available} of ${size} players currently available for selection</div>
+        </section>
+      </div>
+      <p class="md-footer">${esc(d.note)} Players can respond through Inbox and the existing trust system. No changes to career simulation occur when this page opens.</p>
+    </div>`;
   }
-  function render(){if(!host||!state)return;host.classList.toggle('is-training',screen==='training');if(screen==='staff')staff();else if(screen==='training')training();else medical();host.setAttribute('aria-busy',String(busy));}
+  function render(){if(!host||!state)return;host.classList.toggle('is-training',screen==='training');host.classList.toggle('is-medical',screen==='medical');host.classList.toggle('is-staff',screen==='staff');if(screen==='staff')staff();else if(screen==='training')training();else medical();host.setAttribute('aria-busy',String(busy));}
   async function refresh(){
     if(!host)return;
     const tick=++serial;
@@ -303,7 +520,7 @@
     }catch(error){window.alert(error.message||String(error));}
     finally{busy=false;host?.setAttribute('aria-busy','false');}
   }
-  function mount(element,route){host=element;screen=route;state=null;if(route==='training'){trainingView.playerId=null;trainingView.lastThreshold=null;}host.innerHTML='<section class="cs-panel">Loading club information...</section>';if(route==='training')ensureTrainingPhotos();refresh();}
+  function mount(element,route){host=element;screen=route;state=null;if(route==='staff'){staffView.page='overview';staffView.role='coach';staffView.feedback=null;}if(route==='training'){trainingView.playerId=null;trainingView.lastThreshold=null;}host.innerHTML='<section class="cs-panel">Loading club information...</section>';if(route==='training')ensureTrainingPhotos();refresh();}
   document.addEventListener('click',event=>{
     if(host&&screen==='training'){
       const trigger=event.target.closest('[data-tr-picker-trigger]');
@@ -324,9 +541,31 @@
       }
       closeTrainingPickers();
     }
+    const staffLink=event.target.closest('[data-md-open-staff]');
+    if(staffLink&&screen==='medical'&&host&&host.contains(staffLink)){
+      window.FMNavigation?.navigate?.('Staff');return;
+    }
     const reset=event.target.closest('[data-tr-remove]');
     if(reset&&host&&host.contains(reset)&&screen==='training'){
       send({action:'individual',player_id:reset.dataset.trRemove,intensity:'default'});return;
+    }
+    if(host&&screen==='staff'&&host.contains(event.target)){
+      const recruit=event.target.closest('[data-st-recruit]');
+      if(recruit){openStaffRecruit(recruit.dataset.stRecruit);return;}
+      if(event.target.closest('[data-st-back]')){staffView.page='overview';staffView.feedback=null;render();return;}
+      const negotiation=event.target.closest('[data-st-negotiation]');
+      if(negotiation){const person=state.members.find(m=>m.id===negotiation.dataset.stNegotiation);
+        if(person)selectStaffTarget(person,negotiation.dataset.stRole,true);return;}
+      const candidate=event.target.closest('[data-st-candidate]');
+      if(candidate){const person=state.market[staffView.role].find(m=>m.id===candidate.dataset.stCandidate);
+        if(person)selectStaffTarget(person,staffView.role,false);return;}
+      const dismiss=event.target.closest('[data-st-dismiss]');
+      if(dismiss){const member=state.members.find(m=>m.id===dismiss.dataset.stDismiss);
+        if(member&&window.confirm(`Dismiss ${member.name}? A two-week salary settlement is charged.`)){
+          staffView.feedback=null;send({action:'release',member_id:member.id});}
+        return;}
+      const counter=event.target.closest('[data-st-counter]');
+      if(counter){staffView.offerWage=Number(counter.dataset.stCounter);staffView.feedback=null;render();return;}
     }
     const button=event.target.closest('[data-cs-action]');if(!button||!host||!host.contains(button))return;
     const action=button.dataset.csAction;
@@ -334,15 +573,24 @@
     if(screen==='training' && action==='auto_thresholds'){
       send({action:'configure',auto_thresholds:trainingThresholdValues(),changed_field:trainingView.lastThreshold});return;
     }
-    if(screen==='staff' && ['hire','release','renew'].includes(action)){
-      if(!window.confirm(action==='release'?'Release this employee? A small settlement is charged.':action==='hire'?'Sign this employee on a two-year contract?':'Extend this contract by one year?'))return;
-      send({action,member_id:button.dataset.id});return;
+    if(screen==='staff' && action==='release'){
+      if(!window.confirm('Dismiss this staff member? A two-week settlement will be charged.'))return;
+      send({action:'release',member_id:button.dataset.id});return;
     }
     if(screen==='medical' && ['aggressive','conservative'].includes(action)){
       const description=action==='aggressive'?'An early return may result in a new setback.':'This keeps the normal recovery estimate without the extra relapse risk.';
       if(!window.confirm(`Choose ${action} treatment? ${description} This decision cannot be reversed.`))return;
       send({action:'treat',method:action,player_id:button.dataset.player});
     }
+  });
+  document.addEventListener('submit',event=>{
+    const form=event.target.closest('[data-st-offer-form]');
+    if(!form||screen!=='staff'||!host||!host.contains(form))return;
+    event.preventDefault();if(!form.reportValidity())return;
+    staffView.offerWage=Number(form.elements.weekly_wage_gbp.value);
+    staffView.offerYears=Number(form.elements.years.value);
+    staffView.offerBonus=Number(form.elements.signing_bonus_gbp.value);
+    sendStaffOffer();
   });
   document.addEventListener('keydown',event=>{
     if(screen!=='training'||!host||!host.contains(event.target))return;
@@ -363,6 +611,25 @@
     }
   });
   document.addEventListener('input',event=>{
+    if(screen==='staff'&&host&&host.contains(event.target)){
+      if(event.target.matches('[data-st-search]')){
+        staffView.search=event.target.value;
+        // Avoid destroying the focused input until the user commits the search.
+        const list=host.querySelector('.st-candidate-list');
+        if(list){list.querySelectorAll('[data-st-candidate]').forEach(row=>{
+          const item=(state.market[staffView.role]||[]).find(x=>x.id===row.dataset.stCandidate);
+          row.hidden=!!item&&!item.name.toLowerCase().includes(staffView.search.toLowerCase());
+        });}
+      }
+      if(event.target.closest('[data-st-offer-form]')){
+        const input=event.target;
+        if(input.name==='weekly_wage_gbp')staffView.offerWage=Number(input.value);
+        if(input.name==='years')staffView.offerYears=Number(input.value);
+        if(input.name==='signing_bonus_gbp')staffView.offerBonus=Number(input.value);
+        staffUpdateProjected();
+      }
+      return;
+    }
     if(!host||!host.contains(event.target)||screen!=='training')return;
     const el=event.target;
     if(el.dataset.trAutoRange||el.dataset.trAutoNumber){
@@ -373,6 +640,10 @@
     if(el.dataset.trFilter==='search'){trainingView.search=el.value;trainingRosterRows();}
   });
   document.addEventListener('change',event=>{
+    if(screen==='staff'&&host&&host.contains(event.target)){
+      if(event.target.matches('[data-st-sort]')){staffView.sort=event.target.value;render();}
+      return;
+    }
     if(!host||!host.contains(event.target)||screen!=='training')return;
     const el=event.target;
     if(el.dataset.trAutoNumber&&el.value===''){
@@ -385,5 +656,6 @@
       trainingView[el.dataset.trFilter]=el.value;trainingRosterRows();
     }
   });
+  window.addEventListener('fm-identity-ready',()=>{if(host && screen==='staff' && state)render();});
   window.FMSupport=Object.freeze({mount,refresh});
 })();
