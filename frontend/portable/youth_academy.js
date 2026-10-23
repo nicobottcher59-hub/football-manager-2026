@@ -309,7 +309,7 @@
         else{negotiation.response=data;render();}
       }else{feedback=payload.action==='sign'?'Prospect signed to U17.':null;await refresh();}
       return data;
-    }catch(err){window.alert(`Youth Academy: ${err.message}`);return null;
+    }catch(err){window.FMDialog.notify(`Youth Academy: ${err.message}`);return null;
     }finally{loading=false;host?.setAttribute('aria-busy','false');}
   }
   async function refresh(){
@@ -343,11 +343,11 @@
         const action=el.dataset.youthAction;
         if(action==='fire_scout'){
           const scout=(state.scouts||[]).find(s=>s.id===el.dataset.id);
-          if(!window.confirm(`End ${scout?.name||'scout'} contract? Termination cost: ${money(scout?.monthly_wage)}.`))return;
+          if(!await window.FMDialog.confirm(`End ${scout?.name||'scout'} contract? Termination cost: ${money(scout?.monthly_wage)}.`,'End scout contract'))return;
           await command({action,scout_id:el.dataset.id});return;
         }
-        if(action==='release'&&!window.confirm('Release this youth player from the club?'))return;
-        if(action==='sign'&&!window.confirm('Sign this prospect directly to your U17 squad?'))return;
+        if(action==='release'&&!await window.FMDialog.confirm('Release this youth player from the club?','Release youth player'))return;
+        if(action==='sign'&&!await window.FMDialog.confirm('Sign this prospect directly to your U17 squad?','Sign youth player'))return;
         await command({action,player_id:el.dataset.id,...(el.dataset.target?{target:el.dataset.target}:{})});
       }
     });

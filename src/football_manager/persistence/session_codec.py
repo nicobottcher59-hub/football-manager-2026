@@ -23,7 +23,7 @@ from football_manager.domain.world_runner import WorldSeasonRunner
 
 from .models import SaveIntegrityError, UnsupportedSaveVersionError
 
-GRAPH_VERSION = 31
+GRAPH_VERSION = 32
 # TS-24.13: a fully populated 92-club career already needs ~286k live
 # graph nodes after its first season (TS-24.12 rejected that save). Keep
 # the integrity limit finite but accommodate normal longitudinal growth.
@@ -354,6 +354,11 @@ def restore_manager_graph(data: dict, *, migrate_world: bool = True) -> Developm
                             defaults.update(linked_transfer_deal_id=None, source_transfer_deal_id=None)
                         if node.get('class') == 'football_manager.domain.transfer_negotiation:TransferNegotiation':
                             defaults.update(linked_loan_talk_id=None)
+                    if data['version'] < 32:
+                        if node.get('class') == 'football_manager.domain.loan_negotiation:LoanTerms':
+                            defaults.update(loan_fee_gbp=0)
+                        if node.get('class') == 'football_manager.domain.loan_market:LoanAgreement':
+                            defaults.update(loan_fee_gbp=0)
                     if node.get('class') == 'football_manager.domain.club_support:TrainingPolicy':
                         if data['version'] < 24:
                             # TS-UI-03.03 intentionally retires group-by-XI and

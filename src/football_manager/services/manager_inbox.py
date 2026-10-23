@@ -47,7 +47,7 @@ def _transfer_notice(session, state, deal, status, now):
     _notice(state, now, 'market', title,
             f'{other.name}: {player.full_name if player else deal.player_id}. '
             f'GBP {deal.terms.fixed_gbp:,} upfront + GBP {deal.terms.installments_gbp:,} in installments. '
-            f'{deal.reason} Expires {deal.expires_on.isoformat()}. Review the negotiation in Scouting > Market.',
+            f'{deal.reason} Expires {deal.expires_on.isoformat()}. Review the negotiation in Transfers.',
             f'offer:{deal.deal_id}:{status}')
 
 
@@ -256,6 +256,11 @@ def _expire_requests(session, state: ManagerInbox, players: dict) -> None:
 
 def synchronize_manager_inbox(session) -> None:
     state = session.manager_inbox
+    # Migrate old inbox presentation in memory without altering career facts:
+    # scores, completed global deals and recorded loans belong in News.
+    informational = ('result:', 'world-transfer:', 'loan:', 'loan:complete:')
+    if any(m.source_key.startswith(informational) for m in state.messages):
+        state.messages = [m for m in state.messages if not m.source_key.startswith(informational)]
     now = session.current_date
     if now < state.last_synced:
         raise ValueError('cannot rewind inbox clock')
@@ -375,14 +380,8 @@ def synchronize_manager_inbox(session) -> None:
     cid = session.home_club.id
     matches = {key for key, fixture in session._world.fixtures.items()
                if cid in (fixture.home_club_id, fixture.away_club_id) and key in session._world.results}
-    for fid in sorted(matches-state.results):
-        fixture = session._world.fixtures[fid]
-        score = session._world.results[fid]
-        home = session._world_club_names.get(fixture.home_club_id, fixture.home_club_id)
-        away = session._world_club_names.get(fixture.away_club_id, fixture.away_club_id)
-        _notice(state, now, 'results', 'Match result recorded',
-                f'{home} {score.home_goals}-{score.away_goals} {away}. Official result in the career ledger.',
-                f'result:{fid}')
+    # Results remain in canonical match ledgers and /api/news only.
+    # Keeping this snapshot prevents duplicate Inbox messages after save/load.
     state.results = matches
 
     # TS-28.1: only major titles of the managed club belong in the manager's
@@ -415,31 +414,7 @@ def synchronize_manager_inbox(session) -> None:
             _transfer_notice(session, state, deal, status, now)
     state.offers = offers
 
-    # Headline moves elsewhere in the world only when a real transfer was
-    # completed and the fee is sizeable; older historical moves are not replayed.
-    global_moves = [deal for deal in session._world_squads.transfer_offers.values()
-                    if deal.status == 'completed' and deal.terms.fixed_gbp >= 5_000_000
-                    and session.home_club.id not in (deal.seller_id, deal.buyer_id)
-                    and deal.started_on >= state.started_on and deal.personal_events
-                    and 0 <= (now-deal.personal_events[-1].on_date).days <= 21]
-    for deal in sorted(global_moves, key=lambda item:(item.personal_events[-1].on_date, item.deal_id))[-5:]:
-        source = f'world-transfer:{deal.deal_id}'
-        # Reports are grounded in completed transactions, never preliminary bids.
-        seller = session._world_club_names.get(deal.seller_id, deal.seller_id)
-        buyer = session._world_club_names.get(deal.buyer_id, deal.buyer_id)
-        _notice(state, now, 'market', 'Major transfer completed',
-                f'{seller} sold a player to {buyer} for GBP {deal.terms.fixed_gbp:,}.', source)
-    for loan_id, loan in sorted(session._world_squads.loans.items()):
-        if session.home_club.id not in (loan.parent_id, loan.borrower_id):
-            continue
-        if loan.started_on >= state.started_on:
-            _notice(state, now, 'market', 'Player loan recorded',
-                    f'Loan {loan_id}: {loan.parent_id} to {loan.borrower_id} until {loan.ends_on}.',
-                    f'loan:{loan_id}:{loan.started_on}')
-        if loan.completed_on is not None and loan.completed_on >= state.started_on:
-            _notice(state, now, 'market', 'Player loan completed',
-                    f'Loan {loan_id} ended with status {loan.status}.',
-                    f'loan:complete:{loan_id}:{loan.completed_on}:{loan.status}')
+    # Completed moves and loans are global football news, not personal mail.
 
     if state.social_sequence > session.dressing_room.event_sequence:
         state.social_sequence = 0  # a freshly re-established squad history

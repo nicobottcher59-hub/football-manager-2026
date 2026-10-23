@@ -1,0 +1,92 @@
+{
+  "patch": "TS-FIX-07",
+  "base": "TS-UI-09.01",
+  "save_version": 32,
+  "code_files": [
+    {
+      "path": "frontend/portable/club_support.js",
+      "sha256": "97266be24c28a7ca34b295de30c7023012d8f0b48d2a1cbd7084b2f11db4ba1d",
+      "baseline_sha256": "b9cb4e16cd37d2a62e98cea58edb2b454c4e984bd6b2dc3b3fff0dc860f192a2"
+    },
+    {
+      "path": "frontend/portable/fm_dialog.css",
+      "sha256": "c75266d345b0ecd20b9005175f870d9d2379b9c086e8752ddd7d1d2d8c7236aa",
+      "baseline_sha256": null
+    },
+    {
+      "path": "frontend/portable/fm_dialog.js",
+      "sha256": "773086dd7a0cf0e5c449364d7746013649937bf5f8329eb7f63614bb55e24c7d",
+      "baseline_sha256": null
+    },
+    {
+      "path": "frontend/portable/index.html",
+      "sha256": "06b8ba7a6c37fbdc1d732ed6686240f451460ff3f527516375aa432f6affa6f5",
+      "baseline_sha256": "c01c06bf31ea232cc088a177de076f7460f174ded85a51ad1d90787af89536cb"
+    },
+    {
+      "path": "frontend/portable/loan_negotiations.js",
+      "sha256": "65132655765effc9742e38b5525e8dd3b76906633736eb0698656a98e477874c",
+      "baseline_sha256": "8c290d374652d47ed1f3ad25cf46b502adb0f926546a146fde5df03477ae0d95"
+    },
+    {
+      "path": "frontend/portable/news.css",
+      "sha256": "d4af6f82949a33413d5a9b3d186a555a97676f1f861eb726b070d0834f859639",
+      "baseline_sha256": "b6bac489c3332f6d085d0640e7d8a465b7965530007c485bd7102badac46d2da"
+    },
+    {
+      "path": "frontend/portable/news.js",
+      "sha256": "2bb9ef3a81b7422c6ebfaf29c1db3237c33164351edde1fe70f3ad8b25d0381d",
+      "baseline_sha256": "88284a5ffbebdde60f4efc290f2ff3fbcfa0cebcdf8817b45c39436ef01d1644"
+    },
+    {
+      "path": "frontend/portable/transfers.js",
+      "sha256": "8c0fb236d5e2dc831e725bd8df20e2cf566b9e1f44b975d22b450b893a6e74e9",
+      "baseline_sha256": "147992eb7782029f09cba2841bb2bfe501ff74120dcd57fd7114283701ebb9ba"
+    },
+    {
+      "path": "frontend/portable/youth_academy.js",
+      "sha256": "503b31e7f8c152f45112ef8ba3acceb6a1ceaf2d84bde11c3e2889af2d925f7c",
+      "baseline_sha256": "7285eea8101882e9c57d2a7a199cead9eae81033a9ef1fd7f18fc4e86eeef0a2"
+    },
+    {
+      "path": "src/football_manager/domain/loan_market.py",
+      "sha256": "ecbe114245b0811216737816ec763485b1f9a62b6efff5ab063e91bb55121e82",
+      "baseline_sha256": "57ae1d48051d1d1ad0e79b823d51aa9acb1036d9e60f77e09f564ae72420240e"
+    },
+    {
+      "path": "src/football_manager/domain/loan_negotiation.py",
+      "sha256": "ba42911fbc07ca6d75404c771664bf2043e73c6cf85d85dbb301dd10e55ba5d3",
+      "baseline_sha256": "558a209af9daa761153f7f03a2e0712a5337efd6b960eeff8903db2bec6497e5"
+    },
+    {
+      "path": "src/football_manager/persistence/session_codec.py",
+      "sha256": "2f0d80468f2a3d66234fc55edebad16d1d8510cf98b6305dd31db7e467c306d3",
+      "baseline_sha256": "7e1589a93b8fa5c6d2a4742da3209bb040d3cc1ebfe2516a464191b40f8c1b59"
+    },
+    {
+      "path": "src/football_manager/services/loan_bargaining.py",
+      "sha256": "5c4210a6dff267e5a17d1bdc48817e958e4d364301e77edb27b3ae9695b9c760",
+      "baseline_sha256": "cbbf2423da54b1873387ac665f5ff8002dfde828ded157fb897881509fc91dec"
+    },
+    {
+      "path": "src/football_manager/services/loan_market.py",
+      "sha256": "eb90840ba95d9466c7b99646ef315508b9bda40051687d5617f504a2fd7f73a5",
+      "baseline_sha256": "4ee972b3b7e32cb97bcc4e478d6f6d5c7c30b9700f7fba06a70009575e9005ce"
+    },
+    {
+      "path": "src/football_manager/services/manager_inbox.py",
+      "sha256": "bdb6872548f29d2979995454ad2052ddfbeef53eab29d462233254e1d388ccee",
+      "baseline_sha256": "bedfef8efe5a7941760afca77806cc93b6e7e04791c2ce43ac85ce8e2c99a19c"
+    },
+    {
+      "path": "src/football_manager/ui_shell/home_news.py",
+      "sha256": "9b1f7787275e4a425a630f202b5267fa3ab1b91b21313b3516a77fd334ba4663",
+      "baseline_sha256": "ccd40cea522bec8149c7090315ca17ba749da3bc4bb6af0d0f1ee5be54441318"
+    },
+    {
+      "path": "tests/test_ts_fix_07_news_and_loan_fee.py",
+      "sha256": "8d79386d5e5e1d390d9054f721aa2a5847eb465e61c731111f678fa7ee0444e7",
+      "baseline_sha256": null
+    }
+  ]
+}

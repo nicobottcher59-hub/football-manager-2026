@@ -63,7 +63,7 @@ def home_news_read_model(session, limit: int = MAX_STORIES) -> dict[str, Any]:
                        'season': season, 'priority': priority,
                        'competition_id': competition_id, 'club_id': club_id, 'player_id': player_id,
                        '_sort_on': when.isoformat() if when else (f'{int(season[:4])+1}-06-30' if season else ''),
-                       'route': 'Competitions' if competition_id else 'Scouting' if category == 'transfer' else None})
+                       'route': 'Competitions' if competition_id else 'Transfers' if category in ('transfer','loan') else None})
 
     # Match stories: one match event has exactly one immutable fixture ID.
     # Minor AI fixtures are intentionally not newsworthy; managed results are.
@@ -113,16 +113,17 @@ def home_news_read_model(session, limit: int = MAX_STORIES) -> dict[str, Any]:
             competition_id=fixture.competition_id,
             club_id=winner)
 
-    # Transfer stories are only emitted for *completed* contracts with player
-    # consent, not bids, counteroffers or unsigned agreements.
+    # Transfer stories include ALL completed club-to-club deals regardless of
+    # fee; proposals and pending registrations never become news.
     registry = session._world_squads
     for deal in registry.transfer_offers.values():
         if deal.status != 'completed' or deal.personal_status != 'completed' or not deal.personal_events:
             continue
         when = deal.personal_events[-1].on_date
         fee = deal.terms.fixed_gbp
+        deferred = getattr(deal.terms, 'installments_gbp', 0)
         involved = managed in (deal.seller_id, deal.buyer_id)
-        if when > today or (not involved and fee < 5_000_000):
+        if when > today:
             continue
         buyer = names.get(deal.buyer_id, deal.buyer_id)
         seller = names.get(deal.seller_id, deal.seller_id)
@@ -130,9 +131,32 @@ def home_news_read_model(session, limit: int = MAX_STORIES) -> dict[str, Any]:
         label = player or 'A player'
         add(f'transfer:{deal.deal_id}', 'transfer',
             f'{label} joins {buyer}',
-            f'{seller} transferred {label.lower() if player is None else player} to {buyer} for GBP {fee:,} guaranteed.',
+            f'{seller} transferred {label.lower() if player is None else player} to {buyer} for GBP {fee:,} upfront'
+            + (f' plus GBP {deferred:,} in guaranteed installments.' if deferred else '.'),
             when=when, priority=82 if involved else 72,
             club_id=deal.buyer_id, player_id=deal.player_id)
+
+    # Loan headlines come from REGISTERED agreements, never unsigned terms.
+    # The loan fee is a separate, already-settled payment; buying later is a
+    # distinct permanent transfer story only after that transfer completes.
+    for loan in registry.loans.values():
+        if loan.started_on > today:
+            continue
+        parent = names.get(loan.parent_id, loan.parent_id)
+        borrower = names.get(loan.borrower_id, loan.borrower_id)
+        player = _player_name(registry, loan.player_id, loan.borrower_id)
+        label = player or 'A player'
+        fee = getattr(loan, 'loan_fee_gbp', 0)
+        details = (f'{borrower} cover {loan.borrower_wage_percent}% of wages. '
+                   f'Loan fee: GBP {fee:,}.')
+        if loan.option_gbp is not None:
+            details += ' An option to buy is included, but is not a completed sale.'
+        add(f'loan:{loan.loan_id}', 'loan',
+            f'{label} joins {borrower} on loan',
+            f'{parent} loaned {label} to {borrower} until {loan.ends_on.isoformat()}. {details}',
+            when=loan.started_on,
+            priority=77 if managed in (loan.parent_id,loan.borrower_id) else 49,
+            club_id=loan.borrower_id, player_id=loan.player_id)
 
     # Cup title dates are recovered from the final *played* competition result.
     # A champion ID alone is not used to guess an announcement date.

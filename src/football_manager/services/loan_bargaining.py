@@ -26,7 +26,8 @@ def parse_loan_terms(payload: dict, now: date) -> LoanTerms:
         # guaranteed fee, sell-on, buyback). The market quote is not leaked.
         purchase=_terms_from_data(purchase_raw,now,0)
     terms=LoanTerms(payload.get('months'),payload.get('borrower_wage_percent'),
-                    payload.get('playing_time'),payload.get('recall_allowed',False),purchase)
+                    payload.get('playing_time'),payload.get('recall_allowed',False),purchase,
+                    payload.get('loan_fee_gbp',0))
     terms.validate()
     return terms
 
@@ -81,6 +82,29 @@ def _AI_decide(reg,player,parent,borrower,terms,now,manager,rounds):
         desired=replace(desired,borrower_wage_percent=max(0,min(maximum+5,terms.borrower_wage_percent-15)))
         score+=max(0,terms.borrower_wage_percent-maximum)*1.1
         objection.append('The borrowing club cannot justify this salary commitment')
+    # The fee is separate from an option to buy. Counterproposals price a
+    # real sporting/salary benefit, not age. Free loans remain possible.
+    wage = reg.contracts[player.id].weekly_wage_gbp
+    parent_depth = len(reg.clubs[parent].squad)
+    importance = player.overall_rating >= max((p.overall_rating for p in reg.clubs[parent].squad.players), default=0)-4
+    requested_fee = (0 if not importance or parent_depth > 29 else
+                     min(8_000_000,round(max(0,player.overall_rating-65)*max(4000,wage//3)/5000)*5000))
+    borrower_account = reg.club_finances[borrower]
+    borrower_limit = min(max(0,borrower_account.cash_gbp),max(0,borrower_account.transfer_budget_gbp))
+    # A strong loan fee can offset some of the salary cover a lender requires.
+    if ai_lender:
+        if requested_fee and terms.loan_fee_gbp < min(requested_fee,borrower_limit):
+            gap = min(requested_fee,borrower_limit)-terms.loan_fee_gbp
+            suggested = min(borrower_limit,terms.loan_fee_gbp+max(5000,round(gap*.7/5000)*5000))
+            desired=replace(desired,loan_fee_gbp=suggested)
+            score+=min(24,round(gap/max(5000,requested_fee)*22))
+            objection.append('The parent club asks for a higher loan fee')
+    else:
+        desired_max = min(borrower_limit, max(0,round((player.overall_rating-55)*max(5000,wage//2)/5000)*5000))
+        if terms.loan_fee_gbp > desired_max:
+            desired=replace(desired,loan_fee_gbp=max(0,desired_max))
+            score+=min(30,round((terms.loan_fee_gbp-desired_max)/max(5000,terms.loan_fee_gbp)*27))
+            objection.append('The borrowing club wants a lower loan fee')
     # Playing-time promises must be feasible for the actual squad, even when
     # the AI is the parent club and the manager is the borrower.
     borrower_club=reg.clubs[borrower]
@@ -150,7 +174,8 @@ def _register(session, pid, parent, borrower, terms, *, talk_id=None):
     cmd={'player_id':pid,'parent_id':parent,'borrower_id':borrower,
          'months':terms.months,'borrower_wage_percent':terms.borrower_wage_percent,
          'playing_time':terms.playing_time,'option_gbp':terms.purchase.guaranteed_gbp if terms.purchase else None,
-         'recall_allowed':terms.recall_allowed,'purchase_terms':terms.purchase}
+         'recall_allowed':terms.recall_allowed,'purchase_terms':terms.purchase,
+         'loan_fee_gbp':terms.loan_fee_gbp}
     result=_begin(session,cmd)
     if talk_id:
         reg=session._world_squads
@@ -252,7 +277,8 @@ def loan_talk_command(session,cmd):
     # Reject structurally impossible loans before creating a stateful dialogue.
     # Zero salary/backup is only a feasibility check, not the AI's counteroffer.
     from football_manager.services.loan_market import _can_loan
-    _can_loan(reg,pid,parent,borrower,now,terms.months,0,'backup',None,registration_on=arrival)
+    _can_loan(reg,pid,parent,borrower,now,terms.months,0,'backup',None,
+              registration_on=arrival,loan_fee_gbp=terms.loan_fee_gbp)
     if contract.expires_on<_date_plus_months(arrival,terms.months):
         raise ValueError('The parent contract must cover the proposed loan after registration')
     if old is None:
@@ -322,7 +348,7 @@ def _agree(session,talk,terms):
         _can_loan(reg,talk.player_id,talk.parent_id,talk.borrower_id,now,terms.months,
                   terms.borrower_wage_percent,terms.playing_time,
                   terms.purchase.guaranteed_gbp if terms.purchase else None,
-                  registration_on=arrival,purchase_terms=terms.purchase)
+                  registration_on=arrival,purchase_terms=terms.purchase,loan_fee_gbp=terms.loan_fee_gbp)
         pending=replace(talk,status='pending_window',terms=terms,expires_on=arrival+timedelta(days=6),
                         reason=f'Loan agreed; registration scheduled for {arrival.isoformat()}')
         if pending.rounds[-1].terms!=terms:
@@ -341,6 +367,7 @@ def public_loan_terms(terms):
     from football_manager.services.transfer_negotiation import terms_as_json
     return {'months':terms.months,'borrower_wage_percent':terms.borrower_wage_percent,
             'playing_time':terms.playing_time,'recall_allowed':terms.recall_allowed,
+            'loan_fee_gbp':terms.loan_fee_gbp,
             'purchase':terms_as_json(terms.purchase) if terms.purchase else None}
 
 
@@ -367,7 +394,7 @@ def settle_pending_loan_talks(world,day):
     reg=world.football_world
     if world._active_journal is None:
         raise RuntimeError('Loan registrations must run in a world transaction')
-    from football_manager.services.loan_market import _can_loan, _move, _career_minutes
+    from football_manager.services.loan_market import _can_loan, _move, _career_minutes, _settle_loan_fee
     from football_manager.services.transfer_personal import career_player_totals
     from football_manager.domain.loan_market import LoanAgreement
     completed=0
@@ -381,7 +408,7 @@ def settle_pending_loan_talks(world,day):
             player,_=_can_loan(reg,talk.player_id,talk.parent_id,talk.borrower_id,day,terms.months,
                                terms.borrower_wage_percent,terms.playing_time,
                                terms.purchase.guaranteed_gbp if terms.purchase else None,
-                               purchase_terms=terms.purchase)
+                               purchase_terms=terms.purchase,loan_fee_gbp=terms.loan_fee_gbp)
             serial=reg.loan_next_id
             world._active_journal.undo_callbacks.setdefault(('loan-talk-sequence',serial),
                 lambda previous=serial:setattr(reg,'loan_next_id',previous))
@@ -391,9 +418,11 @@ def settle_pending_loan_talks(world,day):
                          terms.playing_time,terms.purchase.guaranteed_gbp if terms.purchase else None,
                          appearances_at_start=career_player_totals(reg,player.id)[0],
                          minutes_at_start=_career_minutes(reg,player.id),
-                         recall_allowed=terms.recall_allowed,purchase_terms=terms.purchase)
+                         recall_allowed=terms.recall_allowed,purchase_terms=terms.purchase,
+                         loan_fee_gbp=terms.loan_fee_gbp)
             agreement.validate()
             _move(reg,player,talk.parent_id,talk.borrower_id,world=world,key=agreement.loan_id)
+            _settle_loan_fee(reg,talk.parent_id,talk.borrower_id,terms.loan_fee_gbp,world=world)
             world._put(reg.loans,agreement.loan_id,agreement)
             world._put(reg.loan_talks,talk.talk_id,replace(talk,status='active',loan_id=agreement.loan_id))
             completed+=1

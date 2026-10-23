@@ -70,9 +70,37 @@ def loan_monthly_adjustments(registry, start: date, end: date) -> dict[str, int]
     return changes
 
 
+def _loan_fee_affordable(registry, borrower: str, loan_fee_gbp: int):
+    if type(loan_fee_gbp) is not int or not 0 <= loan_fee_gbp <= 500_000_000:
+        raise ValueError('Loan fee must be a whole-pound amount between GBP 0 and GBP 500m')
+    account = registry.club_finances[borrower]
+    if loan_fee_gbp > min(max(0,account.cash_gbp), max(0,account.transfer_budget_gbp)):
+        raise ValueError('Borrowing club cannot afford the agreed loan fee')
+
+
+def _settle_loan_fee(registry, parent: str, borrower: str, amount: int, *, world=None):
+    '''Move the fee once, on registration, not on offer or on option exercise.'''
+    _loan_fee_affordable(registry, borrower, amount)
+    if not amount:
+        return
+    owner = registry.club_finances[parent]
+    debtor = registry.club_finances[borrower]
+    new_owner = replace(owner, cash_gbp=owner.cash_gbp+amount,
+                        transfer_budget_gbp=owner.transfer_budget_gbp+amount)
+    new_debtor = replace(debtor, cash_gbp=debtor.cash_gbp-amount,
+                         transfer_budget_gbp=debtor.transfer_budget_gbp-amount)
+    if world is None:
+        registry.club_finances[parent] = new_owner
+        registry.club_finances[borrower] = new_debtor
+    else:
+        world._put(registry.club_finances,parent,new_owner)
+        world._put(registry.club_finances,borrower,new_debtor)
+
+
 def _can_loan(registry, pid: str, parent: str, borrower: str, now: date, months: int,
               wage_percent: int, playing_time: str, option: int | None,
-              *, registration_on: date | None = None, purchase_terms: TransferTerms | None = None):
+              *, registration_on: date | None = None, purchase_terms: TransferTerms | None = None,
+              loan_fee_gbp: int = 0):
     if not window_open(registration_on or now, registry.clubs[borrower].country if borrower in registry.clubs else 'England'):
         raise ValueError('Loan registration requires an open market window')
     actual_start = registration_on or now
@@ -80,6 +108,7 @@ def _can_loan(registry, pid: str, parent: str, borrower: str, now: date, months:
         raise ValueError('Loan registration cannot precede the market offer')
     if parent == borrower or parent not in registry.clubs or borrower not in registry.clubs:
         raise ValueError('Select distinct registered English clubs')
+    _loan_fee_affordable(registry,borrower,loan_fee_gbp)
     if months not in LOAN_MONTHS or type(months) is not int:
         raise ValueError('Loan length must be 6, 12 or 24 months')
     if type(wage_percent) is not int or not 0 <= wage_percent <= 100:
@@ -183,6 +212,7 @@ def _begin(session,cmd):
     playing=cmd.get('playing_time')
     option=cmd.get('option_gbp')
     purchase=cmd.get('purchase_terms')
+    fee=cmd.get('loan_fee_gbp',0)
     recall=cmd.get('recall_allowed',True)
     if type(recall) is not bool:
         raise ValueError('Recall rights must be true or false')
@@ -190,7 +220,8 @@ def _begin(session,cmd):
         purchase.validate()
         if option!=purchase.guaranteed_gbp:
             raise ValueError('Purchase guarantee does not match option terms')
-    player,contract=_can_loan(registry,pid,parent,borrower,now,months,share,playing,option,purchase_terms=purchase)
+    player,contract=_can_loan(registry,pid,parent,borrower,now,months,share,playing,option,
+                              purchase_terms=purchase,loan_fee_gbp=fee)
     # A rival lender requires reasonable salary cover for an important player.
     if parent!=manager and share<25 and contract.weekly_wage_gbp>2000:
         raise ValueError('Parent club wants at least 25% of the wages covered')
@@ -206,9 +237,10 @@ def _begin(session,cmd):
         appearances_at_start=career_player_totals(registry,pid)[0],
         minutes_at_start=sum(u.minutes for u in (*[h.get(pid) for h in registry.history.values()],
                                          registry.usage.get(pid)) if u is not None),
-        recall_allowed=recall,purchase_terms=purchase)
+        recall_allowed=recall,purchase_terms=purchase,loan_fee_gbp=fee)
     loan.validate()
     _move(registry,player,parent,borrower)
+    _settle_loan_fee(registry,parent,borrower,fee)
     registry.loans[loan.loan_id]=loan
     for cid in (parent,borrower):
         _repair_selected_team(session,cid)
@@ -216,7 +248,8 @@ def _begin(session,cmd):
     return {'loan_id':loan.loan_id,'status':'active','player':player.full_name,
             'parent':registry.clubs[parent].name,'borrower':registry.clubs[borrower].name,
             'ends_on':loan.ends_on.isoformat(),'salary_share_percent':share,
-            'option_gbp':option,'note':'Contract remains with the parent club; no transfer fee was paid.'}
+            'option_gbp':option,'loan_fee_gbp':fee,
+            'note':'Contract remains with the parent club; the loan fee is settled on registration.'}
 
 
 def _finish_loan(registry,loan,when:date,*,world=None):
@@ -886,6 +919,7 @@ def loan_read_model(session)->dict:
                       'status':item.status,'ends_on':item.ends_on.isoformat(),
                       'completed_on':item.completed_on.isoformat() if item.completed_on else None,
                       'wage_percent':item.borrower_wage_percent,'playing_time':item.playing_time,
+                      'loan_fee_gbp':item.loan_fee_gbp,
                       'option_gbp':item.option_gbp,'recall_allowed':item.recall_allowed,
                       'option_pending_deal_id':item.option_pending_deal_id,
                       'purchase_terms':( __import__('football_manager.services.transfer_negotiation',fromlist=['terms_as_json']).terms_as_json(item.purchase_terms) if item.purchase_terms else None),

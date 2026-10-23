@@ -28,6 +28,7 @@ class LoanAgreement:
     recall_allowed: bool = True  # compatibility: TS-24 loans allowed recall
     purchase_terms: TransferTerms | None = None
     option_pending_deal_id: str | None = None
+    loan_fee_gbp: int = 0  # settled exactly once on the registration date
 
     def validate(self) -> None:
         from football_manager.services.club_economy import _date_plus_months
@@ -47,6 +48,7 @@ class LoanAgreement:
                 or (self.option_pending_deal_id is not None and
                     (not isinstance(self.option_pending_deal_id,str) or not self.option_gbp))
                 or type(self.recall_allowed) is not bool
+                or type(self.loan_fee_gbp) is not int or not 0 <= self.loan_fee_gbp <= 500_000_000
                 or (self.purchase_terms is not None and not isinstance(self.purchase_terms, TransferTerms))
                 or (self.purchase_terms is not None and self.option_gbp != self.purchase_terms.guaranteed_gbp)
                 or any(type(n) is not int or n < 0 for n in

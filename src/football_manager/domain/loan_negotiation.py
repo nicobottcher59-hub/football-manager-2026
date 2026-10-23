@@ -16,14 +16,17 @@ class LoanTerms:
     playing_time: str
     recall_allowed: bool = False
     purchase: TransferTerms | None = None
+    loan_fee_gbp: int = 0  # one-time fee on registration; unrelated to a purchase option
 
     def validate(self):
         if (type(self.months) is not int or self.months not in (6, 12, 24)
                 or type(self.borrower_wage_percent) is not int
                 or not 0 <= self.borrower_wage_percent <= 100
                 or self.playing_time not in ('starter', 'rotation', 'backup')
-                or type(self.recall_allowed) is not bool):
-            raise ValueError('Invalid duration, salary percentage, minutes or recall option')
+                or type(self.recall_allowed) is not bool
+                or type(self.loan_fee_gbp) is not int
+                or not 0 <= self.loan_fee_gbp <= 500_000_000):
+            raise ValueError('Invalid duration, salary percentage, minutes, recall or loan fee')
         if self.purchase is not None:
             if not isinstance(self.purchase, TransferTerms):
                 raise ValueError('Invalid future purchase terms')

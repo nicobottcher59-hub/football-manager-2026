@@ -510,7 +510,7 @@
     try{const r=await fetch(api[screen],{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
       const result=await r.json();if(!r.ok)throw Error(result.error||`HTTP ${r.status}`);
       await refresh();if(screen==='medical')window.FMInbox?.refresh();if(screen==='staff')window.FMFinances?.refresh();
-    }catch(error){window.alert(error.message||String(error));}finally{busy=false;host?.setAttribute('aria-busy','false');}
+    }catch(error){window.FMDialog.notify(error.message||String(error));}finally{busy=false;host?.setAttribute('aria-busy','false');}
   }
   async function sendDevelopmentFocus(playerId,focus){
     if(busy)return;
@@ -520,11 +520,11 @@
         body:JSON.stringify({player_id:playerId,focus})});
       const result=await r.json();if(!r.ok)throw Error(result.error||`HTTP ${r.status}`);
       await refresh();
-    }catch(error){window.alert(error.message||String(error));}
+    }catch(error){window.FMDialog.notify(error.message||String(error));}
     finally{busy=false;host?.setAttribute('aria-busy','false');}
   }
   function mount(element,route){host=element;screen=route;state=null;if(route==='staff'){staffView.page='overview';staffView.role='coach';staffView.feedback=null;}if(route==='training'){trainingView.playerId=null;trainingView.lastThreshold=null;}host.innerHTML='<section class="cs-panel">Loading club information...</section>';if(route==='training')ensureTrainingPhotos();refresh();}
-  document.addEventListener('click',event=>{
+  document.addEventListener('click',async event=>{
     if(host&&screen==='training'){
       const trigger=event.target.closest('[data-tr-picker-trigger]');
       const option=event.target.closest('[data-tr-picker-option]');
@@ -564,7 +564,7 @@
         if(person)selectStaffTarget(person,staffView.role,false);return;}
       const dismiss=event.target.closest('[data-st-dismiss]');
       if(dismiss){const member=state.members.find(m=>m.id===dismiss.dataset.stDismiss);
-        if(member&&window.confirm(`Dismiss ${member.name}? A two-week salary settlement is charged.`)){
+        if(member&&await window.FMDialog.confirm(`Dismiss ${member.name}? A two-week salary settlement is charged.`,'Dismiss staff member')){
           staffView.feedback=null;send({action:'release',member_id:member.id});}
         return;}
       const counter=event.target.closest('[data-st-counter]');
@@ -577,12 +577,12 @@
       send({action:'configure',auto_thresholds:trainingThresholdValues(),changed_field:trainingView.lastThreshold});return;
     }
     if(screen==='staff' && action==='release'){
-      if(!window.confirm('Dismiss this staff member? A two-week settlement will be charged.'))return;
+      if(!await window.FMDialog.confirm('Dismiss this staff member? A two-week settlement will be charged.','Dismiss staff member'))return;
       send({action:'release',member_id:button.dataset.id});return;
     }
     if(screen==='medical' && ['aggressive','conservative'].includes(action)){
       const description=action==='aggressive'?'An early return may result in a new setback.':'This keeps the normal recovery estimate without the extra relapse risk.';
-      if(!window.confirm(`Choose ${action} treatment? ${description} This decision cannot be reversed.`))return;
+      if(!await window.FMDialog.confirm(`Choose ${action} treatment? ${description} This decision cannot be reversed.`,'Confirm medical treatment'))return;
       send({action:'treat',method:action,player_id:button.dataset.player});
     }
   });
