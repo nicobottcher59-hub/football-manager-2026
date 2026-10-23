@@ -20,6 +20,7 @@ from .player_aging import RetiredPlayer
 from .youth_academy import YouthSystem
 from .market_valuation import MarketQuote
 from .club_economy import ClubFinances, PlayerContract
+from .contract_negotiation import ContractTalk, PlayerBonusLedger
 from .transfer_negotiation import TransferNegotiation
 from .loan_market import LoanAgreement, FreeAgent
 from .club_support import ClubSupport
@@ -102,6 +103,8 @@ class FootballWorld:
     finance_started_on: date | None = None
     contracts: dict[str, PlayerContract] = field(default_factory=dict)
     club_finances: dict[str, ClubFinances] = field(default_factory=dict)
+    contract_talks: dict[str, ContractTalk] = field(default_factory=dict)
+    contract_bonuses: dict[str, PlayerBonusLedger] = field(default_factory=dict)
     # TS-24.3/24.4 club negotiations and consented settlements.
     transfer_last_review_on: date | None = None
     transfer_interest_review_on: date | None = None
@@ -174,6 +177,15 @@ class FootballWorld:
                 account.validate()
         elif self.contracts or self.club_finances or self.finance_started_on is not None:
             raise ValueError('partial economic ledger')
+        for pid, talk in self.contract_talks.items():
+            if not isinstance(talk, ContractTalk) or talk.player_id != pid or talk.club_id not in self.clubs:
+                raise ValueError('Invalid manager contract negotiation identity')
+            talk.validate()
+        for pid, incentives in self.contract_bonuses.items():
+            if (not isinstance(incentives, PlayerBonusLedger) or incentives.player_id != pid
+                    or incentives.club_id not in self.clubs):
+                raise ValueError('Invalid player incentive identity')
+            incentives.validate()
         if self.transfer_last_review_on is not None:
             if type(self.transfer_last_review_on) is not date or self.transfer_last_review_on.day != 1:
                 raise ValueError('invalid transfer review clock')

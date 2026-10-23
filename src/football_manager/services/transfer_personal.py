@@ -70,15 +70,12 @@ def agent_demand(registry, player, seller_id: str, buyer_id: str, on_date: date)
             'role': role, 'years': min(max_years, 3), 'max_years': max_years,
             'suggested_signing_bonus_gbp': min(50_000_000,suggested_bonus),
             'current_weekly_gbp': current.weekly_wage_gbp,
-            'buyer_tier':registry.identities[buyer_id].tier}
+            'buyer_tier':registry.identities[buyer_id].tier,'date':on_date}
 
 
 def _from_data(raw: object) -> PersonalTerms:
-    if not isinstance(raw,dict) or set(raw) != {'weekly_wage_gbp','years','role','signing_bonus_gbp'}:
-        raise ValueError('Enter weekly salary, years, squad role and signing-on fee')
-    terms=PersonalTerms(**raw)
-    terms.validate()
-    return terms
+    from football_manager.services.contract_bargaining import terms_from_json
+    return terms_from_json(raw)
 
 
 def _financing(registry, deal, terms: PersonalTerms, now: date) -> None:
@@ -168,6 +165,8 @@ def _finish(session, deal, terms: PersonalTerms) -> dict:
     demand=agent_demand(registry,player,deal.seller_id,deal.buyer_id,now)
     if terms.years>demand['max_years']:
         raise ValueError('Player declines an excessively long contract')
+    if terms.weekly_wage_gbp < 75:
+        raise ValueError('A registered professional contract requires a positive wage')
     _financing(registry,deal,terms,now)
     seller=registry.clubs[deal.seller_id]
     buyer=registry.clubs[deal.buyer_id]
@@ -194,6 +193,8 @@ def _finish(session, deal, terms: PersonalTerms) -> dict:
     seller.squad.remove(player.id)
     buyer.squad.add(player)
     registry.contracts[player.id]=new_contract
+    from football_manager.services.contract_incentives import record_contract_bonuses
+    record_contract_bonuses(registry,player.id,deal.buyer_id,now,terms.bonuses)
     registry.club_finances[deal.seller_id]=replace(seller_acc,
         cash_gbp=seller_acc.cash_gbp + payment-sell_on-accrued,
         transfer_budget_gbp=seller_acc.transfer_budget_gbp+payment-sell_on,
@@ -201,7 +202,8 @@ def _finish(session, deal, terms: PersonalTerms) -> dict:
     required=payment+terms.signing_bonus_gbp
     registry.club_finances[deal.buyer_id]=replace(buyer_acc,
         cash_gbp=buyer_acc.cash_gbp-required,
-        transfer_budget_gbp=buyer_acc.transfer_budget_gbp-required)
+        transfer_budget_gbp=buyer_acc.transfer_budget_gbp-required,
+        season_operations_gbp=buyer_acc.season_operations_gbp+terms.signing_bonus_gbp)
     if sell_on and beneficiary in registry.club_finances:
         previous=registry.club_finances[beneficiary]
         registry.club_finances[beneficiary]=replace(previous,
@@ -212,6 +214,9 @@ def _finish(session, deal, terms: PersonalTerms) -> dict:
         registry.medical_followups[player.id]=(deal.buyer_id,due)
     for club_id in (deal.seller_id,deal.buyer_id):
         _repair_selected_team(session,club_id)
+    if deal.buyer_id==session.home_club.id:
+        from football_manager.services.contract_promises import record_contract_role_promise
+        record_contract_role_promise(session,player.id,terms.role)
     for key,other in tuple(registry.transfer_offers.items()):
         if key!=deal.deal_id and other.player_id==player.id and other.status in ('agreed','manager_turn'):
             registry.transfer_offers[key]=replace(other,status='expired',reason='Player transferred to another club')
@@ -269,9 +274,11 @@ def personal_command(session,command:dict)->dict:
         return _finish(session,deal,deal.personal_terms)
     if action!='personal_offer':
         raise ValueError('Unsupported player negotiation action')
-    if deal.personal_refusals>=5:
+    if deal.personal_patience<=0:
         raise ValueError('Agent has closed negotiations')
     terms=_from_data(command.get('terms'))
+    from football_manager.services.contract_bargaining import validate_player_bonuses
+    validate_player_bonuses(player,terms)
     if terms.years>quote['max_years']:
         raise ValueError('Player will not accept that contract duration')
     event=PersonalEvent(now,'club',terms,'Club proposes personal contract terms')
@@ -282,30 +289,25 @@ def personal_command(session,command:dict)->dict:
         registry.transfer_offers[deal_id]=updated
         return {'deal_id':deal_id,'status':'failed','reason':quote['reason']}
     _financing(registry,deal,terms,now)
-    preferred=quote['role']
-    wage_factor=(.96 if terms.signing_bonus_gbp>=quote['suggested_signing_bonus_gbp'] else 1.)
-    required=quote['weekly_wage_gbp']*wage_factor
-    role_ok=ROLE_ORDER[terms.role]<=ROLE_ORDER[preferred]+(1 if player.personality.ambition<45 else 0)
-    if terms.weekly_wage_gbp>=required and role_ok:
-        history+= (PersonalEvent(now,'agent',terms,'Agent and player accepted the proposal'),)
-        return _finish(session,replace(deal,personal_terms=terms,personal_events=history),terms)
-    if terms.weekly_wage_gbp < quote['weekly_wage_gbp']*.55 or deal.personal_refusals>=4:
-        reason='Agent ends talks after an unacceptable contract proposal'
+    from football_manager.services.contract_bargaining import agent_response, terms_json
+    outcome,counter,patience,reason=agent_response(
+        player,terms,quote,deal.personal_patience,deal.personal_refusals)
+    if outcome=='accept':
+        history+=(PersonalEvent(now,'agent',terms,reason),)
+        return _finish(session,replace(deal,personal_terms=terms,
+            personal_patience=patience,personal_events=history),terms)
+    if outcome=='end':
         updated=replace(deal,status='failed',personal_status='declined',personal_terms=terms,
-                        personal_events=history,personal_refusals=deal.personal_refusals+1,reason=reason)
+                        personal_events=history,personal_refusals=deal.personal_refusals+1,
+                        personal_patience=0,reason=reason)
+        updated.validate()
         registry.transfer_offers[deal_id]=updated
-        return {'deal_id':deal_id,'status':'failed','reason':reason}
-    counter=PersonalTerms(max(terms.weekly_wage_gbp,_round_wage(required)),
-                          min(terms.years,quote['max_years']),
-                          preferred if not role_ok else terms.role,
-                          terms.signing_bonus_gbp)
-    history+=(PersonalEvent(now,'agent',counter,'Agent requests better contractual terms'),)
+        return {'deal_id':deal_id,'status':'failed','reason':reason,'patience':0}
+    history+=(PersonalEvent(now,'agent',counter,reason),)
     updated=replace(deal,personal_status='counter',personal_terms=counter,
                     personal_events=history,personal_refusals=deal.personal_refusals+1,
-                    reason='Player agent presented a counteroffer')
+                    personal_patience=patience,reason=reason)
     updated.validate()
     registry.transfer_offers[deal_id]=updated
-    return {'deal_id':deal_id,'status':'counter','personal_terms':{
-        'weekly_wage_gbp':counter.weekly_wage_gbp,'years':counter.years,
-        'role':counter.role,'signing_bonus_gbp':counter.signing_bonus_gbp},
-        'reason':updated.reason}
+    return {'deal_id':deal_id,'status':'counter','personal_terms':terms_json(counter),
+            'reason':reason,'patience':patience}

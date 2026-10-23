@@ -1,0 +1,145 @@
+{
+  "patch": "TS-FIX-03",
+  "title": "Agent-mediated player contracts and renewals",
+  "base": "TS-UI-08.04 + TS-FIX-01 + TS-FIX-02",
+  "target_save_graph": 28,
+  "file_count": 22,
+  "files": [
+    {
+      "path": "frontend/portable/contract_negotiations.css",
+      "change": "new",
+      "size_bytes": 6480,
+      "sha256": "7306c29d383db4a7b8148ab451fb5ec339cbaea1a0009a7fec14df97b86a120a"
+    },
+    {
+      "path": "frontend/portable/contract_negotiations.js",
+      "change": "new",
+      "size_bytes": 17133,
+      "sha256": "d27f06f0b679e3b00110d722aeefae5bc923615b57514155d733deca19e3912e"
+    },
+    {
+      "path": "frontend/portable/finances.css",
+      "change": "modified",
+      "size_bytes": 5305,
+      "sha256": "285983731c446aeafc92d74fcf4a688f364bc94231485fd6e7275a972d0c8021"
+    },
+    {
+      "path": "frontend/portable/finances.js",
+      "change": "modified",
+      "size_bytes": 9592,
+      "sha256": "a78cd194211181ca2ce6458b8f363913579f03345f41adead568ddac9edd57f6"
+    },
+    {
+      "path": "frontend/portable/index.html",
+      "change": "modified",
+      "size_bytes": 40283,
+      "sha256": "72ec6495398a316d0cbb8edcac91e7cf0ddd3f2076a5904719f3102535f13750"
+    },
+    {
+      "path": "frontend/portable/portable.js",
+      "change": "modified",
+      "size_bytes": 40276,
+      "sha256": "d468365faa4e071fa8d983dd9121a06b77f73035abe353415f221c3fb96d8ddb"
+    },
+    {
+      "path": "frontend/portable/transfers.js",
+      "change": "modified",
+      "size_bytes": 60626,
+      "sha256": "0f0f86aaf7b503512fd314dcd7ee6248e6f35fb8a04455cc4b918b5646974ba3"
+    },
+    {
+      "path": "src/football_manager/domain/contract_negotiation.py",
+      "change": "new",
+      "size_bytes": 3136,
+      "sha256": "e1b38eb276dc308a13fe8224201b2e41457931a333ff36a4346db6c8750189a5"
+    },
+    {
+      "path": "src/football_manager/domain/football_world.py",
+      "change": "modified",
+      "size_bytes": 21873,
+      "sha256": "1526767c929526489960777c641a2954f1ddbcf6e7e79dcbf7f25f6e39ad8fe4"
+    },
+    {
+      "path": "src/football_manager/domain/transfer_negotiation.py",
+      "change": "modified",
+      "size_bytes": 9708,
+      "sha256": "53159288279f7f160758b303c816a3400460cbeb83a120f9582896b105c9faed"
+    },
+    {
+      "path": "src/football_manager/domain/transfer_personal.py",
+      "change": "modified",
+      "size_bytes": 2584,
+      "sha256": "da215d5d928298c869ff981cad973cdfa554c7c5022f1f083a5a6ab778a59a58"
+    },
+    {
+      "path": "src/football_manager/persistence/session_codec.py",
+      "change": "modified",
+      "size_bytes": 27418,
+      "sha256": "195c484fdd75551fd31c079d056420c07d3732fe12235382469a13cf63636459"
+    },
+    {
+      "path": "src/football_manager/services/club_economy.py",
+      "change": "modified",
+      "size_bytes": 32234,
+      "sha256": "2e1d7e3766fd1067283ac9a798a740c9144a8228a0f8c2a7a987f01baaca8913"
+    },
+    {
+      "path": "src/football_manager/services/contract_bargaining.py",
+      "change": "new",
+      "size_bytes": 6524,
+      "sha256": "1534d01ea87154524ef5f8dc8d32fa424a0736717deb138bd4254b6d20888860"
+    },
+    {
+      "path": "src/football_manager/services/contract_incentives.py",
+      "change": "new",
+      "size_bytes": 2833,
+      "sha256": "30709449f2ae744e15dd9aa2903afd5b59cbefbc3e9614659f754a799a3dc997"
+    },
+    {
+      "path": "src/football_manager/services/contract_promises.py",
+      "change": "new",
+      "size_bytes": 1210,
+      "sha256": "56b396f33b3baeca23e100b2f60cd9dea282d962a62b4fe7918994a08a0a7156"
+    },
+    {
+      "path": "src/football_manager/services/contract_renewal.py",
+      "change": "new",
+      "size_bytes": 9967,
+      "sha256": "743c6fa97219f62c5d6f00caa66e9a1d86bf9468b7c4a77af6444c77c3b49b59"
+    },
+    {
+      "path": "src/football_manager/services/transfer_negotiation.py",
+      "change": "modified",
+      "size_bytes": 33772,
+      "sha256": "786f4b4bed04ffec85a821dab8a757b2883a7b27c6d994ab7d669b1b05e76ade"
+    },
+    {
+      "path": "src/football_manager/services/transfer_personal.py",
+      "change": "modified",
+      "size_bytes": 18617,
+      "sha256": "b24593be069ebace0235ee09642bc2a0707954b3c5922c6a339eba8e09b18719"
+    },
+    {
+      "path": "src/football_manager/ui_shell/application.py",
+      "change": "modified",
+      "size_bytes": 12781,
+      "sha256": "a9c0e072abf8394214a91ebc94efee5fa4db485a2d4586c2302019e83ebdb720"
+    },
+    {
+      "path": "src/football_manager/ui_shell/server.py",
+      "change": "modified",
+      "size_bytes": 19367,
+      "sha256": "7531286fce13c7117ea9e7975b7c0181a3a86174429d3474e410fce2d94f20df"
+    },
+    {
+      "path": "tests/test_ts_fix_03_contract_negotiations.py",
+      "change": "new",
+      "size_bytes": 13426,
+      "sha256": "f68cc5596d78900fd4c4bb857b6a6270ca86c43710a33fa3f117951a2a043cdf"
+    }
+  ],
+  "documentation": [
+    "TS_FIX_03_TEST_REPORT.md",
+    "TS_FIX_03_INSTALL.txt"
+  ]
+}

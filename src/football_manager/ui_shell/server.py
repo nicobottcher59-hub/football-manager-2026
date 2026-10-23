@@ -164,6 +164,17 @@ class FootballUIHandler(BaseHTTPRequestHandler):
             with self.runtime.lock:
                 self._json(200, transfer_read_model(self.runtime.session))
             return
+        if path == '/api/contracts':
+            from football_manager.services.contract_renewal import renew_read_model
+            with self.runtime.lock:
+                try:
+                    pid = parse_qs(urlsplit(self.path).query).get('player_id',[''])[0]
+                    payload = renew_read_model(self.runtime.session,pid)
+                except ValueError as exc:
+                    self._json(404,{'error':str(exc)})
+                    return
+                self._json(200,payload)
+            return
         if path == '/api/finances':
             from football_manager.services.club_economy import finances_read_model
             with self.runtime.lock:

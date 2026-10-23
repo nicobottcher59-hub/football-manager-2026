@@ -323,6 +323,8 @@ def review_finances(world, boundary: date) -> int:
         month_days=(period_end-month).days+1
         from football_manager.services.loan_market import loan_monthly_adjustments
         wage_shares=loan_monthly_adjustments(registry,covered_from,period_end)
+        from football_manager.services.contract_incentives import due_contract_bonuses
+        bonus_expenses=due_contract_bonuses(world,period_end)
         for cid,account in list(registry.club_finances.items()):
             wages=sum(_month_wage(c,covered_from,period_end) for c in registry.contracts.values() if c.club_id==cid)
             wages+=wage_shares.get(cid,0)
@@ -340,7 +342,7 @@ def review_finances(world, boundary: date) -> int:
             nominal_ops=round(account.recurring_operations_gbp*covered_days/month_days)
             preexisting_staff_allowance = (round(support.baseline_weekly_gbp * 52 / 365 * covered_days)
                                            if support is not None else 0)
-            costs=nominal_ops-min(round(nominal_ops * .12), preexisting_staff_allowance)
+            costs=nominal_ops-min(round(nominal_ops * .12), preexisting_staff_allowance) + bonus_expenses.get(cid,0)
             wages+=staff_monthly
             new_cash=account.cash_gbp+income-wages-costs
             # Liquid budget cannot be spent if it exceeds current cash.
@@ -525,7 +527,10 @@ def finances_read_model(session, club_id: str | None = None) -> dict:
             renew=None
         else:
             try:
-                renew=quote_renewal(registry,player,contract,session.current_date,2)
+                info=quote_renewal(registry,player,contract,session.current_date,2)
+                from football_manager.services.contract_bargaining import public_wage_range
+                renew={'wage_range':public_wage_range(info['minimum_weekly_gbp']),
+                       'maximum_years':info['maximum_years']}
             except ValueError:
                 renew=None
         rows.append({'player_id':pid,'name':player.full_name,'position':player.primary_position.value,

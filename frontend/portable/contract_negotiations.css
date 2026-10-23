@@ -1,0 +1,50 @@
+/* TS-FIX-03 - visual component shared by transfers and managed renewals */
+.cn-screen{max-width:1780px;margin:0 auto}
+.cn-screen .tr-neg-hero{grid-template-columns:minmax(0,1.6fr) minmax(0,.95fr) minmax(200px,.66fr)}
+.cn-screen .tr-neg-layout{grid-template-columns:minmax(0,1.08fr) minmax(0,1fr)}
+.cn-offer,.cn-agent-panel{min-width:0}
+.cn-offer>.tr-kicker,.cn-agent-panel .tr-kicker{letter-spacing:1.35px;color:var(--tr-accent,#5fc6eb);font-size:11px;font-weight:800}
+.cn-offer h3{font-size:24px;margin:5px 0 7px;color:#f4f9ff}
+.cn-offer>p{font-size:12px;line-height:1.6;color:#adc8dc;margin:0 0 18px}
+.cn-offer label,.cn-terms label{display:flex;flex-direction:column;gap:7px;color:#b6d3e6;font-size:12px;font-weight:600;min-width:0}
+.cn-offer select,.cn-offer input{width:100%;box-sizing:border-box;min-height:44px;border:1px solid #345e79;color:#f3fbff;background:#0d2d44;border-radius:7px;padding:9px 11px;font:inherit;font-size:14px}
+.cn-offer input:focus-visible,.cn-offer select:focus-visible{outline:2px solid var(--tr-accent,#2eb5e9);outline-offset:1px}
+.cn-expectation{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;padding:13px;border:1px solid #375b73;border-radius:8px;background:#ffffff06;margin:14px 0 19px}
+.cn-expectation span{font-size:11px;color:#aac5d7}.cn-expectation strong{font-size:14px;color:#c1f7df}.cn-expectation small{flex-basis:100%;font-size:10px;color:#89abbd}
+.cn-money-control{display:flex;align-items:stretch;border:1px solid #326885;background:#0c334d;border-radius:8px;overflow:hidden}
+.cn-money-control b{padding:11px 12px;border-right:1px solid #326885;font-size:18px;font-weight:750;color:#d8edf8}
+.cn-money-control input{border:0;border-radius:0;min-width:0;background:transparent;font-size:19px;font-weight:750;padding-left:11px}
+.cn-wage{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:end;padding-bottom:18px;border-bottom:1px solid #28465b}
+.cn-increments{display:flex;gap:5px;padding-bottom:2px}.cn-increments .tr-btn{min-height:40px}
+.cn-terms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:19px 0}
+.cn-signing{padding-bottom:17px;border-bottom:1px solid #28465b}
+.cn-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.cn-section-heading>div{display:flex;flex-direction:column;gap:5px}.cn-section-heading strong{font-size:13px;color:#f0faff}
+.cn-section-heading strong span{color:#69bdd9;font-size:11px;font-weight:500}.cn-section-heading small{font-size:11px;color:#97baca}
+.cn-bonuses{padding:18px 0;border-bottom:1px solid #28465b}.cn-bonus-empty{color:#749db6;border:1px dashed #32647c;padding:11px;font-size:11px;border-radius:7px;margin:12px 0 0}
+.cn-bonus-row{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(70px,.5fr) minmax(130px,1fr) auto;gap:9px;align-items:end;background:#0b3048;border:1px solid #2c5470;border-radius:7px;padding:10px;margin-top:10px}
+.cn-bonus-row label{font-size:10px}.cn-bonus-row .tr-btn{height:44px;font-size:18px}.cn-bonus-row input,.cn-bonus-row select{min-height:38px}
+.cn-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:17px}.cn-actions button{min-height:39px}.cn-actions .tr-btn-primary{font-weight:800}
+.cn-preview{margin-top:13px;border:1px solid #27576b;background:#133b47;padding:12px;border-radius:8px;font-size:11px;color:#bddfe5;line-height:1.7}
+.cn-global-feedback{min-height:0;color:#e9c580;font-size:12px;padding:0 7px}.cn-global-feedback:empty{display:none}
+.cn-status-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.cn-agent-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cn-agent-card{border:1px solid #2a5069;border-radius:9px;padding:14px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;background:#0b2b4266;min-width:0}
+.cn-agent-card h4{margin:0 0 7px;font-size:12px;color:#edfaff}.cn-agent-card strong{font-size:14px;color:#c7f1e3}.cn-agent-card small,.cn-agent-card p{font-size:11px;line-height:1.6;color:#a9c4d6;margin:0;overflow-wrap:anywhere}
+.cn-agent-card button{margin-top:auto}
+.cn-thread{border-top:1px solid #2c4e64;margin-top:22px;padding-top:17px}
+.cn-thread-list{display:flex;flex-direction:column;gap:9px;margin-top:15px;max-height:470px;overflow-y:auto;scrollbar-width:thin}
+.cn-message{display:flex;gap:10px;border:1px solid #254965;background:#0c2c43;border-radius:10px;padding:12px}
+.cn-message.is-own{background:#103b4d;border-color:#2e6474}
+.cn-message-crest{flex:0 0 38px}.cn-crest,.cn-agent-avatar{width:35px;height:35px;display:grid;place-items:center;object-fit:contain;border-radius:7px;color:#eaf7ff}
+.cn-crest-placeholder{background:#205470;border:1px solid #386781;font-weight:800;font-size:13px}
+.cn-agent-avatar{background:#352c45;border:1px solid #765c8d;color:#ebccec;font-size:12px;font-weight:800}
+.cn-message-body{display:flex;flex-direction:column;min-width:0;gap:5px;flex:1}.cn-message-body header{display:flex;justify-content:space-between;gap:10px}.cn-message-body header strong{font-size:12px;color:#f5fbff}.cn-message-body time{font-size:10px;color:#89a8bc}
+.cn-message-body p{font-size:11px;line-height:1.55;color:#b3cbd9;margin:1px 0 2px}.cn-message-body>strong{font-size:13px;color:#baf0dc}.cn-message-body>small{font-size:10px;color:#98bbcf}
+.cn-empty-thread{font-size:12px;color:#84a8bd;text-align:center;padding:22px}
+.cn-withdraw{border-top:1px solid #2a5365;margin-top:15px;padding-top:15px}.cn-withdraw>button{color:#ff8e94}
+.cn-withdraw [data-cn-walk-confirm]{margin-top:12px;padding:13px;background:#5424316b;border:1px solid #a04a59;border-radius:8px}
+.cn-withdraw [data-cn-walk-confirm][hidden]{display:none}.cn-withdraw p{font-size:12px;color:#f7c6cc}.cn-withdraw [data-cn-walk-confirm] button{margin-right:7px}
+@media(max-width:1250px){.cn-increments{display:none}.cn-agent-cards{grid-template-columns:1fr}.cn-screen .tr-neg-hero{grid-template-columns:1fr 1fr}.cn-screen .tr-hero-budget{grid-column:1/-1}}
+@media(max-width:950px){.cn-screen .tr-neg-layout{grid-template-columns:1fr}.cn-increments{display:flex}.cn-agent-cards{grid-template-columns:1fr 1fr}}
+@media(max-width:630px){.cn-screen .tr-neg-hero{grid-template-columns:1fr}.cn-wage,.cn-terms{grid-template-columns:1fr}.cn-bonus-row{grid-template-columns:1fr 1fr}.cn-bonus-row>label:first-child{grid-column:1/-1}.cn-bonus-row>button{grid-column:2;justify-self:end}.cn-agent-cards{grid-template-columns:1fr}.cn-increments{display:none}}

@@ -1,0 +1,23 @@
+TS-FIX-03 - contracts, agents, renewals
+
+BASE: TS-UI-08.04 with TS-FIX-01 and TS-FIX-02 installed.
+
+1. Exit the game and stop the Python server.
+2. BACK UP BOTH the football-manager-2026 folder AND your saved careers.
+3. Extract this zip into football-manager-2026 (the folder containing pyproject.toml).
+4. Keep folder paths intact and replace the matching project files.
+5. Start Python/game again, then hard-refresh browser with Ctrl+F5.
+6. Open Finances > Professional contracts > Open Negotiation.
+7. Test a renewal with a copy of your save, then test a new transfer contract.
+
+Save compatibility: graph v27 -> v28. Old saves can be migrated forward. Saves
+written in graph v28 are not compatible with the prior version. Rollback
+requires restoring BOTH code and the pre-upgrade career save.
+
+GITHUB DESKTOP
+Create NEW branch from latest TS-UI-08.04 branch:
+  fix/ts-fix-03-contract-agents-renewals
+Summary:
+  feat(contracts): TS-FIX-03 player agents, bonuses and renewals
+
+No save file is included. No additional external runtime dependency.

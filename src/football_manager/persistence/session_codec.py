@@ -23,7 +23,7 @@ from football_manager.domain.world_runner import WorldSeasonRunner
 
 from .models import SaveIntegrityError, UnsupportedSaveVersionError
 
-GRAPH_VERSION = 27
+GRAPH_VERSION = 28
 # TS-24.13: a fully populated 92-club career already needs ~286k live
 # graph nodes after its first season (TS-24.12 rejected that save). Keep
 # the integrity limit finite but accommodate normal longitudinal growth.
@@ -48,6 +48,7 @@ _ALLOWED_MODULES = frozenset({
     'football_manager.domain.club_economy',
     'football_manager.domain.transfer_negotiation',
     'football_manager.domain.transfer_personal',
+    'football_manager.domain.contract_negotiation',
     'football_manager.domain.loan_market',
     'football_manager.domain.season_statistics',
     'football_manager.domain.competition',
@@ -335,6 +336,13 @@ def restore_manager_graph(data: dict, *, migrate_world: bool = True) -> Developm
                             defaults.update(tolerance_remaining=100, settled_on=None, installments_paid=0)
                         if node.get('class') == 'football_manager.domain.football_world:FootballWorld':
                             defaults.update(transfer_interest_review_on=None)
+                    if data['version'] < 28:
+                        if node.get('class') == 'football_manager.domain.football_world:FootballWorld':
+                            defaults.update(contract_talks={}, contract_bonuses={})
+                        if node.get('class') == 'football_manager.domain.transfer_personal:PersonalTerms':
+                            defaults.update(bonuses=())
+                        if node.get('class') == 'football_manager.domain.transfer_negotiation:TransferNegotiation':
+                            defaults.update(personal_patience=100)
                     if node.get('class') == 'football_manager.domain.club_support:TrainingPolicy':
                         if data['version'] < 24:
                             # TS-UI-03.03 intentionally retires group-by-XI and

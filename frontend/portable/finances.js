@@ -41,12 +41,11 @@
       <p class="fe-minor">Available deferred credit: ${gbp(state.installment_finance?.available_credit_gbp||0)}. ${esc(state.installment_finance?.credit_policy||'')}</p>
       ${(state.installment_finance?.payments||[]).length?`<div class="fe-table-wrap"><table class="fe-table"><thead><tr><th>Due</th><th>Deal</th><th>Payment</th><th>Direction</th><th>Amount</th><th>Status</th></tr></thead><tbody>${state.installment_finance.payments.slice(-90).map(r=>`<tr><td>${shortDate(r.due_on)}</td><td>${esc(r.deal_id)}</td><td>${r.number}</td><td>${esc(r.direction)}</td><td>${gbp(r.amount_gbp)}</td><td>${r.paid?'Paid':'Scheduled'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="fe-empty">No installment agreements recorded.</p>'}
     </section>
-    <section class="fe-panel"><div class="fe-section-head"><div><h3>Professional contracts <span class="fe-muted">(${state.contracts.length})</span></h3><p>Renew a deal using the player's current salary expectation; wages change only on a new agreement.</p></div><span class="fe-pill">Manager decisions</span></div>
+    <section class="fe-panel"><div class="fe-section-head"><div><h3>Professional contracts <span class="fe-muted">(${state.contracts.length})</span></h3><p>Agent-led discussions: salary, signing fees, bonuses, roles and contract duration.</p></div><span class="fe-pill">Manager decisions</span></div>
       <div class="fe-toolbar"><input id="fe-player-search" type="search" value="${esc(query)}" placeholder="Search name or position" aria-label="Search contracts"/><label><input type="checkbox" id="fe-expiring" ${expiringOnly?'checked':''}/> Expiring within 12 months</label></div>
-      <div class="fe-table-wrap"><table class="fe-table"><thead><tr><th>Player</th><th>Pos</th><th>OVR</th><th>Signed wage</th><th>Until</th><th>Role</th><th>Renewal offer</th></tr></thead><tbody>${filtered.map(p=>{
-        const max=p.renewal?.maximum_years||2;
-        const years=Array.from({length:max},(_,i)=>`<option value="${i+1}" ${i===1?'selected':''}>${i+1} year${i===0?'':'s'}</option>`).join('');
-        return `<tr><td><strong>${esc(p.name)}</strong><small>${p.age} years old</small></td><td>${esc(p.position)}</td><td><span class="fe-rating">${Number(p.ovr).toFixed(1)}</span></td><td>${gbp(p.weekly_wage_gbp)} / wk</td><td><span class="${p.status==='out_of_contract_retained'?'fe-text-warn':''}">${shortDate(p.expires_on)}</span>${p.status==='out_of_contract_retained'?'<small>Paid interim retention</small>':''}</td><td><span class="fe-role">${esc(p.role)}</span></td><td>${p.renewal?`<form class="fe-renew" data-player="${esc(p.player_id)}"><label><span class="fe-sr-only">Weekly offer to ${esc(p.name)}</span><input type="number" step="100" min="75" max="1500000" required name="wage" value="${p.renewal.minimum_weekly_gbp}" aria-label="Weekly wage offer"/></label><select name="years" aria-label="Contract years">${years}</select><button type="submit">Renew</button><small>Expected: ${gbp(p.renewal.minimum_weekly_gbp)}/wk</small></form>`:'<span class="fe-muted">Renewal cooling-off period</span>'}</td></tr>`;
+      <div class="fe-table-wrap"><table class="fe-table"><thead><tr><th>Player</th><th>Pos</th><th>OVR</th><th>Signed wage</th><th>Until</th><th>Role</th><th>Contract discussion</th></tr></thead><tbody>${filtered.map(p=>{
+        const expected=p.renewal?.wage_range;
+        return `<tr><td><strong>${esc(p.name)}</strong><small>${p.age} years old</small></td><td>${esc(p.position)}</td><td><span class="fe-rating">${Number(p.ovr).toFixed(1)}</span></td><td>${gbp(p.weekly_wage_gbp)} / wk</td><td><span class="${p.status==='out_of_contract_retained'?'fe-text-warn':''}">${shortDate(p.expires_on)}</span>${p.status==='out_of_contract_retained'?'<small>Paid interim retention</small>':''}</td><td><span class="fe-role">${esc(p.role)}</span></td><td><button type="button" class="fe-open-negotiation" data-fe-negotiate="${esc(p.player_id)}">Open Negotiation →</button><small>${expected?`Expected ~${gbp(expected.low_gbp)}–${gbp(expected.high_gbp)}/wk`:'View player & agent'}</small></td></tr>`;
       }).join('')}</tbody></table>${filtered.length?'':'<p class="fe-empty">No players match these filters.</p>'}</div>
     </section>
     <section class="fe-panel"><div class="fe-section-head"><div><h3>Monthly club ledger</h3><p>Recorded on the first of each month, with real saved cash movements</p></div><span class="fe-pill">${months.length} entries shown</span></div>
@@ -60,25 +59,9 @@
     try{const response=await fetch('/api/finances',{cache:'no-store'});if(!response.ok)throw Error(`HTTP ${response.status}`);state=await response.json();draw();}
     catch(error){host.innerHTML=`<section class="fe-panel"><h3>Financial data unavailable</h3><p>${esc(error.message)}</p><button type="button" data-fe-refresh="1">Retry</button></section>`;}
   }
-  async function onSubmit(event){
-    const form=event.target.closest('.fe-renew');if(!form)return;
-    event.preventDefault();if(loading)return;
-    const player=state.contracts.find(p=>p.player_id===form.dataset.player);
-    if(!player)return;
-    const weekly=Number(form.elements.wage.value), years=Number(form.elements.years.value);
-    if(!Number.isSafeInteger(weekly)||!Number.isSafeInteger(years))return;
-    if(!window.confirm(`Offer ${player.name} ${gbp(weekly)} per week for ${years} year(s)? This changes the club wage commitment.`))return;
-    loading=true;host.setAttribute('aria-busy','true');
-    try{
-      const res=await fetch('/api/finances',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'renew',player_id:player.player_id,weekly_wage_gbp:weekly,years})});
-      const result=await res.json();if(!res.ok)throw Error(result.error||`HTTP ${res.status}`);
-      await refresh();
-    }catch(error){window.alert(`Contract negotiation: ${error.message}`);}
-    finally{loading=false;host?.setAttribute('aria-busy','false');}
-  }
   function mount(element){
-    if(host!==element){host=element;host.addEventListener('submit',onSubmit);
-      host.addEventListener('click',event=>{if(event.target.closest('[data-fe-refresh]'))refresh();});
+    if(host!==element){host=element;
+      host.addEventListener('click',event=>{if(event.target.closest('[data-fe-refresh]'))refresh();const button=event.target.closest('[data-fe-negotiate]');if(button)window.FMNavigation?.negotiateContract(button.dataset.feNegotiate);});
       host.addEventListener('input',event=>{if(event.target.id==='fe-player-search'){query=event.target.value;const caret=event.target.selectionStart;draw();const input=host.querySelector('#fe-player-search');input?.focus();if(caret!==null)input?.setSelectionRange(caret,caret);}});
       host.addEventListener('change',event=>{if(event.target.id==='fe-expiring'){expiringOnly=event.target.checked;draw();}});
     }

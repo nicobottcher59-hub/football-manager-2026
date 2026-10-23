@@ -491,6 +491,11 @@ def transfer_read_model(session) -> dict:
         if item.status=='agreed':
             from football_manager.services.transfer_personal import agent_demand
             personal=agent_demand(registry,player,item.seller_id,item.buyer_id,now)
+        # The agent's exact internal wage minimum is never exposed as a quote.
+        from football_manager.services.contract_bargaining import public_wage_range, terms_json
+        public_personal=(dict(interested=personal['interested'],reason=personal['reason'],
+            role=personal['role'],years=personal['years'],max_years=personal['max_years'],
+            wage_range=public_wage_range(personal['weekly_wage_gbp'])) if personal else None)
         offers.append({'id':item.deal_id,'direction':'outgoing' if item.buyer_id==manager else 'incoming',
             'player_id':item.player_id,'player':player.full_name,'seller_id':item.seller_id,
             'buyer_id':item.buyer_id,'seller':registry.clubs[item.seller_id].name,
@@ -508,17 +513,11 @@ def transfer_read_model(session) -> dict:
                 for i,(due,amount) in enumerate(schedule(terms,item.settled_on or now))],
             'expires_on':item.expires_on.isoformat(),'updated_on':item.events[-1].on_date.isoformat(),
             'events':len(item.events),'personal_status':item.personal_status,
-            'personal_terms':({'weekly_wage_gbp':item.personal_terms.weekly_wage_gbp,
-                'years':item.personal_terms.years,'role':item.personal_terms.role,
-                'signing_bonus_gbp':item.personal_terms.signing_bonus_gbp}
-                if item.personal_terms else None),
-            'personal_quote':personal,'sell_on_paid_gbp':item.sell_on_paid_gbp,
-            'bonus_paid':list(item.bonus_paid),
+            'personal_terms':terms_json(item.personal_terms),
+            'personal_quote':public_personal,'personal_patience':item.personal_patience,
+            'sell_on_paid_gbp':item.sell_on_paid_gbp,'bonus_paid':list(item.bonus_paid),
             'personal_history':[{'on_date':ev.on_date.isoformat(),'actor':ev.actor,
-                'note':ev.note,'terms':{'weekly_wage_gbp':ev.terms.weekly_wage_gbp,
-                 'years':ev.terms.years,'role':ev.terms.role,
-                 'signing_bonus_gbp':ev.terms.signing_bonus_gbp}}
-                for ev in item.personal_events],
+                'note':ev.note,'terms':terms_json(ev.terms)} for ev in item.personal_events],
             # Chronological events already persist in the save graph. Expose only
             # the terms shared between the two parties, not hidden AI thresholds.
             'history':[{'on_date':event.on_date.isoformat(),

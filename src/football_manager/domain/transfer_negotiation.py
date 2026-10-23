@@ -120,6 +120,7 @@ class TransferNegotiation:
     personal_terms: PersonalTerms | None = None
     personal_events: tuple[PersonalEvent, ...] = ()
     personal_refusals: int = 0
+    personal_patience: int = 100
     sell_on_paid_gbp: int = 0
     bonus_baseline: tuple[int, int, int] = (0, 0, 0)
     bonus_paid: tuple[str, ...] = ()
@@ -151,6 +152,7 @@ class TransferNegotiation:
             raise ValueError('Deferred payments require the actual registration date')
         if (self.personal_status not in ('not_started', 'counter', 'completed', 'declined')
                 or type(self.personal_refusals) is not int or not 0 <= self.personal_refusals <= 8
+                or type(self.personal_patience) is not int or not 0 <= self.personal_patience <= 100
                 or type(self.personal_events) is not tuple or len(self.personal_events) > 16
                 or type(self.sell_on_paid_gbp) is not int or self.sell_on_paid_gbp < 0
                 or type(self.bonus_baseline) is not tuple or len(self.bonus_baseline) != 3

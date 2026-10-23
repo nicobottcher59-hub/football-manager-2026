@@ -111,11 +111,9 @@ class GameApplication:
             runtime.session = tentative
             return result
         if action == 'finances.command':
-            from football_manager.services.club_economy import renew_contract
-            if command.get('action') != 'renew':
-                raise ValueError('Unsupported financial operation')
+            from football_manager.services.contract_renewal import renewal_command
             tentative = deepcopy(runtime.session)
-            result = renew_contract(tentative,command)
+            result = renewal_command(tentative,command)
             from football_manager.services.manager_inbox import synchronize_manager_inbox
             synchronize_manager_inbox(tentative)
             runtime.session = tentative

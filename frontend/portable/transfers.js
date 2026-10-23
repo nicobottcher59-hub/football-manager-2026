@@ -206,23 +206,12 @@
        <p>Your club agreed to ${brief(d.fixed_gbp)} upfront plus ${brief(d.terms.installments_gbp||0)} in guaranteed installments. The buying club must still agree wages and convince the player. This step can fail.</p>
        <p class="tr-agent-expectation">${esc(q.reason||'The player decides whether to accept the destination.')}</p>
        <button class="tr-btn tr-btn-primary" type="button" data-tr-personal-resolve="${esc(d.id)}">Ask player and agent to decide →</button></section>`;
-    const t=d.personal_status==='counter'&&d.personal_terms?d.personal_terms:null;
-    const suggested=q.weekly_wage_gbp||10000,possible=q.interested!==false;
-    return `<section class="tr-panel tr-personal-panel"><div class="tr-kicker">STEP 2 · PERSONAL CONTRACT</div><h3>Negotiate with the player and agent</h3>
-       <p>A club agreement alone cannot move this player. The footballer evaluates your division, ambitions, squad role, wage and contract duration.</p>
-       <div class="tr-agent-expectation"><strong>${possible?'Agent expectations':'Player is unlikely to join'}</strong><span>${esc(q.reason||'')}</span>
-       ${possible?`<span>Indicative salary: <b>${money(suggested)}/week</b> · Role: <b>${esc(q.role||'regular')}</b> · Suggested signing bonus: <b>${brief(q.suggested_signing_bonus_gbp||0)}</b></span>`:''}</div>
-       ${d.personal_status==='counter'?`<div class="tr-agent-counter"><strong>Agent counteroffer received</strong><p>The player requests ${money(t.weekly_wage_gbp)}/week, ${esc(t.role)} role, ${t.years} years and ${brief(t.signing_bonus_gbp)} signing-on fee.</p>
-           <button type="button" class="tr-btn tr-btn-primary" data-tr-personal-accept="${esc(d.id)}">Accept agent terms and complete transfer →</button></div>`:''}
-       <form id="tr-personal-form"><div class="tr-personal-fields">
-         <label><span>Weekly salary (£)</span><input name="weekly_wage_gbp" type="number" min="75" max="1500000" step="25" required value="${t?.weekly_wage_gbp??suggested}" /></label>
-         <label><span>Contract length</span><select name="years">${Array.from({length:q.max_years||5},(_,i)=>opt(i+1,`${i+1} ${i===0?'year':'years'}`,t?.years||q.years||3)).join('')}</select></label>
-         <label><span>Promised squad role</span><select name="role">${[['star','Star player'],['important','Important player'],['regular','Regular starter'],['rotation','Rotation'],['backup','Backup']].map(([a,b])=>opt(a,b,t?.role||q.role||'regular')).join('')}</select></label>
-         <label><span>Signing-on bonus (£)</span><input name="signing_bonus_gbp" type="number" min="0" max="50000000" step="5000" value="${t?.signing_bonus_gbp??0}" required /></label>
-       </div><div class="tr-proposal-actions"><button class="tr-btn tr-btn-primary" type="submit">${possible?'Offer personal terms':'Ask player for decision'} →</button></div></form>
-       <p class="tr-footnote">The transfer fee, signing bonus and weekly wage must fit your budgets. No money is paid before the player accepts.</p>
-       ${d.personal_history?.length?`<div class="tr-personal-history"><h4>Agent conversation</h4>${d.personal_history.map(e=>`<p><b>${e.actor==='club'?'Your club':'Player agent'}:</b> ${esc(e.note)} · ${money(e.terms.weekly_wage_gbp)}/week · ${esc(e.terms.role)}</p>`).join('')}</div>`:''}
-       </section>`;
+    const quote=d.personal_quote||{};
+    const talk={mode:'transfer',dealId:d.id,status:d.personal_status||'open',
+      patience:d.personal_patience??100,counter:d.personal_terms,
+      history:d.personal_history||[],reason:(d.personal_status==='counter'?d.reason:'')};
+    return window.FMContractNegotiations?.form({quote,talk,id:'tr-personal-form'})||
+      '<section class="tr-panel">Contract negotiation module unavailable. Reload the game.</section>';
   }
   function negotiationView(){
     const d=deal(),p=player()||d?.player_profile;
@@ -248,7 +237,11 @@
       <div class="tr-hero-club tr-own-club">${transferCrest(own,model.club,true)}<div><small class="tr-kicker">YOUR CLUB</small><h3>${esc(manager.display_name)}</h3><p>${esc(model.club_league||'')}</p></div></div>
       <div class="tr-hero-budget"><small>Available transfer budget</small><strong>${brief(d?.available_upfront_gbp??model.available_transfer_budget_gbp)}</strong><span>Upfront payment budget</span><button type="button" class="tr-btn" data-tr-finances>View Finances →</button></div></section>
       <div id="tr-feedback" role="status" aria-live="polite" hidden></div><div id="tr-confirm" hidden></div>
-      <div class="tr-neg-layout"><div class="tr-neg-main">${content}</div><aside class="tr-neg-sidebar">${discussion(d)}</aside></div></div>`;
+      <div class="tr-neg-layout"><div class="tr-neg-main">${content}</div><aside class="tr-neg-sidebar">${d?.status==='agreed'&&d.direction==='outgoing'&&window.FMContractNegotiations?
+        window.FMContractNegotiations.panel({quote:d.personal_quote,talk:{mode:'transfer',dealId:d.id,
+        patience:d.personal_patience??100,status:d.personal_status,counter:d.personal_terms,
+        history:d.personal_history||[],reason:d.personal_status==='counter'?d.reason:''},
+        clubId:model.club_id,clubName:model.club}):discussion(d)}</aside></div></div>`;
   }
 
   function draw(){
@@ -407,7 +400,7 @@
       }
       if(button.hasAttribute('data-tr-personal-accept')){
         if(!await askConfirmation('Accept these player-agent conditions? Registration, upfront fee and signing bonus will be committed; installments remain payable on their dates.'))return;
-        if(await post({action:'personal_accept',deal_id:button.dataset.trPersonalAccept}))await refresh();return;
+        if(await post({action:'personal_accept',deal_id:deal()?.id||button.dataset.trPersonalAccept}))await refresh();return;
       }
       if(button.hasAttribute('data-tr-preview')){
         let terms;try{terms=validateTerms();}catch(error){showFeedback(error.message);return;}
@@ -465,9 +458,7 @@
       }
       if(ev.target.id==='tr-personal-form'){
         ev.preventDefault();const form=ev.target,d=deal();if(!d||!form.reportValidity())return;
-        const terms={weekly_wage_gbp:Number(form.elements.namedItem('weekly_wage_gbp').value),
-          years:Number(form.elements.namedItem('years').value),role:form.elements.namedItem('role').value,
-          signing_bonus_gbp:Number(form.elements.namedItem('signing_bonus_gbp').value)};
+        let terms;try{terms=window.FMContractNegotiations.readForm(form);}catch(error){showFeedback(error.message);return;}
         if(!await askConfirmation(`Offer ${money(terms.weekly_wage_gbp)}/week, ${terms.years} years and ${money(terms.signing_bonus_gbp)} signing bonus? If the player accepts, the transfer completes immediately.`))return;
         if(await post({action:'personal_offer',deal_id:d.id,terms}))await refresh();return;
       }
