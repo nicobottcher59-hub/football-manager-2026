@@ -94,6 +94,7 @@ class _TeamRuntime:
     booked_fouls: dict[str, int] = field(default_factory=dict)
     tactical_events: list = field(default_factory=list)
     exposures: list = field(default_factory=list)
+    substitution_windows_used: int = 0
 
     def __post_init__(self) -> None:
         if not self.participants:
@@ -164,7 +165,10 @@ class FastMatchSimulator:
         away.possession = round(100.0 - home.possession, 1)
         home.possession = round(100.0 - away.possession, 1)
 
-        if tactical_plans:
+        if ai_coaches:
+            self._run_coached_period(snapshot, home, away, tactical_plans, ai_coaches, root,
+                                     start=1, end=90)
+        elif tactical_plans:
             self._run_planned_period(snapshot, home, away, tactical_plans, root, start=1, end=90)
         else:
             # Discipline is established before the opportunities it can affect.
@@ -210,9 +214,17 @@ class FastMatchSimulator:
         if tied and decider is MatchDecider.EXTRA_TIME_AND_PENALTIES:
             extra_time_played = True
             extra_subs = snapshot.context.competition.extra_time_additional_substitutions
-            self._apply_extra_time_substitutions(home, extra_subs, root.fork("home/extra_time/substitutions"))
-            self._apply_extra_time_substitutions(away, extra_subs, root.fork("away/extra_time/substitutions"))
-            if tactical_plans:
+            if not ai_coaches:
+                # Preserve the historical no-coach simulation API. Delegated
+                # matches instead share one regulation/extra-time allowance.
+                self._apply_extra_time_substitutions(home, extra_subs, root.fork("home/extra_time/substitutions"))
+                self._apply_extra_time_substitutions(away, extra_subs, root.fork("away/extra_time/substitutions"))
+            if ai_coaches:
+                self._run_coached_period(snapshot, home, away, tactical_plans, ai_coaches, root,
+                    start=91, end=105, pace=self.config.extra_time_first_half_rate)
+                self._run_coached_period(snapshot, home, away, tactical_plans, ai_coaches, root,
+                    start=106, end=120, pace=self.config.extra_time_second_half_rate)
+            elif tactical_plans:
                 self._run_planned_period(snapshot, home, away, tactical_plans, root,
                                          start=91, end=105, pace=self.config.extra_time_first_half_rate)
                 self._run_planned_period(snapshot, home, away, tactical_plans, root,
@@ -269,7 +281,7 @@ class FastMatchSimulator:
             tied = aggregate_home == aggregate_away
 
         final_profiles = (home.profile, away.profile)
-        if tactical_plans:
+        if home.exposures:
             home.profile, away.profile = self._average_plan_profile(home), self._average_plan_profile(away)
             home.possession = round(sum((end - start + 1) * possession
                 for start, end, _, _, possession in home.exposures) / (120 if extra_time_played else 90), 1)
@@ -355,6 +367,140 @@ class FastMatchSimulator:
             tactical_events=tuple(sorted(home.tactical_events + away.tactical_events, key=lambda e: (e.minute, e.club_id))),
             role_segments=self._role_segments(home, 120 if extra_time_played else 90) + self._role_segments(away, 120 if extra_time_played else 90),
         )
+
+    def _refresh_coached_profile(self, snapshot, side, opponent, coach):
+        from .ai_coaching import adjusted_profile
+        side.profile = build_fast_team_profile(side.team)
+        if coach is not None:
+            decisive = snapshot.context.competition.match_decider is not MatchDecider.DRAW_ALLOWED
+            side.profile = adjusted_profile(side.profile, coach,
+                importance=.85 if decisive else .45, opponent_current=opponent.profile.current)
+
+    def _run_coached_period(self, snapshot, home, away, changes, coaches, root, *, start, end, pace=1.0):
+        """Resolve chronological intervals, changing only the *future* lineup.
+
+        No-coach callers keep their calibrated legacy RNG path. Actual career
+        matches use this path for both automatic directions. Tactical plan
+        boundaries split intervals, so an explicit instruction never waits for
+        the next coach checkpoint. Half-time changes do not use a stoppage.
+        """
+        from .models import FastTacticalEvent
+        checkpoints = {31, 46, 56, 66, 76, 86, 91, 106, 116}
+        boundaries = sorted({start, end + 1}
+            | {m for m in checkpoints if start <= m <= end}
+            | {c.rule.minute for c in changes if start <= c.rule.minute <= end})
+        for begin, following in zip(boundaries, boundaries[1:]):
+            finish = following - 1
+            rng = root.fork(f'coached/period/{begin}-{finish}')
+            for change in sorted((c for c in changes if c.rule.minute == begin),
+                                 key=lambda c: c.team.club_id):
+                side, opponent = (home, away) if change.team.club_id == home.team.club_id else (away, home)
+                own, conceded = sum(s.goal for s in side.shots), sum(s.goal for s in opponent.shots)
+                applies = change.rule.matches(own, conceded)
+                if applies:
+                    self._apply_match_plan(side, change)
+                    self._refresh_coached_profile(snapshot, side, opponent, coaches.get(side.team.club_id))
+                side.tactical_events.append(FastTacticalEvent(begin, side.team.club_id,
+                    change.rule.plan, change.name, applies, change.rule.condition, own, conceded))
+            if begin in checkpoints:
+                aggregate_home, aggregate_away = self._aggregate_score(snapshot, home, away)
+                for side, opponent, margin in ((home, away, aggregate_home - aggregate_away),
+                                                (away, home, aggregate_away - aggregate_home)):
+                    coach = coaches.get(side.team.club_id)
+                    if coach is not None:
+                        self._apply_coach_substitutions(snapshot, side, opponent, coach,
+                            elapsed=begin - 1, score_margin=margin, random=rng.fork(side.team.club_id))
+            home.possession = self._home_possession(home.profile, away.profile,
+                                                   root.fork('coached/possession'))
+            away.possession = round(100.0 - home.possession, 1)
+            self._simulate_discipline_period(snapshot, home, away, root=rng,
+                                              minute_start=begin, minute_end=finish)
+            score_h, score_a = sum(s.goal for s in home.shots), sum(s.goal for s in away.shots)
+            leader = home if score_h > score_a else away if score_a > score_h else None
+            waste = 1.0 - (leader.profile.time_wasting / 100 * .25 if leader and begin >= 76 else 0.0)
+            energies = (self._extra_time_energy(home, begin - 1),
+                        self._extra_time_energy(away, begin - 1))
+            for label, side, opponent, own, other, advantage, energy, other_energy in (
+                ('home', home, away, score_h, score_a, True, energies[0], energies[1]),
+                ('away', away, home, score_a, score_h, False, energies[1], energies[0]),
+            ):
+                urgency = 1.0
+                if begin >= 66 and own < other:
+                    urgency += max(0.0, side.profile.urgency_when_trailing - 50) / 50 * .20
+                self._simulate_shot_windows(side, opponent, minutes=finish - begin + 1,
+                    minute_start=begin, minute_end=finish, home_advantage=advantage,
+                    random=rng.fork(f'{label}/shots'), pace_factor=pace * waste * urgency,
+                    attacker_energy=energy, defender_energy=other_energy)
+                side.exposures.append((begin, finish, side.profile, side.team.starters, side.possession))
+            self._apply_score_dependent_risk(home, away, random=rng.fork('leading-risk'),
+                minute_start=begin, minute_end=finish, pace_factor=pace * waste,
+                home_energy=energies[0], away_energy=energies[1])
+
+    def _apply_coach_substitutions(self, snapshot, side, opponent, coach, *, elapsed, score_margin, random):
+        rules = snapshot.context.competition
+        extra = elapsed >= 90
+        limit = rules.substitution_limit + (rules.extra_time_additional_substitutions if extra else 0)
+        windows = rules.substitution_window_limit + (rules.extra_time_additional_windows if extra else 0)
+        interval = elapsed in (45, 90, 105)
+        remaining = limit - len(side.substitutions)
+        if remaining <= 0 or not side.team.bench or (not interval and side.substitution_windows_used >= windows):
+            return
+        # Early/half-time changes are exceptional; later changes can be batched
+        # to use the competition's finite stoppages instead of exceeding them.
+        batch = 1 if elapsed <= 55 else min(2, remaining)
+        if elapsed >= 75 and side.substitution_windows_used >= max(0, windows - 1):
+            batch = remaining
+        used = 0
+        for index in range(min(batch, remaining)):
+            candidates = []
+            for slot, outgoing in enumerate(side.team.starters):
+                played = side.minutes_for(outgoing.player_id, elapsed)
+                if (outgoing.player_id in side.dismissed_at or played < 20
+                        or outgoing.assigned_position in (None, Position.GK)
+                        or outgoing.role_id is None):
+                    continue
+                physical = (self._planned_physical_state(side, outgoing, played, elapsed)
+                            if side.exposures else self._physical_state_after(outgoing, side.profile, played))
+                if elapsed <= 45 and physical.condition >= (45 if elapsed < 45 else 62) and score_margin > -2:
+                    continue
+                for incoming in side.team.bench:
+                    if (incoming.player_id in side.participants or incoming.original_position is Position.GK
+                            or incoming.state.injury is not None or incoming.state.suspended_matches > 0
+                            or incoming.state.condition < 50
+                            or incoming.familiarity.position_score(outgoing.assigned_position) < 55):
+                        continue
+                    assigned = self._assign_bench_player(side, incoming, outgoing)
+                    # Quality may offset freshness: a much weaker replacement
+                    # is not sent on merely to meet an arbitrary quota.
+                    value = (assigned.current_rating - outgoing.current_rating) * .55
+                    value += (incoming.state.condition - physical.condition) * .30
+                    if score_margin < 0:
+                        value += (self._attr(incoming, 'technical.finishing')
+                                  - self._attr(outgoing, 'technical.finishing')) * .055
+                    elif score_margin > 0:
+                        value += (self._attr(incoming, 'mental.positioning')
+                                  - self._attr(outgoing, 'mental.positioning')) * .055
+                    value += random.fork(f'{index}/{outgoing.player_id}/{incoming.player_id}').uniform(0, .1)
+                    threshold = (4.0 if elapsed <= 55 else 2.5) + (90 - coach.judgement) * .015
+                    if value >= threshold:
+                        candidates.append((value, incoming.player_id, slot, outgoing, assigned))
+            if not candidates:
+                break
+            _, _, slot, outgoing, incoming = max(candidates, key=lambda row: (row[0], row[1], row[2]))
+            starters = list(side.team.starters)
+            starters[slot] = incoming
+            side.team = replace(side.team, starters=tuple(starters),
+                bench=tuple(p for p in side.team.bench if p.player_id != incoming.player_id))
+            side.participants[incoming.player_id] = incoming
+            side.entered_minute[incoming.player_id] = elapsed
+            side.exited_minute[outgoing.player_id] = elapsed
+            side.substitutions.append(FastSubstitutionEvent(elapsed + 1, side.team.club_id,
+                outgoing.player_id, incoming.player_id, incoming.assigned_position.value, extra))
+            used += 1
+        if used:
+            if not interval:
+                side.substitution_windows_used += 1
+            self._refresh_coached_profile(snapshot, side, opponent, coach)
 
     def _run_planned_period(self, snapshot, home, away, changes, root, *, start, end, pace=1.0):
         """Chronological path for explicit plans: never change already played events.

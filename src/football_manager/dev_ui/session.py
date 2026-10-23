@@ -1153,7 +1153,7 @@ class DevelopmentSession:
         )
         self._sync_effective_tactic_familiarity(home=True)
 
-    def quick_simulate(self) -> FastMatchResult:
+    def quick_simulate(self, *, delegate_team: bool = True) -> FastMatchResult:
         if self.match_played or (self._active_match is not None and self._fixture_has_result(self._active_match)):
             raise RuntimeError(
                 "The current development fixture is already played. Continue to the next match."
@@ -1170,6 +1170,10 @@ class DevelopmentSession:
         coaches = {opponent.club_id: coach_for_match(
             self._world.seed, opponent.club_id, opponent.tactic.preset_origin.value,
             self._active_match.fixture.fixture_id)}
+        if delegate_team:
+            managed = snapshot.home_team if snapshot.home_team.club_id == self.home_club.id else snapshot.away_team
+            coaches[managed.club_id] = coach_for_match(self._world.seed, managed.club_id,
+                managed.tactic.preset_origin.value, self._active_match.fixture.fixture_id)
         result = self._simulator.simulate(snapshot, tactical_plans=plans, ai_coaches=coaches)
         # These projections are updated by _sync_world_view() after the world
         # ledger is committed. A failure during that projection must not leave

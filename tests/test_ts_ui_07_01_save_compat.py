@@ -20,7 +20,7 @@ def test_scout_contract_survives_sqlite_save_and_existing_v22_section_markers(tm
         'action':'offer_scout','offer_id':offer['id'],'scout_id':None,
         'monthly_wage':offer['monthly_wage']*2,'years':3,'signing_fee':offer['signing_fee']})
     assert reply['accepted']
-    assert MANAGER_STATE_VERSION == GRAPH_VERSION == 25
+    assert MANAGER_STATE_VERSION == GRAPH_VERSION == 26
     repo=SQLiteSaveRepository(tmp_path/'academy-contracts.sqlite3')
     document=manager_career_document(s)
     repo.save('new','New',document,expected_revision=0)

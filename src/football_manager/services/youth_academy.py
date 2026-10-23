@@ -159,6 +159,7 @@ def initialize_youth(registry, on_date: date, managed_club_id: str) -> YouthSyst
     academies = {cid: _initial_academy(registry, cid, on_date) for cid in registry.clubs}
     youth = YouthSystem(registry.seed, registry.season_label, on_date, academies)
     youth.managed_club_id = managed_club_id
+    youth.match_clock = on_date
     youth.fixtures = _fixture_calendar(registry, registry.season_label)
     # New careers start without employees; their recruitment allocation is
     # available for the manager to use on paid hires, not free starter scouts.
@@ -250,83 +251,13 @@ def _poach_prospects(registry, youth: YouthSystem, boundary: date, journal) -> i
 
 
 def _team(academy: YouthAcademy, level: str, on_date: date):
-    """Choose a balanced youth XI rather than eleven high-rated outfielders.
-
-    This lightweight 4-3-3 is independent of the fully simulated senior tactic.
-    Keepers are never used as outfield substitutes.
-    """
-    roster = list(getattr(academy, level).values())
-    season_start = date(on_date.year if on_date.month >= 8 else on_date.year-1, 8, 1)
-    eligible = [p for p in roster if p.age_on(season_start) <= (17 if level == 'u17' else 21)
-                and p.state.injury is None]
-    eligible.sort(key=lambda p:(-reference_overall(p),p.id))
-    keepers = [p for p in eligible if p.primary_position is Position.GK]
-    fielders = [p for p in eligible if p.primary_position is not Position.GK]
-    if not keepers or len(fielders) < 10:
-        return ()
-    groups = (
-        (Position.RB,Position.RWB),
-        (Position.RCB,Position.CB,Position.LCB),
-        (Position.LCB,Position.CB,Position.RCB),
-        (Position.LB,Position.LWB),
-        (Position.DM,Position.CM),
-        (Position.RCM,Position.CM,Position.AM),
-        (Position.LCM,Position.CM,Position.AM),
-        (Position.RW,),
-        (Position.ST,),
-        (Position.LW,),
-    )
-    lineup = [keepers[0]]
-    for positions in groups:
-        selected = next((p for p in fielders if p.primary_position in positions),fielders[0])
-        lineup.append(selected)
-        fielders.remove(selected)
-    return tuple(lineup)
+    from football_manager.services.youth_match_development import select_youth_team
+    return select_youth_team(academy, level, on_date)
 
 
-def _simulate_youth_fixtures(registry, youth: YouthSystem, boundary: date, world) -> tuple[int,int]:
-    from football_manager.domain.player_development import add_match_exposure
-    count, exposures = 0, 0
-    active = world._active_journal
-    for fid, fixture in youth.fixtures.items():
-        if fixture.home_goals is not None or not youth.last_processed < fixture.match_date < boundary:
-            continue
-        home = youth.academies.get(fixture.home_club_id)
-        away = youth.academies.get(fixture.away_club_id)
-        if home is None or away is None:
-            continue
-        first, second = _team(home, fixture.level, fixture.match_date), _team(away, fixture.level, fixture.match_date)
-        rng = _rng(registry.seed, fid, 'result')
-        if not first or not second:
-            # Unplayed: avoid fake results and phantom minutes when fewer than 11 eligible.
-            continue
-        def strength(team):
-            return sum(reference_overall(p) for p in team) / 11
-        diff = (strength(first) - strength(second)) / 20
-        goals_h = max(0, min(7, round(rng.gauss(1.4 + diff*.6, 1.0))))
-        goals_a = max(0, min(7, round(rng.gauss(1.15 - diff*.6, 1.0))))
-        previous = (fixture.home_goals, fixture.away_goals)
-        active.undo_callbacks[('youth-fixture',fid)] = lambda obj=fixture,prior=previous: (
-            setattr(obj,'home_goals',prior[0]),setattr(obj,'away_goals',prior[1]))
-        fixture.home_goals, fixture.away_goals = goals_h, goals_a
-        count += 1
-        for team,goals in ((first,goals_h),(second,goals_a)):
-            for player in team:
-                minutes = 90
-                # Youth competition below senior intensity; no invented senior appearances.
-                challenge = .70 if fixture.level == 'u17' else .83
-                role = default_role_for_position(player.primary_position).role_id
-                rating = max(3.0,min(9.5,6.3 + rng.uniform(-.7,.7) + .08*goals))
-                previous_development = player.development
-                previous_sharpness = player.state.match_sharpness
-                active.undo_callbacks.setdefault(('youth-player',player.id),
-                    lambda obj=player,dev=previous_development,sharp=previous_sharpness:
-                    (setattr(obj,'development',dev),setattr(obj.state,'match_sharpness',sharp)))
-                player.development = add_match_exposure(player,minutes=minutes,rating=rating,
-                    role_minutes={role:minutes},challenge=challenge)
-                player.state.match_sharpness = min(94.0,player.state.match_sharpness+1.7)
-                exposures += 1
-    return count,exposures
+def _simulate_youth_fixtures(registry, youth: YouthSystem, boundary: date, world) -> tuple[int, int]:
+    from football_manager.services.youth_match_development import advance_youth_matches
+    return advance_youth_matches(world, boundary)
 
 
 def _month_scout_reports(registry, youth: YouthSystem, boundary: date) -> int:
@@ -672,6 +603,7 @@ def roll_youth_season(registry, on_date: date, managed_club_id: str, *, new_labe
     youth.recruitment_funds += {1:200_000,2:145_000,3:105_000,4:75_000}.get(tier,75_000)
     youth.season_label = new_label
     youth.last_processed = on_date
+    youth.match_clock = on_date
     youth.fixtures = _fixture_calendar(registry,new_label)
     youth.season_promotion = new_label
     youth.check_unique(registry)
@@ -925,6 +857,11 @@ def youth_command(session, command: dict) -> dict:
     academy = youth.academies[cid]
     today = session.current_date
     action=command.get('action')
+    if action in ('move', 'release', 'sign'):
+        # Close games before changing membership, never allocate a new roster
+        # retrospectively to fixtures from earlier in the month.
+        from football_manager.services.player_development import advance_world_development
+        advance_world_development(session._world, today)
     if action=='hire_scout':
         raise ValueError('Youth scout appointments require a negotiated contract offer')
     if action=='offer_scout':
@@ -965,6 +902,7 @@ def youth_command(session, command: dict) -> dict:
             raise ValueError('Youth squad is full; release or promote a player first')
         p=_preview_to_player(prospect.preview,academy,registry,today)
         roster[p.id]=p
+        youth.state_dates[p.id] = today
         del youth.candidates[p.id]
         youth.check_unique(registry)
         from football_manager.services.club_economy import sync_financial_rosters
@@ -1007,11 +945,10 @@ def youth_command(session, command: dict) -> dict:
             session.home_club.squad.remove(pid)
         else:
             getattr(academy,roster_name).pop(pid)
+        youth.state_dates[player.id] = today
         if target=='first':
             session.home_club.squad.add(player)
             youth.promoted_to_first[pid]=cid
-            # No first-team match = reduced sharpness, not an instant CA decrease.
-            player.state.match_sharpness=min(player.state.match_sharpness,72.0)
         else:
             getattr(academy,target)[pid]=player
         from football_manager.services.dressing_room import sync_roster

@@ -1,0 +1,213 @@
+{
+  "patch": "TS-FIX-01",
+  "status": "passed",
+  "sample": {
+    "matches": 500,
+    "mean": {
+      "goals": 2.47,
+      "shots": 24.474,
+      "xg": 2.4685,
+      "substitutions": 10,
+      "yellow_cards": 3.464,
+      "red_cards": 0.308
+    },
+    "substitutions_min_max": [
+      10,
+      10
+    ],
+    "invariants_passed": true
+  },
+  "season": {
+    "seed": 6606,
+    "from": "2026-08-21",
+    "to": "2027-06-30",
+    "managed_matches": 58,
+    "background_matches": 2827,
+    "world_results": 2959,
+    "world_fixtures": 2959,
+    "fast_matches_checked_including_initialization": 2475,
+    "substitutions": 24306,
+    "managed_subs_min_max": [
+      4,
+      5
+    ],
+    "youth_matches_played": 3888,
+    "youth_matches_total": 4072,
+    "monthly_observations": [
+      {
+        "date": "2026-09-01",
+        "u17": {
+          "players": 18,
+          "min": 63.53,
+          "max": 74.15,
+          "distinct": 16,
+          "played_last_28_days": 17
+        },
+        "u21": {
+          "players": 18,
+          "min": 63.53,
+          "max": 75.85,
+          "distinct": 15,
+          "played_last_28_days": 17
+        }
+      },
+      {
+        "date": "2026-10-01",
+        "u17": {
+          "players": 18,
+          "min": 63.17,
+          "max": 79.12,
+          "distinct": 17,
+          "played_last_28_days": 18
+        },
+        "u21": {
+          "players": 18,
+          "min": 61.57,
+          "max": 81.24,
+          "distinct": 18,
+          "played_last_28_days": 17
+        }
+      },
+      {
+        "date": "2026-11-01",
+        "u17": {
+          "players": 18,
+          "min": 64.47,
+          "max": 82.88,
+          "distinct": 17,
+          "played_last_28_days": 18
+        },
+        "u21": {
+          "players": 18,
+          "min": 60.16,
+          "max": 85.03,
+          "distinct": 18,
+          "played_last_28_days": 17
+        }
+      },
+      {
+        "date": "2026-12-01",
+        "u17": {
+          "players": 18,
+          "min": 63.84,
+          "max": 83.03,
+          "distinct": 17,
+          "played_last_28_days": 18
+        },
+        "u21": {
+          "players": 18,
+          "min": 59.22,
+          "max": 85.01,
+          "distinct": 18,
+          "played_last_28_days": 17
+        }
+      },
+      {
+        "date": "2027-01-01",
+        "u17": {
+          "players": 18,
+          "min": 63.15,
+          "max": 82.41,
+          "distinct": 17,
+          "played_last_28_days": 18
+        },
+        "u21": {
+          "players": 18,
+          "min": 58.55,
+          "max": 84.25,
+          "distinct": 17,
+          "played_last_28_days": 17
+        }
+      },
+      {
+        "date": "2027-02-01",
+        "u17": {
+          "players": 18,
+          "min": 61.25,
+          "max": 83.82,
+          "distinct": 16,
+          "played_last_28_days": 17
+        },
+        "u21": {
+          "players": 18,
+          "min": 58.09,
+          "max": 85.7,
+          "distinct": 16,
+          "played_last_28_days": 17
+        }
+      },
+      {
+        "date": "2027-03-01",
+        "u17": {
+          "players": 18,
+          "min": 60.05,
+          "max": 83.86,
+          "distinct": 17,
+          "played_last_28_days": 17
+        },
+        "u21": {
+          "players": 18,
+          "min": 57.8,
+          "max": 85.73,
+          "distinct": 16,
+          "played_last_28_days": 17
+        }
+      },
+      {
+        "date": "2027-04-01",
+        "u17": {
+          "players": 18,
+          "min": 59.12,
+          "max": 82.93,
+          "distinct": 17,
+          "played_last_28_days": 17
+        },
+        "u21": {
+          "players": 18,
+          "min": 57.57,
+          "max": 84.72,
+          "distinct": 16,
+          "played_last_28_days": 17
+        }
+      },
+      {
+        "date": "2027-05-01",
+        "u17": {
+          "players": 18,
+          "min": 58.5,
+          "max": 80.27,
+          "distinct": 15,
+          "played_last_28_days": 17
+        },
+        "u21": {
+          "players": 18,
+          "min": 57.42,
+          "max": 81.88,
+          "distinct": 16,
+          "played_last_28_days": 17
+        }
+      },
+      {
+        "date": "2027-06-01",
+        "u17": {
+          "players": 18,
+          "min": 58.05,
+          "max": 73.03,
+          "distinct": 15,
+          "played_last_28_days": 0
+        },
+        "u21": {
+          "players": 18,
+          "min": 57.31,
+          "max": 74.13,
+          "distinct": 16,
+          "played_last_28_days": 0
+        }
+      }
+    ],
+    "season_complete": true,
+    "sqlite_roundtrip": true,
+    "all_invariants_passed": true
+  },
+  "seconds": 257.82
+}

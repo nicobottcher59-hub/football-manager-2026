@@ -10,6 +10,7 @@ from __future__ import annotations
 from math import sqrt
 
 from football_manager.domain.player import Player
+from football_manager.domain.match_rhythm import after_match
 
 
 def _clamp(value: float, minimum: float = 0.0, maximum: float = 100.0) -> float:
@@ -29,8 +30,8 @@ def apply_player_match_progression(
 
     Returns the learned tactic-score increment so that the session can preserve
     it in the *baseline* used by its existing plan-similarity adjustment.
-    Substitutes have no documented per-minute role assignment, so they learn
-    team tactics and short-term state, not an invented substitute role.
+    When role segments are supplied, starters and substitutes learn from their
+    actual played roles. A caller without role data never invents that exposure.
     Poor performances can yield no role/tactic progress at all.
     """
     if not 0 <= minutes <= 120:
@@ -61,9 +62,7 @@ def apply_player_match_progression(
 
     state.adjust_form(gradual_step(state.form, form_target, 0.09, 2.0))
     state.adjust_confidence(gradual_step(state.confidence, confidence_target, 0.07, 1.25))
-    state.match_sharpness = _clamp(
-        state.match_sharpness + (100.0 - state.match_sharpness) * 0.018 * participation
-    )
+    state.match_sharpness = after_match(state.match_sharpness, minutes)
 
     # Learning is not guaranteed by playing. It depends on actual performance,
     # the player's adaptability/tactical intelligence and current confidence.

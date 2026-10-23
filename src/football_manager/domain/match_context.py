@@ -231,6 +231,8 @@ class CompetitionContextSnapshot:
     match_decider: MatchDecider = MatchDecider.DRAW_ALLOWED
     substitution_limit: int = 5
     extra_time_additional_substitutions: int = 1
+    substitution_window_limit: int = 3
+    extra_time_additional_windows: int = 1
 
     def __post_init__(self) -> None:
         if not self.competition_id.strip():
@@ -247,6 +249,10 @@ class CompetitionContextSnapshot:
             raise ValueError("substitution_limit cannot be negative")
         if self.extra_time_additional_substitutions < 0:
             raise ValueError("extra_time_additional_substitutions cannot be negative")
+        for name in ('substitution_limit', 'extra_time_additional_substitutions',
+                     'substitution_window_limit', 'extra_time_additional_windows'):
+            if type(getattr(self, name)) is not int or getattr(self, name) < 0:
+                raise ValueError(f'{name} must be a non-negative integer')
 
         positions = [row.position for row in self.standings]
         if len(set(positions)) != len(positions):

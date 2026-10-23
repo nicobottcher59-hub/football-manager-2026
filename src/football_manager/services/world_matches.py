@@ -226,6 +226,8 @@ def record_world_usage(world, fixture_id: str, result, lineups) -> None:
             previous.assists + stat.assists, previous.rating_total + stat.match_rating,
         )
         world._put(registry.usage, stat.player_id, summary)
+        from football_manager.services.youth_match_development import record_participation
+        record_participation(world, stat.player_id, world.fixtures[fixture_id].match_date, stat.minutes)
         participants.append(stat.club_id)
     for club_id in set(participants):
         world._put(registry.last_recovery, club_id, world.fixtures[fixture_id].match_date)

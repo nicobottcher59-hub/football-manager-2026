@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "original_graph_version": 25,
+  "new_graph_version": 26,
+  "original_date": "2026-08-25",
+  "original_completed_results": 123,
+  "youth_players_with_preserved_sharpness": 3312,
+  "new_match_substitutions": 10,
+  "continued_to": "2026-08-29",
+  "sqlite_roundtrip": "passed",
+  "source": "save produced with unmodified uploaded TS-UI-08.03 source"
+}

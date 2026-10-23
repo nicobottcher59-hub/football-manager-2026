@@ -103,8 +103,32 @@ class YouthSystem:
     recruitment_spent: int = 0
     last_scout_payroll: date | None = None
     lost_prospects: dict[str, tuple[str, date, str]] = field(default_factory=dict)
+    # Exclusive daily cutoff, distinct from the monthly development review.
+    match_clock: date | None = None
+    # Bounded, immutable histories shared with first-team appearances. Moving
+    # between categories must never award the same player's minutes twice.
+    recent_participation: dict[str, tuple[tuple[date, int], ...]] = field(default_factory=dict)
+    state_dates: dict[str, date] = field(default_factory=dict)
 
     def check_unique(self, registry) -> None:
+        if self.match_clock is not None and type(self.match_clock) is not date:
+            raise ValueError('invalid youth match clock')
+        if not isinstance(self.recent_participation, dict) or not isinstance(self.state_dates, dict):
+            raise ValueError('invalid youth participation ledgers')
+        for pid, history in self.recent_participation.items():
+            if not isinstance(pid, str) or not isinstance(history, tuple) or len(history) > 29:
+                raise ValueError('invalid youth participation history')
+            previous = None
+            for item in history:
+                if not isinstance(item, tuple) or len(item) != 2:
+                    raise ValueError('invalid youth participation entry')
+                day, minutes = item
+                if (type(day) is not date or type(minutes) is not int or not 1 <= minutes <= 120
+                        or (previous is not None and day <= previous)):
+                    raise ValueError('invalid youth participation chronology')
+                previous = day
+        if any(not isinstance(pid, str) or type(day) is not date for pid, day in self.state_dates.items()):
+            raise ValueError('invalid youth state dates')
         used = set(registry.retired_players)
         for club in registry.clubs.values():
             for player in club.squad.players:

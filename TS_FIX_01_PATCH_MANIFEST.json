@@ -1,0 +1,219 @@
+{
+  "patch": "TS-FIX-01",
+  "title": "Sustituciones, cantera y ritmo competitivo",
+  "base": "User-uploaded football-manager-2026.zip (TS-UI-08.03)",
+  "base_zip_sha256": "d2d45feb3578ea7924a1be1d6298279d78d38f63b82299b9864531989a22a530",
+  "branch": "wip/scouting-08a-redesign",
+  "save_graph_version": {
+    "from": 25,
+    "to": 26
+  },
+  "archive_file_count": 30,
+  "payload_file_count": 29,
+  "manifest_self_hash": "excluded to avoid circular hashing",
+  "files": [
+    {
+      "path": "TS_FIX_01_INSTALL.txt",
+      "status": "new",
+      "bytes": 1420,
+      "sha256": "2efddb2605c0e57d6e1f277bef9e9d3e86a4029a6d8586aa3ebda3d0d78b4615",
+      "base_sha256": null
+    },
+    {
+      "path": "TS_FIX_01_TEST_REPORT.md",
+      "status": "new",
+      "bytes": 11655,
+      "sha256": "3828ee90442d67a3cb473d6ff53ffb52cc7b7819c7017ab0fb84e7caf97e68b7",
+      "base_sha256": null
+    },
+    {
+      "path": "reports/ts_fix_01_cadence_validation.json",
+      "status": "new",
+      "bytes": 284,
+      "sha256": "70bc7ccacdcda894b04525ce6fa8e7c34d286f08cc9ae386665ef2d8cc1451a6",
+      "base_sha256": null
+    },
+    {
+      "path": "reports/ts_fix_01_legacy_validation.json",
+      "status": "new",
+      "bytes": 374,
+      "sha256": "73460757107f394369c430502fe4f93816a441862edabae8d586c1e966b5d23d",
+      "base_sha256": null
+    },
+    {
+      "path": "reports/ts_fix_01_regression.json",
+      "status": "new",
+      "bytes": 4724,
+      "sha256": "8b43408263b84d08ca2da626c6782b67dcd4e511f789fb385e198ae3451f5ce3",
+      "base_sha256": null
+    },
+    {
+      "path": "reports/ts_fix_01_validation.json",
+      "status": "new",
+      "bytes": 4614,
+      "sha256": "535fa47239d1d21525da844dca1e0a81a0a696bb86aeccb7dbdbc371e56ab5fd",
+      "base_sha256": null
+    },
+    {
+      "path": "src/football_manager/dev_ui/session.py",
+      "status": "modified",
+      "bytes": 154079,
+      "sha256": "8f86858d5fcdbb6dfb020b63bf19fdf96fdf8f7def6b1379c4b4414662886919",
+      "base_sha256": "54ffce671afe386a1a1ae3777858b54c80cb679575630f21fd80fa6a70ae4254"
+    },
+    {
+      "path": "src/football_manager/domain/match_context.py",
+      "status": "modified",
+      "bytes": 9272,
+      "sha256": "9721714f029cbd535a57558e2558f16ed9c46396847aa548061b7b0fa6929ea7",
+      "base_sha256": "bd2c76b62049e673ef7c47dd70c7d823e33810aca9a142908aec8af07728ce4e"
+    },
+    {
+      "path": "src/football_manager/domain/match_rhythm.py",
+      "status": "new",
+      "bytes": 1326,
+      "sha256": "ef6b9a3b51b393a665d85be9a4d3380c2a2624212a315452dd800e162ffbeceb",
+      "base_sha256": null
+    },
+    {
+      "path": "src/football_manager/domain/youth_academy.py",
+      "status": "modified",
+      "bytes": 5672,
+      "sha256": "2eb3cc6da4d7e149bc2442b113b2f144c68d5e76c1ec3d6da88c04bf80ebd9e5",
+      "base_sha256": "5de34565f82ea15eb29f70f7c81e67c1fd0289b1be16441abdd8b2f106a0f58f"
+    },
+    {
+      "path": "src/football_manager/fast_simulation/engine.py",
+      "status": "modified",
+      "bytes": 111236,
+      "sha256": "e2dad2391ee8c09c0416b16c9806ce3294c5a501dd25710dc97c485b077a1177",
+      "base_sha256": "58d2ba88596c2ba7f11dac486e655ac84b8ec22afb74b4d96fdd7dbde7b04b97"
+    },
+    {
+      "path": "src/football_manager/persistence/session_codec.py",
+      "status": "modified",
+      "bytes": 26035,
+      "sha256": "fdf529bd9c39b01e57151cc6effb0949d6582bfdaf6b25748560fb6a23fc7556",
+      "base_sha256": "4cdf0dcb62302743686d4e9488bb60b29e2063471ca248021ee10ff88db09dfe"
+    },
+    {
+      "path": "src/football_manager/services/player_development.py",
+      "status": "modified",
+      "bytes": 17076,
+      "sha256": "ec35ea107b35e7d966934c2e0564d2ce8c089081fe92c0705a11f235aa49828a",
+      "base_sha256": "d0c378d249166f78148e552aa89bb9c131e72ab69c39995008bb72a85d1e307c"
+    },
+    {
+      "path": "src/football_manager/services/player_match_progression.py",
+      "status": "modified",
+      "bytes": 4435,
+      "sha256": "b2cf6513078974a526a1a06f2ff5e20df740339019eeeceb80a48852473a219a",
+      "base_sha256": "b0effe3f248e25915d317b95087d34d0fedffb99d6737b2a33d471fd420d776d"
+    },
+    {
+      "path": "src/football_manager/services/world_matches.py",
+      "status": "modified",
+      "bytes": 16183,
+      "sha256": "10c17c7562c189dbe51edec1b04a359b5c204f9fd731f05dff8a7bfec0b50bad",
+      "base_sha256": "62324de54c309a45439d63ceb19176d15662c5a61fe9d36d8606e82c2edda200"
+    },
+    {
+      "path": "src/football_manager/services/youth_academy.py",
+      "status": "modified",
+      "bytes": 52309,
+      "sha256": "7d2bc1d01cdceb309a94aeff44a5d1e7928993b0fe7e2c769d78794439c06b66",
+      "base_sha256": "94df844e2a2634d31bcf3a5e9e28a0ae4f2b1e96bf8aeaa47f4fbbe1f78595bf"
+    },
+    {
+      "path": "src/football_manager/services/youth_match_development.py",
+      "status": "new",
+      "bytes": 14679,
+      "sha256": "71ba908bfe61f8efb8041b05864c29548ac120dff95284bfed1c439ec7c0f68d",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/test_ts_26_1_professional_scouts.py",
+      "status": "modified",
+      "bytes": 14580,
+      "sha256": "6f80ac76c5defe7682bc8d50b2abaaec2571644852d1e789de97b01bc975097d",
+      "base_sha256": "bb36777cf7890c93d556e32972aa6e5c8ae2d4a27ce928385a5839e989df1e0a"
+    },
+    {
+      "path": "tests/test_ts_27_match_preparation.py",
+      "status": "modified",
+      "bytes": 12500,
+      "sha256": "96e3092cc6d5bff05e4ae29857812c49c0612feac0445555d8955e6db0cb6e19",
+      "base_sha256": "7fe7b9a1eb11e36faf5c25ccf970b95af89abe21c08f1670c5b07fc2081db95c"
+    },
+    {
+      "path": "tests/test_ts_28_1_living_news.py",
+      "status": "modified",
+      "bytes": 6322,
+      "sha256": "8c77b37bc605730fc8e852dac433a82ae0a191b06fa90582dfcfcda28c3ce815",
+      "base_sha256": "edd57d117026d1e7c779fe57e81687690a319d03925a3d13d718c72902abe214"
+    },
+    {
+      "path": "tests/test_ts_28_2_career_history.py",
+      "status": "modified",
+      "bytes": 7423,
+      "sha256": "872ceb9bc702c1b2f527468dee3d9cb585b643fec64d909f60808d6de15454b1",
+      "base_sha256": "fdcae87fc823626f9fae6b38ae7c3d34ac35198f72843603278264d44cb3e94d"
+    },
+    {
+      "path": "tests/test_ts_fix_01_integration_save.py",
+      "status": "new",
+      "bytes": 3910,
+      "sha256": "21c1490db82f80876c957251a9c3307377dbe6a1e7ad556b60d56efcfa44951a",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/test_ts_fix_01_substitutions.py",
+      "status": "new",
+      "bytes": 9366,
+      "sha256": "04f9735f277e3538a5edbabe68d9801b94b8420de876488e573a671f6781ea9a",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/test_ts_fix_01_youth_rhythm.py",
+      "status": "new",
+      "bytes": 7869,
+      "sha256": "15125fbe2f82c38bd1f5dcc572402f7978502951d1ab9f2f1e8716a1e93502ef",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/test_ts_ui_07_01_save_compat.py",
+      "status": "modified",
+      "bytes": 2693,
+      "sha256": "1666b7422adcf21ffb7c3dc5c5239bf5d62e6f7a70b9f47799fcc79ac90d012d",
+      "base_sha256": "4c12ba47dcee77467fadc31fb6b5e1df77b7409576be1bf3852ff8bce79f738a"
+    },
+    {
+      "path": "tests/test_ts_ui_07_01_youth_academy.py",
+      "status": "modified",
+      "bytes": 8340,
+      "sha256": "f535e5b6c1bd5b54ccecf0c23c79b01e53f6904b98efd804c663957696759fea",
+      "base_sha256": "7f3a6bbe0bc6a59d48c1f03992deb1f2ba572fe3ce795574a779616a92c6c465"
+    },
+    {
+      "path": "tests/test_ts_ui_training_04_single_plan_squad_click.py",
+      "status": "modified",
+      "bytes": 7407,
+      "sha256": "f4fe27b90fd93de9c8f7eb78b0b263b93bfcd8257b677772e3e1691bc10fcb36",
+      "base_sha256": "95acc94caec3e4338d36e2703b28dec582b47f49f541b09266a79498cfd694ac"
+    },
+    {
+      "path": "tools/validate_ts_fix_01.py",
+      "status": "new",
+      "bytes": 9866,
+      "sha256": "6120cc2b5128bcccf1d49d128121040390a2ab0025d9c1000b4598b9b97e987f",
+      "base_sha256": null
+    },
+    {
+      "path": "tools/verify_ts_fix_01.py",
+      "status": "new",
+      "bytes": 1192,
+      "sha256": "bafe07dda7d73cc9458ef28e95b859a8bde0287eca73ea1a869303eb44d96705",
+      "base_sha256": null
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+TS-FIX-01 - Sustituciones, cantera y ritmo competitivo
+Base: ZIP football-manager-2026 con TS-UI-08.03.
+Branch existente: wip/scouting-08a-redesign
+
+INSTALACIÓN
+1. Detené el juego y Python por completo.
+2. Respaldá la carpeta del proyecto y tus partidas ANTES de reemplazar archivos.
+3. Extraé este ZIP en la raíz de football-manager-2026, donde está pyproject.toml.
+   Conservá las carpetas src, tests, tools y reports; aceptá reemplazar archivos.
+   No extraigas el parche dentro de frontend ni dentro de una segunda carpeta del proyecto.
+4. Reiniciá el juego y recargá con Ctrl + F5.
+5. Cargá una copia de tu partida y guardala en un slot nuevo para la primera prueba.
+
+PARTIDAS
+El formato de guardado sube de 25 a 26. La carga de partidas 25 se migra sin
+reescribir resultados ni modificar de golpe el sharpness. Las reglas actúan
+hacia adelante. No se reconstruyen minutos juveniles históricos desconocidos.
+Una partida guardada en formato 26 no se puede abrir con el código anterior.
+Para volver atrás hacen falta tanto el código como la partida del respaldo.
+Este ZIP no contiene partidas ni una base de datos de reemplazo.
+
+VERIFICACIÓN OPCIONAL, desde la raíz del proyecto
+python tools/verify_ts_fix_01.py
+
+GITHUB DESKTOP
+Branch: wip/scouting-08a-redesign
+Summary: fix(simulation,youth): TS-FIX-01 substitutions and youth match rhythm
+
+Alcance y resultados de prueba: TS_FIX_01_TEST_REPORT.md

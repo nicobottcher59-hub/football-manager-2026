@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "from": "2026-08-21",
+  "through": "2026-09-15",
+  "youth_players_compared": 3312,
+  "fixtures_equal": true,
+  "participation_equal": true,
+  "development_equal": true,
+  "physical_state_equal": true,
+  "max_sharpness_numeric_error": 7.105427357601002e-14
+}

@@ -69,7 +69,10 @@ def advance_world_development(world, through: date) -> int:
         return 0
     if through < registry.development_next_review:
         from football_manager.services.player_aging import recover_medical_absences
-        recover_medical_absences(world, through)
+        from football_manager.services.youth_match_development import advance_youth_matches
+        with world.transaction():
+            advance_youth_matches(world, through)
+            recover_medical_absences(world, through)
         return 0
     reviews = 0
     with world.transaction():
@@ -142,6 +145,8 @@ def advance_world_development(world, through: date) -> int:
             sync_financial_rosters(registry,boundary,world=world)
             registry.development_next_review = next_month(boundary)
         from football_manager.services.player_aging import recover_medical_absences
+        from football_manager.services.youth_match_development import advance_youth_matches
+        advance_youth_matches(world, through)
         recover_medical_absences(world, through)
     return reviews
 

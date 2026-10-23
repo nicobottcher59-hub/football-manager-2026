@@ -1,0 +1,106 @@
+{
+  "patch": "TS-FIX-01",
+  "specific_tests": {
+    "passed": 56,
+    "failed": 0,
+    "fresh_overlay_passed": 56
+  },
+  "existing_tests": {
+    "executed": 270,
+    "passed": 256,
+    "failed": 14,
+    "all_failures_reproduced_on_original_zip": true,
+    "summary": "14 failed, 256 passed in 1072.77s (0:17:52)",
+    "files": [
+      "tests/test_ts_12_fast_match_discipline.py",
+      "tests/test_phase5_11d_extra_time_penalties.py",
+      "tests/test_phase5_11e_condition_recovery.py",
+      "tests/test_ts_23_youth_academy.py",
+      "tests/test_ts_ui_07_01_youth_academy.py",
+      "tests/test_ts_ui_07_01_save_compat.py",
+      "tests/test_ts_27_match_preparation.py",
+      "tests/test_ui35_matchday.py",
+      "tests/test_ui351_matchday_refinements.py",
+      "tests/test_ts_21_2_player_development.py",
+      "tests/test_ts_21_3_player_aging.py",
+      "tests/test_ts_ui_08_02_scouting_assets.py",
+      "tests/test_ts_ui_08_03_club_chrome.py",
+      "tests/test_ts_15_career_save_reliability.py"
+    ],
+    "failures": [
+      {
+        "nodeid": "tests/test_ts_21_2_player_development.py::test_shared_rules_work_without_english_leagues_or_tier_data",
+        "patched_error": "KeyError: 'country-x-0'",
+        "original_error": "KeyError: 'country-x-0'"
+      },
+      {
+        "nodeid": "tests/test_ts_21_2_player_development.py::test_no_match_months_and_long_skip_equal_month_by_month",
+        "patched_error": "KeyError: 'country-x-0'",
+        "original_error": "KeyError: 'country-x-0'"
+      },
+      {
+        "nodeid": "tests/test_ts_21_2_player_development.py::test_empty_calendar_still_advances_every_player",
+        "patched_error": "KeyError: 'country-x-0'",
+        "original_error": "KeyError: 'country-x-0'"
+      },
+      {
+        "nodeid": "tests/test_ts_21_2_player_development.py::test_composed_transaction_restores_prior_months",
+        "patched_error": "KeyError: 'country-x-0'",
+        "original_error": "KeyError: 'country-x-0'"
+      },
+      {
+        "nodeid": "tests/test_ts_21_2_player_development.py::test_v7_roundtrip_preserves_exposure_focus_and_shared_players",
+        "patched_error": "assert 26 == 17",
+        "original_error": "assert 25 == 17"
+      },
+      {
+        "nodeid": "tests/test_ts_21_2_player_development.py::test_results_only_reset_keeps_profile_without_fake_experience",
+        "patched_error": "KeyError: 'country-x-0'",
+        "original_error": "KeyError: 'country-x-0'"
+      },
+      {
+        "nodeid": "tests/test_ts_21_2_player_development.py::test_explicit_legacy_balance_preserves_potential_headroom",
+        "patched_error": "football_manager.persistence.models.SaveIntegrityError: could not reconstruct saved manager career",
+        "original_error": "football_manager.persistence.models.SaveIntegrityError: could not reconstruct saved manager career"
+      },
+      {
+        "nodeid": "tests/test_ts_21_3_player_aging.py::test_partial_month_absence_reduces_growth_proportionally",
+        "patched_error": "KeyError: 'test-club'",
+        "original_error": "KeyError: 'test-club'"
+      },
+      {
+        "nodeid": "tests/test_ts_21_3_player_aging.py::test_large_jump_equal_daily_medical_and_development_advances",
+        "patched_error": "KeyError: 'test-club'",
+        "original_error": "KeyError: 'test-club'"
+      },
+      {
+        "nodeid": "tests/test_ts_21_3_player_aging.py::test_failure_restores_attributes_medical_state_and_month_clock",
+        "patched_error": "KeyError: 'test-club'",
+        "original_error": "KeyError: 'test-club'"
+      },
+      {
+        "nodeid": "tests/test_ts_21_3_player_aging.py::test_sequelae_applied_once_without_changing_pa",
+        "patched_error": "KeyError: 'test-club'",
+        "original_error": "KeyError: 'test-club'"
+      },
+      {
+        "nodeid": "tests/test_ts_21_3_player_aging.py::test_retirement_only_requested_at_month_review",
+        "patched_error": "KeyError: 'test-club'",
+        "original_error": "KeyError: 'test-club'"
+      },
+      {
+        "nodeid": "tests/test_ts_21_3_player_aging.py::test_full_graph_roundtrip_preserves_age_and_medical_data",
+        "patched_error": "assert 26 == 17",
+        "original_error": "assert 25 == 17"
+      },
+      {
+        "nodeid": "tests/test_ts_21_3_player_aging.py::test_retired_shirt_number_does_not_block_new_active_assignment",
+        "patched_error": "football_manager.persistence.models.SaveIntegrityError: manager state failed domain validation",
+        "original_error": "football_manager.persistence.models.SaveIntegrityError: manager state failed domain validation"
+      }
+    ]
+  },
+  "syntax": "passed",
+  "browser_visual_qa": "not_performed",
+  "user_completed_career": "not_provided_for_validation"
+}
