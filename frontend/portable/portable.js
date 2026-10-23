@@ -219,6 +219,7 @@
       if(youthPanel.style.display!=='none')window.FMYouthAcademy?.refresh();
       if(financesPanel.style.display!=='none')window.FMFinances?.refresh();
       if(transfersPanel.style.display!=='none'){if(routeState.page==='Scouting')window.FMScouting?.refresh();else window.FMTransfers?.refresh();}
+      if(transferCentrePanel.style.display!=='none')window.FMTransferCentre?.refresh();
       if(competitionPanel.style.display!=='none'){
         const other=$('.sidebar .nav-item.is-active span')?.textContent.trim()==='Other Leagues';
         window.FMCompetitions?.mount(competitionPanel,other?'other':'mine');
@@ -264,6 +265,9 @@
   const youthPanel=document.createElement('section');
   youthPanel.className='fm-youth-academy-screen';youthPanel.style.display='none';
   main.insertBefore(youthPanel,footer);
+  const transferCentrePanel=document.createElement('section');
+  transferCentrePanel.className='fm-transfer-centre-screen';transferCentrePanel.style.display='none';
+  main.insertBefore(transferCentrePanel,footer);
   const transfersPanel=document.createElement('section');
   transfersPanel.className='fm-transfers-screen';transfersPanel.style.display='none';
   main.insertBefore(transfersPanel,footer);
@@ -296,7 +300,7 @@
   let routeState={page:'Home'};
   let negotiationOrigin='Scouting';
   function goBack(){if(history.state?.fm22&&history.state.depth>0)history.back();
-    else navigate(routeState.page==='Negotiation'?'Scouting':routeState.page==='Contract Negotiation'?'Finances':'Home');}
+    else navigate(['Negotiation','Loan Negotiation'].includes(routeState.page)?'Transfers':routeState.page==='Contract Negotiation'?'Finances':'Home');}
   routeBack.addEventListener('click',goBack);
   const placeholder = document.createElement('section');
   placeholder.className = 'panel placeholder-page';
@@ -317,22 +321,24 @@
     else frame.src=url;
   }
   function navigate(page, fromFrame = false, extra = {}, record = true) {
-    if(page==='Transfers')page='Scouting'; // Restore historic TS-24.3 bookmarks.
     if(routeState.page==='Home'&&page!=='Home')window.FMHomeCompetition?.reset();
     if(page==='Negotiation'&&routeState.page!=='Negotiation')
-      negotiationOrigin=routeState.page==='Club Profile'?'player profile':'Scouting';
+      negotiationOrigin=routeState.page==='Club Profile'?'player profile':routeState.page==='Transfers'?'Transfers':'Scouting';
     routeState={page,...extra};
     const hash=page==='Match Center'?'#match/'+encodeURIComponent(extra.fixture||''):
       page==='Club Profile'?'#club/'+encodeURIComponent(extra.club||'')+(extra.player?'/'+encodeURIComponent(extra.player):''):
       page==='Career History'?'#history/'+encodeURIComponent(extra.entity||'')+'/'+encodeURIComponent(extra.id||''):
       page==='Negotiation'?'#negotiation/'+(extra.deal?'deal/':'player/')+encodeURIComponent(extra.deal||extra.player||''):
       page==='Contract Negotiation'?'#contract/'+encodeURIComponent(extra.player||''):
+      page==='Loan Negotiation'?(extra.talk?'#loan/talk/'+encodeURIComponent(extra.talk):extra.player?'#loan/player/'+encodeURIComponent(extra.player)+(extra.owner?'/'+encodeURIComponent(extra.owner):''):'#loan/hub'):
       '#page/'+encodeURIComponent(page)+(extra.competition?'/'+encodeURIComponent(extra.competition):'');
     if(record && location.hash!==hash){const depth=(history.state?.fm22?history.state.depth:-1)+1;history.pushState({fm22:true,depth},'',hash);}
     const matchPage=page==='Match Center',clubPage=page==='Club Profile';
     const negotiationPage=page==='Negotiation';
+    const loanPage=page==='Loan Negotiation';
+    const transferCentrePage=page==='Transfers';
     const contractPage=page==='Contract Negotiation';
-    document.body.classList.toggle('tr-negotiation-open',negotiationPage||contractPage);
+    document.body.classList.toggle('tr-negotiation-open',negotiationPage||loanPage||contractPage);
     document.body.classList.toggle('ts22-match-open',matchPage);
     matchFrame.style.display=matchPage?'block':'none';clubFrame.style.display=clubPage?'block':'none';routeBack.hidden=!clubPage && page!=='Career History';
     if(matchPage){const src=`match.html?embedded=1&fixture=${encodeURIComponent(extra.fixture||'')}`;loadFrame(matchFrame,src);}
@@ -346,31 +352,34 @@
     const clubSupport = ['Staff','Training','Medical Centre'].includes(page);
     const youthAcademy = page === 'Youth Academy';
     const finances = page === 'Finances';
-    const transfers = page === 'Scouting' || negotiationPage;
+    const transfers = page === 'Scouting' || negotiationPage || loanPage;
     const competitions = page === 'Competitions';
     const otherLeagues = page === 'Other Leagues';
     const competitionPage = competitions || otherLeagues;
     const careerPage = page === 'Career History';
     const clubInfoPage = page === 'Club Info';
     navButtons.forEach(button => {
-      const selected = $('span', button)?.textContent.trim() === (negotiationPage?'Scouting':contractPage?'Finances':page);
+      const selected = $('span', button)?.textContent.trim() === (negotiationPage?(negotiationOrigin==='Transfers'?'Transfers':'Scouting'):loanPage?'Transfers':contractPage?'Finances':page);
       button.classList.toggle('is-active', selected);
       if (selected) button.setAttribute('aria-current', 'page');
       else button.removeAttribute('aria-current');
     });
     dashboard.style.display = home ? '' : 'none';
-    placeholder.style.display = !home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !clubSupport && !youthAcademy && !finances && !transfers && !contractPage && !matchPage && !clubPage && !careerPage && !clubInfoPage ? 'flex' : 'none';
+    placeholder.style.display = !home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !clubSupport && !youthAcademy && !finances && !transfers && !transferCentrePage && !contractPage && !matchPage && !clubPage && !careerPage && !clubInfoPage ? 'flex' : 'none';
     supportPanel.style.display = clubSupport ? 'block' : 'none';
     if(clubSupport)window.FMSupport?.mount(supportPanel,page==='Staff'?'staff':page==='Training'?'training':'medical');
     dressingPanel.style.display = dressingRoom ? 'block' : 'none';
     inboxPanel.style.display = inbox ? 'block' : 'none';
     if(inbox)window.FMInbox?.mount(inboxPanel,extra.player||null);
     youthPanel.style.display = youthAcademy ? 'block' : 'none';
+    transferCentrePanel.style.display = transferCentrePage ? 'block' : 'none';
+    if(transferCentrePage)window.FMTransferCentre?.mount(transferCentrePanel);
     transfersPanel.style.display = transfers ? 'block' : 'none';
     transfersPanel.classList.toggle('is-scouting',page==='Scouting');
     if(page==='Scouting')window.FMScouting?.mount(transfersPanel);
     else if(negotiationPage)window.FMTransfers?.mount(transfersPanel,{view:'negotiation',
       playerId:extra.player||null,dealId:extra.deal||null,tab:extra.tab||null});
+    else if(loanPage)window.FMTransfers?.mount(transfersPanel,{view:'loans',playerId:extra.player||null,ownerId:extra.owner||null,talkId:extra.talk||null});
     contractsPanel.style.display=contractPage?'block':'none';
     if(contractPage)window.FMContractNegotiations?.mount(contractsPanel,extra.player);
     financesPanel.style.display = finances ? 'block' : 'none';
@@ -413,12 +422,13 @@
     document.body.classList.toggle('tsui-squad-active',page==='Squad');
     document.body.classList.toggle('tsui-youth-active',youthAcademy);
     document.body.classList.toggle('tsui-scouting-active',page==='Scouting');
+    document.body.classList.toggle('tsui-transfers-active',transferCentrePage);
     document.body.classList.toggle('tsui-medical-active',page==='Medical Centre');
     document.body.classList.toggle('tsui-training-active',page==='Training');
     document.body.classList.toggle('tsui-staff-active',page==='Staff');
     document.body.classList.toggle('tsui-dressing-active',dressingRoom);
     if (home) { refreshHome();window.dispatchEvent(new CustomEvent('fm-ui-home-refresh')); }
-    headerTitle.textContent = page;
+    headerTitle.textContent = transferCentrePage ? 'Transfer Centre' : page;
     headerSubhead.textContent = home
       ? 'Live results, fixtures and verified football news from your career.'
       : squad ? (page==='Squad' ? 'Sortable roster, full player attributes, recorded season statistics and player management.' : 'Formation, individual roles and team tactics backed by the Python development session.')
@@ -430,6 +440,8 @@
       : youthAcademy ? 'U15 preview, automated U17/U21 leagues and quarterly scouting.'
       : contractPage ? 'Agent-led personal contracts: wage, role, duration and performance incentives.'
       : negotiationPage ? 'Dedicated negotiation: guaranteed fees, optional clauses and club replies.'
+      : loanPage ? 'Discuss loans, salary sharing, playing time and purchase options.'
+      : transferCentrePage ? 'Received and sent offers, shortlist, negotiations and market updates.'
       : transfers ? 'Search worldwide, assign professional scouts, and manage your shortlist.'
       : finances ? 'Club cash, transfer allocation, wage budget and registered player contracts.'
       : dressingRoom ? 'Automatic hierarchy, working relationships and quiet squad dynamics. No micromanagement required.'
@@ -437,7 +449,7 @@
       : competitions ? 'Your club competitions, standings, fixtures and confirmed cup brackets.'
       : otherLeagues ? 'Browse other leagues and cups by continent, country and division.'
       : 'This section is planned for a future update.';
-    if (!home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !clubSupport && !youthAcademy && !finances && !transfers && !contractPage) $('h2', placeholder).textContent = page;
+    if (!home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !clubSupport && !youthAcademy && !finances && !transfers && !transferCentrePage && !contractPage) $('h2', placeholder).textContent = page;
     window.scrollTo({top:0, behavior:'auto'});
   }
   window.addEventListener('message', event => {
@@ -464,6 +476,7 @@
     if(youthPanel.style.display!=='none')window.FMYouthAcademy?.refresh();
     if(financesPanel.style.display!=='none')window.FMFinances?.refresh();
       if(transfersPanel.style.display!=='none'){if(routeState.page==='Scouting')window.FMScouting?.refresh();else window.FMTransfers?.refresh();}
+      if(transferCentrePanel.style.display!=='none')window.FMTransferCentre?.refresh();
     if(competitionPanel.style.display!=='none'){
       const other=$('.sidebar .nav-item.is-active span')?.textContent.trim()==='Other Leagues';
       window.FMCompetitions?.mount(competitionPanel, other?'other':'mine');
@@ -476,6 +489,7 @@
     if(youthPanel.style.display!=='none')window.FMYouthAcademy?.refresh();
     if(financesPanel.style.display!=='none')window.FMFinances?.refresh();
       if(transfersPanel.style.display!=='none'){if(routeState.page==='Scouting')window.FMScouting?.refresh();else window.FMTransfers?.refresh();}
+      if(transferCentrePanel.style.display!=='none')window.FMTransferCentre?.refresh();
   });
   navButtons.forEach(button => button.addEventListener('click', () => navigate($('span',button).textContent.trim())));
   $('button.action-green', placeholder).addEventListener('click', () => navigate('Home'));
@@ -585,6 +599,8 @@
     competition:id=>navigate('Competitions',false,{competition:id}),
     match:id=>navigate('Match Center',false,{fixture:id}),back:goBack,
     negotiatePlayer:id=>navigate('Negotiation',false,{player:id}),
+    loanPlayer:(id,owner)=>navigate('Loan Negotiation',false,{player:id||'',owner:owner||''}),
+    loanTalk:id=>navigate('Loan Negotiation',false,{talk:id}),
     negotiateContract:id=>navigate('Contract Negotiation',false,{player:id}),
     negotiateDeal:(id,replace=false)=>{
       if(replace){
@@ -601,10 +617,11 @@
     else if(parts[0]==='match')navigate('Match Center',false,{fixture:parts[1]||''},false);
     else if(parts[0]==='club'&&parts[1])navigate('Club Profile',false,{club:parts[1],player:parts[2]},false);
     else if(parts[0]==='contract'&&parts[1])navigate('Contract Negotiation',false,{player:parts[1]},false);
+    else if(parts[0]==='loan'&&(parts[1]==='hub'||parts[2]))navigate('Loan Negotiation',false,parts[1]==='hub'?{}:parts[1]==='talk'?{talk:parts[2]}:{player:parts[2],owner:parts[3]||''},false);
     else if(parts[0]==='negotiation'&&parts[2])navigate('Negotiation',false,
       parts[1]==='deal'?{deal:parts[2]}:{player:parts[2]},false);
     else {const allowed=navButtons.map(b=>$('span',b).textContent.trim());
-      const target=parts[1]==='Transfers'?'Scouting':parts[1];
+      const target=parts[1];
       navigate(allowed.includes(target)?target:'Home',false,{competition:parts[2]},false);}
   }
   window.addEventListener('popstate',readHash);

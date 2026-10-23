@@ -128,6 +128,8 @@ class TransferNegotiation:
     tolerance_remaining: int = 100
     settled_on: date | None = None
     installments_paid: int = 0
+    # Cross-mode conversations share their prior record and remaining patience.
+    linked_loan_talk_id: str | None = None
 
     def validate(self) -> None:
         if (not self.deal_id or not self.player_id or not self.seller_id or not self.buyer_id
@@ -139,6 +141,8 @@ class TransferNegotiation:
                 or not self.events or len(self.events) > 32 or not 0 <= self.refusal_count <= 32):
             raise ValueError('Invalid recorded transfer negotiation')
         self.terms.validate()
+        if self.linked_loan_talk_id is not None and not isinstance(self.linked_loan_talk_id,str):
+            raise ValueError('Invalid linked loan negotiation')
         if type(self.tolerance_remaining) is not int or not 0 <= self.tolerance_remaining <= 100:
             raise ValueError('Invalid negotiation tolerance')
         if self.settled_on is not None and (type(self.settled_on) is not date or self.settled_on < self.started_on):

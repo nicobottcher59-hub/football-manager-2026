@@ -4,14 +4,45 @@
  */
 (() => {
   let host=null,model=null,busy=false,view='scouting',tab='players',search='',position='all',
-      minOvr='',maxAge='',chosen=null,dealId=null,countering=false,lastError='',loansModel=null,loanMode='active',loanQuery='',loanSelected=null;
+      minOvr='',maxAge='',chosen=null,dealId=null,countering=false,lastError='',loansModel=null,loanMode='active',loanQuery='',loanSelected=null,requestedLoanTalk=null,dealMode='transfer',loanDrafts=new Map(),transferDrafts=new Map();
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const money=n=>`\u00a3${Math.max(0,Number(n)||0).toLocaleString('en-GB',{maximumFractionDigits:0})}`;
   const brief=n=>{const v=Math.max(0,Number(n)||0);return v>=1e6?`\u00a3${(v/1e6).toFixed(1).replace(/\.0$/,'')}M`:v>=1e3?`\u00a3${(v/1e3).toFixed(v<1e4?1:0).replace(/\.0$/,'')}K`:money(v);};
   const seasonDate=(str,years)=>{const [y,m,d]=(str||'2026-08-01').split('-').map(Number);return `${y+years}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;};
   const statuses={manager_turn:'Decision required',agreed:'Club agreement reached',pending_window:'Awaiting registration',completed:'Transfer completed',failed:'Player talks failed',rejected:'Rejected',withdrawn:'Withdrawn',expired:'Expired'};
   const opt=(v,t,s)=>`<option value="${esc(v)}" ${String(v)===String(s)?'selected':''}>${esc(t)}</option>`;
-  const player=()=>model?.targets?.find(p=>p.id===chosen)||model?.offers?.find(d=>d.id===dealId)?.player_profile||null;
+  const loanPerson=(pid)=>[...(loansModel?.outgoing||[]),...(loansModel?.incoming||[])].find(p=>p.id===pid)||null;
+  const player=()=>model?.targets?.find(p=>p.id===chosen)||model?.offers?.find(d=>d.id===dealId)?.player_profile||loanPerson(chosen||loanSelected?.id)||null;
+  const currentLoanTalk=()=>loansModel?.negotiations?.find(t=>t.id===loanSelected?.talkId)||null;
+  const loanCounterpart=()=>{
+    const own=model.club_id, talk=currentLoanTalk(),p=player()||{};
+    const parent=talk?.parent_id||loanSelected?.owner||p.club_id||own;
+    const outgoing=parent===own;
+    const borrower=talk?.borrower_id||loanSelected?.borrower||(outgoing?null:own);
+    const otherId=outgoing?borrower:parent;
+    const name=otherId&&(loansModel?.destinations||[]).find(x=>x.id===otherId)?.name||
+       (otherId===own?model.club:p.club)||'Choose borrowing club';
+    return {parent,borrower,otherId,otherName:name,outgoing,talk};
+  };
+  const saveDraft=()=>{
+    const form=host?.querySelector(dealMode==='loan'?'#tr-loan-form':'#tr-offer-form');
+    if(!form)return;
+    const data={};form.querySelectorAll('input[name],select[name]').forEach(x=>{
+      data[x.name]=x.type==='checkbox'?x.checked:x.value;
+    });
+    (dealMode==='loan'?loanDrafts:transferDrafts).set(chosen||loanSelected?.id||dealId||'',data);
+  };
+  const restoreDraft=()=>{
+    const form=host?.querySelector(dealMode==='loan'?'#tr-loan-form':'#tr-offer-form');
+    const entry=(dealMode==='loan'?loanDrafts:transferDrafts).get(chosen||loanSelected?.id||dealId||'');
+    if(!form||!entry)return;
+    form.querySelectorAll('input[name],select[name]').forEach(x=>{
+      if(!Object.hasOwn(entry,x.name))return;
+      if(x.type==='checkbox')x.checked=Boolean(entry[x.name]);
+      else x.value=entry[x.name];
+    });
+    window.FMLoanNegotiations?.sync?.(host);updatePayments();
+  };
   const payments=()=>window.FMTransferPayments;
   const deal=()=>model?.offers?.find(d=>d.id===dealId)||null;
   const openDeal=pid=>model?.offers?.find(d=>d.player_id===pid&&['manager_turn','agreed','pending_window'].includes(d.status))||null;
@@ -120,7 +151,7 @@
     return `<section class="tr-panel tr-loan-hub"><div class="tr-heading-row"><div><h3>Loans, free agents & buybacks</h3><p>Multi-round loan negotiations, salary sharing and complete options to buy. Registrations respect the transfer window.</p></div><span class="tr-tag">${data.summary.active} world loans · ${data.summary.unsigned} free agents</span></div><nav class="tr-loan-tabs">${[['active','My loans'],['talks',`Discussions (${(data.negotiations||[]).length})`],['outgoing','Loan out'],['incoming','Loan in'],['free','Free agents'],['buyback','Buybacks']].map(([id,name])=>`<button type="button" class="tr-btn" data-tr-loan-tab="${id}" aria-pressed="${loanMode===id}">${name}</button>`).join('')}</nav><div id="tr-loan-confirm" hidden></div><label class="tr-loan-search">Search <input type="search" id="tr-loan-search" value="${esc(loanQuery)}" placeholder="Search players or clubs"></label>${form}<div class="tr-loan-list">${rows||'<p class="tr-empty">No eligible players or agreements in this category.</p>'}</div>${!data.window_open?'<p class="tr-footnote">Loans can be negotiated now; registration occurs at the next window. Options to buy can be exercised in the eligible registration window.</p>':''}</section>`;
   }
   async function loadLoans(){
-    try{const response=await fetch('/api/loans',{cache:'no-store'});if(!response.ok)throw Error('HTTP '+response.status);loansModel=await response.json();if(host&&tab==='loans')draw();}
+    try{const response=await fetch('/api/loans',{cache:'no-store'});if(!response.ok)throw Error('HTTP '+response.status);loansModel=await response.json();if(host&&(tab==='loans'||view==='loans'||dealMode==='loan')){if(requestedLoanTalk){const talk=loansModel.negotiations?.find(t=>t.id===requestedLoanTalk);if(talk){loanSelected={mode:'loan',id:talk.player_id,owner:talk.parent_id,borrower:talk.borrower_id,talkId:talk.id};chosen=talk.player_id;loanMode='talks';}requestedLoanTalk=null;}draw();}}
     catch(error){const message=host?.querySelector('#ln-feedback');if(message)message.textContent='Loans: '+error.message;else console.error('Loan read:',error.message);}
   }
   async function postLoan(command){
@@ -151,6 +182,7 @@
     return `<section class="tr-panel tr-proposal"><div class="tr-panel-top"><div><div class="tr-kicker">YOUR OFFER</div><h3>Build your offer</h3><p>Set your upfront payment. Add installments or optional clauses only when you need them.</p></div></div>
       ${!model.window_open?`<p class="tr-terms-warning">Window closed: you can negotiate now. A signed deal will be registered no earlier than ${esc(model.window?.opens_on||'the next window')}.</p>`:''}
       <form id="tr-offer-form" novalidate>
+        ${player()?.club_id===model.club_id&&!dealRecord?`<label class="tr-offer-buyer">Potential buying club<select name="buyer_id" required><option value="">Choose club…</option>${(loansModel?.destinations||[]).filter(x=>x.id!==model.club_id).map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')}</select></label>`:''}
         <div class="tr-upfront-section"><label for="tr-upfront-field">Upfront payment (£)</label><div class="tr-amount-row">${moneyField('fixed_gbp',fixed,'Upfront payment')}${increments('fixed_gbp')}</div></div>
         <div class="tr-installments-section"><div class="tr-clause-heading"><div><strong>Installments <span class="tr-muted">(optional)</span></strong><small>Add a separate amount, payable after registration.</small></div><label class="tr-switch"><input id="tr-installments-enabled" type="checkbox" role="switch" aria-label="Add payment in installments" ${scheduled?'checked':''}><span></span></label></div>
           <div id="tr-installments-fields" ${scheduled?'':'hidden'}>
@@ -189,11 +221,11 @@
   }
 
   function discussion(d){
-    const history=d?.history||[], tolerance=d?.tolerance||{level:'Open',remaining_percent:100};
+    const history=[...(d?.prior_loan_history||[]),...(d?.history||[])], tolerance=d?.tolerance||{level:'Open',remaining_percent:100};
     const own=model.club_id, otherId=d?(d.seller_id===own?d.buyer_id:d.seller_id):player()?.club_id;
     const otherName=d?(d.seller_id===own?d.buyer:d.seller):player()?.club;
     const other=clubVisual(otherId,otherName);
-    const lastOther=[...history].reverse().find(e=>!e.by_manager);
+    const lastOther=[...history].reverse().find(e=>!e.by_manager&&e.mode!=='loan');
     const terms=lastOther?.terms;
     const accepted=['agreed','pending_window','completed'].includes(d?.status);
     const label=d?.status==='manager_turn'?'Counteroffer received':d?statuses[d.status]:'Opening talks';
@@ -205,7 +237,7 @@
       <div class="tr-stance-cards"><section class="tr-stance-card"><h4>Current club terms</h4><div class="tr-party">${transferCrest(otherId,otherName)}<span><strong>${esc(other.display_name)}</strong><small>${lastOther?'Their communicated proposal':'Awaiting a first response'}</small></span></div>${termRows}
         ${d?.may_answer?`<div class="tr-stance-actions"><button type="button" class="tr-btn tr-btn-primary" data-tr-accept="${esc(d.id)}">Accept club terms</button><button type="button" class="tr-btn tr-btn-danger" data-tr-reject="${esc(d.id)}">Reject</button></div>`:''}</section>
       <section class="tr-stance-card"><h4>What they're open to</h4><div class="tr-party">${transferCrest(otherId,otherName)}<span><strong>${esc(other.display_name)}</strong><small>Based on actual discussions</small></span></div>${features.length?`<ul class="tr-communicated-terms">${features.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'<p class="tr-empty-stance">Not yet communicated.</p>'}<p class="tr-knowledge-note">No hidden price range or private acceptance threshold is shown.</p></section></div>
-      <div class="tr-thread-section"><div class="tr-kicker">CONVERSATION</div><div class="tr-thread" role="log" aria-label="Negotiation conversation">${history.length?[...history].reverse().map(e=>`<article class="tr-message ${e.by_manager?'is-own':''}" data-fm-club-theme="${esc(e.by_club_id)}" data-fm-club-name="${esc(e.by_club)}"><div class="tr-message-dot"></div>${transferCrest(e.by_club_id,e.by_club)}<div class="tr-message-content"><div class="tr-message-meta"><strong>${esc(clubVisual(e.by_club_id,e.by_club).display_name)}</strong><time>${esc(e.on_date)}</time></div><p>${esc(e.note)}</p><strong class="tr-message-fee">${brief(e.terms.fixed_gbp)} upfront${e.terms.installments_gbp?` + ${brief(e.terms.installments_gbp)} in installments`:''}</strong>${e.terms.installments_gbp?`<span>${e.terms.installment_count} payments · every ${e.terms.installment_interval_months} months</span>`:''}<span>${e.terms.bonuses.length?e.terms.bonuses.map(b=>`${brief(b.amount_gbp)} after ${b.threshold} ${esc(b.kind)}`).join(' · '):'No performance bonuses'}${e.terms.sell_on_percent?` · ${e.terms.sell_on_percent}% future ${e.terms.sell_on_type==='profit'?'profit':'fee'}`:''}${e.terms.buyback_gbp?` · Buyback ${brief(e.terms.buyback_gbp)}`:''}</span></div></article>`).join(''):'<div class="tr-thread-empty">No messages yet. Your opening amount is entirely your choice.</div>'}</div></div>
+      <div class="tr-thread-section"><div class="tr-kicker">CONVERSATION</div><div class="tr-thread" role="log" aria-label="Negotiation conversation">${history.length?[...history].reverse().map(e=>`<article class="tr-message ${e.by_manager?'is-own':''}" data-fm-club-theme="${esc(e.by_club_id)}" data-fm-club-name="${esc(e.by_club)}"><div class="tr-message-dot"></div>${transferCrest(e.by_club_id,e.by_club)}<div class="tr-message-content"><div class="tr-message-meta"><strong>${esc(clubVisual(e.by_club_id,e.by_club).display_name)}</strong><time>${esc(e.on_date)}</time></div><p>${esc(e.note)}</p><strong class="tr-message-fee">${e.mode==='loan'?`Loan · ${e.terms.months} months · ${e.terms.borrower_wage_percent}% wages`:brief(e.terms.fixed_gbp)+' upfront'+(e.terms.installments_gbp?' + '+brief(e.terms.installments_gbp)+' in installments':'')}</strong>${e.mode!=='loan'&&e.terms.installments_gbp?`<span>${e.terms.installment_count} payments · every ${e.terms.installment_interval_months} months</span>`:''}<span>${e.mode==='loan'?'Proposed role: '+esc(e.terms.playing_time):(e.terms.bonuses||[]).length?e.terms.bonuses.map(b=>`${brief(b.amount_gbp)} after ${b.threshold} ${esc(b.kind)}`).join(' · '):'No performance bonuses'}${e.mode!=='loan'&&e.terms.sell_on_percent?` · ${e.terms.sell_on_percent}% future ${e.terms.sell_on_type==='profit'?'profit':'fee'}`:''}${e.mode!=='loan'&&e.terms.buyback_gbp?` · Buyback ${brief(e.terms.buyback_gbp)}`:''}</span></div></article>`).join(''):'<div class="tr-thread-empty">No messages yet. Your opening amount is entirely your choice.</div>'}</div></div>
       ${accepted?'<p class="tr-terms-warning">Club agreement reached. Registration and player consent determine the actual transfer date.</p>':''}</section>`;
   }
 
@@ -222,16 +254,30 @@
     return window.FMContractNegotiations?.form({quote,talk,id:'tr-personal-form'})||
       '<section class="tr-panel">Contract negotiation module unavailable. Reload the game.</section>';
   }
+  function embeddedLoanView(){
+    if(!loansModel)return '<section class="tr-panel"><h3>Loading loan terms…</h3><p>The player and conversation will stay on this page.</p></section>';
+    const context=loanCounterpart(),p=player()||{id:chosen,name:'Player',age:'?',position:'?',ovr:null};
+    if(!context.parent)return '<section class="tr-panel">Choose a player before preparing the loan.</section>';
+    return window.FMLoanNegotiations?.render?.({
+      embedded:true,player:{...p,name:p.name||p.full_name||'Player'},
+      managerId:model.club_id,managerName:model.club,
+      parentId:context.parent,parentName:context.parent===model.club_id?model.club:(p.club||context.otherName),
+      borrowerId:context.borrower,borrowerName:context.borrower===model.club_id?model.club:context.otherName,
+      talk:context.talk,day:loansModel.as_of||model.date,
+      destinations:loansModel.destinations||[]})||
+      '<section class="tr-panel">Loan offer editor unavailable. Reload the game.</section>';
+  }
   function negotiationView(){
     const d=deal(),p=player()||d?.player_profile;
     if(!p&&!d)return `<div class="tr-immersive"><button class="tr-btn" data-tr-back>← Back to Scouting</button><p class="tr-empty">This player or negotiation is no longer available.</p></div>`;
     const actual=p||{}, own=model.club_id;
-    const otherId=d?(d.seller_id===own?d.buyer_id:d.seller_id):actual.club_id;
-    const otherName=d?(d.seller_id===own?d.buyer:d.seller):actual.club;
+    const loanContext=dealMode==='loan'?loanCounterpart():null;
+    const otherId=loanContext?.otherId||(d?(d.seller_id===own?d.buyer_id:d.seller_id):actual.club_id);
+    const otherName=loanContext?.otherName||(d?(d.seller_id===own?d.buyer:d.seller):actual.club);
     const other=clubVisual(otherId,otherName),manager=clubVisual(own,model.club);
     const nation=window.FMPortraits?.nation?.(actual.nationality,'tr-player-nation')||esc(actual.nationality||'');
     const face=window.FMPortraits?.portrait?.(actual,'tr-player-face')||`<span class="tr-player-face">${esc(actual.name?.[0]||'?')}</span>`;
-    const previous=!d?openDeal(actual.id):null;
+    const previous=dealMode==='transfer'&&!d?openDeal(actual.id):null;
     const editable=(!d&&!previous)||d?.may_answer;
     const knowledge=actual.knowledge_source==='scout_report'?`Report: ${actual.observed_on}`:actual.knowledge_source==='public'?'Public knowledge':actual.knowledge_source==='own_club'?'Your player':'Not scouted';
     let content;
@@ -241,23 +287,24 @@
     else if(previous)content=`<section class="tr-panel"><h3>Existing discussion</h3><p>Continue the active negotiation for this player.</p><button type="button" class="tr-btn tr-btn-primary" data-tr-deal="${esc(previous.id)}">Open negotiation →</button></section>`;
     else if(editable)content=compose(d);
     else content=`<section class="tr-panel tr-closed"><div class="tr-kicker">${esc(statuses[d?.status]||'DISCUSSION')}</div><h3>${esc(d?.status==='rejected'?'Negotiations ended':statuses[d?.status]||'Awaiting response')}</h3><p>${esc(d?.reason||'')}</p><p>No further offer can be sent in this discussion. The history remains available.</p><button type="button" class="tr-btn" data-tr-back>Back to Scouting</button></section>`;
-    return `<div class="tr-immersive tr-fix02"><header class="tr-immersive-header"><div class="tr-page-title"><button type="button" class="tr-back" data-tr-back>← Back to ${esc(window.FMNavigation?.previousLabel?.()||'Scouting')}</button><h1>Transfer Negotiation</h1></div><span class="tr-immersive-tag">TS-FIX-02 · TRANSFER NEGOTIATION</span></header>
+    return `<div class="tr-immersive tr-fix02"><header class="tr-immersive-header"><div class="tr-page-title"><button type="button" class="tr-back" data-tr-back>← Back to ${esc(window.FMNavigation?.previousLabel?.()||'Scouting')}</button><h1>Negotiation</h1></div><span class="tr-immersive-tag">TS-FIX-02 · TRANSFER NEGOTIATION</span></header>
+      <div class="tr-deal-mode tr-inline-mode" role="group" aria-label="Choose offer structure"><span>OFFER STRUCTURE</span><button type="button" class="tr-btn ${dealMode==='transfer'?'tr-btn-primary':''}" aria-pressed="${dealMode==='transfer'}" data-tr-switch-transfer="${esc(d?.player_id||actual.id||'')}">Permanent transfer</button><button type="button" class="tr-btn ${dealMode==='loan'?'tr-btn-primary':''}" aria-pressed="${dealMode==='loan'}" data-tr-switch-loan="${esc(d?.player_id||actual.id||'')}" data-tr-owner="${esc(d?.seller_id||actual.club_id||'')}">Loan</button><small>One discussion · flexible terms</small></div>
       <section class="tr-neg-hero"><div class="tr-hero-player" data-fm-club-theme="${esc(actual.club_id)}" data-fm-club-name="${esc(actual.club)}">${face}<div class="tr-player-identity"><h2>${esc(actual.name||d.player)}</h2><p>${esc(actual.age??'??')} years old · ${esc(actual.position||'')} · ${nation}</p><div class="tr-rating-facts"><div><small>OVR</small><strong title="General overall, not match-adjusted rating">${actual.ovr===null||actual.ovr===undefined?'??':Number(actual.ovr).toFixed(1)}</strong></div><div><small>Market value</small><strong title="${actual.value_gbp==null?'Unknown':money(actual.value_gbp)}">${actual.value_gbp==null?'??':brief(actual.value_gbp)}</strong></div><span class="tr-tag tr-knowledge-tag">${esc(knowledge)}</span></div></div></div>
-      <div class="tr-hero-club" data-fm-club-theme="${esc(otherId)}" data-fm-club-name="${esc(otherName)}">${transferCrest(otherId,otherName,true)}<div><small class="tr-kicker">${d?.direction==='incoming'?'BUYING CLUB':'SELLING CLUB'}</small><h3>${esc(other.display_name)}</h3><p>${esc(d?.direction==='incoming'?'Your negotiating counterpart':actual.league||'')}</p><button class="tr-btn" type="button" data-tr-club="${esc(otherId)}">View Club →</button></div></div>
+      <div class="tr-hero-club" data-fm-club-theme="${esc(otherId)}" data-fm-club-name="${esc(otherName)}">${transferCrest(otherId,otherName,true)}<div><small class="tr-kicker">${dealMode==='loan'?'OTHER CLUB':d?.direction==='incoming'?'BUYING CLUB':'SELLING CLUB'}</small><h3>${esc(other.display_name)}</h3><p>${esc(d?.direction==='incoming'?'Your negotiating counterpart':actual.league||'')}</p><button class="tr-btn" type="button" data-tr-club="${esc(otherId)}">View Club →</button></div></div>
       <div class="tr-hero-club tr-own-club">${transferCrest(own,model.club,true)}<div><small class="tr-kicker">YOUR CLUB</small><h3>${esc(manager.display_name)}</h3><p>${esc(model.club_league||'')}</p></div></div>
       <div class="tr-hero-budget"><small>Available transfer budget</small><strong>${brief(d?.available_upfront_gbp??model.available_transfer_budget_gbp)}</strong><span>Upfront payment budget</span><button type="button" class="tr-btn" data-tr-finances>View Finances →</button></div></section>
       <div id="tr-feedback" role="status" aria-live="polite" hidden></div><div id="tr-confirm" hidden></div>
-      <div class="tr-neg-layout"><div class="tr-neg-main">${content}</div><aside class="tr-neg-sidebar">${d?.status==='agreed'&&d.direction==='outgoing'&&window.FMContractNegotiations?
+      ${dealMode==='loan'?embeddedLoanView():`<div class="tr-neg-layout"><div class="tr-neg-main">${content}</div><aside class="tr-neg-sidebar">${d?.status==='agreed'&&d.direction==='outgoing'&&window.FMContractNegotiations?
         window.FMContractNegotiations.panel({quote:d.personal_quote,talk:{mode:'transfer',dealId:d.id,
         patience:d.personal_patience??100,status:d.personal_status,counter:d.personal_terms,
         history:d.personal_history||[],reason:d.personal_status==='counter'?d.reason:''},
-        clubId:model.club_id,clubName:model.club}):discussion(d)}</aside></div></div>`;
+        clubId:model.club_id,clubName:model.club}):discussion(d)}</aside></div>`}</div>`;
   }
 
   function draw(){
     if(!host||!model)return;
     if(view==='negotiation'&&deal()?.may_answer)countering=true;
-    host.innerHTML=view==='negotiation'?negotiationView():searchView();
+    host.innerHTML=view==='negotiation'?negotiationView():view==='loans'?`<div class="tr-immersive tr-fix02"><header class="tr-immersive-header"><div class="tr-page-title"><button class="tr-back" type="button" data-tr-back>← Back to Transfers</button><h1>Choose a player for a loan</h1></div></header>${loanHub()}</div>`:searchView();
     if(view==='negotiation'){
       const sidebar=document.querySelector('.sidebar');
       if(sidebar){let brand=sidebar.querySelector('.tr-sidebar-club');if(!brand){brand=document.createElement('div');brand.className='tr-sidebar-club';sidebar.prepend(brand);}
@@ -297,8 +344,8 @@
       sell_on_percent:sellActive?Number(form.elements.namedItem('sell_on_percent').value):0,
       buyback_gbp:buybackPrice,buyback_until:buybackDate||null};
     if(!Number.isSafeInteger(fixed)||fixed<0||bonuses.some(b=>!Number.isSafeInteger(b.amount_gbp)||!Number.isSafeInteger(b.threshold)))throw Error('Use valid integer offer values');
-    if(terms.fixed_gbp>(deal()?.available_upfront_gbp??model.available_transfer_budget_gbp) && (!deal()||deal().direction==='outgoing'))throw Error('The upfront amount exceeds your available transfer budget');
-    if(terms.installments_gbp>(deal()?.available_installment_credit_gbp??model.installment_finance?.available_credit_gbp??0) && (!deal()||deal().direction==='outgoing'))throw Error('Installments exceed board credit. Check Finances for the allowance and existing commitments.');
+    if(terms.fixed_gbp>(deal()?.available_upfront_gbp??model.available_transfer_budget_gbp) && (!deal()&&player()?.club_id!==model.club_id||deal()?.direction==='outgoing'))throw Error('The upfront amount exceeds your available transfer budget');
+    if(terms.installments_gbp>(deal()?.available_installment_credit_gbp??model.installment_finance?.available_credit_gbp??0) && (!deal()&&player()?.club_id!==model.club_id||deal()?.direction==='outgoing'))throw Error('Installments exceed board credit. Check Finances for the allowance and existing commitments.');
     return terms;
   }
   function showFeedback(message,error=true){
@@ -360,10 +407,14 @@
   }
   function mount(element,options={}){
     if(host!==element){host=element;listen();}
-    const next=options.view==='negotiation'?'negotiation':'scouting';
-    view=next;chosen=options.playerId||null;dealId=options.dealId||null;countering=false;lastError='';
+    const next=options.view==='negotiation'?'negotiation':options.view==='loans'?'loans':'scouting';
+    view=next==='loans'&&(options.playerId||options.talkId)?'negotiation':next;
+    dealMode=next==='loans'?'loan':'transfer';chosen=options.playerId||null;dealId=options.dealId||null;countering=false;lastError='';
+    loanDrafts.clear();transferDrafts.clear();
+    loanSelected=next==='loans'&&chosen?{mode:'loan',id:chosen,owner:options.ownerId||null}:null;requestedLoanTalk=options.talkId||null;
+    if(next==='loans')loanMode=chosen?'incoming':requestedLoanTalk?'talks':'active';
     if(options.tab)tab=options.tab;
-    if(tab==='loans')loadLoans();
+    if(tab==='loans'||view==='loans'||dealMode==='loan'||(view==='negotiation'&&!dealId))loadLoans();
     host.innerHTML='<section class="tr-panel">Loading scouting...</section>';refresh();
   }
   function toggleClause(type){
@@ -375,6 +426,26 @@
   function listen(){
     host.addEventListener('click',async ev=>{
       const button=ev.target.closest('button');if(!button||!host.contains(button))return;
+      if(button.dataset.trSwitchLoan!==undefined){
+        if(dealMode==='loan')return;
+        saveDraft();dealMode='loan';chosen=button.dataset.trSwitchLoan||chosen;
+        loanSelected=loanSelected||{mode:'loan',id:chosen,owner:button.dataset.trOwner||player()?.club_id,
+          borrower:deal()?.buyer_id};
+        await loadLoans();draw();restoreDraft();return;
+      }
+      if(button.dataset.trSwitchTransfer!==undefined){
+        if(dealMode==='transfer')return;
+        saveDraft();dealMode='transfer';chosen=button.dataset.trSwitchTransfer||chosen;
+        const linked=currentLoanTalk()?.linked_transfer_deal_id;
+        if(linked){dealId=linked;await refresh();}
+        else {
+          // A loan-to-transfer proposal starts as a draft. The existing loan
+          // talk remains live until the manager actually submits that draft.
+          if(currentLoanTalk()?.status==='counter')dealId=null;
+          draw();restoreDraft();
+        }
+        return;
+      }
       if(button.dataset.trClub){nav()?.club(button.dataset.trClub);return;}
       if(button.hasAttribute('data-tr-finances')){nav()?.navigate('Finances');return;}
       if(button.dataset.trStep){const field=host.querySelector(`[name="${button.dataset.trStep}"]`);if(field){try{field.value=payments().format(Math.min(500000000,Math.max(0,payments().amount(field.value)+Number(button.dataset.trDelta))));updatePayments();}catch(error){showFeedback(error.message);}}return;}
@@ -390,9 +461,9 @@
       if(button.dataset.trTab){tab=button.dataset.trTab;draw();if(tab==='loans')loadLoans();return;}
       if(button.dataset.trLoanTab){loanMode=button.dataset.trLoanTab;loanSelected=null;draw();return;}
       if(button.hasAttribute('data-tr-loan-reload')){await loadLoans();return;}
-      if(button.hasAttribute('data-tr-loan-cancel')){loanSelected=null;draw();return;}
-      if(button.dataset.trLoanSelect){loanSelected={mode:'loan',id:button.dataset.trLoanSelect,owner:button.dataset.trLoanOwner};draw();return;}
-      if(button.dataset.trLoanTalk){const talk=(loansModel?.negotiations||[]).find(t=>t.id===button.dataset.trLoanTalk);if(talk){loanSelected={mode:'loan',id:talk.player_id,owner:talk.parent_id,borrower:talk.borrower_id,talkId:talk.id};draw();}return;}
+      if(button.hasAttribute('data-tr-loan-cancel')){if(view==='negotiation'){dealMode='transfer';draw();}else{loanSelected=null;draw();}return;}
+      if(button.dataset.trLoanSelect){loanSelected={mode:'loan',id:button.dataset.trLoanSelect,owner:button.dataset.trLoanOwner};chosen=loanSelected.id;dealMode='loan';view='negotiation';draw();return;}
+      if(button.dataset.trLoanTalk){const talk=(loansModel?.negotiations||[]).find(t=>t.id===button.dataset.trLoanTalk);if(talk){loanSelected={mode:'loan',id:talk.player_id,owner:talk.parent_id,borrower:talk.borrower_id,talkId:talk.id};chosen=talk.player_id;dealMode=talk.linked_transfer_deal_id?'transfer':'loan';dealId=talk.linked_transfer_deal_id||null;view='negotiation';if(dealId)await refresh();else draw();}return;}
       if(button.hasAttribute('data-ln-add-bonus')){const holder=host.querySelector('#ln-bonuses');if(holder&&holder.children.length<3)holder.insertAdjacentHTML('beforeend',window.FMLoanNegotiations.bonus());return;}
       if(button.hasAttribute('data-ln-remove')){button.closest('[data-ln-bonus]')?.remove();window.FMLoanNegotiations.sync(host);return;}
       if(button.dataset.lnAccept||button.dataset.lnWalk){const action=button.dataset.lnAccept?'loan_accept_counter':'loan_walk';const id=button.dataset.lnAccept||button.dataset.lnWalk;const result=await postLoan({action,talk_id:id});if(result){if(action==='loan_walk')loanSelected=null;await loadLoans();}return;}
@@ -481,9 +552,18 @@
         ev.preventDefault();const f=ev.target;if(!f.reportValidity()||!loanSelected)return;
         try{
           const cmd={action:'loan_propose',player_id:loanSelected.id,parent_id:loanSelected.owner,borrower_id:f.elements.namedItem('borrower_id').value,
+                     ...(!loanSelected.talkId&&deal()?.may_answer?{source_transfer_deal_id:dealId}:{}),
                      ...(loanSelected.talkId?{talk_id:loanSelected.talkId}:{}),terms:window.FMLoanNegotiations.read(f)};
           const reply=await postLoan(cmd);
-          if(reply){loanSelected.talkId=reply.talk_id||loanSelected.talkId;loanSelected.borrower=cmd.borrower_id;await loadLoans();}
+          if(reply){
+            loanSelected.talkId=reply.talk_id||loanSelected.talkId;loanSelected.borrower=cmd.borrower_id;
+            if(cmd.source_transfer_deal_id)dealId=null;
+            if(reply.status==='alternate_transfer'&&reply.transfer_deal_id){
+              // The selling club changed the offer type. Stay on this SAME page.
+              dealMode='transfer';dealId=reply.transfer_deal_id;
+              await refresh();await loadLoans();
+            }else await loadLoans();
+          }
         }catch(error){const notice=host.querySelector('#ln-feedback');if(notice)notice.textContent=error.message;}
         return;
       }
@@ -501,13 +581,23 @@
       if(ev.target.id!=='tr-offer-form')return;ev.preventDefault();
       let terms;try{terms=validateTerms();}catch(error){showFeedback(error.message);return;}
       const p=player(),d=deal();
-      const command=countering&&d?{action:'counter',deal_id:d.id,terms}:
+      const command=dealMode==='transfer'&&!d&&currentLoanTalk()?.status==='counter'?{action:'transfer_from_loan',talk_id:currentLoanTalk().id,terms}:
+        countering&&d?{action:'counter',deal_id:d.id,terms}:
+        p?.club_id===model.club_id?
+        {action:'offer_sale',player_id:p.id,buyer_id:host.querySelector('#tr-offer-form [name="buyer_id"]')?.value,terms}:
         p?{action:'submit',seller_id:p.club_id,player_id:p.id,terms}:null;
       if(!command)return;
       const result=await post(command);if(!result)return;
       countering=false;
-      if(result.deal_id&&!dealId)nav()?.negotiateDeal(result.deal_id,true);
-      else await refresh();
+      if(result.status==='alternate_loan'&&result.loan_talk_id){
+        dealId=result.deal_id||dealId;chosen=p.id;dealMode='loan';
+        loanSelected={mode:'loan',id:p.id,owner:p.club_id,borrower:model.club_id,
+                      talkId:result.loan_talk_id};
+        await loadLoans();await refresh();
+      }else{
+        if(result.deal_id)dealId=result.deal_id;
+        await refresh();
+      }
     });
   }
   window.FMTransfers=Object.freeze({mount,refresh});

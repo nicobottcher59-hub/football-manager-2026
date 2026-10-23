@@ -1,0 +1,99 @@
+/* TS-UI-09 Transfer Centre. Stable IDs and shared club theme, no team-specific colours. */
+body.tsui-transfers-active .sidebar{background:linear-gradient(170deg,#061420,#06111d 57%,var(--ui-club-soft,#102b40) 180%);border-right-color:rgba(var(--ui-club-highlight-rgb,30,150,220),.3)}
+body.tsui-transfers-active .sidebar::before{background:repeating-linear-gradient(37deg,transparent 0 51px,rgba(var(--ui-club-rgb,20,122,204),.07) 52px 54px),radial-gradient(ellipse at 12% 95%,rgba(var(--ui-club-rgb,20,122,204),.18),transparent 70%)}
+body.tsui-transfers-active .sidebar .nav-item.is-active{background:linear-gradient(110deg,rgba(var(--ui-club-rgb,20,122,204),.44),#10283e);border-color:rgba(var(--ui-club-highlight-rgb,30,150,220),.65);color:white;box-shadow:inset 3px 0 var(--ui-club-highlight,#46a8ea)}
+body.tsui-transfers-active .sidebar .nav-item.is-active svg{color:var(--ui-club-highlight,#6bb9ee)}
+.fm-transfer-centre-screen,.fm-transfer-centre-screen *{box-sizing:border-box}
+.fm-transfer-centre-screen{width:100%;min-width:0;--tc-accent:var(--ui-club-highlight,#46a8ea);--tc-rgb:var(--ui-club-highlight-rgb,35,136,209);--tc-base:var(--ui-club-rgb,20,130,205);color:#e8f4fc;font-family:inherit;font-size:12px}
+.tc-centre{width:100%;display:grid;gap:13px;padding:3px 0 34px;max-width:none}
+.tc-centre button,.tc-centre input,.tc-centre select{font-family:inherit}
+.tc-centre button{cursor:pointer}
+.tc-centre button:disabled{cursor:not-allowed;opacity:.42}
+.tc-centre :is(button,input,select):focus-visible{outline:2px solid var(--tc-accent);outline-offset:2px}
+.tc-card{min-width:0;border:1px solid #29526a;border-radius:10px;background:linear-gradient(150deg,#0b2a42 0%,#071d30 95%);box-shadow:inset 0 1px #ffffff0c;overflow:hidden}
+.tc-button{background:#082d48;border:1px solid #30698a;color:#d9f1ff;border-radius:6px;min-height:30px;padding:6px 10px;font-size:10px;font-weight:780;white-space:nowrap}
+.tc-button:hover{background:#155071;border-color:var(--tc-accent)}
+.tc-banner{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 17px;border:1px solid #8d663f;background:#42322356;border-radius:8px;color:#ffe6b5}
+.tc-top-grid{display:grid;grid-template-columns:minmax(0,2.45fr) minmax(240px,.84fr);gap:13px;min-height:163px}
+.tc-hero{position:relative;display:grid;grid-template-columns:minmax(220px,1.14fr) minmax(145px,.69fr) minmax(260px,1.33fr);gap:0;align-items:stretch;min-height:163px;border-color:rgba(var(--tc-rgb),.47);isolation:isolate}
+.tc-hero:before{content:'';position:absolute;inset:0;background:linear-gradient(95deg,rgba(var(--tc-base),.10),transparent 68%);pointer-events:none;z-index:0}
+.tc-hero-art{min-height:161px;background:linear-gradient(90deg,transparent 38%,#0b253df7 100%),url('assets/transfers-transfer-window.jpg') 8% center/cover no-repeat;position:relative}
+.tc-hero-art:after{position:absolute;content:'';inset:0;background:linear-gradient(180deg,#00122003,#0012205a)}
+.tc-club-block{display:flex;align-items:center;gap:14px;padding:18px 14px;min-width:0;z-index:1;border-right:1px solid #36607666}
+.tc-club-block h2{font-size:16px;line-height:1.15;margin:0 0 6px;color:white}
+.tc-club-block p{margin:0 0 10px;color:#a8c7d9;font-size:11px}
+.tc-crest{object-fit:contain;display:inline-flex;align-items:center;justify-content:center;flex:none;width:30px;height:30px;border-radius:6px;vertical-align:middle}
+.tc-shield{clip-path:polygon(50% 0%,91% 12%,87% 74%,50% 100%,13% 74%,9% 12%);font-weight:900;font-size:11px;background:linear-gradient(150deg,var(--tc-shield,#447d9d),#092237);border:1px solid #bddeff55;color:white}
+.tc-club-large{width:61px;height:67px;max-width:30%;border-radius:5px}
+.tc-hero-finances{display:grid;grid-template-columns:1fr 1fr;align-content:stretch;position:relative;z-index:1}
+.tc-hero-finances>div{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:7px;padding:17px 18px;min-width:0}
+.tc-hero-finances>div+div{border-left:1px solid #34607a66}
+.tc-hero-finances small{font-size:10px;color:#bdd5e6}
+.tc-hero-finances strong{font-size:23px;color:#fff;font-variant-numeric:tabular-nums}
+.tc-hero-finances span{font-size:10px;color:#91b7d1}
+.tc-market-window{padding:20px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.tc-window-top{display:flex;align-items:flex-start;gap:13px}.tc-calendar-icon{width:37px;height:38px;display:grid;place-items:center;border:1px solid #32617a;border-radius:8px;background:#0b314a;font-size:25px;color:#c3e9ff}
+.tc-window-top h3{font-size:14px;margin:1px 0 9px;color:#fff}.tc-window-top strong{font-size:14px;display:flex;align-items:center;gap:7px}.tc-window-top p{margin:6px 0 0;font-size:10px;color:#adc8db}
+.tc-positive{color:#74f0bd!important}.tc-muted{color:#b8cadd}.tc-window-dot{width:9px;height:9px;border-radius:50%;background:currentColor;display:inline-block}
+.tc-window-track{height:10px;border-radius:20px;background:#1b4059;border:1px solid #32617a;overflow:hidden}
+.tc-window-track span{height:100%;display:block;border-radius:20px;background:linear-gradient(90deg,#1acbaa,#62efae)}
+.tc-market-window>small{font-size:10px;color:#9dbacc}
+.tc-filter-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:1px 0}
+.tc-filter-label{font-size:10px;color:#a9c7d9;font-weight:800;margin-right:4px}
+.tc-type-button{color:#b7d9ee;border:1px solid #315c7b;background:#0a283f;border-radius:7px;padding:8px 16px;font-size:11px;font-weight:800}
+.tc-type-button.is-selected{color:#fff;border-color:var(--tc-accent);background:linear-gradient(120deg,rgba(var(--tc-base),.46),#0a2e49);box-shadow:inset 2px 0 var(--tc-accent)}
+.tc-prepare-loan{margin-left:auto;min-height:35px}
+.tc-offer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;align-items:start}
+.tc-offer-panel{min-height:377px}
+.tc-card-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:15px 16px;border-bottom:1px solid #2e567052}
+.tc-card-heading h3{font-size:17px;line-height:1.15;color:#f8fbff;margin:0;font-weight:900}
+.tc-card-heading p{font-size:10px;color:#9dbed2;margin:5px 0 0;line-height:1.38}
+.tc-count{font-size:13px;color:var(--tc-accent)}
+.tc-table-head,.tc-offer-row{display:grid;grid-template-columns:minmax(90px,1.35fr) minmax(74px,.99fr) 61px 73px minmax(78px,.94fr) 65px 56px;gap:6px;align-items:center}
+.tc-table-head{font-size:9px;text-transform:uppercase;color:#92b8d3;letter-spacing:.35px;padding:12px 13px 8px;border-bottom:1px solid #2a506762;font-weight:750}
+.tc-offer-row{padding:9px 13px;min-height:58px;border-bottom:1px solid #2a526e75}
+.tc-offer-row:last-child{border-bottom:0}.tc-offer-row:hover,.tc-short-row:hover,.tc-history-row:hover{background:rgba(var(--tc-base),.12)}
+.tc-person{display:flex;align-items:center;gap:9px;min-width:0}.tc-person-name{min-width:0}.tc-person-name strong,.tc-short-name strong{display:block;color:#fff;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tc-person-name small,.tc-short-name small{color:#9cbed4;font-size:9px;display:flex;align-items:center;gap:4px;margin-top:4px}
+.tc-face{flex:0 0 34px;display:grid;place-items:center;width:34px;height:39px;min-width:34px;border-radius:7px;overflow:hidden;object-fit:cover;background:linear-gradient(145deg,#3c819d,#092c45);border:1px solid #49799c;color:#c4eaff;font-size:18px;font-weight:800}
+.tc-other{display:flex;gap:7px;min-width:0;align-items:center;color:#cee4f6;font-size:10px}.tc-other span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tc-other .tc-crest{width:26px;height:29px}
+.tc-type{font-size:10px;border:1px solid #46718c;border-radius:5px;background:#0e3049;padding:5px 3px;text-align:center;white-space:nowrap}
+.tc-money{font-size:11px;font-weight:850;color:#edf9ff;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tc-status{display:inline-block;border-radius:5px;font-size:9px;font-weight:800;padding:5px 6px;line-height:1.25;text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.tc-good{color:#92f6bf;border:1px solid #238565;background:#0a45364c}.tc-amber{color:#ffda7c;border:1px solid #95712d;background:#4a341a75}.tc-red{color:#ffacb5;border:1px solid #925264;background:#46233375}.tc-blue{color:#a9d8fb;border:1px solid #3a779e;background:#11395677}
+.tc-date{color:#9fc1d4;font-size:9px;white-space:nowrap}.tc-row-action{min-height:28px;padding:6px 7px}
+.tc-empty{padding:35px 14px;color:#9fbed0;text-align:center;font-size:11px}.tc-small-note{padding:8px 15px;color:#9bbdce;font-size:10px}
+.tc-bottom-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(215px,.74fr) minmax(225px,.92fr);gap:13px;align-items:start}
+.tc-shortlist,.tc-finance,.tc-activity{min-height:291px}
+.tc-short-controls{display:flex;gap:8px;padding:10px 14px;border-bottom:1px solid #2a526e66}
+.tc-short-controls input,.tc-short-controls select{font-size:10px;background:#092a41;color:#eaf8ff;border:1px solid #3a6380;border-radius:6px;padding:7px 10px;min-width:0}
+.tc-short-controls input{flex:1}.tc-short-controls select{width:133px}
+.tc-short-scroll{max-height:465px;overflow-y:auto}
+.tc-short-row{display:grid;grid-template-columns:20px 34px minmax(95px,1.1fr) minmax(86px,1fr) 72px 87px 86px;align-items:center;gap:7px;min-height:52px;border-bottom:1px solid #2b4f6566;padding:7px 12px}
+.tc-short-row .tc-face{width:32px;min-width:32px;height:35px;flex-basis:32px}
+.tc-favorite{background:none;border:none;color:#f5cd59;font-size:17px;padding:0;min-width:16px}
+.tc-short-name{min-width:0}.tc-short-club{display:flex;gap:5px;align-items:center;font-size:9px;color:#b4d4e6;min-width:0}.tc-short-club .tc-crest{width:23px;height:25px}.tc-short-club span{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.tc-short-value{font-weight:820;font-size:10px;color:#cbe9fa;white-space:nowrap}.tc-scout-status{font-size:9px;color:#a7d9c9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tc-short-row .tc-button{padding:6px 5px;min-height:28px}.tc-more{margin:10px 12px}
+.tc-finance{padding-bottom:14px}.tc-finance-list{padding:0 15px;margin:8px 0 15px}.tc-finance-list div{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 0}
+.tc-finance-list dt{color:#b7d0e0;font-size:10px}.tc-finance-list dd{font-size:11px;font-weight:900;margin:0;white-space:nowrap;font-variant-numeric:tabular-nums}.tc-finance-list hr{border:0;border-top:1px solid #2a526b;margin:5px 0}
+.tc-finance>.tc-button{margin-left:15px}.tc-activity-list{max-height:475px;overflow-y:auto}.tc-activity-row{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:10px 13px;border-bottom:1px solid #284f6966}
+.tc-activity-row>div:first-child{min-width:0}.tc-activity-row strong{display:block;color:#f6fbff;font-size:10px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}.tc-activity-row small{display:block;color:#97b8cb;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
+.tc-activity-row>div:last-child{text-align:right;min-width:66px}
+.tc-history-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 15px;padding:4px 13px 10px}.tc-history-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid #2a516970;min-width:0}.tc-history-row>div{min-width:0;flex:1}
+.tc-history-row strong{display:block;font-size:11px;color:#f4faff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tc-history-row small{display:block;font-size:9px;color:#9ebed0;margin-top:4px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.tc-loading{padding:30px;text-align:center}.tc-flag{width:15px;height:12px;object-fit:cover}.tc-flag-fallback{font-size:9px}
+@media (max-width:1520px){.tc-hero{grid-template-columns:minmax(145px,.82fr) minmax(165px,.95fr) minmax(280px,1.3fr)}.tc-offer-row,.tc-table-head{grid-template-columns:minmax(75px,1.4fr) minmax(58px,.9fr) 49px 63px minmax(65px,1fr) 0 53px;gap:5px}.tc-date,.tc-table-head span:nth-child(6){display:none}.tc-short-row{grid-template-columns:18px 31px minmax(82px,1fr) minmax(75px,.8fr) 61px 82px 75px;gap:5px}}
+@media (max-width:1190px){.tc-top-grid{grid-template-columns:minmax(0,1.7fr) minmax(185px,.8fr)}.tc-hero{grid-template-columns:minmax(120px,.75fr) minmax(155px,1fr)}.tc-hero-finances{grid-column:1/-1;border-top:1px solid #31556d55}.tc-hero-art{min-height:145px}.tc-offer-grid{grid-template-columns:1fr}.tc-table-head,.tc-offer-row{grid-template-columns:minmax(130px,1.25fr) minmax(95px,1fr) 80px 85px 100px 72px 63px}.tc-date,.tc-table-head span:nth-child(6){display:block}.tc-bottom-grid{grid-template-columns:minmax(0,1.5fr) minmax(190px,.7fr)}.tc-activity{grid-column:1/-1}.tc-short-row{grid-template-columns:18px 32px minmax(90px,1fr) minmax(84px,1fr) 75px 92px 83px}}
+@media (max-width:760px){.tc-top-grid,.tc-bottom-grid{grid-template-columns:1fr}.tc-activity{grid-column:auto}.tc-hero{grid-template-columns:38% 62%}.tc-hero-finances{grid-column:1/-1}.tc-market-window{padding:14px}.tc-offer-grid{gap:12px}.tc-table-head,.tc-offer-row{grid-template-columns:minmax(105px,1.4fr) minmax(85px,1fr) 55px 75px 60px}.tc-date,.tc-table-head span:nth-child(6),.tc-table-head span:nth-child(3),.tc-type{display:none}.tc-short-row{grid-template-columns:18px 34px minmax(100px,1fr) minmax(72px,1fr) 76px}.tc-short-value,.tc-scout-status{display:none}.tc-history-list{grid-template-columns:1fr}.tc-prepare-loan{margin-left:0}}
+@media (max-width:440px){.tc-hero{grid-template-columns:1fr}.tc-hero-art{min-height:105px}.tc-hero-finances{grid-template-columns:1fr 1fr}.tc-hero-finances strong{font-size:16px}.tc-hero-finances>div{padding:11px}.tc-table-head,.tc-offer-row{grid-template-columns:minmax(100px,1.5fr) 75px 78px 56px}.tc-other,.tc-table-head span:nth-child(2){display:none}.tc-card-heading{padding:12px}.tc-card-heading h3{font-size:15px}.tc-short-row{grid-template-columns:16px 32px minmax(70px,1fr) 69px}.tc-short-club{display:none}.tc-short-controls{flex-wrap:wrap}.tc-short-controls select{width:100%}.tc-finance-list div{padding:8px 0}}
+
+/* Compact Transfer Centre viewport: preserve the two offer panels without horizontal page scrolling. */
+@media(max-width:600px){
+ body.tsui-transfers-active .app-header .club-identity,body.tsui-transfers-active .app-header .header-icon-button{display:none!important}
+ body.tsui-transfers-active .app-header .header-actions{min-width:0;max-width:150px;flex:0 1 auto}
+ body.tsui-transfers-active .app-header .continue-button{min-width:0;max-width:142px;padding-inline:9px}
+ .tc-offer-row,.tc-table-head{grid-template-columns:minmax(65px,1.4fr) 53px 68px 52px!important;gap:3px;padding-inline:7px}
+ .tc-offer-row .tc-money{font-size:10px}
+ .tc-row-action{font-size:9px;min-width:0;padding-inline:3px}
+ .tc-offer-panel{overflow:hidden}
+}

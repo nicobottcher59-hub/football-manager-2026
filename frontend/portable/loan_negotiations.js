@@ -18,18 +18,18 @@ function bonus(kind='appearances',threshold=20,value=10000){
  return `<div class="ln-bonus-row" data-ln-bonus><select data-ln-kind aria-label="Bonus trigger">${kinds.map(([id,label])=>`<option value="${id}" ${kind===id?'selected':''}>${label}</option>`).join('')}</select><input data-ln-threshold aria-label="Trigger" type="number" min="1" max="100" value="${h(threshold)}"><div class="tr-money"><span>£</span><input data-loan-money data-ln-amount inputmode="numeric" aria-label="Bonus amount" value="${h(window.FMTransferPayments.format(value||0))}"></div><button type="button" class="tr-btn" data-ln-remove>×</button></div>`;
 }
 function render(args){
- const {player,managerId,managerName,parentId,parentName,borrowerId,borrowerName,talk,day,destinations=[]}=args;
+ const {player,managerId,managerName,parentId,parentName,borrowerId,borrowerName,talk,day,destinations=[],embedded=false}=args;
  const t=talk?.terms||{};const purchase=t.purchase||{};const option=!!t.purchase;
  const isOut=parentId===managerId;
  const opponentId=isOut?borrowerId:parentId, opponentName=isOut?borrowerName:parentName;
  const patience=talk?.patience??100;
  const editable=!talk||talk.status==='counter';
- const history=talk?.history||[];
+ const history=[...(talk?.prior_transfer_history||[]),...(talk?.history||[])];
  const borrowerOptions=isOut?destinations.map(d=>`<option value="${h(d.id)}" ${d.id===borrowerId?'selected':''}>${h(d.name)}</option>`).join(''):`<option value="${h(managerId)}">${h(managerName)}</option>`;
  const portrait=window.FMPortraits?.portrait?.(player,'tr-player-face')||`<div class="ln-avatar">${h((player.name||'?').slice(0,1))}</div>`;
  const flag=window.FMPortraits?.nation?.(player.nationality,'tr-player-nation')||h(player.nationality||'');
  const canAccept=talk?.status==='counter'&&history.at(-1)?.by_club_id!==managerId;
- return `<section class="ln-negotiation">
+ const markup=`<section class="ln-negotiation">
     <header class="ln-hero"><div class="ln-player" data-fm-club-theme="${h(parentId)}" data-fm-club-name="${h(parentName)}">${portrait}<div><small class="tr-kicker">LOAN NEGOTIATION · ${h(talk?.status||'OPENING TALKS')}</small><h2>${h(player.name)}</h2><p>${h(player.position)} · ${h(player.age)} years · ${flag}</p><p>OVR ${player.ovr==null?'??':Number(player.ovr).toFixed(1)} · ${isOut?'Your player':'Outside scouting knowledge may be incomplete'}</p></div></div>
     <div class="ln-identity" data-fm-club-theme="${h(opponentId)}">${badge(opponentId,opponentName)}<div><small>OTHER CLUB</small><strong>${h(opponentName)}</strong><span>${isOut?'Borrower':'Parent club'}</span></div></div>
     <div class="ln-identity">${badge(managerId,managerName)}<div><small>YOUR CLUB</small><strong>${h(managerName)}</strong><span>${isOut?'Lender':'Borrower'}</span></div></div></header>
@@ -54,11 +54,19 @@ function render(args){
       <label class="ln-check"><input type="checkbox" id="ln-buyback" ${purchase.buyback_gbp?'checked':''} ${editable?'':'disabled'}> Include seller buyback right</label>
       <div id="ln-buyback-fields" ${purchase.buyback_gbp?'':'hidden'}>${number('Buyback fee',purchase.buyback_gbp||0,'buyback_gbp')}<label>Buyback expiry<input type="date" name="buyback_until" value="${h(purchase.buyback_until||dateForBuyback(day))}"></label></div>
     </div></div>
-    <div class="ln-actions">${editable?`<button class="tr-btn tr-btn-primary" type="submit">${talk?'Send revised loan offer':'Submit loan proposal'} →</button>`:''}${canAccept?`<button class="tr-btn" type="button" data-ln-accept="${h(talk.id)}">Accept club counteroffer</button>`:''}${talk&&['counter','pending_window'].includes(talk.status)?`<button class="tr-btn" type="button" data-ln-walk="${h(talk.id)}">Walk away</button>`:''}<button type="button" class="tr-btn" data-tr-loan-cancel>Back to loans</button></div>
+    <div class="ln-actions">${editable?`<button class="tr-btn tr-btn-primary" type="submit">${talk?'Send revised loan offer':'Submit loan proposal'} →</button>`:''}${canAccept?`<button class="tr-btn" type="button" data-ln-accept="${h(talk.id)}">Accept club counteroffer</button>`:''}${talk&&['counter','pending_window'].includes(talk.status)?`<button class="tr-btn" type="button" data-ln-walk="${h(talk.id)}">Walk away</button>`:''}<button type="button" class="tr-btn" data-tr-loan-cancel>Cancel proposal</button></div>
     <div id="ln-feedback" aria-live="polite" role="status"></div></form>
     <aside class="ln-right"><section class="tr-panel"><div class="tr-kicker">NEGOTIATION STATUS</div><div class="ln-toolbar"><h3>${h((talk?.status||'Open').replaceAll('_',' '))}</h3><strong>${patience<=25?'Critical':patience<=60?'Tense':'Open'}</strong></div><div class="ln-tolerance" role="meter" aria-label="Seller/borrower patience" aria-valuenow="${patience}" aria-valuemin="0" aria-valuemax="100"><span style="width:${patience}%"></span></div><small>Patience, not probability of accepting your offer</small><p>${h(talk?.reason||'The other club is willing to discuss a loan package.')}</p>${talk?.status==='pending_window'?`<p><strong>Agreement reached; waiting for the next registration window.</strong> No player or wage payments move yet.</p>`:''}</section>
     <section class="tr-panel"><div class="tr-kicker">CURRENT COUNTERPART TERMS</div>${talk?`<strong>${h(opponentName)}</strong><p>${h(t.months)} months · ${t.borrower_wage_percent}% wages paid by borrower · ${h(t.playing_time)} minutes role</p><p>Recall: ${t.recall_allowed?'Included':'Not included'} · Purchase option: ${t.purchase?fmt(t.purchase.fixed_gbp)+' upfront + '+fmt(t.purchase.installments_gbp)+' deferred':'None'}</p>`:'<p>Submit your own opening terms to receive a response. No hidden minimum price is displayed.</p>'}</section>
-    <section class="tr-panel"><div class="tr-kicker">CONVERSATION HISTORY</div><div class="ln-timeline">${history.length?history.map(r=>`<article class="ln-message">${badge(r.by_club_id,r.club)}<div><div class="ln-toolbar"><strong>${h(r.club)}</strong><small>${h(r.date)}</small></div><p>${h(r.note)}</p><small>${r.terms.months} months · ${r.terms.borrower_wage_percent}% wages · ${h(r.terms.playing_time)} · purchase ${r.terms.purchase?fmt(r.terms.purchase.fixed_gbp)+' upfront':'none'}</small></div></article>`).join(''):'<p>No messages yet. You decide the first proposal.</p>'}</div></section></aside></div></section>`;
+    <section class="tr-panel"><div class="tr-kicker">CONVERSATION HISTORY</div><div class="ln-timeline">${history.length?history.map(r=>`<article class="ln-message">${badge(r.by_club_id,r.club)}<div><div class="ln-toolbar"><strong>${h(r.club)}</strong><small>${h(r.date)}</small></div><p>${h(r.note)}</p><small>${r.mode==='transfer'?`Permanent offer · ${fmt(r.terms.fixed_gbp)} upfront`:`Loan · ${r.terms.months} months · ${r.terms.borrower_wage_percent}% wages · ${h(r.terms.playing_time)} · purchase ${r.terms.purchase?fmt(r.terms.purchase.fixed_gbp)+' upfront':'none'}`}</small></div></article>`).join(''):'<p>No messages yet. You decide the first proposal.</p>'}</div></section></aside></div></section>`;
+ if (!embedded) return markup;
+ // Keep only the existing loan builder/status cards. The parent negotiation
+ // supplies the shared player header and inline deal-type switch.
+ const start=markup.indexOf('<div class="ln-columns">');
+ const content=markup.slice(start+'<div class="ln-columns">'.length,-'</div></section>'.length);
+ return '<div class="tr-neg-layout ln-embedded-columns"><div class="tr-neg-main">'+
+   content.replace('<aside class="ln-right">','</div><aside class="tr-neg-sidebar ln-right">')+
+   '</div>';
 }
 function sync(host){
  const f=host.querySelector('#tr-loan-form');if(!f)return;

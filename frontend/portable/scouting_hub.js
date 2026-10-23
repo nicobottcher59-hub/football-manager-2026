@@ -51,10 +51,10 @@
   const button = (name,action,style='',disabled=false) => `<button type="button" class="sc-btn ${style}" data-sc-action="${esc(action)}" ${disabled?'disabled':''}>${esc(name)}</button>`;
   const pills = (values) => (values||[]).map(x=>`<span class="sc-position">${esc(x)}</span>`).join('');
   const valueOrUnknown = (value) => value == null ? '—' : esc(value);
-  const navTabs = () => `<nav class="sc-subnav" aria-label="Scouting pages">${[['hub','Scouting Hub'],['search','Player Search'],['shortlist',`Shortlist (${model?.shortlisted||0})`],['network',`Scout Network (${people().length})`]].map(([id,label])=>
+  const navTabs = () => `<nav class="sc-subnav" aria-label="Scouting pages">${[['hub','Scouting Hub'],['search','Player Search'],['network',`Scout Network (${people().length})`]].map(([id,label])=>
     `<button type="button" class="${page===id?'is-active':''}" data-sc-page="${id}" aria-current="${page===id?'page':'false'}">${esc(label)}</button>`).join('')}</nav>`;
   function hero(){
-    const id=identity(); const counts=[['Scouts',people().length],['Watching',`${model.occupied} / ${model.capacity}`],['Reports',model.reports_completed],['Shortlisted',model.shortlisted]];
+    const id=identity(); const counts=[['Scouts',people().length],['Watching',`${model.occupied} / ${model.capacity}`],['Reports',model.reports_completed],['Leads',model.recommendations.length]];
     return `<header class="sc-hero"><div class="sc-hero-identity"><span class="sc-hero-crest">${id.crest?`<img src="${esc(id.crest)}" alt="">`:'⚽'}</span>
       <div class="sc-hero-copy"><small>${esc(id.display_name)} · SCOUTING</small><h2>${page==='hub'?'Scouting centre':page==='search'?'Player search':page==='shortlist'?'Shortlist':'Scouting network'}</h2>
       <p>${page==='hub'?'Find talent. Build your future.':page==='search'?'Explore every registered professional player.':page==='shortlist'?'Your saved targets and observation priorities.':'Your scouts, destinations and workload.'}</p></div></div>
@@ -103,7 +103,7 @@
   const briefPlayer=p=>`${esc(p.position)} · ${p.age} yrs · ${flag(p.nationality)}`;
   function hub(){
     const recommended=model.recommendations.map(rec=>({rec,p:player(rec.player_id)})).filter(x=>x.p).slice(0,5);
-    const recent=model.players.filter(p=>p.priority).slice(0,5);
+    const reportStats={finished:model.reports_completed,working:model.occupied,scouts:people().length,leads:model.recommendations.length};
     return `<div class="sc-hub-grid">
       <section class="sc-card sc-hub-search"><div class="sc-card-title"><div><h3>⌕ &nbsp; Search players</h3><p>Find players worldwide with no discovery restrictions.</p></div></div>
         <form data-sc-form="hub">${formContents()}<div class="sc-hub-actions"><button class="sc-btn sc-btn-primary" type="submit">Search players →</button></div></form></section>
@@ -118,9 +118,9 @@
           <div class="sc-network-line-stats"><strong>${s.occupied} / ${s.capacity}</strong><small>Assigned</small></div></div>`).join(''):'<div class="sc-empty">No scouts hired. Recruit in the Staff department.</div>'}</div>
         <button type="button" data-sc-page="network" class="sc-wide-link">Manage scout network →</button></section>
     </div>
-    <section class="sc-card sc-short-preview"><div class="sc-card-title"><div><h3>★ &nbsp; Shortlist overview</h3><p>Keep an eye on your priority targets and finished reports.</p></div><button class="sc-btn" data-sc-page="shortlist">View full shortlist →</button></div>
-      <div class="sc-short-summary"><div class="sc-short-counts">${[['Total targets',model.shortlisted],['Top targets',model.players.filter(p=>p.priority==='top').length],['For future',model.players.filter(p=>p.priority==='future').length],['Monitoring',model.players.filter(p=>p.priority==='monitor').length]].map(([label,num])=>`<div><strong>${num}</strong><small>${label}</small></div>`).join('')}</div>
-      <div class="sc-short-recent">${recent.length?recent.map(p=>`<button data-sc-select="${esc(p.id)}" data-sc-open="shortlist">${portrait(p,'sc-list-face')}<strong>${esc(p.name)}</strong><small>${esc(p.position)}</small></button>`).join(''):'<p>Your shortlist is empty. Select players from search or recommendations.</p>'}</div></div></section>`;
+    <section class="sc-card sc-short-preview sc-intelligence-panel"><div class="sc-card-title"><div><h3>✦ &nbsp; Recruitment intelligence</h3><p>Scouting capacity, reports and worldwide leads. Saved targets now live in Transfers.</p></div><button type="button" class="sc-btn" data-sc-action="transfers">Open Transfers →</button></div>
+      <div class="sc-short-summary"><div class="sc-short-counts">${[['Reports',reportStats.finished],['Watching',reportStats.working],['Scouts',reportStats.scouts],['Leads',reportStats.leads]].map(([label,num])=>`<div><strong>${num}</strong><small>${label}</small></div>`).join('')}</div>
+      <div class="sc-intel-copy"><strong>From discovery to negotiation</strong><p>Assign scouts for better attribute ranges, add interesting players to your shortlist and manage all offers inside Transfers.</p><button type="button" class="sc-btn sc-btn-primary" data-sc-action="transfers">View shortlist & offers →</button></div></div></section>`;
   }
   function labelDestination(destination){
     if(!destination || destination==='all')return 'All available leagues';
@@ -250,7 +250,7 @@
     });
     host.addEventListener('click',event=>{
       const node=event.target.closest('button');if(!node||!host.contains(node))return;
-      if(node.dataset.scPage){toPage(node.dataset.scPage);return;}
+      if(node.dataset.scPage){if(node.dataset.scPage==='shortlist')window.FMNavigation?.navigate?.('Transfers');else toPage(node.dataset.scPage);return;}
       if(node.dataset.scPriorityFilter){shortlistFilter=node.dataset.scPriorityFilter;selected=null;draw();return;}
       if(node.dataset.scTab){profileTab=node.dataset.scTab;draw();return;}
       if(node.dataset.scSelect){if(node.dataset.scOpen)page=node.dataset.scOpen;selected=node.dataset.scSelect;profileTab='overview';
@@ -263,6 +263,7 @@
       if(cmd==='clear_filters'){filters={query:'',country:'',league:'',club:'',position:'',ageMin:'',ageMax:''};selected=null;draw();return;}
       if(cmd==='show_more'){limit+=100;draw();return;}
       if(cmd==='staff'){window.FMNavigation?.navigate?.('Staff');return;}
+      if(cmd==='transfers'){window.FMNavigation?.navigate?.('Transfers');return;}
       const [action,id]=cmd.split(':');if(!id)return;
       if(action==='negotiate'){
         const item=player(id);if(item)window.FMNavigation?.negotiatePlayer?.(id);
@@ -280,5 +281,5 @@
     if(host!==element){host=element;events();model=null;selected=null;page='hub';}
     if(!model)reload();else draw();
   }
-  window.FMScouting=Object.freeze({mount,refresh:reload});
+  window.FMScouting=Object.freeze({mount,refresh:reload,showSearch:()=>{if(host){page='search';selected=null;draw();}}});
 })();

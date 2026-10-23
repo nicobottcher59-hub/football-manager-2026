@@ -689,14 +689,15 @@ def process_ai_loans(world, boundary: date) -> list[dict]:
         club=reg.clubs[cid]
         if len(club.squad)<=20:
             continue
-        # Loan only a young deputy whom the parent can really spare.
+        # Loan an expendable deputy of ANY age: youth development,
+        # veteran minutes, squad flexibility and wage relief all count.
         options=[]
         for row in plan['assignments']:
             if row['layer']!=2 or row['position']=='GK':
                 continue
             pl=club.squad.get(row['player_id'])
             contract=reg.contracts.get(pl.id)
-            if (pl.age_on(boundary)>24 or pl.age_on(boundary)<17 or
+            if (pl.age_on(boundary)<17 or
                     contract is None or contract.club_id!=cid or
                     contract.expires_on < _date_plus_months(boundary,6) or
                     active_loan(reg,pl.id)):
@@ -704,7 +705,11 @@ def process_ai_loans(world, boundary: date) -> list[dict]:
             if not can_spare(club,reg.identities[cid].primary,pl.id,before=plan):
                 continue
             options.append(pl)
-        options.sort(key=lambda p:(p.age_on(boundary),p.overall_rating,p.id))
+        # Mix youth development opportunities with seasoned deputies who
+        # could benefit from playing regularly elsewhere. No age maximum.
+        options.sort(key=lambda p:(0 if p.age_on(boundary)<25 else
+            (0 if reg.contracts[p.id].weekly_wage_gbp>=18000 else 1),
+            p.overall_rating,p.id))
         for pl in options[:5]:
             lender_pool.append((cid,pl))
     if not lender_pool:
@@ -819,6 +824,32 @@ def review_loan_month(world,boundary:date)->dict:
             'released':released,'free_agent_signings':signed,'unsigned_retired':retired}
 
 
+
+def _loan_discovery_sample(candidates: list[dict], needs: set[str], limit: int = 250) -> list[dict]:
+    """Show professional borrowers at all ages without leaking private ratings.
+
+    The first-page loan list is a *discovery sample*, not an eligibility cap.
+    Round-robin through ages so a large academy intake cannot hide every
+    established professional behind the initial result limit.
+    """
+    by_age: dict[int, list[dict]] = {}
+    for candidate in candidates:
+        by_age.setdefault(candidate['age'], []).append(candidate)
+    for group in by_age.values():
+        group.sort(key=lambda p: (p['position'] not in needs, p['club_id'], p['name'], p['id']))
+    remaining = {age: iter(group) for age, group in by_age.items()}
+    result = []
+    while len(result) < limit and remaining:
+        for age in sorted(tuple(remaining)):
+            if len(result) >= limit:
+                break
+            try:
+                result.append(next(remaining[age]))
+            except StopIteration:
+                del remaining[age]
+    return result
+
+
 def loan_read_model(session)->dict:
     reg=session._world_squads
     manager=session.home_club.id
@@ -880,16 +911,12 @@ def loan_read_model(session)->dict:
                     and active_loan(reg,p.id) is None and con.expires_on>_date_plus_months(day,6)):
                 incoming.append(person(p,own=False)|{'club_id':cid,'club':club.name,
                           'weekly_gbp':None})
-    # The loan search should surface attainable young reinforcements first,
-    # instead of truncating a worldwide OVR-descending list to 250 stars.
-    manager_account=reg.club_finances[manager]
-    wage_room=max(0,manager_account.wage_budget_weekly_gbp-weekly_payroll(reg,manager))
+    # Candidate discovery is balanced across age groups. Youth, players in
+    # their prime and veterans all remain visible even in a crowded market.
+    # No hidden overall rating, salary or private willingness enters sorting.
     plan=squad_plan(reg.clubs[manager],reg.identities[manager].primary)
     needs={v['position'] for v in plan['vacancies'] if v['layer']<=2}
-    mean_ovr=(sum(p.overall_rating for p in reg.clubs[manager].squad.players) /
-              max(1,len(reg.clubs[manager].squad)))
-    # Sorting must not expose a player's hidden OVR or salary indirectly.
-    incoming.sort(key=lambda p:(p['position'] not in needs,p['age']>23,p['age'],p['name'],p['id']))
+    incoming=_loan_discovery_sample(incoming,needs)
     free=[]
     for pid,entry in reg.free_agents.items():
         demand=_free_demand(reg,entry,manager,day)
@@ -914,7 +941,7 @@ def loan_read_model(session)->dict:
             'manager_club_name':reg.clubs[manager].name,
             'negotiations':[public_loan_talk(t,reg) for t in sorted(reg.loan_talks.values(),key=lambda t:t.started_on,reverse=True) if manager in (t.parent_id,t.borrower_id)],
             'manager_club_id':manager,'loans':deals,'outgoing':outgoing,
-            'incoming':incoming[:250],'free_agents':free[:150],'buybacks':buybacks,
+            'incoming':incoming,'free_agents':free[:150],'buybacks':buybacks,
             'destinations':[{'id':cid,'name':club.name,'tier':reg.identities[cid].tier}
                             for cid,club in reg.clubs.items() if cid!=manager],
             'summary':{'active':sum(l.status=='active' for l in reg.loans.values()),

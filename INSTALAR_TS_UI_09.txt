@@ -1,0 +1,15 @@
+TS-UI-09 — Transfer Centre
+
+INSTALL ON TOP OF: TS-FIX-06 (with all previous TS-FIX and TS-UI patches present).
+
+1. Back up your game folder and save file before applying any ZIP.
+2. Close the game, stop its Python server, and extract this archive into the root of football-manager-2026 (the folder containing pyproject.toml).
+3. Preserve subdirectories and replace matching files.
+4. Start the Python server again and reload in the browser with Ctrl+F5.
+5. Open Transfers in the sidebar. Check: Sent/Received, Shortlist, Loan negotiation, Market Window, finance widgets.
+
+No additional installation dependencies. The save schema remains version 30.
+
+GitHub Desktop
+Branch: feat/ts-ui-09-transfer-centre
+Summary: feat(transfers): TS-UI-09 transfer centre, shortlist and loan entry points

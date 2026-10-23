@@ -317,3 +317,23 @@ body.tr-negotiation-open .tr-sidebar-club strong{font-size:11px;letter-spacing:.
  .tr-fix02 .tr-sliders{gap:20px}
  .tr-installment-summary{padding:8px 10px;margin-top:9px}
 }
+
+/* TS-UI-09: switch between permanent deals and loans in the same negotiation flow. */
+.tr-deal-mode{display:flex;align-items:center;gap:8px;margin:-10px 0 15px;padding:8px 0}
+.tr-deal-mode>span{color:#a7c9dc;font-size:10px;font-weight:900;letter-spacing:1px;margin-right:7px}
+.tr-deal-mode .tr-btn{min-width:96px}
+
+/* TS-UI-09.01 — same negotiation workspace, inline deal structure, no tab jump. */
+.tr-fix02 .tr-inline-mode{margin:0 0 12px;padding:11px 15px;border:1px solid #29485d;
+ background:linear-gradient(90deg,#0d293d,#0a2032);border-radius:10px;flex-wrap:wrap}
+.tr-inline-mode .tr-btn{min-width:0;border-radius:7px;padding:8px 18px}
+.tr-inline-mode small{color:#86a9c1;margin-left:auto;font-size:10px}
+.tr-fix02 .ln-embedded-columns{grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);gap:15px}
+.tr-fix02 .ln-embedded-columns>.tr-neg-main,.tr-fix02 .ln-embedded-columns>.tr-neg-sidebar{min-width:0}
+.tr-fix02 .ln-embedded-columns .ln-form{margin:0;padding:19px!important}
+.tr-fix02 .ln-embedded-columns .ln-right{display:grid;gap:14px;align-content:start}
+.tr-fix02 .ln-embedded-columns .ln-right>.tr-panel{margin:0}
+@media(max-width:950px){.tr-fix02 .ln-embedded-columns{grid-template-columns:1fr}.tr-inline-mode small{margin-left:0}}
+
+.tr-fix02 .tr-offer-buyer{display:grid;gap:7px;margin-bottom:14px;color:#a9ccdf;font-size:11px}
+.tr-fix02 .tr-offer-buyer select{width:100%;padding:11px;background:#0a293f;border:1px solid #39718d;color:#e6f5ff;border-radius:7px}

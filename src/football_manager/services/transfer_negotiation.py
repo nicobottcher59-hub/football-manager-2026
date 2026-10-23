@@ -190,7 +190,8 @@ def _terms_from_data(raw: dict, as_of: date, value: int) -> TransferTerms:
 
 
 def _status(reason: str, status: str, latest: TransferNegotiation) -> dict:
-    return {'deal_id':latest.deal_id,'status':status,'reason':reason,
+    return {'deal_id':latest.deal_id,'status':('alternate_loan' if latest.linked_loan_talk_id and status=='withdrawn' else status),
+            'loan_talk_id':latest.linked_loan_talk_id,'reason':reason,
             'fixed_gbp':latest.terms.fixed_gbp, 'expires_on':latest.expires_on.isoformat(),
             'pending_player_consent':status=='agreed'}
 
@@ -285,6 +286,54 @@ def _create_offer(registry, player_id: str, seller: str, buyer: str, as_of: date
     return record
 
 
+
+def _prefer_loan_instead_of_sale(reg,player,seller,buyer,on_date,offer):
+    """Occasional genuine alternative when the seller prefers retaining ownership."""
+    if offer.status!='manager_turn' or offer.tolerance_remaining<=12:
+        return False
+    from football_manager.services.ai_squad_planning import can_spare,squad_plan
+    if not can_spare(reg.clubs[seller],reg.identities[seller].primary,player.id):
+        return False
+    contract=reg.contracts[player.id]
+    remaining=(contract.expires_on-on_date).days
+    from football_manager.services.loan_market import _can_loan
+    try:
+        _can_loan(reg,player.id,seller,buyer,on_date,12,50,'backup',None,
+                  registration_on=__import__('football_manager.services.transfer_windows',fromlist=['next_opening']).next_opening(on_date,reg.clubs[buyer].country))
+    except ValueError:
+        return False
+    # Strong reluctance to sell a replaceable player with a long contract;
+    # age contributes only softly (no minimum/maximum loan age).
+    age=player.age_on(on_date)
+    wage=contract.weekly_wage_gbp
+    team=sorted((p.overall_rating for p in reg.clubs[seller].squad.players),reverse=True)
+    better=sum(v>player.overall_rating+1 for v in team)
+    reason_score=(3 if remaining>850 else 0)+(2 if better>=8 else 0)+(1 if wage<18000 else 0)+(1 if age<=23 else 0)
+    return reason_score>=5 and offer.terms.guaranteed_gbp < _seller_target(reg,seller,buyer,player,contract,on_date)*.75
+
+
+def _offer_loan_instead_of_sale(session,offer,player):
+    """Emit one real loan counterproposal instead of a second independent page."""
+    from football_manager.domain.loan_negotiation import LoanTerms, LoanRound, LoanTalk
+    reg=session._world_squads
+    now=session.current_date
+    parent,borrower=offer.seller_id,offer.buyer_id
+    if any(t.player_id==player.id and t.parent_id==parent and t.borrower_id==borrower
+           and t.status in ('counter','pending_window','agreed','active') for t in reg.loan_talks.values()):
+        return offer
+    loan_terms=LoanTerms(12,50,'backup',True,None)
+    msg='We prefer to retain ownership. We can offer a one-year loan instead of a permanent sale.'
+    key=f'tsfix06-talk-{reg.loan_next_id:06d}'
+    reg.loan_next_id+=1
+    talk=LoanTalk(key,player.id,parent,borrower,offer.started_on,now+timedelta(days=35),
+        'counter',loan_terms,(LoanRound(now,parent,loan_terms,msg),),
+        offer.tolerance_remaining,None,msg,source_transfer_deal_id=offer.deal_id)
+    talk.validate()
+    reg.loan_talks[key]=talk
+    updated=replace(offer,status='withdrawn',reason=msg,linked_loan_talk_id=key)
+    updated.validate()
+    return updated
+
 def negotiate(session, command: dict) -> dict:
     """Transactional adapter: command is applied to a cloned session by caller."""
     registry=session._world_squads
@@ -308,6 +357,43 @@ def negotiate(session, command: dict) -> dict:
                 'available_transfer_budget_gbp':_availability(registry,manager,now),
                 'available_installment_credit_gbp':deferred_capacity(registry,manager,now),
                 'note':'Your financial commitment only. This does not predict seller acceptance.'}
+    if action=='transfer_from_loan':
+        # Switch one existing club conversation to a permanent offer, keeping
+        # the loan transcript and remaining patience. No player is moved.
+        talk=registry.loan_talks.get(command.get('talk_id'))
+        if (talk is None or talk.status!='counter' or talk.expires_on<now or
+                talk.linked_transfer_deal_id or manager not in (talk.parent_id,talk.borrower_id)):
+            raise ValueError('This loan negotiation cannot become a transfer proposal')
+        seller,buyer,pid=talk.parent_id,talk.borrower_id,talk.player_id
+        _can_start(registry,pid,seller,buyer,now)
+        player,_=_player(registry,pid,seller)
+        terms=_terms_from_data(command.get('terms'),now,_quote(registry,player).value_gbp)
+        if buyer==manager:
+            from football_manager.services.transfer_installments import validate_financing
+            validate_financing(registry,buyer,terms,now)
+        initial=_create_offer(registry,pid,seller,buyer,now,terms,manager)
+        bridged=replace(initial,started_on=talk.started_on,
+            tolerance_remaining=talk.patience,linked_loan_talk_id=talk.talk_id,
+            refusal_count=min(30,len(talk.rounds)//2))
+        answered=_apply_ai_reply(registry,bridged,now)
+        answered.validate()
+        registry.transfer_offers[initial.deal_id]=answered
+        registry.loan_talks[talk.talk_id]=replace(talk,status='converted',
+            reason='Manager proposed permanent transfer terms instead',
+            linked_transfer_deal_id=answered.deal_id)
+        return _status(answered.reason,answered.status,answered)
+    if action=='offer_sale':
+        # Manager offers to sell a registered own player to a selected club.
+        buyer=command.get('buyer_id');pid=command.get('player_id')
+        if not isinstance(buyer,str) or buyer==manager or not isinstance(pid,str):
+            raise ValueError('Choose a buyer and a registered player to sell')
+        _can_start(registry,pid,manager,buyer,now)
+        player,_=_player(registry,pid,manager)
+        terms=_terms_from_data(command.get('terms'),now,_quote(registry,player).value_gbp)
+        proposed=_create_offer(registry,pid,manager,buyer,now,terms,manager)
+        answered=_apply_ai_reply(registry,proposed,now)
+        registry.transfer_offers[proposed.deal_id]=answered
+        return _status(answered.reason,answered.status,answered)
     if action=='submit':
         # Negotiations run year-round. Only player registration is window-bound.
         seller=command.get('seller_id')
@@ -321,6 +407,8 @@ def negotiate(session, command: dict) -> dict:
         validate_financing(registry,manager,terms,now)
         offer=_create_offer(registry,pid,seller,manager,now,terms,manager)
         answered=_apply_ai_reply(registry,offer,now)
+        if _prefer_loan_instead_of_sale(registry,player,seller,manager,now,answered):
+            answered=_offer_loan_instead_of_sale(session,answered,player)
         registry.transfer_offers[offer.deal_id]=answered
         return _status(answered.reason,answered.status,answered)
     deal_id=command.get('deal_id')
@@ -495,7 +583,14 @@ def transfer_read_model(session) -> dict:
         public_personal=(dict(interested=personal['interested'],reason=personal['reason'],
             role=personal['role'],years=personal['years'],max_years=personal['max_years'],
             wage_range=public_wage_range(personal['weekly_wage_gbp'])) if personal else None)
-        offers.append({'id':item.deal_id,'direction':'outgoing' if item.buyer_id==manager else 'incoming',
+        earlier=registry.loan_talks.get(item.linked_loan_talk_id) if item.linked_loan_talk_id else None
+        earlier_history=([{'on_date':r.on_date.isoformat(),'by_club_id':r.by_club_id,
+            'by_club':registry.clubs[r.by_club_id].name,'by_manager':r.by_club_id==manager,
+            'note':r.note,'mode':'loan','terms':{'months':r.terms.months,
+            'borrower_wage_percent':r.terms.borrower_wage_percent,
+            'playing_time':r.terms.playing_time}} for r in earlier.rounds] if earlier else [])
+        offers.append({'id':item.deal_id,'linked_loan_talk_id':item.linked_loan_talk_id,
+            'prior_loan_history':earlier_history,'direction':'outgoing' if item.buyer_id==manager else 'incoming',
             'player_id':item.player_id,'player':player.full_name,'seller_id':item.seller_id,
             'buyer_id':item.buyer_id,'seller':registry.clubs[item.seller_id].name,
             'buyer':registry.clubs[item.buyer_id].name,'status':'expired' if inactive else item.status,

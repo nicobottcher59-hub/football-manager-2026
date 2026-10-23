@@ -1,0 +1,7 @@
+TS-UI-09.01 — Instalación incremental
+BASE: TS-UI-09 sobre TS-FIX-06
+Respaldar código y partidas (guardados pasarán de v30 a v31).
+Cerrar Python y navegador. Extraer en la raíz football-manager-2026 reemplazando archivos.
+Reiniciar, Ctrl+F5. No instalar sobre versiones anteriores a TS-UI-09.
+Branch: feat/ts-ui-09-01-unified-negotiations
+Commit: feat(transfers,loans): TS-UI-09.01 unified negotiation modes and veteran loans

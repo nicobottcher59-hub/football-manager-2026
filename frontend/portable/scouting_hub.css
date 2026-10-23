@@ -196,3 +196,8 @@ body.tsui-scouting-active .sidebar-bottom-icon{color:var(--ui-club-highlight)}
   .sc-profile-club-name{overflow-wrap:normal!important}
   .sc-profile-club-name>span{overflow-wrap:break-word!important}
 }
+
+/* TS-UI-09: saved targets moved to Transfers, leaving scouting intelligence. */
+.sc-intel-copy{display:flex;flex-direction:column;gap:9px;align-items:flex-start;justify-content:center;padding:12px 15px;color:#c2dcec}
+.sc-intel-copy>strong{font-size:15px;color:white}.sc-intel-copy>p{margin:0;line-height:1.55;font-size:12px;max-width:410px}
+@media(max-width:900px){.sc-intelligence-panel .sc-short-summary{grid-template-columns:1fr}.sc-intelligence-panel .sc-short-counts{grid-template-columns:repeat(4,minmax(0,1fr))}}

@@ -59,15 +59,20 @@ class LoanTalk:
     patience: int = 100
     loan_id: str | None = None
     reason: str = ''
+    # An AI club may propose a permanent transfer in this same conversation.
+    linked_transfer_deal_id: str | None = None
+    source_transfer_deal_id: str | None = None
 
     def validate(self):
         if (not self.talk_id or not self.player_id or not self.parent_id or not self.borrower_id
                 or self.parent_id == self.borrower_id or type(self.started_on) is not date
                 or type(self.expires_on) is not date or self.expires_on < self.started_on
-                or self.status not in ('counter','agreed','pending_window','active','broken','walked','expired','failed')
+                or self.status not in ('counter','agreed','pending_window','active','broken','walked','expired','failed','converted')
                 or not isinstance(self.terms, LoanTerms) or type(self.rounds) is not tuple
                 or not 1 <= len(self.rounds) <= 24 or type(self.patience) is not int
-                or not 0 <= self.patience <= 100 or not isinstance(self.reason,str) or len(self.reason)>240):
+                or not 0 <= self.patience <= 100 or not isinstance(self.reason,str) or len(self.reason)>240
+                or (self.linked_transfer_deal_id is not None and not isinstance(self.linked_transfer_deal_id,str))
+                or (self.source_transfer_deal_id is not None and not isinstance(self.source_transfer_deal_id,str))):
             raise ValueError('Invalid loan negotiation')
         self.terms.validate()
         for round_ in self.rounds:

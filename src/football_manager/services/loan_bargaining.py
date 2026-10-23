@@ -13,7 +13,7 @@ from football_manager.services.club_economy import _date_plus_months, weekly_pay
 from football_manager.services.transfer_windows import next_opening, window_open
 from football_manager.services.ai_squad_planning import squad_plan
 
-ACTIVE = ('counter', 'agreed', 'pending_window')
+ACTIVE = ('counter', 'agreed', 'pending_window')  # 'converted' talks are read-only historical links
 
 
 def parse_loan_terms(payload: dict, now: date) -> LoanTerms:
@@ -158,6 +158,55 @@ def _register(session, pid, parent, borrower, terms, *, talk_id=None):
     return result
 
 
+
+def _prefer_permanent_sale(reg, player, parent, borrower, now, terms, dispute):
+    """Contextual alternative: loans stay possible at EVERY professional age.
+
+    This is an offer preference, not an age eligibility check. The lender may
+    offer a sale if retaining the player on loan makes little financial/sporting
+    sense. Normal loan bargaining remains available for veterans.
+    """
+    if terms.purchase is not None or dispute < 16:
+        return False
+    club=reg.clubs[parent]
+    wage=reg.contracts[player.id].weekly_wage_gbp
+    annual=reg.club_finances[parent].wage_budget_weekly_gbp
+    remaining=(reg.contracts[player.id].expires_on-now).days
+    plan=squad_plan(club,reg.identities[parent].primary)
+    second_string=any(a['player_id']==player.id and a['layer']>=2 for a in plan['assignments'])
+    financially_important=wage>=max(18000,annual//16)
+    expiring=remaining<=650
+    veteran=player.age_on(now)>=27  # small preference only; NEVER a veto
+    preference=int(second_string)*2+int(financially_important)*2+int(expiring)*2+int(veteran)
+    return preference>=5
+
+
+def _offer_transfer_alternative(session, talk, player):
+    """Seller sends an actual permanent-transfer counteroffer, no payment yet."""
+    from football_manager.domain.transfer_negotiation import NegotiationEvent, TransferNegotiation
+    from football_manager.services.transfer_negotiation import _seller_target
+    reg=session._world_squads
+    now=session.current_date
+    contract=reg.contracts[player.id]
+    target=_seller_target(reg,talk.parent_id,talk.borrower_id,player,contract,now)
+    fee=min(500_000_000,max(5000,round(target/5000)*5000))
+    terms=TransferTerms(fee)
+    key=f't24-{reg.transfer_next_id:06d}'
+    reg.transfer_next_id+=1
+    message='We prefer a permanent sale instead of a loan. Here is our transfer counteroffer.'
+    record=TransferNegotiation(key,player.id,talk.parent_id,talk.borrower_id,
+        talk.started_on,now+timedelta(days=21),'manager_turn',talk.parent_id,terms,
+        (NegotiationEvent(now,talk.parent_id,terms,message),),reason=message,
+        refusal_count=max(0,len(talk.rounds)//2),tolerance_remaining=talk.patience,
+        linked_loan_talk_id=talk.talk_id)
+    record.validate()
+    reg.transfer_offers[key]=record
+    reg.loan_talks[talk.talk_id]=replace(talk,status='converted',reason=message,
+                                        linked_transfer_deal_id=key)
+    return {'talk_id':talk.talk_id,'status':'alternate_transfer',
+            'transfer_deal_id':key,'patience':talk.patience,
+            'reason':message,'transfer_terms':{'fixed_gbp':fee}}
+
 def loan_talk_command(session,cmd):
     reg=session._world_squads
     manager=session.home_club.id
@@ -179,6 +228,15 @@ def loan_talk_command(session,cmd):
     if action!='loan_propose':
         raise ValueError('Unsupported loan negotiation operation')
     old=reg.loan_talks.get(cmd.get('talk_id')) if cmd.get('talk_id') else None
+    from_transfer=None
+    if old is None and cmd.get('source_transfer_deal_id'):
+        from_transfer=reg.transfer_offers.get(cmd.get('source_transfer_deal_id'))
+        if (from_transfer is None or from_transfer.status!='manager_turn' or
+                from_transfer.player_id!=cmd.get('player_id') or
+                from_transfer.seller_id!=cmd.get('parent_id') or
+                from_transfer.buyer_id!=cmd.get('borrower_id') or
+                from_transfer.expires_on<now):
+            raise ValueError('The original transfer discussion is no longer available')
     if old is not None and old.expires_on<now:
         raise ValueError('This conversation expired; start a new negotiation')
     if old is not None and old.status!='counter':
@@ -213,8 +271,8 @@ def loan_talk_command(session,cmd):
         reg.loan_next_id+=1
         key=f'tsfix06-talk-{idx:06d}'
         rounds=()
-        patience=100
-        started=now
+        patience=from_transfer.tolerance_remaining if from_transfer else 100
+        started=from_transfer.started_on if from_transfer else now
     else:
         key=old.talk_id
         rounds=old.rounds
@@ -230,11 +288,25 @@ def loan_talk_command(session,cmd):
                        terms if accepted else counter,reason)
     next_status='agreed' if accepted else 'counter' if patience>0 else 'broken'
     talked=LoanTalk(key,pid,parent,borrower,started,now+timedelta(days=35),
-                    next_status,response.terms,rounds+(submitted,response),patience,None,reason)
+                    next_status,response.terms,rounds+(submitted,response),patience,None,reason,
+                    source_transfer_deal_id=from_transfer.deal_id if from_transfer else
+                        (old.source_transfer_deal_id if old else None))
     talked.validate()
     reg.loan_talks[key]=talked
+    if from_transfer:
+        # One discussion: moving the proposal to loans closes its transfer
+        # phase, without erasing offers, history or inherited patience.
+        reg.transfer_offers[from_transfer.deal_id]=replace(from_transfer,
+            status='withdrawn',linked_loan_talk_id=key,
+            reason='Manager revised the offer structure to a loan')
     if accepted:
         return _agree(session,talked,terms)
+    if (from_transfer is None and parent!=manager and next_status=='counter' and
+            _prefer_permanent_sale(reg,player,parent,borrower,now,terms,disagreement) and
+            not any(d.player_id==pid and d.buyer_id==borrower and
+                d.status in ('manager_turn','agreed','pending_window')
+                for d in reg.transfer_offers.values())):
+        return _offer_transfer_alternative(session,talked,player)
     return {'talk_id':key,'status':next_status,'patience':patience,'reason':reason,
             'terms':public_loan_terms(response.terms)}
 
@@ -273,11 +345,18 @@ def public_loan_terms(terms):
 
 
 def public_loan_talk(talk,registry):
-    return {'id':talk.talk_id,'player_id':talk.player_id,'parent_id':talk.parent_id,
+    old=registry.transfer_offers.get(talk.source_transfer_deal_id) if talk.source_transfer_deal_id else None
+    from football_manager.services.transfer_negotiation import terms_as_json
+    former=([{'date':r.on_date.isoformat(),'by_club_id':r.by_club_id,
+             'club':registry.clubs[r.by_club_id].name,'note':r.note,'mode':'transfer',
+             'terms':terms_as_json(r.terms)} for r in old.events] if old else [])
+    return {'id':talk.talk_id,'prior_transfer_history':former,'player_id':talk.player_id,'parent_id':talk.parent_id,
             'parent':registry.clubs[talk.parent_id].name,'borrower_id':talk.borrower_id,
             'borrower':registry.clubs[talk.borrower_id].name,'status':talk.status,
             'patience':talk.patience,'reason':talk.reason,'expires_on':talk.expires_on.isoformat(),
-            'loan_id':talk.loan_id,'terms':public_loan_terms(talk.terms),
+            'loan_id':talk.loan_id, 'linked_transfer_deal_id':talk.linked_transfer_deal_id,
+            'source_transfer_deal_id':talk.source_transfer_deal_id,
+            'terms':public_loan_terms(talk.terms),
             'history':[{'date':r.on_date.isoformat(),'by_club_id':r.by_club_id,
                         'club':registry.clubs[r.by_club_id].name,'note':r.note,
                         'terms':public_loan_terms(r.terms)} for r in talk.rounds]}
