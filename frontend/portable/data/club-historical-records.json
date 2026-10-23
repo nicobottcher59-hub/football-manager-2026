@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "notes": "Optional verified pre-career records keyed by stable club ID. Keep separate from career-generated season reports. No fictional historic titles are prepopulated.",
+  "clubs": {}
+}

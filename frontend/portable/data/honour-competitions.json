@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "description": "Presentation-only trophy categories. Counts always come from confirmed career champions and separately imported pre-career history. Extend countries and match IDs here, never hardcode counts.",
+  "countries": {
+    "england": {
+      "aliases": ["England", "English", "ENG"],
+      "categories": [
+        {
+          "id": "eng-leagues-all", "label": "English Leagues", "subtitle": "All divisions", "rank": 10,
+          "competition_ids": ["dev-premier", "dev-championship", "dev-league-one", "dev-league-two", "premier-league", "english-first-division", "first-division", "championship", "league-one", "league-two", "english-premier-league", "football-league-first-division"],
+          "image": "premier-league.png"
+        },
+        {
+          "id": "eng-fa-cup", "label": "FA Cup", "rank": 20,
+          "competition_ids": ["fa-cup", "english-fa-cup", "the-fa-cup"], "image": "fa-cup.png"
+        },
+        {
+          "id": "eng-carabao", "label": "Carabao Cup", "rank": 30,
+          "competition_ids": ["carabao-cup", "efl-cup", "league-cup", "english-league-cup"], "image": "carabao-cup.png"
+        },
+        {
+          "id": "eng-lower", "label": "Lower Division Titles", "subtitle": "Included in English Leagues", "rank": 80,
+          "competition_ids": ["dev-championship", "dev-league-one", "dev-league-two", "championship", "league-one", "league-two"],
+          "image": "english-lower-leagues.png", "subset_of": "eng-leagues-all"
+        },
+        {
+          "id": "eng-efl-trophy", "label": "EFL Trophy", "rank": 90,
+          "competition_ids": ["efl-trophy", "english-football-league-trophy", "football-league-trophy", "efl-trophy-cup"]
+        }
+      ]
+    }
+  },
+  "regions": {
+    "uefa": {
+      "countries": ["England", "Scotland", "Wales", "Northern Ireland", "Ireland", "France", "Germany", "Spain", "Italy", "Portugal", "Netherlands", "Belgium", "Switzerland", "Austria", "Denmark", "Sweden", "Norway", "Finland", "Iceland", "Poland", "Czechia", "Czech Republic", "Slovakia", "Hungary", "Romania", "Croatia", "Serbia", "Slovenia", "Bosnia and Herzegovina", "Albania", "Montenegro", "North Macedonia", "Greece", "Turkey", "Türkiye", "Ukraine", "Bulgaria", "Cyprus", "Malta", "Georgia", "Armenia", "Azerbaijan", "Kazakhstan", "Estonia", "Latvia", "Lithuania", "Luxembourg", "Kosovo", "Israel", "Moldova"],
+      "categories": [
+        {
+          "id": "uefa-champions", "label": "Champions League", "rank": 40,
+          "competition_ids": ["champions-league", "uefa-champions-league", "european-cup", "european-champions-cup"],
+          "image": "champions-league.png"
+        },
+        {
+          "id": "uefa-europa", "label": "Europa League", "rank": 50,
+          "competition_ids": ["europa-league", "uefa-europa-league", "uefa-cup"],
+          "image": "europa-league.png"
+        },
+        {
+          "id": "uefa-conference", "label": "Conference League", "rank": 60,
+          "competition_ids": ["conference-league", "uefa-conference-league", "europa-conference-league"],
+          "image": "conference-league.png"
+        }
+      ]
+    }
+  },
+  "global_categories": [
+    {
+      "id": "club-world-titles", "label": "Club World Titles", "subtitle": "Club World Cup / Intercontinental / Mundialito", "rank": 70,
+      "competition_ids": ["club-world-cup", "fifa-club-world-cup", "fifa-club-world-cup-expanded", "fifa-club-world-cup-2025", "fifa-club-world-cup-new", "fifa-club-world-cup-old", "club-world-cup-2025", "intercontinental-cup", "fifa-intercontinental-cup", "toyota-cup", "mundialito", "mundialito-de-clubes", "club-world-championship"],
+      "image": "club-world-cup.png"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+TS-UI-10 - CLUB INFO / HISTORIA VIVA
+===================================
+Base requerida: TS-FIX-07 (y parches previos)
+Guardar version: 32 (sin cambio)
+
+1) Cierra el juego y detene Python.
+2) Respaldá la carpeta football-manager-2026 y tus partidas.
+3) Descomprimi TS_UI_10_Club_Info_Historia_Viva.zip sobre la RAIZ de
+   football-manager-2026 (donde esta pyproject.toml).
+4) Mantené las carpetas y aceptá reemplazar los archivos.
+5) Reiniciá el juego y pulsá Ctrl+F5.
+6) Revisá Club Info, View Club de un rival y los datos de temporada.
+
+GitHub Desktop: CREA RAMA NUEVA DESDE TS-FIX-07
+feat/ts-ui-10-living-club-info
+Summary: feat(club-info): TS-UI-10 scalable living club history and honours
+
+Historia real previa a la carrera: queda lista para importar, pero no se
+completaron datos históricos faltantes ni se inventaron trofeos.

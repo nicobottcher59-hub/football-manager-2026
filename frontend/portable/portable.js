@@ -326,7 +326,7 @@
       negotiationOrigin=routeState.page==='Club Profile'?'player profile':routeState.page==='Transfers'?'Transfers':'Scouting';
     routeState={page,...extra};
     const hash=page==='Match Center'?'#match/'+encodeURIComponent(extra.fixture||''):
-      page==='Club Profile'?'#club/'+encodeURIComponent(extra.club||'')+(extra.player?'/'+encodeURIComponent(extra.player):''):
+      (page==='Club Profile'||(page==='Club Info'&&extra.club))?'#club/'+encodeURIComponent(extra.club||'')+(extra.player?'/'+encodeURIComponent(extra.player):''):
       page==='Career History'?'#history/'+encodeURIComponent(extra.entity||'')+'/'+encodeURIComponent(extra.id||''):
       page==='Negotiation'?'#negotiation/'+(extra.deal?'deal/':'player/')+encodeURIComponent(extra.deal||extra.player||''):
       page==='Contract Negotiation'?'#contract/'+encodeURIComponent(extra.player||''):
@@ -340,7 +340,8 @@
     const contractPage=page==='Contract Negotiation';
     document.body.classList.toggle('tr-negotiation-open',negotiationPage||loanPage||contractPage);
     document.body.classList.toggle('ts22-match-open',matchPage);
-    matchFrame.style.display=matchPage?'block':'none';clubFrame.style.display=clubPage?'block':'none';routeBack.hidden=!clubPage && page!=='Career History';
+    matchFrame.style.display=matchPage?'block':'none';clubFrame.style.display=clubPage?'block':'none';routeBack.hidden=!clubPage && page!=='Career History' && page!=='Club Info';
+    routeBack.textContent=page==='Club Info'?'← Back':'Back';
     if(matchPage){const src=`match.html?embedded=1&fixture=${encodeURIComponent(extra.fixture||'')}`;loadFrame(matchFrame,src);}
     if(clubPage){const src=`../public/squad/embed.html?view=squad&club=${encodeURIComponent(extra.club||'')}${extra.player?'&player='+encodeURIComponent(extra.player):''}`;loadFrame(clubFrame,src);}
 
@@ -400,14 +401,19 @@
     }
     if(careerPage)showHistory(extra.entity,extra.id);
     if(clubInfoPage){
-      if(pythonHome?.club_id)showHistory('club',pythonHome.club_id);
+      const requested=extra.club||pythonHome?.club_id;
+      const showClubInfo=id=>{
+        if(routeState.page!=='Club Info'||(routeState.club||null)!==(extra.club||null))return;
+        if(typeof window.FMClubInfo?.mount==='function')window.FMClubInfo.mount(historyPanel,id);
+        else historyPanel.innerHTML='<section class="ch-card" role="alert"><h3>Club Info module unavailable</h3><p>Reload the game after applying TS-UI-10.</p></section>';
+      };
+      if(requested)showClubInfo(requested);
       else {
-        historyPanel.innerHTML='<div class="ch-loading">Loading your club information…</div>';
+        historyPanel.innerHTML='<div class="ci-loading">Loading your club information…</div>';
         fetch('/api/squad',{cache:'no-store'}).then(r=>{
-          if(!r.ok)throw Error('Club information request failed');
-          return r.json();
-        }).then(v=>{if(routeState.page==='Club Info')showHistory('club',v.club_id);})
-          .catch(()=>{if(routeState.page==='Club Info')historyPanel.innerHTML='<section class="ch-card" role="alert"><h3>Club information unavailable</h3><p>Could not read the current club from the local game server. Try reloading the page.</p></section>';});
+          if(!r.ok)throw Error('Club information request failed');return r.json();
+        }).then(v=>{if(v.club_id)showClubInfo(v.club_id);})
+          .catch(()=>{if(routeState.page==='Club Info')historyPanel.innerHTML='<section class="ch-card" role="alert"><h3>Club information unavailable</h3><p>Could not read the selected club.</p></section>';});
       }
     }
     if(competitionPage) window.FMCompetitions?.mount(competitionPanel, otherLeagues ? 'other' : 'mine', extra.competition);
@@ -423,6 +429,7 @@
     document.body.classList.toggle('tsui-youth-active',youthAcademy);
     document.body.classList.toggle('tsui-scouting-active',page==='Scouting');
     document.body.classList.toggle('tsui-transfers-active',transferCentrePage);
+    document.body.classList.toggle('tsui-club-info-active',clubInfoPage);
     document.body.classList.toggle('tsui-medical-active',page==='Medical Centre');
     document.body.classList.toggle('tsui-training-active',page==='Training');
     document.body.classList.toggle('tsui-staff-active',page==='Staff');
@@ -433,7 +440,7 @@
       ? 'Live results, fixtures and verified football news from your career.'
       : squad ? (page==='Squad' ? 'Sortable roster, full player attributes, recorded season statistics and player management.' : 'Formation, individual roles and team tactics backed by the Python development session.')
       : careerPage ? 'Permanent player, club and competition archive. Verified career facts only.'
-      : clubInfoPage ? 'Club identity, current squad, staffing capacity, records and verified historical results.'
+      : clubInfoPage ? 'Dynamic club identity, current season, honours and career history.'
       : clubPage ? 'Persistent squad, player profiles and recorded club information. Read-only.'
       : clubSupport ? (page==='Staff'?'Hire coaching, medical and fitness specialists.':page==='Training'?'Manage one automatic training plan and individual workloads.':'Injury timelines, recovery treatments and player opinions.')
       : inbox ? 'Live club messages, scouting reports, medical news and player conversations.'
@@ -594,7 +601,8 @@
   window.FMInbox?.refresh();
 
   window.FMNavigation={
-    navigate,club:(id,player)=>navigate('Club Profile',false,{club:id,player}),
+    navigate,club:(id,player)=>player?navigate('Club Profile',false,{club:id,player}):navigate('Club Info',false,{club:id}),
+    clubSquad:(id)=>navigate('Club Profile',false,{club:id}),
     history:(entity,id)=>navigate('Career History',false,{entity,id}),
     competition:id=>navigate('Competitions',false,{competition:id}),
     match:id=>navigate('Match Center',false,{fixture:id}),back:goBack,
@@ -615,7 +623,7 @@
     let parts;try{parts=location.hash.slice(1).split('/').map(decodeURIComponent);}catch(_){navigate('Home',false,{},false);return;}
     if(parts[0]==='history'&&['player','club','competition'].includes(parts[1])&&parts[2])navigate('Career History',false,{entity:parts[1],id:parts[2]},false);
     else if(parts[0]==='match')navigate('Match Center',false,{fixture:parts[1]||''},false);
-    else if(parts[0]==='club'&&parts[1])navigate('Club Profile',false,{club:parts[1],player:parts[2]},false);
+    else if(parts[0]==='club'&&parts[1])navigate(parts[2]?'Club Profile':'Club Info',false,{club:parts[1],player:parts[2]},false);
     else if(parts[0]==='contract'&&parts[1])navigate('Contract Negotiation',false,{player:parts[1]},false);
     else if(parts[0]==='loan'&&(parts[1]==='hub'||parts[2]))navigate('Loan Negotiation',false,parts[1]==='hub'?{}:parts[1]==='talk'?{talk:parts[2]}:{player:parts[2],owner:parts[3]||''},false);
     else if(parts[0]==='negotiation'&&parts[2])navigate('Negotiation',false,

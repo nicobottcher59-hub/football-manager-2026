@@ -277,6 +277,70 @@ def _club_seasons(session, club_id):
               'titles': [], 'complete': False}] + rows)
 
 
+
+def _current_club_season(session, club_id):
+    """Live competition affiliation and results by immutable club ID.
+
+    Uses the actual current WorldSeasonRunner (including promotions/relegations)
+    and never persists duplicated title counters or estimated records.
+    """
+    world = session._world
+    league_id = next((cid for cid, edition in world.leagues.items()
+                      if club_id in edition.participant_club_ids), None)
+    standing = next((row for row in world.standings(league_id)
+                     if row.club_id == club_id), None) if league_id else None
+    league = ({'id': league_id, 'name': _competition_name(world, league_id),
+               'position': standing.position if standing and standing.played > 0 else None,
+               'played': standing.played if standing else 0,
+               'won': standing.won if standing else 0,
+               'drawn': standing.drawn if standing else 0,
+               'lost': standing.lost if standing else 0,
+               'gf': standing.goals_for if standing else 0,
+               'ga': standing.goals_against if standing else 0,
+               'gd': standing.goal_difference if standing else 0,
+               'points': standing.points if standing else 0} if league_id else None)
+    entries = []
+    if league_id:
+        entries.append({'id': league_id, 'name': league['name'], 'type': 'league',
+                        'status': 'In progress', 'position': league['position']})
+    # Cup entrants may be enrolled before a draw or fixture exists.
+    for cid, cup in world.cups.items():
+        involved = any(club_id in rnd.entrants for rnd in cup.rounds) or any(
+            club_id in (tie.club_a_id, tie.club_b_id)
+            for plan in cup.plans for tie in plan.ties)
+        if involved:
+            entries.append({'id': cid, 'name': _competition_name(world, cid),
+                            'type': 'cup', 'status': 'Champion' if cup.champion_club_id == club_id else 'In progress',
+                            'position': None})
+    for cid, stage in world.staged.items():
+        if club_id in stage.participants:
+            entries.append({'id': cid, 'name': _competition_name(world, cid),
+                            'type': 'continental', 'status': 'In progress', 'position': None})
+    completed, future = [], []
+    for fixture in world.fixtures.values():
+        if club_id not in (fixture.home_club_id, fixture.away_club_id) or not fixture.kickoff:
+            continue
+        result = world.results.get(fixture.fixture_id)
+        if result is not None and fixture.kickoff.date() <= session.current_date:
+            own = result.home_goals if fixture.home_club_id == club_id else result.away_goals
+            opp = result.away_goals if fixture.home_club_id == club_id else result.home_goals
+            completed.append((fixture.kickoff, fixture.fixture_id, 'W' if own > opp else 'D' if own == opp else 'L'))
+        elif result is None and fixture.kickoff.date() >= session.current_date:
+            opponent_id = fixture.away_club_id if fixture.home_club_id == club_id else fixture.home_club_id
+            future.append((fixture.kickoff, fixture.fixture_id, {
+                'date': fixture.kickoff.date().isoformat(),
+                'competition_id': fixture.competition_id,
+                'competition': _competition_name(world, fixture.competition_id),
+                'opponent_id': opponent_id, 'opponent': _name(session, opponent_id),
+                'home': fixture.home_club_id == club_id}))
+    completed.sort(key=lambda x: (x[0], x[1]), reverse=True)
+    future.sort(key=lambda x: (x[0], x[1]))
+    return {'season': world.season_label, 'date': session.current_date.isoformat(),
+            'league': league, 'competitions': entries,
+            'form': [x[2] for x in reversed(completed[:5])],
+            'next_fixture': future[0][2] if future else None}
+
+
 def club_career_read_model(session, club_id, *, season=None, offset=0):
     if club_id not in session._world_club_names:
         raise KeyError('Unknown club')
@@ -300,6 +364,7 @@ def club_career_read_model(session, club_id, *, season=None, offset=0):
             row['player_name'] = 'Player (profile unavailable)'
     return {'source': 'verified-career-ledgers', 'type': 'club', 'id': club_id,
             'institution': _club_institution(session,club_id),
+            'live': _current_club_season(session, club_id),
             'records': _records(session,club_id=club_id),
             'awards': [x for x in _all_awards(session) if x['club_id'] == club_id],
             'name': _name(session, club_id), 'season': selected, 'seasons': rows,

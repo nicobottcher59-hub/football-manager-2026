@@ -1,0 +1,17 @@
+TS-UI-10.01 - Club Info: Honours & Achievements con copas reales
+Base: TS-UI-10 (sobre TS-FIX-07 y anteriores)
+
+1. Respaldar el proyecto y las partidas.
+2. Detener Python y cerrar el juego.
+3. Extraer este ZIP en la carpeta raiz football-manager-2026, junto a pyproject.toml.
+4. Conservar las subcarpetas y reemplazar index.html, club_info.js y club_info.css.
+5. Reiniciar el juego y presionar Ctrl + F5.
+
+No cambia el formato de guardado (sigue siendo 32).
+No modifica la base de datos de jugadores ni los resultados de partidos.
+Los nuevos PNG estan en frontend/portable/assets/trophies.
+Nuevos paises: editar frontend/portable/data/honour-competitions.json.
+
+GitHub Desktop:
+Branch: feat/ts-ui-10-01-illustrated-honours
+Summary: feat(club-info): TS-UI-10.01 country-aware illustrated honours gallery
