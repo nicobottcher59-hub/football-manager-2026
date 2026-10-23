@@ -1,0 +1,30 @@
+TS-UI-11 + TS-UI-10.02 — Player Career History / English trophies
+
+BASE OBLIGATORIA: TS-UI-10.01 sobre TS-FIX-07 y demás parches anteriores.
+
+1. Hacer copia de seguridad de football-manager-2026 y de las partidas.
+2. Cerrar el juego y detener el proceso Python.
+3. Extraer TODO este ZIP directamente en la raíz de football-manager-2026,
+   manteniendo la estructura frontend/, src/ y tests/.
+4. Permitir reemplazar los archivos existentes.
+5. Reiniciar Python y forzar recarga del navegador con Ctrl+F5.
+
+No instala dependencias. No modifica el formato del guardado: versión 32.
+
+Rama sugerida (crearla desde la última que contiene TS-UI-10.01):
+feat/ts-ui-11-player-career-archive
+
+Summary para GitHub Desktop:
+feat(history): TS-UI-11 player career awards and TS-UI-10.02 English cups
+
+CONTROLES MANUALES RECOMENDADOS:
+- Abrir el Career History de varios jugadores, uno sin títulos/premios.
+- Cambiar medida del gráfico y desplegar estadísticas de una temporada.
+- Probar la barra y flechas de ambos carruseles.
+- Probar vistas de clubes rivales y el cambio de país de un jugador.
+- En Club Info de un equipo inglés, verificar Community Shield y EFL Trophy.
+
+RESTRICCIONES:
+El motor actual no almacena tipo/estética de gol; no se adjudica el premio
+Puskas automáticamente. La imagen y la categoría se incluyen para importación
+verificada futura. Los archivos históricos previos a la carrera no se incluyen.

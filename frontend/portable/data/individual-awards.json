@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "description": "Presentation-only mapping. Display only certified awards in the player career. Missing pictures use a fallback. Golden Boy and Golden Shoe are based on recorded season statistics; Puskas is not auto-awarded until verified goal-quality events are available.",
+  "categories": [
+    {"id":"league-player","category":"player","label":"League Player of the Season","image":"league-player-season.png","group_by_scope":false},
+    {"id":"league-scorer","category":"goals","label":"League Top Scorer","image":"league-top-scorer.png","group_by_scope":false},
+    {"id":"ballon-dor","category":"world_player","label":"Ballon d'Or","image":"ballon-dor.png"},
+    {"id":"golden-shoe","category":"golden_shoe","label":"Golden Shoe","image":"golden-shoe.png"},
+    {"id":"golden-boy","category":"world_young","label":"Golden Boy","image":"golden-boy.png"},
+    {"id":"puskas","category":"puskas","label":"Puskas Award","image":"puskas.png"},
+    {"id":"league-young","category":"young","label":"Young Player of the Season","group_by_scope":false},
+    {"id":"league-keeper","category":"keeper","label":"Goalkeeper of the Season","group_by_scope":false},
+    {"id":"league-assists","category":"assists","label":"Top Assists","group_by_scope":false},
+    {"id":"team-of-the-season","category":"xi_gk","label":"Team of the Season","group_by_scope":false}
+  ]
+}

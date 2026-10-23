@@ -20,7 +20,9 @@ AWARD_LABELS = {
     'xi_mid_1': 'Team of the Season · MID', 'xi_mid_2': 'Team of the Season · MID',
     'xi_mid_3': 'Team of the Season · MID', 'xi_att_1': 'Team of the Season · ATT',
     'xi_att_2': 'Team of the Season · ATT', 'xi_att_3': 'Team of the Season · ATT',
-    'world_player': 'Golden Ball · Best player of simulated world',
+    'world_player': 'Ballon d’Or · Simulated world player of the year',
+    'world_young': 'Golden Boy · Simulated world U21 player',
+    'golden_shoe': 'Golden Shoe · Top-division league scorer',
 }
 
 
@@ -140,6 +142,11 @@ def award_season(registry, world, report, *, as_of: date) -> int:
         by_score = sorted(candidates, key=lambda x: (-x['score'], -x['s'].minutes, x['id']))
         if scope_id == 'world':
             add(scope_id, 'world_player', by_score[0])
+            # A Golden Boy-style annual winner is certified from actually
+            # recorded season participation, not current potential or OVR.
+            juniors = [x for x in by_score if x['player'].age_on(as_of) < 21]
+            if juniors:
+                add(scope_id, 'world_young', juniors[0])
             continue
         add(scope_id, 'player', by_score[0])
         young = [x for x in candidates if x['player'].age_on(as_of) < 23]
@@ -155,5 +162,31 @@ def award_season(registry, world, report, *, as_of: date) -> int:
             group = [x for x in by_score if x['group'] == family][:count]
             for index, item in enumerate(group, 1):
                 add(scope_id, f'xi_{family}_{index}' if family != 'gk' else 'xi_gk', item)
+    # Golden Shoe: actual goals in top-tier league matches only.  In future
+    # databases, each country's top division is recognized from the stable
+    # club identity tier; we never count lower divisions or cup goals.
+    eligible_leagues = []
+    for cid, edition in world.leagues.items():
+        participants = getattr(edition, 'participant_club_ids', ())
+        tiers = [registry.identities.get(club_id).tier for club_id in participants
+                 if registry.identities.get(club_id) is not None]
+        if tiers and min(tiers) == 1:
+            eligible_leagues.append(cid)
+    scorers = {}
+    for cid in eligible_leagues:
+        for pid, stat in recorded.get(cid, {}).items():
+            if pid not in all_players or stat.appearances < 3 or stat.minutes < 225:
+                continue
+            prior = scorers.get(pid, (0, 0))
+            scorers[pid] = (prior[0]+stat.goals, prior[1]+stat.minutes)
+    if scorers:
+        winner_id = sorted(scorers, key=lambda pid:(-scorers[pid][0], -scorers[pid][1], pid))[0]
+        clubs = registry.player_season_clubs.get(season, {}).get(winner_id, ())
+        # A multi-club year must not be credited to a guessed club.
+        results.append(IndividualAward(season, 'world', 'golden_shoe', winner_id,
+                                       clubs[0] if len(clubs) == 1 else None))
+    # The Puskas award is deliberately not fabricated: low xG is not the same
+    # as an aesthetically outstanding goal.  The icon and record schema are
+    # ready for a future authenticated goal-quality event feed.
     registry.individual_awards[season] = tuple(results)
     return len(results)

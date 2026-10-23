@@ -215,7 +215,15 @@ def player_career_read_model(session, player_id):
             if season != registry.season_label or status == 'retired':
                 continue
         summary = player_statistics(registry, player_id, season=season)
-        rows.append({'season': season, 'club_ids': list(played),
+        per_competition = []
+        for cid, participants in detail.items():
+            if player_id in participants:
+                per_competition.append({'competition_id': cid,
+                    'competition': registry.statistics.competition_names.get(cid) or _competition_name(session._world, cid),
+                    'statistics': player_statistics(registry, player_id, season=season, competition=cid)})
+        per_competition.sort(key=lambda x: x['competition'])
+        rows.append({'season': season, 'competitions': per_competition,
+                     'club_ids': list(played),
                      'clubs': [{'id': cid, 'name': _name(session, cid)} for cid in played],
                      'statistics': summary, 'coverage': summary['coverage']})
     deals = _completed_deals(registry, player_id=player_id)
@@ -238,6 +246,9 @@ def player_career_read_model(session, player_id):
             'retired_on': (player.aging.retired_on.isoformat() if player.aging and player.aging.retired_on else None),
             'current_club_id': current_club, 'current_club': _name(session, current_club) if current_club else None,
             'birth_date': player.identity.birth_date.isoformat(),
+            'age': player.age_on(session.current_date),
+            'preferred_foot': player.identity.dominant_foot.value,
+            'overall_rating': round(player.overall_rating, 1),
             'nationality': player.identity.nationality,
             'position': player.primary_position.value,
             'seasons': rows, 'transfers': deals, 'loans': loans, 'honours': honours,

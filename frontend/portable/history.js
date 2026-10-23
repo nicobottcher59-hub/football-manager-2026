@@ -117,21 +117,29 @@ window.FMHistory = (() => {
       if(token!==request||!host)return;
       if(data.source!=='verified-career-ledgers'||data.type!==entity||data.id!==identifier)throw Error('Invalid career archive response');
       selectedSeason=data.season||'';cached=data;
-      const body=entity==='player'?playerPage(data):entity==='club'?clubPage(data):competitionPage(data);
+      const imported=entity==='player' ? (await (async()=>{
+        await window.FMPlayerCareer?.load?.();
+        return await window.FMPlayerCareer?.historicalFor?.(data.id) || {};
+      })()) : {};
+      if(token!==request||!host)return;
+      const body=entity==='player'?(window.FMPlayerCareer?.render?.(data,imported)||playerPage(data)):
+        entity==='club'?clubPage(data):competitionPage(data);
       const club=entity==='club' ? window.FMClubIdentity?.resolve?.(data.id,data.name) : null;
       const art=club?.crest ? `<img class="ch-hero-club-crest" src="${h(window.FMEntityAssets?.url?.(club.crest)||club.crest)}" data-fm-asset="optional" alt="" loading="lazy">` : '';
       const shown=club?.display_name||data.name;
       const subtitle='';
-      host.innerHTML=`<div class="ch-root"><div class="ch-hero ch-hero-with-crest">${art}<div><span class="ch-eyebrow">${h(entity.toUpperCase())} · VERIFIED CAREER ARCHIVE</span><h2>${h(shown)}</h2>${subtitle}</div><button type="button" class="ch-back" data-history-back>← Back</button></div>${body}<p class="ch-note">${h(data.note)}</p></div>`;
+      const cover=entity==='player'?'':`<div class="ch-hero ch-hero-with-crest">${art}<div><span class="ch-eyebrow">${h(entity.toUpperCase())} · VERIFIED CAREER ARCHIVE</span><h2>${h(shown)}</h2>${subtitle}</div><button type="button" class="ch-back" data-history-back>← Back</button></div>`;
+      host.innerHTML=`<div class="ch-root ${entity==='player'?'ch-player-layout':''}">${cover}${body}${entity==='player'?'':`<p class="ch-note">${h(data.note)}</p>`}</div>`;
       window.FMClubIdentity?.paintWithin?.(host);
     }catch(err){if(token===request&&host)host.innerHTML=`<section class="ch-card" role="alert"><h3>Career history unavailable</h3><p>${h(err.message)}</p><button type="button" data-history-retry>Retry</button></section>`;}
   }
   function mount(element,type,id){
-    if(host!==element){host=element;host.addEventListener('click',click);host.addEventListener('change',change);}
+    if(host!==element){host=element;host.addEventListener('click',click);host.addEventListener('change',change);host.addEventListener('wheel',e=>window.FMPlayerCareer?.wheel?.(e,host),{passive:false});}
     if(type!==entity||id!==identifier){entity=type;identifier=id;selectedSeason='';offset=0;chartMetric='overall';cached=null;}
     fetchHistory();
   }
   function click(event){
+    if(entity==='player'&&window.FMPlayerCareer?.click?.(event,host))return;
     const b=event.target.closest('button');if(!b||!host.contains(b))return;
     if(b.hasAttribute('data-history-back'))window.FMNavigation?.back();
     if(b.hasAttribute('data-history-retry'))fetchHistory();
@@ -140,6 +148,7 @@ window.FMHistory = (() => {
     if(b.hasAttribute('data-history-step')){offset=Math.max(0,offset+80*Number(b.dataset.historyStep));fetchHistory();}
   }
   function change(event){
+    if(entity==='player'&&cached&&window.FMPlayerCareer?.change?.(event,host,cached))return;
     if(event.target.matches('[data-history-season]')){selectedSeason=event.target.value;offset=0;fetchHistory();}
     if(event.target.matches('[data-history-metric]')&&entity==='player'&&cached){chartMetric=event.target.value;
       const chart=host.querySelector('[data-history-progression]');

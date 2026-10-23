@@ -30,7 +30,7 @@ def test_every_declared_trophy_png_is_real_transparent_asset():
     data = _catalogue()
     entries = data['countries']['england']['categories'] + data['regions']['uefa']['categories'] + data['global_categories']
     files = {x['image'] for x in entries if x.get('image')}
-    assert len(files) == 8
+    assert len(files) == 9  # EFL Trophy and Community Shield added; lower-league image corrected
     for name in files:
         path = ROOT / 'assets' / 'trophies' / name
         raw = path.read_bytes()
