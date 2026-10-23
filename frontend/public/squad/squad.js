@@ -9,7 +9,7 @@
   const inspectedClub=params.get('club');
   let screen=params.get('view')==='tactics'?'tactics':'squad';
   let phase='in_possession', tacticMode='lineup';
-  let data=null, selectedSlot=null, benchToSwap=null, activeTab='role', busy=false;
+  let data=null, selectedSlot=null, selectedCandidate=null, activeTab='role', busy=false;
   let lastEdit=null, error=null, hintTimer=null;
   // TS-19.1.1: formation picker changes Python state only after confirmation.
   let pickerOpen=false, pickerDraft=null, pickerGroup='all', pickerSearch='';
@@ -37,7 +37,7 @@
     hintTimer=setTimeout(()=>notice.classList.remove('shown'),5600);
   }
   function route(next){
-    screen=next; selectedSlot=null; benchToSwap=null; activeTab='role'; tacticMode='lineup';pickerOpen=false;
+    screen=next; selectedSlot=null; selectedCandidate=null; activeTab='role'; tacticMode='lineup';pickerOpen=false;
     const uri=new URL(location.href);uri.searchParams.set('view',screen);history.replaceState({},'',uri);
     try{if(parent!==window)parent.postMessage({type:'fm-squad-route',page:screen==='tactics'?'tactics':'squad'},window.location.origin);}catch(_){/* standalone */}
     render();
@@ -171,7 +171,7 @@
     if(busy||!pickerDraft||pickerDraft===data.formation.id)return;
     const id=pickerDraft;
     // The exact preexisting action is used; previews never mutate the domain.
-    selectedSlot=null;benchToSwap=null;
+    selectedSlot=null;selectedCandidate=null;
     if(await command({action:'formation',id},'Formation updated in Python. Roles reset to position defaults.')){
       closeFormationDialog();
     }
@@ -181,7 +181,7 @@
     if(screen==='tactics' && tacticMode==='editor' && window.FMStudio)return window.FMStudio.marker(slot,p,pos,selectedSlot===slot.slot_id,data.studio);
     if(screen==='tactics' && tacticMode==='editor')return `<div class="fm-token ${p.position==='GK'?'keeper':''}" data-slot="${esc(slot.slot_id)}" style="${style}" aria-label="${esc(slot.label||slot.position)} tactical marker"><span class="token-glow"></span></div>`;
     const selected=selectedSlot===slot.slot_id;
-    const pending=benchToSwap?' is-swap-target':'';
+    const pending=selectedCandidate?' is-swap-target':'';
     return `<button type="button" draggable="true" class="fm-player-chip ${selected?'selected':''}${pending}" data-player-slot="${esc(slot.slot_id)}" style="${style}" title="${esc(p.name)} — OVR ${rating(p.ovr)} / ACT ${rating(p.act)}" aria-label="${esc(p.name)} at ${esc(p.position)}, OVR ${rating(p.ovr)}, ACT ${rating(p.act)}, condition ${n(p.condition)} percent">
       <span class="fm-player-top">${face(p,'fm-face-pitch')}<span class="fm-player-ovr ${grade(p.act)}">${rating(p.act)} <small>GRL</small></span></span>
       <span class="fm-player-name">${esc(p.short_name)}</span>
@@ -201,16 +201,17 @@
       ${data.slots.map(slot=>pitchCard(slot,players.get(slot.slot_id),points[slot.slot_id])).join('')}
       </div></div>
     ${tacticMode==='editor'?window.FMStudio.footer(data,phase)
-      :`<div class="fm-pitch-foot"><span>Click a player to edit their role and instructions.</span><span>Drag a starter to swap positions; select a substitute to replace one.</span></div>`}</section>`;
+      :`<div class="fm-pitch-foot"><span>Click a player to edit their role and instructions.</span><span>Drag between starters, substitutes and reserves, or click a replacement then its destination.</span></div>`}</section>`;
   }
   function statusPanel(){
     const m=data.squad_status;
     return `<section class="fm-panel fm-status"><div class="fm-panel-head"><h2>Squad Status</h2><small>Starting XI averages</small></div><div class="fm-status-grid">${metric('Morale',m.morale,'Dressing room')}${metric('Condition',m.condition,'Match fitness')}${metric('Chemistry',m.chemistry,'Team cohesion')}${metric('Form',m.form,'Recent form')}</div></section>`;
   }
   function subsPanel(){
-    return `<section class="fm-panel fm-subs"><div class="fm-panel-head"><h2>Substitutes <span class="fm-count">${data.bench.length}</span></h2><small>${benchToSwap?'Choose a starter →':'Click to select replacement'}</small></div>
-      ${benchToSwap?`<div class="fm-swap-hint">Replace a starter with <b>${esc(data.bench.find(p=>p.id===benchToSwap)?.name||'')}</b>. <button data-action="cancel-swap">Cancel</button></div>`:''}
-      <div class="fm-subs-list">${data.bench.map((p,i)=>`<button type="button" data-bench="${esc(p.id)}" class="fm-bench-row ${benchToSwap===p.id?'active':''}"><span class="fm-sub-no">${i+12}</span>${face(p,'fm-face-bench')}<span class="fm-sub-main"><strong>${esc(p.name)}</strong><small>${esc(p.position)} · ${rating(p.ovr)} OVR · ${rating(p.act)} ACT</small></span><span class="fm-sub-phys"><span>${n(p.condition)}%</span><i><i style="width:${n(p.condition)}%" class="${statusColor(p.condition)}"></i></i></span></button>`).join('')}</div></section>`;
+    const chosen=selectedCandidate && [...data.bench,...data.outside].find(p=>p.id===selectedCandidate.id);
+    return `<section class="fm-panel fm-subs"><div class="fm-panel-head"><h2>Substitutes <span class="fm-count">${data.bench.length}</span></h2><small>${chosen?'Choose an XI, bench or reserve destination':'Drag or click to select replacement'}</small></div>
+      ${chosen?`<div class="fm-swap-hint">Selected: <b>${esc(chosen.name)}</b>. Click a destination or drag to swap. <button type="button" data-action="cancel-swap">Cancel</button></div>`:''}
+      <div class="fm-subs-list">${data.bench.map((p,i)=>`<button type="button" draggable="true" data-bench="${esc(p.id)}" aria-pressed="${selectedCandidate?.kind==='bench'&&selectedCandidate.id===p.id}" class="fm-bench-row ${selectedCandidate?.kind==='bench'&&selectedCandidate.id===p.id?'active':''}" title="Drag to exchange with a starter or reserve"><span class="fm-sub-no">${i+12}</span>${face(p,'fm-face-bench')}<span class="fm-sub-main"><strong>${esc(p.name)}</strong><small>${esc(p.position)} · ${rating(p.ovr)} OVR · ${rating(p.act)} ACT</small></span><span class="fm-sub-phys"><span>${n(p.condition)}%</span><i><i style="width:${n(p.condition)}%" class="${statusColor(p.condition)}"></i></i></span></button>`).join('')}</div></section>`;
   }
   function setPiecePanel(){
     const entries=data.set_pieces?.roles||[];
@@ -241,7 +242,7 @@
   }
   function outsidePanel(){
     const items=data.outside;
-    return `<section class="fm-panel fm-outside"><div class="fm-panel-head"><h2>Out of Matchday Squad <span class="fm-count">${items.length}</span></h2><small>Not in starting XI or on bench</small></div>${items.length?`<div class="fm-outside-list">${items.map(p=>`<div class="fm-outside-player">${face(p,'fm-face-outside')}<div><strong>${esc(p.name)}</strong><small>${esc(p.position)} · OVR ${rating(p.ovr)}</small></div><span class="${p.available?'fm-ready':'fm-injury'}">${p.injury?'Injured':p.suspension?'Suspended':'Available'}</span></div>`).join('')}</div>`:`<p class="fm-empty">No players outside the matchday squad in this DEV roster: 11 starters + ${data.bench.length} substitutes. This section will populate when squads have additional players.</p>`}</section>`;
+    return `<section class="fm-panel fm-outside"><div class="fm-panel-head"><h2>Reserves · Out of Matchday Squad <span class="fm-count">${items.length}</span></h2><small>Drag or select an available reserve to exchange with the XI or bench</small></div>${items.length?`<div class="fm-outside-list">${items.map(p=>`<button type="button" draggable="${p.available?'true':'false'}" data-outside="${esc(p.id)}" aria-pressed="${selectedCandidate?.kind==='reserve'&&selectedCandidate.id===p.id}" class="fm-outside-player ${selectedCandidate?.kind==='reserve'&&selectedCandidate.id===p.id?'active':''} ${p.available?'':'unavailable'}" title="${p.available?'Drag or click to select reserve':'Unavailable for the matchday squad'}">${face(p,'fm-face-outside')}<span class="fm-outside-info"><strong>${esc(p.name)}</strong><small>${esc(p.position)} · OVR ${rating(p.ovr)}</small></span><span class="${p.available?'fm-ready':'fm-injury'}">${p.injury?'Injured':p.suspension?'Suspended':'Available'}</span></button>`).join('')}</div>`:`<p class="fm-empty">All eligible players are currently in the matchday squad.</p>`}</section>`;
   }
   function selector(options,value,extras=''){
     return `<select class="fm-select" ${extras}>${options.map(item=>`<option value="${esc(item.id)}" ${item.id===value?'selected':''}>${esc(item.name)}</option>`).join('')}</select>`;
@@ -372,6 +373,52 @@
     const label=$('.fm-board-help strong'); if(label&&lastEdit)label.textContent=lastEdit;
     if(tacticMode==='editor')window.FMStudio?.refresh();
   }
+  // TS-FIX-05: a single exchange plan powers HTML drag & drop and click/touch
+  // fallback. Python remains responsible for eligibility and squad integrity.
+  function playerTarget(element){
+    if(!element||!data)return null;
+    if(element.hasAttribute('data-player-slot')){
+      const slot=element.dataset.playerSlot;
+      const player=data.starters.find(p=>p.slot_id===slot);
+      return player?{kind:'starter',id:slot,playerId:player.id,available:true}:null;
+    }
+    if(element.hasAttribute('data-bench')){
+      const player=data.bench.find(p=>p.id===element.dataset.bench);
+      return player?{kind:'bench',id:player.id,playerId:player.id,available:player.available}:null;
+    }
+    if(element.hasAttribute('data-outside')){
+      const player=data.outside.find(p=>p.id===element.dataset.outside);
+      return player?{kind:'reserve',id:player.id,playerId:player.id,available:player.available}:null;
+    }
+    return null;
+  }
+  function squadExchange(first,second){
+    if(!first||!second||(first.kind===second.kind && first.id===second.id))return null;
+    if(first.kind==='starter'&&second.kind==='starter'){
+      return {action:'swap_starters',first:first.id,second:second.id};
+    }
+    if(first.kind==='reserve'&&second.kind==='reserve')return null;
+    const starter=first.kind==='starter'?first:second.kind==='starter'?second:null;
+    const bench=first.kind==='bench'?first:second.kind==='bench'?second:null;
+    const reserve=first.kind==='reserve'?first:second.kind==='reserve'?second:null;
+    if(starter&&bench)return {action:'swap_bench',starter_id:starter.playerId,bench_id:bench.id};
+    if(reserve&&(starter||bench))return {action:'swap_reserve',player_id:(starter||bench).playerId,reserve_id:reserve.id};
+    if(first.kind==='bench'&&second.kind==='bench'){
+      return {action:'swap_bench_slots',first_id:first.id,second_id:second.id};
+    }
+    return null;
+  }
+  function exchangePlayers(first,second){
+    if(!first||!second)return;
+    if(!first.available||!second.available){
+      announce('This player is injured or suspended and cannot join the matchday squad.',true);
+      return;
+    }
+    const payload=squadExchange(first,second);
+    if(!payload)return;
+    selectedSlot=null;selectedCandidate=null;
+    return command(payload,'Starting XI, substitutes and reserves updated.');
+  }
   root.addEventListener('click',event=>{
     const button=event.target.closest('button');
     if(!button){
@@ -410,22 +457,26 @@
     if(pickerOpen)return; // Prevent background mutations while the dialog is open.
     if(screen==='squad' && window.FMRoster.onClick(button, refreshKeepingTable))return;
     if(button.dataset.route)return route(button.dataset.route);
-    if(button.dataset.tacticMode){tacticMode=button.dataset.tacticMode;selectedSlot=null;benchToSwap=null;render();return;}
+    if(button.dataset.tacticMode){tacticMode=button.dataset.tacticMode;selectedSlot=null;selectedCandidate=null;render();return;}
     if(button.dataset.phase){phase=button.dataset.phase; render();return;}
     if(button.dataset.playerTab){activeTab=button.dataset.playerTab;render();return;}
     if(button.dataset.action==='close-player'){selectedSlot=null;render();return;}
-    if(button.dataset.action==='cancel-swap'){benchToSwap=null;render();return;}
+    if(button.dataset.action==='cancel-swap'){selectedCandidate=null;render();return;}
     if(button.dataset.action==='reset-individual'){
       return command({action:'reset_player_instructions',slot_id:selectedSlot},'All individual overrides reset to role defaults.');
     }
     if(button.dataset.roleId){return command({action:'role',slot_id:selectedSlot,role_id:button.dataset.roleId},'Role changed in Python.');}
-    if(button.dataset.bench){benchToSwap=button.dataset.bench;selectedSlot=null;render();return;}
-    if(button.dataset.playerSlot){
-      if(benchToSwap){
-        const starter=data.starters.find(p=>p.slot_id===button.dataset.playerSlot);
-        const bench=benchToSwap;benchToSwap=null;
-        return command({action:'swap_bench',starter_id:starter.id,bench_id:bench},'Lineup and substitutes updated in Python.');
+    if(button.dataset.bench||button.dataset.outside){
+      const target=playerTarget(button);
+      if(!target?.available){announce('This reserve is injured or suspended.',true);return;}
+      if(selectedCandidate){
+        if(selectedCandidate.kind===target.kind&&selectedCandidate.id===target.id){selectedCandidate=null;render();return;}
+        if(selectedCandidate.kind!=='reserve'||target.kind!=='reserve')return exchangePlayers(selectedCandidate,target);
       }
+      selectedCandidate=target;selectedSlot=null;render();return;
+    }
+    if(button.dataset.playerSlot){
+      if(selectedCandidate)return exchangePlayers(selectedCandidate,playerTarget(button));
       selectedSlot=button.dataset.playerSlot; activeTab='role';render();
     }
   });
@@ -479,26 +530,41 @@
     lastEdit=item.label;
     refreshBoard();
   });
-  let dragSlot=null;
+  let dragOrigin=null,dropHighlight=null;
+  function clearDragHighlight(){
+    if(dropHighlight)dropHighlight.classList.remove('fm-drop-valid');
+    dropHighlight=null;
+  }
+  function clearDragging(){
+    clearDragHighlight();dragOrigin=null;root.classList.remove('fm-is-dragging');
+  }
   root.addEventListener('dragstart',e=>{
-    const button=e.target.closest('[data-player-slot]');
-    if(!button||pickerOpen)return;
-    dragSlot=button.dataset.playerSlot;e.dataTransfer.effectAllowed='move';
-    e.dataTransfer.setData('text/plain',dragSlot);
+    const button=e.target.closest('[data-player-slot],[data-bench],[data-outside]');
+    if(!button||pickerOpen||busy||inspectedClub||screen!=='tactics'||tacticMode==='editor')return;
+    const source=playerTarget(button);
+    if(!source?.available){e.preventDefault();return;}
+    dragOrigin=source;root.classList.add('fm-is-dragging');
+    e.dataTransfer.effectAllowed='move';
+    e.dataTransfer.setData('text/plain',source.kind+':'+source.id);
   });
   root.addEventListener('dragover',e=>{
-    const target=e.target.closest('[data-player-slot]');
-    if(target&&dragSlot&&!pickerOpen){e.preventDefault();e.dataTransfer.dropEffect='move';}
+    const element=e.target.closest('[data-player-slot],[data-bench],[data-outside]');
+    const target=playerTarget(element);
+    if(!dragOrigin||!target?.available||!squadExchange(dragOrigin,target)||pickerOpen||busy){
+      clearDragHighlight();return;
+    }
+    e.preventDefault();e.dataTransfer.dropEffect='move';
+    if(dropHighlight!==element){clearDragHighlight();dropHighlight=element;element.classList.add('fm-drop-valid');}
   });
   root.addEventListener('drop',e=>{
-    const target=e.target.closest('[data-player-slot]');
-    if(!target||!dragSlot||pickerOpen)return;
-    e.preventDefault();const first=dragSlot,second=target.dataset.playerSlot;dragSlot=null;
-    if(first===second)return;
-    selectedSlot=null;
-    command({action:'swap_starters',first,second},'Starting players swapped in Python.');
+    if(!dragOrigin)return;
+    e.preventDefault();
+    const origin=dragOrigin;
+    const target=playerTarget(e.target.closest('[data-player-slot],[data-bench],[data-outside]'));
+    clearDragging();
+    if(!pickerOpen&&!busy)return exchangePlayers(origin,target);
   });
-  root.addEventListener('dragend',()=>{dragSlot=null;});
+  root.addEventListener('dragend',clearDragging);
   window.addEventListener('keydown',event=>{
     if(!pickerOpen)return;
     if(event.key==='Escape'){
@@ -516,7 +582,7 @@
   window.addEventListener('message',event=>{
     if(event.source!==parent || event.origin!==window.location.origin)return;
     if(event.data?.type==='fm-squad-refresh' && !busy){load();return;}
-    if(event.data?.type==='fm-open-squad'){const next=event.data.view==='tactics'?'tactics':'squad';if(next!==screen){screen=next;tacticMode='lineup';selectedSlot=null;benchToSwap=null;pickerOpen=false;}render();}
+    if(event.data?.type==='fm-open-squad'){const next=event.data.view==='tactics'?'tactics':'squad';if(next!==screen){screen=next;tacticMode='lineup';selectedSlot=null;selectedCandidate=null;pickerOpen=false;}render();}
   });
   window.FMRoster.reload=load;
   if(params.get('player'))window.FMRoster.state.expanded=params.get('player');

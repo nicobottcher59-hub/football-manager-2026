@@ -1,0 +1,44 @@
+/* TS-FIX-05 | Tactics matchday group exchange (no Squad redesign). */
+.is-tactics .fm-bench-row,
+.is-tactics .fm-outside-player,
+.is-tactics .fm-player-chip{cursor:grab;touch-action:manipulation}
+.is-tactics .fm-bench-row:active,
+.is-tactics .fm-outside-player:active,
+.is-tactics .fm-player-chip:active{cursor:grabbing}
+.is-tactics .fm-outside-player{
+  width:100%;margin:0;font:inherit;color:#f1f8ff;text-align:left;
+  appearance:none;-webkit-appearance:none;
+  transition:border-color .14s,background .14s,box-shadow .14s;
+}
+.is-tactics .fm-outside-player .fm-outside-info{
+  display:flex;flex:1;min-width:0;flex-direction:column;gap:3px;
+}
+.is-tactics .fm-outside-player .fm-outside-info strong{
+  font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.is-tactics .fm-outside-player .fm-outside-info small{font-size:10px;color:#8dadc8}
+.is-tactics .fm-outside-player:hover,
+.is-tactics .fm-outside-player:focus-visible,
+.is-tactics .fm-outside-player.active{
+  border-color:#28a7e3;background:#123a56;
+  box-shadow:0 0 0 1px #28a7e345;
+}
+.is-tactics .fm-outside-player.unavailable{
+  opacity:.68;cursor:not-allowed;
+}
+.is-tactics .fm-outside-player.unavailable:hover{border-color:#214261;background:#102b44}
+.is-tactics.fm-is-dragging [data-player-slot],
+.is-tactics.fm-is-dragging [data-bench],
+.is-tactics.fm-is-dragging [data-outside]:not(.unavailable){
+  outline:1px dashed #78c4dc72;outline-offset:-2px;
+}
+.is-tactics .fm-drop-valid,
+.is-tactics .fm-drop-valid.fm-player-chip,
+.is-tactics .fm-drop-valid.fm-bench-row,
+.is-tactics .fm-drop-valid.fm-outside-player{
+  outline:2px solid #62dcff;outline-offset:2px;
+  border-color:#62dcff;box-shadow:0 0 0 3px #009bdf50,0 0 19px #008bd56e;
+}
+@media(prefers-reduced-motion:reduce){
+  .is-tactics .fm-outside-player{transition:none}
+}

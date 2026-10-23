@@ -1154,6 +1154,67 @@ class DevelopmentSession:
         )
         self._sync_effective_tactic_familiarity(home=True)
 
+    def swap_with_reserve(self, selected_player_id: str, reserve_player_id: str) -> None:
+        """Exchange an XI or bench player with an available, unselected club player.
+
+        The matchday squad keeps the same size.  A player taken out of the XI or
+        bench becomes a reserve automatically because ``outside`` is derived
+        from the club roster minus the selected players.  This deliberately
+        does not change the formation or the tactical slot's assigned role.
+        """
+        lineup = self.home_lineup
+        selected_ids = {p.id for p in lineup.selected_players}
+        if reserve_player_id in selected_ids:
+            raise ValueError("replacement must be outside the current matchday squad")
+        reserve = next(
+            (p for p in self.home_club.squad.players if p.id == reserve_player_id), None
+        )
+        if reserve is None:
+            raise ValueError("reserve player must belong to your club")
+        if not reserve.state.is_available:
+            raise ValueError("injured or suspended reserves cannot join the matchday squad")
+
+        starters = list(lineup.starters)
+        bench = list(lineup.bench)
+        starter_index = next(
+            (i for i, entry in enumerate(starters) if entry.player.id == selected_player_id), None
+        )
+        bench_index = next(
+            (i for i, player in enumerate(bench) if player.id == selected_player_id), None
+        )
+        if starter_index is not None:
+            outgoing = starters[starter_index]
+            starters[starter_index] = LineupEntry(outgoing.slot_id, reserve)
+        elif bench_index is not None:
+            bench[bench_index] = reserve
+        else:
+            raise ValueError("the outgoing player must be a starter or substitute")
+
+        self.home_lineup = MatchLineup(
+            club_id=lineup.club_id,
+            formation=lineup.formation,
+            starters=tuple(starters),
+            bench=tuple(bench),
+        )
+        if starter_index is not None:
+            self._sync_effective_tactic_familiarity(home=True)
+
+    def swap_bench_slots(self, first_player_id: str, second_player_id: str) -> None:
+        """Reorder substitutes without changing the XI or matchday eligibility."""
+        bench = list(self.home_lineup.bench)
+        indices = {p.id: index for index, p in enumerate(bench)}
+        if first_player_id not in indices or second_player_id not in indices:
+            raise ValueError("both players must be substitutes")
+        if first_player_id == second_player_id:
+            return
+        a, b = indices[first_player_id], indices[second_player_id]
+        bench[a], bench[b] = bench[b], bench[a]
+        lineup = self.home_lineup
+        self.home_lineup = MatchLineup(
+            club_id=lineup.club_id, formation=lineup.formation,
+            starters=lineup.starters, bench=tuple(bench),
+        )
+
     def quick_simulate(self, *, delegate_team: bool = True) -> FastMatchResult:
         if self.match_played or (self._active_match is not None and self._fixture_has_result(self._active_match)):
             raise RuntimeError(

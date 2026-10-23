@@ -1,0 +1,8 @@
+TS-FIX-05 | source base: TS-FIX-04 | SHA-256
+Type  Original SHA-256  Patched SHA-256  Relative path
+MOD  ab27ba9a7f9f271c1e15d580c743c240aa8f8def4070fe0b8338c1e291640cc7  2dd78fdfe074ecf05ac12003dcf3e02f9b4cf0f29901f4c7534de564fd5cab53  frontend/public/squad/squad.js
+MOD  d74b789f2ad1e7bc8b08a50f64581b5e0ad5a204c05d489688222bb4de149ed1  335d5910d773a93d0f17c0ec23709bd58c521cee87e5bde13b14af9bce5a3b69  frontend/public/squad/embed.html
+NEW  -  1527b994ac3ee2938bf3a11ec1f9a576d3a4251d9386dbe98913e87a85f073d3  frontend/public/squad/ts_fix_05.css
+MOD  db82526f1f77d2959b1f3b9edd8cff271ec8d87908f4253c891ff9a0add8a53b  f780730cea64ee756d8d89f6461fe72fc996136419aa01433a2ccac9cab538b8  src/football_manager/dev_ui/session.py
+MOD  73e9a6f8fe4e818dae5db89446469e51e12536d4b23e1ba00b8a508ec5a13635  499ca134fa300feccb091cd363db90b6888d362fabbb42c9ab826df92dac1a82  src/football_manager/ui_shell/models.py
+NEW  -  ac50fb208fe9ff1a6e0a88ec0aead955c71e38de4192093c152d8354c5416d1b  tests/test_ts_fix_05_tactics_roster_drag.py

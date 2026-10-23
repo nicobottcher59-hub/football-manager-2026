@@ -1,0 +1,25 @@
+TS-FIX-05 — TACTICS DRAG & DROP
+================================
+
+BASE: TS-FIX-04 (incluye TS-FIX-03 y TS-UI-08.04).
+
+1. Respaldar el proyecto football-manager-2026 y las partidas.
+2. Detener Python y cerrar el juego.
+3. Descomprimir TS_FIX_05_Tactics_Drag_Drop_Completo.zip en la carpeta
+   football-manager-2026 que contiene pyproject.toml.
+4. Mantener todas las carpetas y aceptar reemplazar archivos.
+5. Reiniciar el juego y presionar Ctrl + F5.
+
+NO cambia el formato de guardado (se mantiene en 29).
+NO instala dependencias nuevas.
+
+GITHUB DESKTOP
+Branch nueva: fix/ts-fix-05-tactics-drag-reserves
+Summary: fix(tactics): TS-FIX-05 XI bench reserve drag and drop
+
+VERIFICAR
+- Drag de suplentes -> titulares y viceversa.
+- Drag de reservas -> titulares / suplentes y viceversa.
+- Elegir un reserva, luego un titular o suplente, mediante clic.
+- Guardar/cargar y verificar que se mantiene la alineación.
+- Jugadores lesionados o suspendidos no pueden ingresar al partido.

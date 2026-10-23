@@ -303,6 +303,10 @@ def apply_squad_command(session: DevelopmentSession, command: dict, admin: UIRos
         session.swap_starting_slots(str(command.get("first", "")), str(command.get("second", "")))
     elif action == "swap_bench":
         session.swap_lineup(str(command.get("starter_id", "")), str(command.get("bench_id", "")))
+    elif action == "swap_reserve":
+        session.swap_with_reserve(str(command.get("player_id", "")), str(command.get("reserve_id", "")))
+    elif action == "swap_bench_slots":
+        session.swap_bench_slots(str(command.get("first_id", "")), str(command.get("second_id", "")))
     elif action in ("squad_number", "transfer_status"):
         if admin is None:
             raise ValueError("UI administration state is unavailable")
