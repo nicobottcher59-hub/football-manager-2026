@@ -111,13 +111,15 @@ window.FMCalendar = (() => {
     </section>`;
   }
   function simulateBox(){
+    const resume=window.FMProgression?.state()?.resume_target;
     const target=selectedDate||today();
     const past=target<today();
     const beyond=target>(window.FMProgression?.state()?.season_cutoff||'9999-12-31');
     return `<section class="cal-sim-card panel"><div class="cal-sim-heading"><span>Selected day</span><strong>${html(fmtDay(target))}</strong></div>
-      <p>Auto-simulates every fixture, including your club's matches, until this day. Only a real intervention event would pause it (those events are not yet implemented).</p>
+      <p>Auto-simulates every fixture, including your club's matches, until this day. Pauses for transfer offers or negotiations that need your decision.</p>
       <button type="button" data-cal-simulate="${html(target)}" ${past||beyond||simulating?'disabled':''}>
       ${simulating?'Simulating...':past?'Past date':beyond?'Outside current season':'Simulate to this date →'}</button>
+      ${resume&&resume>=today()?`<button type="button" data-cal-simulate="${html(resume)}" ${simulating?'disabled':''}>Resume to ${html(fmtDay(resume))} →</button>`:''}
       <small>DEV session only · Results are not saved when the server closes.</small>
     </section>`;
   }

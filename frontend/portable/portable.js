@@ -228,6 +228,7 @@
         const view=active==='Tactics'?'tactics':'squad';
         squadFrame.src=`../public/squad/embed.html?view=${view}&world=${encodeURIComponent(payload.state.date)}`;
       }
+      if(payload.stopped_for_decision && payload.decisions?.length)window.FMNavigation?.negotiateDeal(payload.decisions[0].deal_id);
       return payload;
     }catch(error){
       showModal({title:'Progression status',category:action==='simulate_until'?'Check Python server':'No partial changes committed',
@@ -348,7 +349,7 @@
     const careerPage = page === 'Career History';
     const clubInfoPage = page === 'Club Info';
     navButtons.forEach(button => {
-      const selected = $('span', button)?.textContent.trim() === page;
+      const selected = $('span', button)?.textContent.trim() === (negotiationPage?'Scouting':page);
       button.classList.toggle('is-active', selected);
       if (selected) button.setAttribute('aria-current', 'page');
       else button.removeAttribute('aria-current');

@@ -37,10 +37,31 @@ class TransferTerms:
     sell_on_percent: int = 0
     buyback_gbp: int | None = None
     buyback_until: date | None = None
+    # TS-FIX-02: fixed_gbp is cash at registration; deferred cash is guaranteed too.
+    installments_gbp: int = 0
+    installment_count: int = 0
+    installment_interval_months: int = 0
+
+    @property
+    def guaranteed_gbp(self) -> int:
+        return self.fixed_gbp + self.installments_gbp
 
     def validate(self) -> None:
-        if type(self.fixed_gbp) is not int or not 5_000 <= self.fixed_gbp <= MAX_FEE:
-            raise ValueError('Invalid fixed transfer fee')
+        if type(self.fixed_gbp) is not int or not 0 <= self.fixed_gbp <= MAX_FEE:
+            raise ValueError('Enter a non-negative upfront payment (technical limit: GBP 500 million)')
+        if (type(self.installments_gbp) is not int or not 0 <= self.installments_gbp <= MAX_FEE
+                or type(self.installment_count) is not int
+                or type(self.installment_interval_months) is not int):
+            raise ValueError('Invalid installment amount or schedule')
+        if self.installments_gbp:
+            if (self.installment_count not in (2, 4, 6)
+                    or self.installment_interval_months not in (6, 12, 18)
+                    or self.installments_gbp < self.installment_count):
+                raise ValueError('Choose 2, 4 or 6 positive installments, every 6, 12 or 18 months')
+        elif self.installment_count or self.installment_interval_months:
+            raise ValueError('A payment schedule requires a positive installment total')
+        if self.guaranteed_gbp > MAX_FEE:
+            raise ValueError('Technical guaranteed-total limit is GBP 500 million')
         if type(self.bonuses) is not tuple or len(self.bonuses) > 3:
             raise ValueError('At most three distinct conditional bonuses')
         seen = set()
@@ -103,6 +124,9 @@ class TransferNegotiation:
     bonus_baseline: tuple[int, int, int] = (0, 0, 0)
     bonus_paid: tuple[str, ...] = ()
     buyer_tier_at_signing: int = 0
+    tolerance_remaining: int = 100
+    settled_on: date | None = None
+    installments_paid: int = 0
 
     def validate(self) -> None:
         if (not self.deal_id or not self.player_id or not self.seller_id or not self.buyer_id
@@ -114,6 +138,17 @@ class TransferNegotiation:
                 or not self.events or len(self.events) > 32 or not 0 <= self.refusal_count <= 32):
             raise ValueError('Invalid recorded transfer negotiation')
         self.terms.validate()
+        if type(self.tolerance_remaining) is not int or not 0 <= self.tolerance_remaining <= 100:
+            raise ValueError('Invalid negotiation tolerance')
+        if self.settled_on is not None and (type(self.settled_on) is not date or self.settled_on < self.started_on):
+            raise ValueError('Invalid transfer completion date')
+        if (type(self.installments_paid) is not int
+                or not 0 <= self.installments_paid <= self.terms.installment_count):
+            raise ValueError('Invalid settled installment count')
+        if self.installments_paid and self.status != 'completed':
+            raise ValueError('Uncompleted transfers cannot have paid installments')
+        if self.status == 'completed' and self.terms.installments_gbp and self.settled_on is None:
+            raise ValueError('Deferred payments require the actual registration date')
         if (self.personal_status not in ('not_started', 'counter', 'completed', 'declined')
                 or type(self.personal_refusals) is not int or not 0 <= self.personal_refusals <= 8
                 or type(self.personal_events) is not tuple or len(self.personal_events) > 16

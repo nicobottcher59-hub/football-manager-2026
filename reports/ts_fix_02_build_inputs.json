@@ -1,0 +1,14 @@
+{
+  "base_zip": {
+    "filename": "football-manager-2026.zip",
+    "sha256": "d2d45feb3578ea7924a1be1d6298279d78d38f63b82299b9864531989a22a530"
+  },
+  "prerequisite_patch": {
+    "filename": "TS_FIX_01_Sustituciones_Cantera_Ritmo.zip",
+    "sha256": "e2b9e24477102a25d2772ecc73f5c5351302141cde525d4e879326f4a8d8c3df"
+  },
+  "javascript_checks": 30,
+  "browser_checks": 26,
+  "new_pytest_cases": 63,
+  "prior_fix01_cases": 56
+}

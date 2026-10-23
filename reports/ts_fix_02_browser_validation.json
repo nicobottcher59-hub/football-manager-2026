@@ -1,0 +1,27 @@
+{
+  "checks": [
+    "unknown OVR and value remain visible as ??",
+    "initial offer is zero",
+    "money input is formatted",
+    "independent sliders give 4 payments every 12 months",
+    "payment timeline starts at 12 and ends at 48 months",
+    "sum of upfront and deferred is guaranteed",
+    "evaluation contains no hidden acceptance forecast",
+    "submission reaches Python and records chosen terms",
+    "counteroffer is displayed",
+    "known seller quote does not expose market value",
+    "no native confirmation dialogs",
+    "reset clears draft only",
+    "reset does not replenish patience or erase history",
+    "bonus and sell-on controls open",
+    "buyback controls open",
+    "no horizontal overflow at 1366",
+    "no horizontal overflow at 1024",
+    "no horizontal overflow at 390",
+    "known OVR and market value shown",
+    "even known players start offer at zero",
+    "no JavaScript errors"
+  ],
+  "errors": [],
+  "dialogs": []
+}

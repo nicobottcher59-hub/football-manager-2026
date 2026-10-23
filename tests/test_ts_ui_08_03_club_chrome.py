@@ -36,9 +36,11 @@ def test_scouting_and_transfers_badges_are_club_id_keyed_and_scoped():
     assert 'clubMark(p.club_id)' in scout
     assert 'data-fm-club-theme="${esc(selectedPlayer().club_id)}"' in scout
     assert 'transferCrest(p.club_id,p.club)' in transfer
-    assert 'transferCrest(belongingId,belongingName,true)' in transfer
-    assert "d?.status==='completed' ? d.buyer_id : d?.seller_id" in transfer
-    assert 'data-fm-club-theme="${esc(belongingId)}"' in transfer
+    assert 'transferCrest(otherId,otherName,true)' in transfer
+    assert 'transferCrest(own,model.club,true)' in transfer
+    assert 'const actual=' in transfer
+    assert 'data-fm-club-theme="${esc(actual.club_id)}"' in transfer
+    assert 'data-fm-club-theme="${esc(e.by_club_id)}"' in transfer
     assert 'window.FMClubIdentity?.paintWithin?.(host)' in scout
     assert 'window.FMClubIdentity?.paintWithin?.(host)' in transfer
     assert 'element.dataset.fmClubTheme' in identity

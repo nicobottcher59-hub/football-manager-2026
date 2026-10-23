@@ -1,0 +1,115 @@
+{
+  "patch": "TS-UI-08.04",
+  "title": "Scouting — identidad visual y estimaciones de atributos",
+  "base": "TS-UI-08.03 + TS-FIX-01 + TS-FIX-02",
+  "save_schema_version": 27,
+  "requires_ordered_patches": [
+    "TS_FIX_01_Sustituciones_Cantera_Ritmo.zip",
+    "TS_FIX_02_Mercado_Negociacion_UX.zip"
+  ],
+  "source_input_zip_sha256": {
+    "football-manager-2026.zip": "d2d45feb3578ea7924a1be1d6298279d78d38f63b82299b9864531989a22a530",
+    "TS_FIX_01_Sustituciones_Cantera_Ritmo.zip": "e2b9e24477102a25d2772ecc73f5c5351302141cde525d4e879326f4a8d8c3df",
+    "TS_FIX_02_Mercado_Negociacion_UX.zip": "4ba6339951f8614b677906683c993c2fa9d6b2b2bfe4d06a35e09cc658524f37"
+  },
+  "files": [
+    {
+      "path": "TS_UI_08_04_INSTALL.txt",
+      "size_bytes": 1602,
+      "sha256": "0dcf21e30ebe3f0424b7f5f80cdaf6b656606869cde452c9f72cd73fef54945a",
+      "base_sha256": null,
+      "action": "add"
+    },
+    {
+      "path": "TS_UI_08_04_TEST_REPORT.md",
+      "size_bytes": 6455,
+      "sha256": "4b886ba21f682f0d986bc36dab2aeef36a280ea2ab917fd34397393c11258f3f",
+      "base_sha256": null,
+      "action": "add"
+    },
+    {
+      "path": "frontend/portable/assets/flags/england.svg",
+      "size_bytes": 163,
+      "sha256": "77db4d6cdfa4d0a4149db3664fc9a79667cf8ef5b7320d5167c208358f47c8a9",
+      "base_sha256": null,
+      "action": "add"
+    },
+    {
+      "path": "frontend/portable/assets/flags/scotland.svg",
+      "size_bytes": 178,
+      "sha256": "e88952ed264a7b8e768887a62acca3d69ff49f99de192cdf1f2833e19ff12561",
+      "base_sha256": null,
+      "action": "add"
+    },
+    {
+      "path": "frontend/portable/assets/flags/wales.svg",
+      "size_bytes": 401,
+      "sha256": "e554b844a81eb90bd31e70eb200c9334f24514cfb2b8f80f62edf23838e97555",
+      "base_sha256": null,
+      "action": "add"
+    },
+    {
+      "path": "frontend/portable/assets_registry.js",
+      "size_bytes": 4813,
+      "sha256": "f4ba31e627e78ea169ebf04800fcf8155294d2254d2a0926e20d12cdd609bae2",
+      "base_sha256": "fc0de300ec352187e29e8e3a53c4f9074923eee5dae725d03a72a1ddc2505785",
+      "action": "modify"
+    },
+    {
+      "path": "frontend/portable/club_identity.js",
+      "size_bytes": 9975,
+      "sha256": "11d15c0bce21f36c10e63d667cc9a45a5c5d15bfb24b23a609d6b076961a2e95",
+      "base_sha256": "f46ff9958cfe68f08cc25b9eda48dc2ad05403d319bfa226d601b6fb6a362bfb",
+      "action": "modify"
+    },
+    {
+      "path": "frontend/portable/index.html",
+      "size_bytes": 40170,
+      "sha256": "78168cf5b43b9f282becbf1b7438d178581ea8fc9e9981df72ca3e3c2ccbf16d",
+      "base_sha256": "01b951d00ce7583b8eea31776881e3d4e13c892eee3b2eb5854d2f3117179cb8",
+      "action": "modify"
+    },
+    {
+      "path": "frontend/portable/nation_flags.js",
+      "size_bytes": 3842,
+      "sha256": "a397154f95f956e62bd56c283e19b5deb2e7898d6107ecefd88b010c450218fc",
+      "base_sha256": null,
+      "action": "add"
+    },
+    {
+      "path": "frontend/portable/scouting_hub.css",
+      "size_bytes": 30127,
+      "sha256": "e1cda684fea43ed113c4cb2b2049b1fc1ce69d59d4175e87f1e437dece92291a",
+      "base_sha256": "f0f3e40e242df1087dd4404f020193a24e37dede7211b96979da625f9bbfe101",
+      "action": "modify"
+    },
+    {
+      "path": "frontend/portable/scouting_hub.js",
+      "size_bytes": 31807,
+      "sha256": "4dc8b29a0a026e298799c00365d753a49454872c69f730fd7f4baa426175baf9",
+      "base_sha256": "c7e1f3815be34c6d30f5760396da78c8348ab7feef958fc57312c0f7ecef45d3",
+      "action": "modify"
+    },
+    {
+      "path": "src/football_manager/services/professional_scouting.py",
+      "size_bytes": 22935,
+      "sha256": "021f5f629b843184756063c8e506f841c211f9de5a1da6e08e9e899404830f20",
+      "base_sha256": "519c274d8997dd67c51de93f1103255ecd5519c8b2ef1b136a7c6611705fef4b",
+      "action": "modify"
+    },
+    {
+      "path": "tests/test_ts_ui_08_04_scouting_identity_ranges.py",
+      "size_bytes": 5025,
+      "sha256": "9a931ada19f9284a97f54490fcad0e042a7aa69f1cd6a73715b502f76c24e482",
+      "base_sha256": null,
+      "action": "add"
+    },
+    {
+      "path": "tools/verify_ts_ui_08_04.py",
+      "size_bytes": 1067,
+      "sha256": "c409a488939dd83fb5c45c3fc33428da881108f39d9498cf18c32fc758ab1987",
+      "base_sha256": null,
+      "action": "add"
+    }
+  ]
+}

@@ -30,7 +30,7 @@ _UI_STATE_VERSION = 1
 # Explicit contract for the current disposable session. When a later version
 # adds new persistent state, this must be revised and migrated intentionally.
 _REQUIRED_FIELDS = frozenset({
-    '_simulator', '_next_seed', '_seed', 'current_date',
+    '_simulator', '_next_seed', '_seed', 'current_date', '_calendar_resume_target',
     'home_club', 'home_lineup', 'home_tactic', 'tactical_studio', 'dressing_room', 'manager_inbox', 'set_piece_orders',
     'away_club', 'away_lineup', 'away_tactic',
     '_world_squads',
@@ -64,6 +64,13 @@ def validate_manager_session(session: DevelopmentSession) -> None:
         raise SaveIntegrityError('manager career has incompatible state fields')
     if not isinstance(session.current_date, date) or type(session._seed) is not int or type(session._next_seed) is not int:
         raise SaveIntegrityError('invalid manager clock or simulation seed')
+    if session._calendar_resume_target is not None:
+        try:
+            if not isinstance(session._calendar_resume_target, str):
+                raise ValueError('invalid pending calendar target')
+            date.fromisoformat(session._calendar_resume_target)
+        except ValueError as exc:
+            raise SaveIntegrityError('invalid pending calendar target') from exc
     if session._next_seed < 0 or session._seed < 0:
         raise SaveIntegrityError('invalid manager simulation seed')
     if not isinstance(session.dev_favorable_mode, bool) or not isinstance(session.match_played, bool):

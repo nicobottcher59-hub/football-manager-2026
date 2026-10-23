@@ -536,7 +536,9 @@ def finances_read_model(session, club_id: str | None = None) -> dict:
     staff_weekly=sum(m.wage_weekly_gbp for m in support.members.values() if m.contract_until>=session.current_date) if support else 0
     initial_allowance=min(round(account.recurring_operations_gbp*.12),
                           round(support.baseline_weekly_gbp*52/12)) if support else 0
+    from football_manager.services.transfer_installments import finance_summary
     return {'schema_version':1,'source':'ts24-2-persistent-club-economy',
+            'installment_finance':finance_summary(registry,cid,session.current_date),
             'club_id':cid,'club':registry.clubs[cid].name,'managed':cid==session.home_club.id,
             'tier':registry.identities[cid].tier,'date':session.current_date.isoformat(),
             'as_of_month':registry.finance_review_on.isoformat(),

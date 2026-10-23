@@ -1,0 +1,12 @@
+{
+  "legacy_generated_with_version": 26,
+  "loaded_version": 27,
+  "original_date": "2026-08-21",
+  "original_world_results": 74,
+  "player_sharpness_unchanged_on_load": true,
+  "old_pending_offer_preserved": true,
+  "calendar_pause_survives_save_reload": true,
+  "continued_until": "2026-08-23",
+  "world_results_after_continuation": 119,
+  "resaved_and_reloaded": true
+}

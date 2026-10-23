@@ -25,7 +25,7 @@ def _fixtures(session):
 
 def _offers(session):
     cid = session.home_club.id
-    return {key: deal.status + ':' + deal.personal_status
+    return {key: deal.status + ':' + deal.personal_status + ':' + str(len(deal.events)) + ':' + str(len(deal.personal_events))
             for key, deal in session._world_squads.transfer_offers.items()
             if cid in (deal.seller_id, deal.buyer_id)}
 
@@ -35,6 +35,20 @@ def _scouts(session):
     if youth is None:
         return set(), {}
     return set(youth.candidates), {sid: s.reports_sent for sid, s in youth.scouts.items()}
+
+
+def _transfer_notice(session, state, deal, status, now):
+    other_id = deal.buyer_id if deal.seller_id == session.home_club.id else deal.seller_id
+    other = session._world_squads.clubs[other_id]
+    contract = session._world_squads.contracts.get(deal.player_id)
+    owner = session._world_squads.clubs.get(contract.club_id) if contract else None
+    player = owner.squad._players.get(deal.player_id) if owner else None
+    title = 'Transfer offer received' if deal.seller_id == session.home_club.id and deal.status == 'manager_turn' else 'Transfer negotiation update'
+    _notice(state, now, 'market', title,
+            f'{other.name}: {player.full_name if player else deal.player_id}. '
+            f'GBP {deal.terms.fixed_gbp:,} upfront + GBP {deal.terms.installments_gbp:,} in installments. '
+            f'{deal.reason} Expires {deal.expires_on.isoformat()}. Review the negotiation in Scouting > Market.',
+            f'offer:{deal.deal_id}:{status}')
 
 
 def create_manager_inbox(session) -> ManagerInbox:
@@ -63,6 +77,11 @@ def create_manager_inbox(session) -> ManagerInbox:
     _notice(state, now, 'system', 'Your manager inbox is ready',
             'Updates here come from actual career events. Discussions with players are optional.',
             'inbox:welcome')
+    # Existing actionable bids are real pending decisions, not invented history.
+    for key, status in sorted(state.offers.items()):
+        deal = session._world_squads.transfer_offers[key]
+        if deal.status in ('manager_turn', 'agreed') and deal.expires_on >= now:
+            _transfer_notice(session, state, deal, status, now)
     return state
 
 
@@ -388,10 +407,12 @@ def synchronize_manager_inbox(session) -> None:
 
     offers = _offers(session)
     for deal_id, status in sorted(offers.items()):
-        if status != state.offers.get(deal_id):
-            _notice(state, now, 'market', 'Transfer negotiation update',
-                    f'Negotiation {deal_id}: {status.replace(":", ", personal status ")}. Review Transfers for the real terms.',
-                    f'offer:{deal_id}:{status}')
+        deal = session._world_squads.transfer_offers[deal_id]
+        prior = state.offers.get(deal_id)
+        legacy_same = (prior == deal.status + ':' + deal.personal_status
+                       and deal.status not in ('manager_turn', 'agreed'))
+        if status != prior and not legacy_same:
+            _transfer_notice(session, state, deal, status, now)
     state.offers = offers
 
     # Headline moves elsewhere in the world only when a real transfer was

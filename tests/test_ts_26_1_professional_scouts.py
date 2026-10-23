@@ -87,16 +87,18 @@ def test_high_quality_scouts_cover_more_and_finish_faster(starting):
     assert fast._world_squads.club_support[fast.home_club.id].scouting_reports[p1].overall > 0
 
 
-def test_report_shows_grounded_attributes_but_does_not_hide_grl_or_offers(starting):
+def test_report_reveals_recorded_attributes_without_early_transfer_leak(starting):
     session = setup(starting)
     targets_before = transfer_read_model(session)['targets']
-    target = targets_before[0]
-    assert 'ovr' in target and 'value_gbp' in target
+    target = next(p for p in targets_before if p['ovr'] is None)
+    assert target['ovr'] is None and target['value_gbp'] is None
     scouting_command(session, {'action': 'assign', 'player_id': target['id']})
     advance(session, 18)
     report = session._world_squads.club_support[session.home_club.id].scouting_reports[target['id']]
     assert report.player_name == target['name']
-    assert report.overall == target['ovr']
+    assert report.overall > 0
+    revealed=next(p for p in transfer_read_model(session)['targets'] if p['id']==target['id'])
+    assert revealed['ovr']==report.overall and revealed['value_gbp']==report.value_gbp
     assert len(report.strengths) == 3
     assert all(isinstance(name, str) and name for name in report.strengths)
     after = transfer_read_model(session)
@@ -156,7 +158,7 @@ def test_pending_and_reports_survive_sqlite_style_graph_roundtrip(starting):
     scouting_command(session, {'action':'assign','player_id':second})
     advance(session, 2)
     graph = capture_manager_graph(session)
-    assert graph['version'] == GRAPH_VERSION == 26
+    assert graph['version'] == GRAPH_VERSION == 27
     restored = restore_manager_graph(graph)
     info = scouting_read_model(restored)
     assert first in {r['player_id'] for r in info['reports']}
@@ -244,10 +246,10 @@ def test_atomic_http_command_does_not_modify_session_on_bad_player(starting):
     with pytest.raises(ValueError):
         app.command('scouting.command', {'action': 'assign', 'player_id': 'missing-player'})
     assert len(scouting_read_model(runtime.session)['assignments']) == 1
-    assert before == GRAPH_VERSION == 26
+    assert before == GRAPH_VERSION == 27
 
 
-def test_real_http_get_and_post_expose_scouts_without_masking_targets(starting):
+def test_real_http_exposes_scouts_but_masks_unobserved_player_values(starting):
     import json
     from threading import Thread
     from urllib.request import Request, urlopen
@@ -269,13 +271,15 @@ def test_real_http_get_and_post_expose_scouts_without_masking_targets(starting):
         staff = get('/api/staff')
         assert 'scout' in staff['capacity']
         transfer = get('/api/transfers')
-        pid = transfer['targets'][0]['id']
-        assert isinstance(transfer['targets'][0]['ovr'], float)
+        unknown=next(p for p in transfer['targets'] if p['ovr'] is None)
+        pid=unknown['id']
+        assert unknown['ovr'] is None and unknown['value_gbp'] is None
         assert transfer['professional_scouting']['capacity'] >= 1
         assert post('/api/scouting', {'action': 'assign', 'player_id': pid})['assigned'] == pid
         scouting = get('/api/scouting')
         assert len(scouting['assignments']) == 1
-        assert get('/api/transfers')['targets'][0]['ovr'] == transfer['targets'][0]['ovr']
+        pending=next(p for p in get('/api/transfers')['targets'] if p['id']==pid)
+        assert pending['ovr'] is None and pending['value_gbp'] is None
     finally:
         server.shutdown()
         thread.join(timeout=4)

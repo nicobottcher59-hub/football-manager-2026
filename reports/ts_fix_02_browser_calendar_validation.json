@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "calendar overlay displays decision pause",
+    "pending decision prevents advancing and original destination is retained",
+    "review action opens live negotiation",
+    "calendar exposes resume action",
+    "calendar negotiation navigation has no JavaScript errors"
+  ],
+  "errors": []
+}

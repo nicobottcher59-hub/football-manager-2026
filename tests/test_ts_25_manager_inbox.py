@@ -35,8 +35,16 @@ def player(session):
 def test_bootstrap_contains_no_unsupported_fake_events(seed):
     data = inbox_read_model(seed)
     assert data['source']=='python-manager-inbox'
-    assert len(data['messages'])==1
-    assert all(m['category']=='system' for m in data['messages'])
+    # TS-FIX-02 may start with real actionable bids already in the world.
+    # These are not invented history and must be visible to the manager.
+    assert sum(m['category']=='system' for m in data['messages'])==1
+    live={key for key,d in seed._world_squads.transfer_offers.items()
+          if seed.home_club.id in (d.buyer_id,d.seller_id)
+          and d.status in ('manager_turn','agreed') and d.expires_on>=seed.current_date}
+    market=[m for m in seed.manager_inbox.messages if m.category=='market']
+    assert len(market)==len(live)
+    assert all(any(m.source_key.startswith('offer:'+key+':') for key in live) for m in market)
+    assert all(m['category'] in ('system','market') for m in data['messages'])
     assert 'international' not in {m['category'] for m in data['messages']}
     assert len(data['players']) == len(seed.home_club.squad.players)
     validate_manager_session(seed)

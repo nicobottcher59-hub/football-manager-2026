@@ -73,6 +73,8 @@ def advance_world_development(world, through: date) -> int:
         with world.transaction():
             advance_youth_matches(world, through)
             recover_medical_absences(world, through)
+            from football_manager.services.transfer_market_activity import advance_transfer_activity
+            advance_transfer_activity(world, through)
         return 0
     reviews = 0
     with world.transaction():
@@ -87,6 +89,8 @@ def advance_world_development(world, through: date) -> int:
             review_finances(world, boundary)
             from football_manager.services.transfer_negotiation import review_transfers
             review_transfers(world, boundary)
+            from football_manager.services.transfer_market_activity import advance_transfer_activity
+            advance_transfer_activity(world, boundary)
             from football_manager.services.youth_academy import process_youth_month
             process_youth_month(world, boundary)
             for club_id, club in registry.clubs.items():
@@ -148,6 +152,8 @@ def advance_world_development(world, through: date) -> int:
         from football_manager.services.youth_match_development import advance_youth_matches
         advance_youth_matches(world, through)
         recover_medical_absences(world, through)
+        from football_manager.services.transfer_market_activity import advance_transfer_activity
+        advance_transfer_activity(world, through)
     return reviews
 
 

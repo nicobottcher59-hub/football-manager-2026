@@ -1,0 +1,306 @@
+{
+  "patch": "TS-FIX-02",
+  "base": "TS-UI-08.03 + TS-FIX-01",
+  "save_graph_version_before": 26,
+  "save_graph_version_after": 27,
+  "payload_file_count": 42,
+  "archive_file_count_including_manifest": 43,
+  "requires_backup_of_code_and_saves": true,
+  "files": [
+    {
+      "path": "TS_FIX_02_INSTALL.txt",
+      "sha256": "5f2da13aa11c03a7c958c3168d1a02025af6d4d4d69880974177a4dbe80741a7",
+      "baseline_sha256": null,
+      "bytes": 2113,
+      "status": "new"
+    },
+    {
+      "path": "TS_FIX_02_TEST_REPORT.md",
+      "sha256": "72ec5b6eeff777aa9c1a3a18fa937a21f73680f8e7678342953dae3496e6018d",
+      "baseline_sha256": null,
+      "bytes": 11569,
+      "status": "new"
+    },
+    {
+      "path": "frontend/portable/calendar.js",
+      "sha256": "aeb0c866b77d532d5c6c3b26f4582cf00ffc87a867ed041325fb48be35a26f57",
+      "baseline_sha256": "0cb59b2182433da489dc76f809b7628556d3e7b6f5663e0d480cea32c20da9f2",
+      "bytes": 17192,
+      "status": "modified"
+    },
+    {
+      "path": "frontend/portable/finances.js",
+      "sha256": "2dd3df01035a87d234f48a404daa915f3cce16723e1803edac70fd4c1f73b53e",
+      "baseline_sha256": "5dee453850754aea77c9e6114147f797cff8de924777f17f804f5ce717ad4fc6",
+      "bytes": 11033,
+      "status": "modified"
+    },
+    {
+      "path": "frontend/portable/index.html",
+      "sha256": "01b951d00ce7583b8eea31776881e3d4e13c892eee3b2eb5854d2f3117179cb8",
+      "baseline_sha256": "a20408ceb0a5b6245b70042c0abd505ee589d32a65dbeea89885a2094bb88e0f",
+      "bytes": 40125,
+      "status": "modified"
+    },
+    {
+      "path": "frontend/portable/portable.js",
+      "sha256": "cbbdc5d2f42d647defaf18c0ab84b5612b00991c1187bd582aa8a937517d6087",
+      "baseline_sha256": "0b34567b9fefbbabc206579a4765579dc79a556aa966be618e8540d427fe6c4b",
+      "bytes": 39388,
+      "status": "modified"
+    },
+    {
+      "path": "frontend/portable/simulation.js",
+      "sha256": "66ce506e8d16e722706b7780c7f76638b80cfbc00ad0641cb3dea05eed9b281b",
+      "baseline_sha256": "5ebac28ecd0f237a32d030755dfff3bafa430e69dafc141de4e39f1c309ea635",
+      "bytes": 14352,
+      "status": "modified"
+    },
+    {
+      "path": "frontend/portable/transfer_payments.js",
+      "sha256": "156df6e623346f68d73fc9770294f54542cce9d2ca65c2145f9f39e193d8dcd4",
+      "baseline_sha256": null,
+      "bytes": 1937,
+      "status": "new"
+    },
+    {
+      "path": "frontend/portable/transfers.css",
+      "sha256": "e76cf0df7550288f2434d2936aa0b631dcafc3734689c2864807a82a87a87f70",
+      "baseline_sha256": "29c6c46b3c75dd7da44b3df19b3fdbd14a2982876ec1ba522811cf94cb35c96e",
+      "bytes": 37765,
+      "status": "modified"
+    },
+    {
+      "path": "frontend/portable/transfers.js",
+      "sha256": "29222a7073735a89d5fe9fb1e46c603dac61c8c8682fb469ad1664957b92ddfc",
+      "baseline_sha256": "6085da735aefe6dabd731dde351d3e0ce82583394c34a23714799990eecc4eb1",
+      "bytes": 62735,
+      "status": "modified"
+    },
+    {
+      "path": "reports/ts_fix_02_browser_calendar_validation.json",
+      "sha256": "c120bf86965fa8c66a11224e6fac377ddc79204a1a4eaf7d7ef867d581f0831e",
+      "baseline_sha256": null,
+      "bytes": 310,
+      "status": "new"
+    },
+    {
+      "path": "reports/ts_fix_02_browser_validation.json",
+      "sha256": "a285ccb21a7f6a694e282b4eec6ef57f617edf8ad5c1704553ddf9324d5118de",
+      "baseline_sha256": null,
+      "bytes": 956,
+      "status": "new"
+    },
+    {
+      "path": "reports/ts_fix_02_build_inputs.json",
+      "sha256": "ccae01eaf66493cf96aa3b7cb06db9d5ab29cbfbd033779b10debba03c9be1ee",
+      "baseline_sha256": null,
+      "bytes": 427,
+      "status": "new"
+    },
+    {
+      "path": "reports/ts_fix_02_calendar_validation.json",
+      "sha256": "0be1c77143a0afd0aeb866d08515f43e2d410d75d0cefc6a22b85985ee6df1d4",
+      "baseline_sha256": null,
+      "bytes": 2530,
+      "status": "new"
+    },
+    {
+      "path": "reports/ts_fix_02_legacy_save_validation.json",
+      "sha256": "1ca65f6c5bec9b35d507406c7bf1224dbd1e61fac7eea91c63bcd0c55598927d",
+      "baseline_sha256": null,
+      "bytes": 373,
+      "status": "new"
+    },
+    {
+      "path": "reports/ts_fix_02_release_verification.json",
+      "sha256": "eb11473c94dad567236fe891ae4a9be93a129db47b3eed222183054467ae46da",
+      "baseline_sha256": null,
+      "bytes": 797,
+      "status": "new"
+    },
+    {
+      "path": "src/football_manager/dev_ui/session.py",
+      "sha256": "f5a6e8f57c4adf07ef4fd02e16259dba003a617cf36b73b426f3650af971656d",
+      "baseline_sha256": "8f86858d5fcdbb6dfb020b63bf19fdf96fdf8f7def6b1379c4b4414662886919",
+      "bytes": 154123,
+      "status": "modified"
+    },
+    {
+      "path": "src/football_manager/domain/football_world.py",
+      "sha256": "8008dabdd075c60e373b388c79334bbf33f11e2fc65b4dd072e0d356ccd281da",
+      "baseline_sha256": "302830081d71946c3eff64d17111de855bf62e65f1b3b1d160ab63ba478ed9de",
+      "bytes": 21057,
+      "status": "modified"
+    },
+    {
+      "path": "src/football_manager/domain/transfer_negotiation.py",
+      "sha256": "3023dcb6b2792fb8d0579a4f2d58da92684346e75dcb0fe1c526d0a47efe9fae",
+      "baseline_sha256": "2d092e5df3fa90df076ba068b289402995bc283f488314439068a15c5d649771",
+      "bytes": 9574,
+      "status": "modified"
+    },
+    {
+      "path": "src/football_manager/persistence/manager_career.py",
+      "sha256": "7a392c558cc2e52ed65e9ab682b3fbd40b6cd2eeaa7f48cf9f52e40e6995aa38",
+      "baseline_sha256": "47450b7ea1ee46dbae08b49cb55c66eaf42610bb99ff92c5b102d4c4c54fffac",
+      "bytes": 17777,
+      "status": "modified"
+    },
+    {
+      "path": "src/football_manager/persistence/session_codec.py",
+      "sha256": "c4978c54812eca1447b2df317b34c963cdf89af963b10f6b0d838a06cbf8a143",
+      "baseline_sha256": "fdf529bd9c39b01e57151cc6effb0949d6582bfdaf6b25748560fb6a23fc7556",
+      "bytes": 26787,
+      "status": "modified"
+    },
+    {
+      "path": "src/football_manager/services/ai_transfer_market.py",
+      "sha256": "15dba8a49aabc83cca1636aeedd085f12fc60a8bcace5a6616036b00b06bbd5f",
+      "baseline_sha256": "edc7d2084e495eb2995856301b5cbee1f167300f5773f72c76dc42bd8349a321",
+      "bytes": 17966,
+      "status": "modified"
+    },
+    {
+      "path": "src/football_manager/services/club_economy.py",
+      "sha256": "6e51b0dc92be49b39917020482efeedf33930180749bdd87ee14331f0ae0ca5c",
+      "baseline_sha256": "5e976a1bc5222eeac3d4d45b67b930200bc2399e4bbb4265589caea64adcd972",
+      "bytes": 31821,
+      "status": "modified"
+    },
+    {
+      "path": "src/football_manager/services/manager_inbox.py",
+      "sha256": "a9f031c680744b7f2bf8b21af856edfbc512e8b3e678bf4cb302770349987f91",
+      "baseline_sha256": "b150bd42b7a5113dc7eefc86b42a6d274fd621c6de495192211d3b65bb33b131",
+      "bytes": 40588,
+      "status": "modified"
+    },
+    {
+      "path": "src/football_manager/services/player_development.py",
+      "sha256": "5d37b4a87686dd7e4f5b57961dd4296d51df2fda8f6d416b97ca5795e3611de0",
+      "baseline_sha256": "ec35ea107b35e7d966934c2e0564d2ce8c089081fe92c0705a11f235aa49828a",
+      "bytes": 17534,
+      "status": "modified"
+    },
+    {
+      "path": "src/football_manager/services/transfer_bargaining.py",
+      "sha256": "67ee3b0d1364d5f5b23fcca39efc41e97ccf0897d39665580645ee9de0856964",
+      "baseline_sha256": null,
+      "bytes": 8551,
+      "status": "new"
+    },
+    {
+      "path": "src/football_manager/services/transfer_installments.py",
+      "sha256": "568426c33f81b97ad4b5ea33fb95733bb61b63345a6a3e7c0e95729bee275097",
+      "baseline_sha256": null,
+      "bytes": 6466,
+      "status": "new"
+    },
+    {
+      "path": "src/football_manager/services/transfer_knowledge.py",
+      "sha256": "adef33db8816abb0f6ca2b3752f4f9ad2f9024718a18e4f9966fd05fe659dccd",
+      "baseline_sha256": null,
+      "bytes": 1914,
+      "status": "new"
+    },
+    {
+      "path": "src/football_manager/services/transfer_market_activity.py",
+      "sha256": "cdfc54857e21a2fb80c3556b10d6f96f71f261f2295489ae34cbf767ea663c39",
+      "baseline_sha256": null,
+      "bytes": 7031,
+      "status": "new"
+    },
+    {
+      "path": "src/football_manager/services/transfer_negotiation.py",
+      "sha256": "d5ce9e21e7915c3be3d381fac5d2c44ec7054386c1bef4a849d34e6311c3cadb",
+      "baseline_sha256": "309f6edd37a01d4223e35f474137a3cb2396bfb66fad64443cfdd7f140ce0e32",
+      "bytes": 33671,
+      "status": "modified"
+    },
+    {
+      "path": "src/football_manager/services/transfer_personal.py",
+      "sha256": "a04f11aa9954d0ff7a1048bbd03d0ef43c838ef8f6ab9ab177656b16f944a5a8",
+      "baseline_sha256": "ef6e4a7fb58c5397d043b187d890a78ad36aad6966c56b4ac367c8759663a8c8",
+      "bytes": 18593,
+      "status": "modified"
+    },
+    {
+      "path": "src/football_manager/ui_shell/progression.py",
+      "sha256": "b9d7c1c3c3d1ddb7fca5c4ff337a9cf5b037864696930c67ff2f4d2cd5c7c49d",
+      "baseline_sha256": "ef8585709617494d2ce19fb1a4434712bf9e1c01293c0db21a2681e6d21365e2",
+      "bytes": 13479,
+      "status": "modified"
+    },
+    {
+      "path": "tests/test_ts_24_1_market_valuation.py",
+      "sha256": "e688b5cd5c5cda35fd8f79d0750ce58fc80d0abd662b3d79aa97a6300f7644da",
+      "baseline_sha256": "1c0ca728addb26ea4b41d65e9c2d90d47b93fac218f2aab46099b9a341c972d5",
+      "bytes": 10434,
+      "status": "modified"
+    },
+    {
+      "path": "tests/test_ts_24_2_contracts_finances.py",
+      "sha256": "aded93c2fd2abebf7de760bd46e9090ad92261d1a98bef733f13d925fc4157cd",
+      "baseline_sha256": "1e9e341ac929fe0abd92468552e3503ec95684f1d523eb436ffc7fc7e17fea5a",
+      "bytes": 15275,
+      "status": "modified"
+    },
+    {
+      "path": "tests/test_ts_25_manager_inbox.py",
+      "sha256": "b3d55e4603ad4519e6b35f7e6c3245b174291a853d2e7057e76d127ab727b408",
+      "baseline_sha256": "a39f6d0ef1188b575a2c3e8fece23b85dc86a987f25a3cacbb95a3c1ea1057d8",
+      "bytes": 8971,
+      "status": "modified"
+    },
+    {
+      "path": "tests/test_ts_26_1_professional_scouts.py",
+      "sha256": "e07a2395361ac65b1df9d05626a9ddf8f0635bc90dda667bcab43739223d7da0",
+      "baseline_sha256": "6f80ac76c5defe7682bc8d50b2abaaec2571644852d1e789de97b01bc975097d",
+      "bytes": 14917,
+      "status": "modified"
+    },
+    {
+      "path": "tests/test_ts_fix_01_integration_save.py",
+      "sha256": "873718f58aae048e4ef242eb6f42a5368b1320c6c6c54accf3ee8a7763f1be18",
+      "baseline_sha256": "21c1490db82f80876c957251a9c3307377dbe6a1e7ad556b60d56efcfa44951a",
+      "bytes": 4257,
+      "status": "modified"
+    },
+    {
+      "path": "tests/test_ts_fix_02_market_negotiation.py",
+      "sha256": "3dc825a9141e190d25e1d0c1fb24804b41e3e4323de00d43bb6bfb69ba5833da",
+      "baseline_sha256": null,
+      "bytes": 24056,
+      "status": "new"
+    },
+    {
+      "path": "tests/test_ts_ui_08_03_club_chrome.py",
+      "sha256": "aaf00a99829c1465b1a331ed1bb4fa53caf64a1f99946974e23347914c1da4b9",
+      "baseline_sha256": "3ba751541ba4a93d636eab818be7fe1f77f5e1684427222268cc1a34a0af07f7",
+      "bytes": 3270,
+      "status": "modified"
+    },
+    {
+      "path": "tools/validate_ts_fix_02.py",
+      "sha256": "15b0bd9ac4d54cc419c8e1b04fbcd1d31dfc59cf24d7bec1091b2b4164978a9a",
+      "baseline_sha256": null,
+      "bytes": 6065,
+      "status": "new"
+    },
+    {
+      "path": "tools/verify_ts_fix_02_install.py",
+      "sha256": "e4112cae76d1ca72342941e012c2b64ca47adc03601b6d4de3a949e8c7f921af",
+      "baseline_sha256": null,
+      "bytes": 1878,
+      "status": "new"
+    },
+    {
+      "path": "tools/verify_ts_fix_02_payments.cjs",
+      "sha256": "e4cef5d048a64ab6b27c9f52575eab143deb2ff8518a8b6001bf51fb6318f7f2",
+      "baseline_sha256": null,
+      "bytes": 2045,
+      "status": "new"
+    }
+  ],
+  "note": "SHA-256 list excludes this manifest to avoid a self-hash cycle."
+}

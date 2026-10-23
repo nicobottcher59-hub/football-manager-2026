@@ -1,0 +1,43 @@
+TS-FIX-02 - Market, structured negotiation and approved UX
+
+BASE REQUIRED
+The uploaded TS-UI-08.03 project WITH TS-FIX-01 already applied.
+This is an incremental overlay, not a standalone full game.
+
+INSTALL
+1. Stop the game and its Python server.
+2. Back up BOTH the complete project and your saved career files.
+3. Extract this ZIP into football-manager-2026, beside pyproject.toml.
+   Preserve subdirectories and replace the included files.
+4. Restart Python/the game and refresh the browser with Ctrl+F5.
+5. Optional file verification: python tools/verify_ts_fix_02_install.py
+
+SAVE COMPATIBILITY
+Manager save format changes from 26 to 27.
+Older careers are migrated on load without recalculating old results.
+Once saved in version 27, that save cannot be loaded by the old code.
+To roll back, restore BOTH the code backup AND the earlier save backup.
+No user saves or new runtime dependencies are included in this archive.
+
+WHAT TO CHECK IN A COPY OF YOUR CAREER
+- Open an unscouted player: OVR/value slots read ?? and opening cash is 0.
+- Enter upfront and separate installment totals. Choose payment count and
+  interval independently; read the dated schedule and guaranteed sum.
+- Submit a proposal and inspect the counteroffer and patience indicator.
+- Advance Calendar. Respond to incoming decisions, then use Resume.
+- Complete a signing and inspect the payable schedule in Finances.
+
+KNOWN SCOPE
+The implemented surface is inter-club negotiation, transfer search,
+incoming market interest, installment accounting and calendar intervention.
+Advanced player-contract/renewal bargaining remains a separate update.
+Missing portraits/crests use existing shared fallbacks.
+Legacy general profile/loan/free-agent information is not comprehensively
+masked by this patch. Read TS_FIX_02_TEST_REPORT.md for verification limits.
+
+GITHUB DESKTOP
+Create a NEW branch from your latest working branch with TS-FIX-01:
+  fix/ts-fix-02-market-negotiation-ux
+Suggested summary:
+  feat(transfers): TS-FIX-02 negotiation UX, installments and live market
+Do not delete or rename the earlier Scouting or TS-FIX-01 branches.

@@ -51,7 +51,20 @@
    const element=event.target;
    if(!(element instanceof HTMLImageElement)||!element.hasAttribute('data-fm-asset'))return;
    if(element.classList.contains('fm-photo-real'))element.remove();
-   else{
+   else if(element.dataset.fmAsset==='flag') {
+     // A missing local flag is not a football symbol or a guessed country.
+     const fallback=document.createElement('span');fallback.className='fm-flag-unavailable';
+     fallback.textContent='◇';fallback.setAttribute('aria-hidden','true');element.replaceWith(fallback);
+   } else if(element.hasAttribute('data-fm-crest-fallback')) {
+     const fallback=document.createElement('span');
+     fallback.className=element.className+' sc-crest-placeholder';
+     fallback.textContent=element.dataset.fmCrestFallback||'?';
+     fallback.style.setProperty('--sc-placeholder-color',
+       window.FMClubIdentity?.fallbackColour?.(element.dataset.fmCrestClubId) || '#447d9d');
+     fallback.setAttribute('role','img');fallback.setAttribute('aria-label',element.alt||'Club crest unavailable');
+     fallback.title=element.title||'';
+     element.replaceWith(fallback);
+   } else {
      const fallback=document.createElement('span');fallback.className='fm-asset-fallback';fallback.textContent='⚽';
      fallback.setAttribute('aria-hidden','true');element.replaceWith(fallback);
    }

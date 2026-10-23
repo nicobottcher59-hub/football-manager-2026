@@ -183,7 +183,7 @@ def test_v11_migration_no_player_mutations_and_quotes_persist(initial):
     before={(p.id):(p.attributes,p.development.potential,p.state.form)
             for c in s._world_squads.clubs.values() for p in c.squad.players}
     graph=capture_manager_graph(s)
-    assert graph['version']==GRAPH_VERSION==17
+    assert graph['version']==GRAPH_VERSION==27
     legacy=deepcopy(graph);legacy['version']=11
     node=next(n for n in legacy['nodes'] if n.get('class')=='football_manager.domain.football_world:FootballWorld')
     del node['fields']['market_review_on'];del node['fields']['market_values']
@@ -204,7 +204,7 @@ def test_sqlite_full_save_roundtrip(initial,tmp_path):
     loaded=load_manager_career(repo,'test').session
     assert loaded._world_squads.market_values==s._world_squads.market_values
     assert loaded._world_squads.market_review_on==s._world_squads.market_review_on
-    assert capture_manager_graph(loaded)['version']==17
+    assert capture_manager_graph(loaded)['version']==GRAPH_VERSION==27
 
 
 def test_ceiling_on_extreme_market_scenario():

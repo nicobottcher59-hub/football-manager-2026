@@ -1,0 +1,34 @@
+TS-UI-08.04 — Scouting: insignias, banderas y rangos
+
+BASE OBLIGATORIA:
+- El proyecto original de football-manager-2026.zip (TS-UI-08.03)
+- TS-FIX-01 ya aplicado
+- TS-FIX-02 ya aplicado
+
+INSTALACION:
+1. Cerrar el juego y detener el servidor Python.
+2. Hacer una copia de la carpeta football-manager-2026 y de las partidas.
+3. Extraer TS_UI_08_04_Scouting_Identidad_Rangos.zip directamente en la
+   raiz de football-manager-2026, junto a pyproject.toml.
+4. Conservar la estructura de carpetas y reemplazar los archivos incluidos.
+5. Reiniciar Python, volver al juego y presionar Ctrl + F5.
+6. Entrar a Scouting > Player Search > Attributes; probar varios equipos,
+   un jugador sin informe, otro en observacion y uno con informe.
+
+CONSIDERACIONES:
+- Los escudos reales dependen de que existan en el catalogo por ID.
+  Cuando no existen aparece una insignia con iniciales, NO un escudo oficial.
+- La cabecera del jugador toma la paleta cargada o detectada del escudo.
+  Sin logo/paleta se asigna un color visual estable por ID de club.
+- Los atributos son INDICACIONES en rango; GRL, valor y potencial mantienen
+  las reglas de conocimiento de los parches anteriores. Las estrellas 85+
+  conservan su reputacion publica.
+- Los cambios NO alteran el mundo, los ratings verdaderos ni las partidas.
+  La version de guardado permanece en 27; no requiere migracion.
+- No se agregan dependencias.
+
+GITHUB DESKTOP:
+Branch nueva: feat/ts-ui-08-04-scouting-identity-ranges
+Summary: feat(scouting): TS-UI-08.04 scalable identity and attribute ranges
+
+Pruebas, limitaciones y archivos: TS_UI_08_04_TEST_REPORT.md

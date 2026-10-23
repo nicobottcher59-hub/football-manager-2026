@@ -125,3 +125,74 @@ body.tsui-scouting-active .sidebar::before {background:repeating-linear-gradient
 body.tsui-scouting-active .sidebar .nav-item:hover:not(.is-active){background:rgba(var(--ui-club-rgb),.14);color:#fff}
 body.tsui-scouting-active .sidebar-bottom-icon{color:var(--ui-club-highlight)}
 .sc-recommendation-name small.sc-rec-club{display:flex;align-items:center;gap:5px;min-width:0;white-space:nowrap}.sc-rec-club .sc-mini-crest{width:17px;height:18px;flex-basis:17px}
+
+/* TS-UI-08.04 — scalable country/club identity + compact scouting knowledge. */
+.fm-flag-only{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:23px;height:17px;border-radius:3px;background:#102d43;border:1px solid #789ab7aa;overflow:hidden;vertical-align:middle;white-space:nowrap}
+.fm-flag-only img{display:block;width:100%;height:100%;object-fit:cover}
+.fm-flag-emoji{display:inline-flex;align-items:center;justify-content:center;line-height:1;width:100%;height:100%;font-size:20px;letter-spacing:-2px;white-space:nowrap;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif}
+.fm-flag-unavailable,.sc-nationality-backup{font-size:14px;color:#a0b5c2;text-align:center;line-height:1}
+.sc-roster-meta{flex-wrap:nowrap;gap:7px!important}
+.sc-row-age{white-space:nowrap}
+.sc-roster-clubline{display:flex!important;align-items:center;gap:7px!important;min-height:24px;max-width:100%}
+.sc-roster-league{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;min-width:0}
+.sc-roster-about .fm-flag-only{margin-left:1px}
+.sc-mini-crest{width:23px;height:25px;flex:0 0 23px;object-fit:contain}
+.sc-player-club-crest{width:35px;height:39px;flex:0 0 35px;object-fit:contain}
+.sc-crest-placeholder{display:inline-flex!important;align-items:center;justify-content:center;isolation:isolate;
+  padding:3px 2px 5px;border:1px solid #ffffff6b!important;border-radius:5px 5px 8px 8px;
+  background:linear-gradient(150deg,var(--sc-placeholder-color,#447d9d),#0c263d)!important;
+  box-shadow:0 2px 5px #0009,inset 0 1px #ffffff40;color:#fff!important;font-size:9px!important;
+  font-weight:900!important;line-height:1;letter-spacing:-.3px;text-shadow:0 1px #0009}
+.sc-player-club-crest.sc-crest-placeholder{font-size:13px!important;border-radius:7px 7px 11px 11px}
+.sc-hub-shell .sc-hero{min-height:147px;padding:15px 21px}
+.sc-hero-metrics>div{min-height:70px}
+.sc-hero-crest{width:67px;height:70px;flex-basis:67px}
+.sc-list-scroll{padding:0 8px}
+.sc-roster-row{min-height:70px;padding:8px;gap:8px}
+.sc-row-face{width:43px;height:49px;flex-basis:43px}
+.sc-roster-side{flex-basis:112px;padding-left:7px}
+.sc-profile-hero{padding:14px}
+.sc-profile-club-name{gap:10px!important;font-size:11px!important}
+.sc-inspector[data-fm-club-theme] .sc-profile-hero{
+  background:radial-gradient(ellipse at 12% 10%,rgba(var(--player-club-rgb,20,135,216),.55),transparent 72%),
+    linear-gradient(110deg,rgba(var(--player-club-rgb,20,135,216),.32),#0b1c31 86%);
+  border-bottom-color:rgba(var(--player-club-rgb,20,135,216),.85)
+}
+.sc-inspector[data-fm-club-theme] .sc-profile-club-name{color:var(--player-club-highlight,#80bddc)}
+.sc-inspector[data-fm-club-theme] .sc-profile-status{background:#0b2032cc}
+.sc-profile-meta .fm-flag-only{margin-right:3px}
+.sc-attribute-preview{padding:11px 12px}
+.sc-preview-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.sc-preview-heading h4{margin:0}
+.sc-preview-heading small{color:#a4c8de;font-size:10px}
+.sc-preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.sc-preview-grid>div{display:flex;align-items:center;justify-content:space-between;gap:7px;padding:9px;border:1px solid #305673;border-radius:6px;background:#08243a;color:#aecedf;font-size:10px;min-width:0}
+.sc-preview-grid strong{color:#d7f4ff;font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sc-attribute-preview>p{font-size:10px;color:#9ebdd0;margin-top:9px;line-height:1.45}
+.sc-range-notice{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;border:1px solid #35617a;border-radius:7px;background:#12334b;padding:9px 11px;margin-bottom:9px;font-size:11px;color:#b9d3e3}
+.sc-range-notice strong{color:#e0f9ff;white-space:nowrap}
+.sc-attr-row strong{font-variant-numeric:tabular-nums;min-width:42px;text-align:right;color:#c5f7d9}
+.sc-attributes section{padding:10px}
+@media(max-width:1390px){.sc-profile-status{display:inline-flex;max-width:115px;text-align:center}}
+@media(max-width:1080px){.sc-profile-status{display:none}.sc-hub-shell .sc-hero{min-height:140px}}
+@media(max-width:730px){.sc-hub-shell .sc-hero{padding:14px}.sc-profile-id h2{font-size:21px}}
+@media(max-width:450px){.sc-player-club-crest{width:28px;height:32px;flex-basis:28px}.sc-roster-side{flex-basis:91px}.sc-roster-league{max-width:115px}.sc-roster-row{gap:6px}.sc-row-face{width:38px;height:44px;flex-basis:38px}.sc-preview-grid{grid-template-columns:1fr}}
+/* On narrow windows keep navigation icons available without squeezing the
+   player directory into a sliver. No other application pages are affected. */
+@media(max-width:650px){
+  body.tsui-scouting-active .app-shell>.sidebar{flex:0 0 58px!important;width:58px!important;min-width:58px!important;max-width:58px!important;padding-left:4px;padding-right:4px}
+  body.tsui-scouting-active .sidebar .brand-name,
+  body.tsui-scouting-active .sidebar .brand-sub,
+  body.tsui-scouting-active .sidebar .club-identity strong,
+  body.tsui-scouting-active .sidebar .nav-item>span,
+  body.tsui-scouting-active .sidebar .nav-item .nav-label{display:none!important}
+  body.tsui-scouting-active .sidebar .nav-item{justify-content:center!important;min-width:0;padding-left:7px!important;padding-right:7px!important}
+  body.tsui-scouting-active .sidebar .nav-item svg{flex:0 0 auto}
+  body.tsui-scouting-active .sidebar .club-identity{justify-content:center;padding-left:0;padding-right:0}
+  .sc-hub-shell .sc-hero{min-height:0}
+  .sc-roster-row{gap:8px}
+  .sc-roster-side{flex-basis:94px}
+  .sc-roster-about{min-width:0}
+  .sc-profile-club-name{overflow-wrap:normal!important}
+  .sc-profile-club-name>span{overflow-wrap:break-word!important}
+}

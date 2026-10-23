@@ -191,12 +191,16 @@ window.FMSimulationOverlay = (() => {
         await donePromise;
         throw new Error(terminal.error);
       }
-      updateProgress(jobState,true);
-      select('.fm-sim-pulse').textContent='✓ SIMULATION COMPLETE';
+      const paused = terminal?.result?.stopped_for_decision === true;
+      updateProgress(jobState,!paused);
+      select('.fm-sim-pulse').textContent=paused?'DECISION REQUIRED':'✓ SIMULATION COMPLETE';
       select('.fm-sim-pulse').classList.add('fm-sim-pulse-done');
       select('.fm-sim-description').textContent=`${shown.toLocaleString('en-GB')} of your club's matches played`;
       if(shown===0)select('.fm-sim-feed-empty').textContent='Your club had no matches during this period. Other clubs were simulated in the background.';
-      select('.fm-sim-note').textContent=`World committed through ${dateText(target)}. Results, standings and players are now updated in Python. This DEV session is not saved when the server closes.`;
+      select('.fm-sim-note').textContent=paused
+        ? `Paused on ${dateText(terminal.result.to_date)}: ${terminal.result.decisions.length} transfer decision(s) require your response. Your original target is retained in Calendar.`
+        : `World committed through ${dateText(terminal.result.to_date)}. Save your career to preserve these changes.`;
+      done.textContent=paused?'Review negotiation':'Return to calendar';
       done.disabled=false;
       done.focus();
       await donePromise;

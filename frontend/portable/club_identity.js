@@ -8,6 +8,21 @@
   const safeAsset = value => window.FMEntityAssets?.safePath?.(value) || (typeof value==='string' && /^assets\/[A-Za-z0-9/_-]+\.(?:png|webp|jpg|svg)$/.test(value)) ? value : null;
   const safeColor = value => typeof value === 'string' && /^#[0-9a-fA-F]{6}$/.test(value) ? value.toLowerCase() : null;
   const DEFAULT = Object.freeze({primary:'#1487d8',accent:'#d5ad70',secondary:'#ffffff'});
+  // Only used when NO real badge or explicit palette is available. The colour
+  // is a stable visual fallback derived from the club ID, not an assertion of
+  // official team colours. Real imported crests/palettes always take priority.
+  const FALLBACK_COLOURS = Object.freeze([
+    '#b94857','#da9848','#629c75','#5d91bc','#945cbe','#b8629e',
+    '#5da8a1','#b48753','#708ac5','#ba7358','#6f9d56','#9b83c5',
+  ]);
+  function fallbackColour(id){
+    let hash=2166136261;
+    for(const char of String(id || 'unknown')){
+      hash=Math.imul(hash ^ char.charCodeAt(0),16777619);
+    }
+    return FALLBACK_COLOURS[(hash>>>0)%FALLBACK_COLOURS.length];
+  }
+
   const RGB = hex => [1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));
   const HEX = arr => '#'+arr.map(n=>Math.max(0,Math.min(255,Math.round(n))).toString(16).padStart(2,'0')).join('');
   const blend = (a,b,weight) => HEX(RGB(a).map((channel,i)=>channel*(1-weight)+RGB(b)[i]*weight));
@@ -111,7 +126,7 @@
       const item=resolve(clubId,clubName);
       const fromCatalog=Object.hasOwn(catalog,String(clubId))?catalog[String(clubId)]?.primary_color:null;
       const imported=window.FMEntityAssets?.getClub?.(clubId)?.primary_color;
-      setScopedColour(element,safeColor(imported)||safeColor(fromCatalog)||DEFAULT.primary);
+      setScopedColour(element,safeColor(imported)||safeColor(fromCatalog)||fallbackColour(clubId));
       if(!safeColor(imported)&&!safeColor(fromCatalog)&&item.crest){
         selectColour(item.crest).then(colour=>{
           if(colour && element.isConnected && element.dataset.fmClubTheme===clubId)
@@ -172,5 +187,5 @@
       return true;
     }).catch(error=>{console.warn('Visual identity catalog unavailable; using fallback palette',error);return false;});
   window.addEventListener('fm-assets-ready',()=>{if(last)applyShell(last.id,last.name);});
-  window.FMClubIdentity=Object.freeze({resolve,theme,applyTheme,applyShell,paintWithin,ready});
+  window.FMClubIdentity=Object.freeze({resolve,theme,applyTheme,applyShell,paintWithin,fallbackColour,ready});
 })();

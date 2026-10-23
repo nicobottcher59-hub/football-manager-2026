@@ -35,13 +35,19 @@
   const displayClub = (cid, fallback) => window.FMClubIdentity?.resolve?.(cid, fallback)?.display_name || fallback || cid;
   const clubMark = (cid, fallback='', large=false) => {
     const obj = model?.clubs?.find(c=>c.id===cid);
-    const id = window.FMClubIdentity?.resolve?.(cid,obj?.name||fallback||cid);
-    const cls=large?'sc-player-club-crest':'sc-mini-crest';
-    const source=id?.crest&&(window.FMEntityAssets?.url?.(id.crest)||'/portable/'+id.crest);
-    return source ? `<img class="${cls}" data-fm-asset="optional" src="${esc(source)}" alt="" loading="lazy">`
-      : `<span class="${cls} sc-crest-placeholder" aria-hidden="true">⚽</span>`;
+    const club = window.FMClubIdentity?.resolve?.(cid,obj?.name||fallback||cid);
+    const name = club?.display_name || obj?.name || fallback || cid || 'Unknown club';
+    const cls = large ? 'sc-player-club-crest' : 'sc-mini-crest';
+    const source = club?.crest && (window.FMEntityAssets?.url?.(club.crest) || '/portable/' + club.crest);
+    const initials = String(name).split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase() || '?';
+    // A missing club badge is a distinct shield, never a football icon.
+    // Importing a real crest under the same club ID replaces it automatically.
+    const fallbackColor = window.FMClubIdentity?.fallbackColour?.(cid) || '#447d9d';
+    return source
+      ? `<img class="${cls}" data-fm-asset="optional" data-fm-crest-fallback="${esc(initials)}" data-fm-crest-club-id="${esc(cid)}" src="${esc(source)}" alt="${esc(name)} crest" title="${esc(name)}" loading="lazy" decoding="async">`
+      : `<span class="${cls} sc-crest-placeholder" style="--sc-placeholder-color:${esc(fallbackColor)}" role="img" aria-label="${esc(name)} crest" title="${esc(name)}">${esc(initials)}</span>`;
   };
-  const flag = n => window.FMPortraits?.nation?.(n,'sc-nation') || `<span>${esc(n)}</span>`;
+  const flag = n => window.FMNationFlags?.render?.(n,'sc-nation') || `<span class="sc-nationality-backup" title="${esc(n)}">◇</span>`;
   const button = (name,action,style='',disabled=false) => `<button type="button" class="sc-btn ${style}" data-sc-action="${esc(action)}" ${disabled?'disabled':''}>${esc(name)}</button>`;
   const pills = (values) => (values||[]).map(x=>`<span class="sc-position">${esc(x)}</span>`).join('');
   const valueOrUnknown = (value) => value == null ? '—' : esc(value);
@@ -94,7 +100,7 @@
     });
     return values;
   }
-  const briefPlayer=p=>`${esc(p.position)} · ${p.age} yrs · ${esc(p.nationality)}`;
+  const briefPlayer=p=>`${esc(p.position)} · ${p.age} yrs · ${flag(p.nationality)}`;
   function hub(){
     const recommended=model.recommendations.map(rec=>({rec,p:player(rec.player_id)})).filter(x=>x.p).slice(0,5);
     const recent=model.players.filter(p=>p.priority).slice(0,5);
@@ -131,7 +137,7 @@
   function listRow(p){
     const chosen=p.id===selected;
     return `<button type="button" class="sc-roster-row ${chosen?'is-selected':''}" data-sc-select="${esc(p.id)}" aria-pressed="${chosen}">
-      ${portrait(p,'sc-row-face')}<span class="sc-roster-about"><strong>${esc(p.name)}</strong><span>${pills([p.position])}${esc(p.age)} yrs · ${esc(p.nationality)}</span><small>${clubMark(p.club_id)} ${esc(displayClub(p.club_id,p.club))} · ${esc(p.league)}</small></span>
+      ${portrait(p,'sc-row-face')}<span class="sc-roster-about"><strong>${esc(p.name)}</strong><span class="sc-roster-meta">${pills([p.position])}<span class="sc-row-age">${esc(p.age)} yrs</span>${flag(p.nationality)}</span><small class="sc-roster-clubline">${clubMark(p.club_id)}<span class="sc-roster-league">${esc(p.league)}</span></small></span>
       <span class="sc-roster-side"><strong class="${p.report?'has-report':''}">${knownAbility(p)}</strong><small>${p.public_profile&&!p.report?'Public GRL':p.report?'Est. GRL':p.scouting?`${p.scouting.progress}% scouted`:'?? GRL'}</small><span class="sc-roster-value">${knownValue(p)}</span><span class="sc-roster-priority">${p.priority?esc(priorityName(p.priority)):p.report?'Report ready':'Not scouted'}</span></span></button>`;
   }
   const priorityName = p => ({top:'Top target',future:'For future',monitor:'Monitoring'}[p]||'Not shortlisted');
@@ -153,7 +159,7 @@
     const rep=p.report||null,project=p.scouting||null,publicKnowledge=p.public_profile||null;
     return `<div class="sc-profile-hero"><div class="sc-profile-head">${portrait(p,'sc-large-face')}
        <div class="sc-profile-id"><small class="sc-profile-club-name">${clubMark(p.club_id,p.club,true)} <span>${esc(displayClub(p.club_id,p.club))} · ${esc(p.league)}</span></small><h2>${esc(p.name)}</h2><div class="sc-profile-meta">${flag(p.nationality)} <span>${p.age} years old</span> ${pills(p.positions)}</div>
-         <span class="sc-profile-public">${esc(displayClub(p.club_id,p.club))} · ${esc(p.foot)}-footed</span></div><div class="sc-profile-status">${rep?'REPORT READY':publicKnowledge?'WORLD-CLASS · PUBLIC':project?'UNDER OBSERVATION':'NOT SCOUTED'}</div></div>
+         <span class="sc-profile-public">${esc(p.foot)}-footed · ${p.report?'Report completed':p.scouting?'Under observation':'Public identity'}</span></div><div class="sc-profile-status">${rep?'REPORT READY':publicKnowledge?'WORLD-CLASS · PUBLIC':project?'UNDER OBSERVATION':'NOT SCOUTED'}</div></div>
        <div class="sc-profile-facts"><div><small>Height</small><b>${valueOrUnknown(p.height_cm)}${p.height_cm?' cm':''}</b></div><div><small>Weight</small><b>${valueOrUnknown(p.weight_kg)}${p.weight_kg?' kg':''}</b></div>
          <div><small>GRL</small><b>${knownAbility(p)}</b></div><div><small>Value</small><b>${knownValue(p)}</b></div></div></div>
        <div class="sc-profile-actions"><button class="sc-btn sc-btn-blue" data-sc-action="scout:${esc(p.id)}" ${rep||project||model.free_slots<1?'disabled':''}>${rep?'Report complete':project?'Scouting in progress':model.free_slots<1?'Scouts occupied':'Assign scout'}</button>
@@ -166,14 +172,21 @@
   function overviewPane(p){
     const rep=p.report,known=knowledge(p);
     const potential=known?.potential_range;
+    const glimpses=rep?.attributes||p.public_profile?.attributes||p.attribute_estimates||[];
+    // Summarise a few genuine attribute bands so unscouted profiles are useful.
+    // The full technical/mental/physical list remains under Attributes.
+    const focus=['Pace','Heading','Passing','Tackling','Finishing','Strength'];
+    const shortlist=focus.map(name=>glimpses.find(a=>a.name===name)).filter(Boolean).slice(0,4);
+    const preview=shortlist.length?`<section class="sc-profile-section sc-attribute-preview"><div class="sc-preview-heading"><h4>Attribute indications</h4><small>${rep?'Scout assessment':p.public_profile?'Publicly known':'Early, broad estimates'}</small></div><div class="sc-preview-grid">${shortlist.map(a=>`<div><span>${esc(a.name)}</span><strong>${a.value==null?range(a.range):esc(a.value)}</strong></div>`).join('')}</div><p>Indicative only. Open Attributes to see all ranges; scouting makes estimates more precise.</p></section>`:'';
     return `<div class="sc-profile-stats"><div><small>${p.public_profile&&!rep?'Public GRL':'Estimated GRL'}</small><strong>${knownAbility(p)}</strong></div><div><small>Potential estimate</small><strong>${range(potential)}</strong></div><div><small>Market value</small><strong>${knownValue(p)}</strong></div><div><small>Scout confidence</small><strong>${rep?rep.confidence+'%':'??'}</strong></div></div>
-      <section class="sc-profile-section"><h4>Positions & familiarity</h4><div class="sc-field-map"><div class="sc-field-mark">${pills(p.positions)}</div></div></section>
-      <section class="sc-profile-section"><h4>${rep?'Scout verdict':p.public_profile?'Public reputation':'Scout verdict'}</h4><p>${rep?esc(rep.verdict):p.public_profile?'Established world-class footballer. Public ability and estimated market value are known without assigning a scout; hidden potential remains unknown.':'?? — No report available. Public information is visible, but ability, potential and transfer value remain unknown.'}</p></section>`;
+      ${preview}<section class="sc-profile-section"><h4>Positions & familiarity</h4><div class="sc-field-map"><div class="sc-field-mark">${pills(p.positions)}</div></div></section>
+      <section class="sc-profile-section"><h4>${rep?'Scout verdict':p.public_profile?'Public reputation':'Scouting status'}</h4><p>${rep?esc(rep.verdict):p.public_profile?'Established world-class footballer. Public ability and estimated market value are known without assigning a scout; hidden potential remains unknown.':'No completed report. Attribute indications are broad; OVR, potential and market value remain undisclosed.'}</p></section>`;
   }
   function attributesPane(p){
-    const attrs=p.report?.attributes||p.public_profile?.attributes;
-    if(!attrs)return `<div class="sc-locked"><strong>Attributes: ??</strong><p>Assign a scout and advance the career calendar to reveal estimated ranges. Exact attributes are not disclosed for unscouted players.</p></div>`;
-    return `<div class="sc-attributes">${['technical','mental','physical','goalkeeping'].map(group=>`<section><h4>${group.toUpperCase()}</h4>${attrs.filter(a=>a.group===group).map(a=>`<div class="sc-attr-row"><span>${esc(a.name)}</span><strong>${a.value==null?range(a.range):esc(a.value)}</strong></div>`).join('')||'<p>No attributes for this group.</p>'}</section>`).join('')}</div>`;
+    const attrs=p.report?.attributes||p.public_profile?.attributes||p.attribute_estimates;
+    if(!attrs?.length)return `<div class="sc-locked"><strong>Attributes unavailable</strong><p>This player has no attribute indications recorded.</p></div>`;
+    const mode=p.report?'Scout-estimated ranges':p.public_profile?'Publicly known attributes':p.scouting?'Observation in progress · narrowing estimates':'Early indications · broad ranges';
+    return `<div class="sc-range-notice"><strong>${esc(mode)}</strong><span>Ranges are estimates, not exact ratings. They remain stable until the player changes or observation progresses.</span></div><div class="sc-attributes">${['technical','mental','physical','goalkeeping'].filter(group=>attrs.some(a=>a.group===group)).map(group=>`<section><h4>${group.toUpperCase()}</h4>${attrs.filter(a=>a.group===group).map(a=>`<div class="sc-attr-row"><span>${esc(a.name)}</span><strong>${a.value==null?range(a.range):esc(a.value)}</strong></div>`).join('')}</section>`).join('')}</div>`;
   }
   function contractPane(p){
     return `<div class="sc-profile-stats sc-contract-grid"><div><small>Current wage / week</small><strong>${cash(p.weekly_wage_gbp)}</strong></div><div><small>Contract expires</small><strong>${esc(p.contract_until||'—')}</strong></div><div><small>${p.report?'Estimated market value':'Market value'}</small><strong>${knownValue(p)}</strong></div><div><small>Transfer scouting</small><strong class="sc-contract-status">${esc(status(p))}</strong></div></div>

@@ -1,0 +1,96 @@
+{
+  "patch": "TS-FIX-02",
+  "from_date": "2026-08-21",
+  "to_date": "2026-09-25",
+  "calendar_days": 35,
+  "new_world_results": 377,
+  "streamed_unique_results": 377,
+  "decision_stops": [
+    {
+      "on_date": "2026-08-21",
+      "decisions": [
+        {
+          "deal_id": "t24-000003",
+          "player_id": "northbridge-2",
+          "player": "Lewis Hart",
+          "kind": "incoming_offer",
+          "status": "manager_turn",
+          "expires_on": "2026-08-22"
+        },
+        {
+          "deal_id": "t24-000004",
+          "player_id": "northbridge-15",
+          "player": "Callum Stone",
+          "kind": "incoming_offer",
+          "status": "manager_turn",
+          "expires_on": "2026-08-22"
+        },
+        {
+          "deal_id": "t24-000005",
+          "player_id": "northbridge-15",
+          "player": "Callum Stone",
+          "kind": "incoming_offer",
+          "status": "manager_turn",
+          "expires_on": "2026-08-29"
+        }
+      ]
+    },
+    {
+      "on_date": "2026-08-22",
+      "decisions": [
+        {
+          "deal_id": "t24-000007",
+          "player_id": "ew1-5a693873434630f5",
+          "player": "Harrison Monroe",
+          "kind": "incoming_offer",
+          "status": "manager_turn",
+          "expires_on": "2026-09-05"
+        },
+        {
+          "deal_id": "t24-000008",
+          "player_id": "ew1-770ee4708e075ec5",
+          "player": "Mason Redmond",
+          "kind": "incoming_offer",
+          "status": "manager_turn",
+          "expires_on": "2026-09-05"
+        }
+      ]
+    },
+    {
+      "on_date": "2026-08-29",
+      "decisions": [
+        {
+          "deal_id": "t24-000009",
+          "player_id": "northbridge-15",
+          "player": "Callum Stone",
+          "kind": "incoming_offer",
+          "status": "manager_turn",
+          "expires_on": "2026-09-12"
+        },
+        {
+          "deal_id": "t24-000010",
+          "player_id": "ew1-45f49629967903ae",
+          "player": "Aaron Lawson",
+          "kind": "incoming_offer",
+          "status": "manager_turn",
+          "expires_on": "2026-09-12"
+        }
+      ]
+    }
+  ],
+  "incoming_offers_reviewed": 7,
+  "unapproved_managed_sales": 0,
+  "completed_world_deals": 16,
+  "test_signing": {
+    "deal_id": "t24-000006",
+    "player_id": "ew1-106dcb763a73e778",
+    "upfront_gbp": 528000,
+    "installments_gbp": 308000,
+    "count": 4,
+    "interval_months": 6
+  },
+  "outstanding_payable_gbp": 308000,
+  "sqlite_roundtrip": true,
+  "save_version": 27,
+  "elapsed_seconds": 84.67
+}

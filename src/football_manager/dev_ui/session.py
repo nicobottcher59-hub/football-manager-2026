@@ -271,6 +271,7 @@ class DevelopmentSession:
         self.set_piece_orders = empty_orders()
         self._seed = self._next_seed
         self._next_seed += 1
+        self._calendar_resume_target = None
         self.current_date = date(2026, 8, 15)
         self.home_club, self.home_lineup, self.home_tactic = _build_side(
             club_id="northbridge",

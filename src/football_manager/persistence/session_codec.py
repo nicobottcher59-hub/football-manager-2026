@@ -23,7 +23,7 @@ from football_manager.domain.world_runner import WorldSeasonRunner
 
 from .models import SaveIntegrityError, UnsupportedSaveVersionError
 
-GRAPH_VERSION = 26
+GRAPH_VERSION = 27
 # TS-24.13: a fully populated 92-club career already needs ~286k live
 # graph nodes after its first season (TS-24.12 rejected that save). Keep
 # the integrity limit finite but accommodate normal longitudinal growth.
@@ -328,6 +328,13 @@ def restore_manager_graph(data: dict, *, migrate_world: bool = True) -> Developm
                             defaults.update(match_clock=None, recent_participation={}, state_dates={})
                         if node.get('class') == 'football_manager.domain.match_context:CompetitionContextSnapshot':
                             defaults.update(substitution_window_limit=3, extra_time_additional_windows=1)
+                    if data['version'] < 27:
+                        if node.get('class') == 'football_manager.domain.transfer_negotiation:TransferTerms':
+                            defaults.update(installments_gbp=0, installment_count=0, installment_interval_months=0)
+                        if node.get('class') == 'football_manager.domain.transfer_negotiation:TransferNegotiation':
+                            defaults.update(tolerance_remaining=100, settled_on=None, installments_paid=0)
+                        if node.get('class') == 'football_manager.domain.football_world:FootballWorld':
+                            defaults.update(transfer_interest_review_on=None)
                     if node.get('class') == 'football_manager.domain.club_support:TrainingPolicy':
                         if data['version'] < 24:
                             # TS-UI-03.03 intentionally retires group-by-XI and
@@ -371,6 +378,8 @@ def restore_manager_graph(data: dict, *, migrate_world: bool = True) -> Developm
         raise SaveIntegrityError('manager graph root must be a dictionary')
     session = object.__new__(DevelopmentSession)
     session.__dict__.update(root)
+    if data['version'] < 27:
+        session._calendar_resume_target = None
     if data['version'] < 3 and 'tactical_studio' not in root:
         from football_manager.domain.tactical_studio import TacticalStudioState
         session.tactical_studio = TacticalStudioState()

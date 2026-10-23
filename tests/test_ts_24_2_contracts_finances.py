@@ -211,7 +211,7 @@ def test_expired_deal_visible_and_still_paid_during_interim_retention(starting):
 
 def test_migration_v12_creates_ledger_without_mutating_original_world(starting):
     graph=capture_manager_graph(starting)
-    assert graph['version']==GRAPH_VERSION==17
+    assert graph['version']==GRAPH_VERSION==27
     before_market=dict(starting._world_squads.market_values)
     # Simulate the v12 schema: all four new fields were absent.
     graph['version']=12
@@ -253,7 +253,7 @@ def test_sqlite_roundtrip_preserves_contracts_and_accounts(starting,tmp_path):
     assert loaded._world_squads.club_finances==s._world_squads.club_finances
     assert loaded._world_squads.finance_review_on==s._world_squads.finance_review_on
     assert loaded._world_squads.finance_started_on==s._world_squads.finance_started_on
-    assert capture_manager_graph(loaded)['version']==17
+    assert capture_manager_graph(loaded)['version']==GRAPH_VERSION==27
     validate_manager_session(loaded)
 
 

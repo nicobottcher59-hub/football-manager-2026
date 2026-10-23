@@ -104,6 +104,7 @@ class FootballWorld:
     club_finances: dict[str, ClubFinances] = field(default_factory=dict)
     # TS-24.3/24.4 club negotiations and consented settlements.
     transfer_last_review_on: date | None = None
+    transfer_interest_review_on: date | None = None
     transfer_next_id: int = 1
     transfer_offers: dict[str, TransferNegotiation] = field(default_factory=dict)
     # TS-24.6; registrations on loan differ from contractual ownership.
@@ -114,6 +115,8 @@ class FootballWorld:
     club_support: dict[str, ClubSupport] = field(default_factory=dict)
 
     def validate(self, participants: dict[str, int] | None = None) -> None:
+        if self.transfer_interest_review_on is not None and type(self.transfer_interest_review_on) is not date:
+            raise ValueError('Invalid transfer interest clock')
         if self.club_support:
             if set(self.club_support) != set(self.clubs):
                 raise ValueError('club support registry must cover all clubs')

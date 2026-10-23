@@ -249,7 +249,7 @@ def process_ai_market(world, today: date) -> list[dict]:
                 for seller_id,player in stock[position]:
                     if seller_id==buyer_id or player.id in changed or sales[seller_id]>=2:
                         continue
-                    if len(registry.clubs[seller_id].squad)<=20:
+                    if seller_id != manager and len(registry.clubs[seller_id].squad)<=20:
                         continue
                     if player.primary_position is Position.GK and seller_id!=manager:
                         if sum(p.primary_position is Position.GK for p in registry.clubs[seller_id].squad.players)<=2:
@@ -298,7 +298,9 @@ def process_ai_market(world, today: date) -> list[dict]:
                 _,seller_id,player,fee,demand=max(contenders,key=lambda item:(item[0],item[2].id))
                 if seller_id==manager:
                     # Only an OFFER. No AI can accept on behalf of the manager.
-                    if any(d.player_id==player.id and d.buyer_id==buyer_id and d.status in ('manager_turn','agreed')
+                    if any(d.player_id==player.id and d.buyer_id==buyer_id
+                           and ((d.status in ('manager_turn','agreed') and d.expires_on>=today)
+                                or (today-d.events[-1].on_date).days<45)
                            for d in registry.transfer_offers.values()):
                         continue
                     number=registry.transfer_next_id

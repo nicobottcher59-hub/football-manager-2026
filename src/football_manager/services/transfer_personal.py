@@ -82,6 +82,8 @@ def _from_data(raw: object) -> PersonalTerms:
 
 
 def _financing(registry, deal, terms: PersonalTerms, now: date) -> None:
+    from football_manager.services.transfer_installments import validate_financing
+    validate_financing(registry,deal.buyer_id,deal.terms,now,deal.deal_id)
     account=registry.club_finances[deal.buyer_id]
     required=deal.terms.fixed_gbp+terms.signing_bonus_gbp
     if required > _availability(registry,deal.buyer_id,now,deal.deal_id):
@@ -117,9 +119,10 @@ def _sell_on_payout(registry, deal) -> tuple[str|None,int]:
         return None,0
     # Conditional bonuses already earned are actual acquisition/sale costs.
     # Unpaid, speculative bonuses do not count in profit calculations.
-    proceeds = deal.terms.fixed_gbp+sum(b.amount_gbp for b in deal.terms.bonuses
+    from football_manager.services.transfer_installments import paid_deferred
+    proceeds = deal.terms.fixed_gbp+paid_deferred(deal)+sum(b.amount_gbp for b in deal.terms.bonuses
                                         if b.kind in deal.bonus_paid)
-    cost = source.terms.fixed_gbp+sum(b.amount_gbp for b in source.terms.bonuses
+    cost = source.terms.guaranteed_gbp+sum(b.amount_gbp for b in source.terms.bonuses
                                       if b.kind in source.bonus_paid)
     basis=(proceeds if source.terms.sell_on_type=='gross' else max(0,proceeds-cost))
     total=round(basis*source.terms.sell_on_percent/100)
@@ -213,7 +216,7 @@ def _finish(session, deal, terms: PersonalTerms) -> dict:
         if key!=deal.deal_id and other.player_id==player.id and other.status in ('agreed','manager_turn'):
             registry.transfer_offers[key]=replace(other,status='expired',reason='Player transferred to another club')
     completed=replace(deal,status='completed',personal_status='completed',
-        personal_terms=terms,reason='Transfer completed after player consent',
+        personal_terms=terms,reason='Transfer completed after player consent',settled_on=now,
         sell_on_paid_gbp=sell_on,bonus_baseline=career_player_totals(registry,player.id),
         buyer_tier_at_signing=registry.identities[deal.buyer_id].tier)
     completed.validate()

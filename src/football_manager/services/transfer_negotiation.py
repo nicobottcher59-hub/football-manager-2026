@@ -106,6 +106,10 @@ def assess_terms(registry, player, buyer_id: str, terms: TransferTerms, on_date:
     """
     terms.validate()
     value=_quote(registry,player).value_gbp
+    from football_manager.services.transfer_bargaining import installment_present_value
+    contract = registry.contracts.get(player.id)
+    seller_id = contract.club_id if contract else buyer_id
+    deferred_value = installment_present_value(registry, seller_id, player, terms, on_date)
     tier=registry.identities[buyer_id].tier
     forecasts=[]
     bonus_expected=0
@@ -126,15 +130,16 @@ def assess_terms(registry, player, buyer_id: str, terms: TransferTerms, on_date:
     buyback_value=0
     if terms.buyback_gbp is not None:
         time_left=(terms.buyback_until-on_date).days
-        if time_left<=0 or time_left>365*5:
+        if time_left>366*5:
             raise ValueError('Buyback must expire within 5 years in the future')
-        if terms.buyback_gbp <= terms.fixed_gbp:
+        if terms.buyback_gbp <= terms.guaranteed_gbp:
             raise ValueError('Buyback price must exceed the guaranteed fee')
-        buyback_value=round(min(value*.12,max(0,value*1.65-terms.buyback_gbp)*.16))
+        buyback_value=round(min(value*.12,max(0,value*1.65-terms.buyback_gbp)*.16)) if time_left > 0 else 0
     # A generous clause menu cannot replace essentially all guaranteed cash.
-    unsecured=min(bonus_expected+future_sale+buyback_value, max(value*.38,terms.fixed_gbp*.70))
-    adjusted=terms.fixed_gbp + round(unsecured)
-    return {'fixed_gbp':terms.fixed_gbp,'headline_gbp':terms.fixed_gbp+sum(b.amount_gbp for b in terms.bonuses),
+    unsecured=min(bonus_expected+future_sale+buyback_value, max(value*.38,terms.guaranteed_gbp*.70))
+    adjusted=terms.fixed_gbp + deferred_value + round(unsecured)
+    return {'fixed_gbp':terms.fixed_gbp,'guaranteed_gbp':terms.guaranteed_gbp,'installments_gbp':terms.installments_gbp,
+            'headline_gbp':terms.guaranteed_gbp+sum(b.amount_gbp for b in terms.bonuses),
             'risk_adjusted_gbp':adjusted,'bonuses':forecasts,'resale_expected_gbp':future_sale,
             'buyback_expected_gbp':buyback_value,'uncertain_gbp':round(unsecured)}
 
@@ -157,7 +162,8 @@ def _make_counter(terms: TransferTerms, target: int, offered: int, buyer_budget:
 def _terms_from_data(raw: dict, as_of: date, value: int) -> TransferTerms:
     if not isinstance(raw,dict):
         raise ValueError('Offer terms must be a JSON object')
-    allowed={'fixed_gbp','bonuses','sell_on_type','sell_on_percent','buyback_gbp','buyback_until'}
+    allowed={'fixed_gbp','bonuses','sell_on_type','sell_on_percent','buyback_gbp','buyback_until',
+             'installments_gbp','installment_count','installment_interval_months'}
     if set(raw)-allowed:
         raise ValueError('Unknown offer term')
     bs=raw.get('bonuses',[])
@@ -173,9 +179,10 @@ def _terms_from_data(raw: dict, as_of: date, value: int) -> TransferTerms:
     except (ValueError,TypeError) as exc:
         raise ValueError('Invalid buyback expiration date') from exc
     terms=TransferTerms(raw.get('fixed_gbp'),tuple(bonus),raw.get('sell_on_type','none'),
-                        raw.get('sell_on_percent',0),raw.get('buyback_gbp'),until)
+                        raw.get('sell_on_percent',0),raw.get('buyback_gbp'),until,
+                        raw.get('installments_gbp',0),raw.get('installment_count',0),raw.get('installment_interval_months',0))
     terms.validate()
-    if terms.fixed_gbp + sum(b.amount_gbp for b in terms.bonuses) > 1_000_000_000:
+    if terms.guaranteed_gbp + sum(b.amount_gbp for b in terms.bonuses) > 1_000_000_000:
         raise ValueError('Excessive headline valuation')
     if terms.buyback_until is not None and terms.buyback_until <= as_of:
         raise ValueError('Buyback must be valid in the future')
@@ -210,45 +217,40 @@ def _apply_ai_reply(registry, offer: TransferNegotiation, on_date: date) -> Tran
             required=round(required*1.65/5_000)*5_000
         elif after['backups_covered'] < before['backups_covered']:
             required=round(required*1.25/5_000)*5_000
-    fixed=offer.terms.fixed_gbp
-    if fixed>buyer_budget:
-        return replace(offer,status='rejected',reason='Buyer cannot finance the guaranteed upfront fee')
-    # In principle a club will never accept a no-money deal hidden behind bonuses.
+    from football_manager.services.transfer_installments import validate_financing, deferred_capacity
+    try:
+        validate_financing(registry, offer.buyer_id, offer.terms, on_date, offer.deal_id)
+    except ValueError:
+        if seller_is_ai:
+            # An invalid command must not consume patience or end a discussion.
+            raise
     if seller_is_ai:
-        if required<=0:
-            return replace(offer,status='rejected',reason='Seller has no valid contracted price')
-        if evaluation>=required and fixed>=max(5_000,round(required*.32)):
-            return replace(offer,status='agreed',expires_on=on_date+timedelta(days=45),
-                           reason='Club terms agreed; awaiting player consent')
-        if evaluation<required*.48:
-            return replace(offer,status='rejected',reason='Offer too far below the seller valuation')
-        if offer.refusal_count>=5:
-            return replace(offer,status='rejected',reason='Seller closed negotiations after repeated low offers')
-        counter=_make_counter(offer.terms,required,evaluation,buyer_budget)
-        if counter is None:
-            return replace(offer,status='rejected',reason='Required guaranteed fee exceeds buyer budget')
-        event=NegotiationEvent(on_date,offer.seller_id,counter,'Seller counteroffer: more guaranteed money required')
-        return replace(offer,terms=counter,proposed_by=offer.seller_id,
-                       events=(*offer.events,event),refusal_count=offer.refusal_count+1,
-                       expires_on=on_date+timedelta(days=21),status='manager_turn',
-                       reason='Seller values uncertain clauses below their maximum headline')
-    # AI buyer: max willingness tied to its valuation AND its liquidity.
-    value=_quote(registry,player).value_gbp
-    ceiling=min(buyer_budget,int(value*(1.15+.23*_unit(registry.seed,'demand',offer.buyer_id,player.id))))
-    if fixed > ceiling or evaluation > ceiling*1.10:
-        if offer.refusal_count>=5 or fixed>ceiling*1.75:
-            return replace(offer,status='rejected',reason='Buyer refused the price')
-        counter=replace(offer.terms,fixed_gbp=max(5_000,(int(min(ceiling, fixed*.82))//5_000)*5_000))
-        if counter==offer.terms or counter.fixed_gbp>buyer_budget:
-            return replace(offer,status='rejected',reason='Buyer refused the requested price')
-        event=NegotiationEvent(on_date,offer.buyer_id,counter,'Buyer counteroffer based on financial ceiling')
-        return replace(offer,terms=counter,proposed_by=offer.buyer_id,events=(*offer.events,event),
-                       refusal_count=offer.refusal_count+1,expires_on=on_date+timedelta(days=21),
-                       status='manager_turn',reason='Buyer is seeking a lower guaranteed fee')
-    if evaluation>=required*.58:  # Manager-as-seller may accept a lower amount.
-        return replace(offer,status='agreed',expires_on=on_date+timedelta(days=45),
+        from football_manager.services.transfer_bargaining import seller_reply
+        return seller_reply(registry, offer, player, required, on_date)
+    # Managed sale: buyer values the package, not just its initial cash payment.
+    value = _quote(registry, player).value_gbp
+    capacity = deferred_capacity(registry, offer.buyer_id, on_date, offer.deal_id)
+    ceiling = min(buyer_budget + capacity, int(value * (1.15 + .23 * _unit(
+        registry.seed, 'demand', offer.buyer_id, player.id))))
+    finance_ok = (offer.terms.fixed_gbp <= buyer_budget and offer.terms.installments_gbp <= capacity)
+    if finance_ok and evaluation <= ceiling * 1.02:
+        return replace(offer, status='agreed', expires_on=on_date + timedelta(days=45),
                        reason='Club terms agreed; awaiting player consent')
-    return replace(offer,status='rejected',reason='Buyer withdrew after unfavorable revised terms')
+    remaining = max(0, offer.tolerance_remaining - (28 if evaluation > ceiling * 1.6 else 15))
+    if remaining <= 0 and offer.tolerance_remaining > 20:
+        remaining = 10
+    if remaining == 0 or len(offer.events) >= 30:
+        return replace(offer, status='rejected', tolerance_remaining=0,
+                       reason='Buyer ended talks after repeated unaffordable demands')
+    fixed = min(buyer_budget, max(0, int(min(ceiling, offer.terms.guaranteed_gbp * .88) / 5000) * 5000))
+    deferred = min(capacity, max(0, int((ceiling - fixed) / 5000) * 5000)) if offer.terms.installments_gbp else 0
+    counter = TransferTerms(fixed, installments_gbp=deferred,
+        installment_count=2 if deferred else 0, installment_interval_months=6 if deferred else 0)
+    event = NegotiationEvent(on_date, offer.buyer_id, counter, 'Buyer counteroffer: revised affordable payment structure')
+    return replace(offer, terms=counter, proposed_by=offer.buyer_id, events=(*offer.events, event),
+        refusal_count=offer.refusal_count + 1, tolerance_remaining=remaining,
+        expires_on=on_date + timedelta(days=21), status='manager_turn',
+        reason='Final warning: the buyer is close to ending talks.' if remaining <= 20 else 'The buyer requests a less expensive package.')
 
 
 def initialize_transfer_market(registry, on_date: date) -> None:
@@ -260,6 +262,12 @@ def _can_start(registry, player_id: str, seller_id: str, buyer_id: str, on_date:
     if seller_id==buyer_id or seller_id not in registry.clubs or buyer_id not in registry.clubs:
         raise ValueError('Invalid buying or selling club')
     _player(registry,player_id,seller_id)
+    closed = [d for d in registry.transfer_offers.values()
+              if d.player_id == player_id and d.buyer_id == buyer_id and d.seller_id == seller_id
+              and d.status in ('rejected', 'withdrawn') and d.events[-1].on_date + timedelta(days=14) > on_date]
+    if closed:
+        until = max(d.events[-1].on_date for d in closed) + timedelta(days=14)
+        raise ValueError(f'The other club will not reopen talks before {until.isoformat()}')
     if any(d.player_id==player_id and d.status in ('manager_turn','agreed') and d.expires_on>=on_date
            and d.buyer_id==buyer_id for d in registry.transfer_offers.values()):
         raise ValueError('A live negotiation already exists for this player and buyer')
@@ -295,10 +303,11 @@ def negotiate(session, command: dict) -> dict:
             raise ValueError('Choose a rival professional player')
         player,_=_player(registry,pid,seller)
         terms=_terms_from_data(command.get('terms'),now,_quote(registry,player).value_gbp)
-        return {'valuation':assess_terms(registry,player,manager,terms,now),
+        from football_manager.services.transfer_installments import deferred_capacity
+        return {'valuation':public_terms_summary(terms),
                 'available_transfer_budget_gbp':_availability(registry,manager,now),
-                'market_value_gbp':_quote(registry,player).value_gbp,
-                'note':'Risk-adjusted amount is NOT a seller acceptance quote.'}
+                'available_installment_credit_gbp':deferred_capacity(registry,manager,now),
+                'note':'Your financial commitment only. This does not predict seller acceptance.'}
     if action=='submit':
         from football_manager.services.ai_transfer_market import window_open
         if not window_open(now):
@@ -310,8 +319,8 @@ def negotiate(session, command: dict) -> dict:
         _can_start(registry,pid,seller,manager,now)
         player,_=_player(registry,pid,seller)
         terms=_terms_from_data(command.get('terms'),now,_quote(registry,player).value_gbp)
-        if terms.fixed_gbp>_availability(registry,manager,now):
-            raise ValueError('Guaranteed fee exceeds available transfer budget')
+        from football_manager.services.transfer_installments import validate_financing
+        validate_financing(registry,manager,terms,now)
         offer=_create_offer(registry,pid,seller,manager,now,terms,manager)
         answered=_apply_ai_reply(registry,offer,now)
         registry.transfer_offers[offer.deal_id]=answered
@@ -339,15 +348,16 @@ def negotiate(session, command: dict) -> dict:
         player,_=_player(registry,old.player_id,old.seller_id)
         required=_seller_target(registry,old.seller_id,old.buyer_id,player,
                                 registry.contracts[old.player_id],now)
-        if old.terms.fixed_gbp>_availability(registry,old.buyer_id,now,old.deal_id):
-            raise ValueError('Buyer transfer budget no longer covers the guaranteed amount')
+        from football_manager.services.transfer_installments import validate_financing
+        validate_financing(registry,old.buyer_id,old.terms,now,old.deal_id)
         amended=replace(old,status='agreed',expires_on=now+timedelta(days=45),
                         reason='Club terms agreed; player consent and transfer settlement pending')
     elif action=='counter':
         player,_=_player(registry,old.player_id,old.seller_id)
         new_terms=_terms_from_data(command.get('terms'),now,_quote(registry,player).value_gbp)
-        if manager==old.buyer_id and new_terms.fixed_gbp>_availability(registry,manager,now,old.deal_id):
-            raise ValueError('Guaranteed fee exceeds transfer budget')
+        if manager==old.buyer_id:
+            from football_manager.services.transfer_installments import validate_financing
+            validate_financing(registry,manager,new_terms,now,old.deal_id)
         event=NegotiationEvent(now,manager,new_terms,'Manager counteroffer')
         candidate=replace(old,terms=new_terms,proposed_by=manager,events=(*old.events,event),
                           expires_on=now+timedelta(days=21),reason='Manager counteroffer submitted')
@@ -450,7 +460,8 @@ def transfer_read_model(session) -> dict:
     now=session.current_date
     manager=_manager_club(session)
     offers=[]
-    for item in sorted(registry.transfer_offers.values(),key=lambda d:d.deal_id,reverse=True)[:80]:
+    managed_deals = [d for d in registry.transfer_offers.values() if manager in (d.seller_id, d.buyer_id)]
+    for item in sorted(managed_deals, key=lambda d:(d.status in ('manager_turn','agreed'), d.deal_id), reverse=True)[:80]:
         if manager not in (item.seller_id,item.buyer_id):
             continue
         try:
@@ -469,7 +480,12 @@ def transfer_read_model(session) -> dict:
             except ValueError:
                 continue
         terms=item.terms
-        evaluation=assess_terms(registry,player,item.buyer_id,terms,now)
+        from football_manager.services.transfer_knowledge import player_knowledge
+        from football_manager.services.transfer_bargaining import public_tolerance
+        from football_manager.services.transfer_installments import deferred_capacity, schedule, paid_deferred
+        evaluation=public_terms_summary(terms)
+        actual_owner=registry.contracts[player.id].club_id
+        profile=player_knowledge(session,actual_owner,player)
         inactive=item.expires_on<now and item.status in ('manager_turn','agreed')
         personal=None
         if item.status=='agreed':
@@ -480,7 +496,16 @@ def transfer_read_model(session) -> dict:
             'buyer_id':item.buyer_id,'seller':registry.clubs[item.seller_id].name,
             'buyer':registry.clubs[item.buyer_id].name,'status':'expired' if inactive else item.status,
             'reason':item.reason,'fixed_gbp':terms.fixed_gbp,'terms':terms_as_json(terms),
-            'valuation':evaluation,'market_value_gbp':_quote(registry,player).value_gbp,
+            'valuation':evaluation,'market_value_gbp':profile['value_gbp'],
+            'player_profile':profile,'tolerance':public_tolerance(item),
+            'guaranteed_gbp':terms.guaranteed_gbp,
+            'available_upfront_gbp':_availability(registry,manager,now,item.deal_id),
+            'available_installment_credit_gbp':deferred_capacity(registry,manager,now,item.deal_id),
+            'settled_on':item.settled_on.isoformat() if item.settled_on else None,
+            'installments_paid':item.installments_paid,
+            'outstanding_installments_gbp':terms.installments_gbp-paid_deferred(item),
+            'installment_schedule':[{'due_on':due.isoformat(),'amount_gbp':amount,'paid':i<item.installments_paid}
+                for i,(due,amount) in enumerate(schedule(terms,item.settled_on or now))],
             'expires_on':item.expires_on.isoformat(),'updated_on':item.events[-1].on_date.isoformat(),
             'events':len(item.events),'personal_status':item.personal_status,
             'personal_terms':({'weekly_wage_gbp':item.personal_terms.weekly_wage_gbp,
@@ -511,11 +536,8 @@ def transfer_read_model(session) -> dict:
         club=registry.clubs[cid]
         for p in club.squad.players:
             if p.id not in registry.contracts or registry.contracts[p.id].kind!='professional':continue
-            q=_quote(registry,p)
-            targets.append({'id':p.id,'name':p.full_name,'club_id':cid,'club':club.name,
-                            'position':p.primary_position.value,'ovr':round(p.overall_rating,1),
-                            'age':p.age_on(now),'value_gbp':q.value_gbp,
-                            'contract_until':registry.contracts[p.id].expires_on.isoformat()})
+            from football_manager.services.transfer_knowledge import player_knowledge
+            targets.append(player_knowledge(session,cid,p))
     targets.sort(key=lambda x:(x['club'],x['name']))
     from football_manager.services.ai_transfer_market import window_open
     world_deals=[d for d in registry.transfer_offers.values()
@@ -531,18 +553,30 @@ def transfer_read_model(session) -> dict:
                     'fee_gbp':d.terms.fixed_gbp}
                    for d in world_deals[:45]]
     from football_manager.services.professional_scouting import scouting_read_model
-    return {'schema_version':1,'source':'ts24-5-autonomous-club-negotiation','date':now.isoformat(),
+    from football_manager.services.transfer_installments import finance_summary
+    return {'schema_version':2,'source':'ts-fix-02-structured-negotiation','date':now.isoformat(),
             'window_open': window_open(now), 'world_transfers':transfer_news,
             'club_id':manager,'club':registry.clubs[manager].name,
             'available_transfer_budget_gbp':_availability(registry,manager,now),
             'transfer_budget_gbp':registry.club_finances[manager].transfer_budget_gbp,
+            'installment_finance':finance_summary(registry,manager,now),
+            'club_country':registry.clubs[manager].country,
+            'club_league':{1:'Premier League',2:'Championship',3:'League One',4:'League Two',0:'Other divisions'}[registry.identities[manager].tier],
             'offers':offers,'targets':targets,'professional_scouting':scouting_read_model(session),
             'note':'Club offers reserve fees; player consent completes registration and guaranteed payments. Future bonuses remain recorded obligations.',
             'accepted_note':'A club agreement is provisional until the player and agent approve a contract and the transfer is settled.'}
 
 
 def terms_as_json(terms: TransferTerms) -> dict:
-    return {'fixed_gbp':terms.fixed_gbp,'bonuses':[{'kind':b.kind,'threshold':b.threshold,'amount_gbp':b.amount_gbp}
+    return {'fixed_gbp':terms.fixed_gbp,'installments_gbp':terms.installments_gbp,
+            'installment_count':terms.installment_count,'installment_interval_months':terms.installment_interval_months,'bonuses':[{'kind':b.kind,'threshold':b.threshold,'amount_gbp':b.amount_gbp}
             for b in terms.bonuses], 'sell_on_type':terms.sell_on_type,
             'sell_on_percent':terms.sell_on_percent,'buyback_gbp':terms.buyback_gbp,
             'buyback_until':terms.buyback_until.isoformat() if terms.buyback_until else None}
+
+
+def public_terms_summary(terms: TransferTerms) -> dict:
+    """Only arithmetic on terms already supplied by one negotiating party."""
+    return {'fixed_gbp':terms.fixed_gbp, 'installments_gbp':terms.installments_gbp,
+            'guaranteed_gbp':terms.guaranteed_gbp,
+            'headline_gbp':terms.guaranteed_gbp + sum(b.amount_gbp for b in terms.bonuses)}

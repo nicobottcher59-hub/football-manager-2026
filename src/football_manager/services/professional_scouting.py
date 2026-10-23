@@ -244,6 +244,45 @@ def _estimation(source, quality, player_id, name, maximum=100):
             max(1, min(maximum, round(centre + spread)))]
 
 
+def _attribute_indications(player, player_id: str, *, progress: int = 0,
+                           report_quality: int | None = None) -> list[dict]:
+    """Deterministic, approximate scouting indications; never ship exact values.
+
+    The stable per-attribute offset means refreshes do not reroll bands. As an
+    assignment progresses (or completes), bands narrow. Bounds are clamped to
+    the valid attribute scale without ever exposing the exact underlying value.
+    No latent player potential, ability, transfer value or wages are read here.
+    """
+    from hashlib import sha256
+
+    output = []
+    for group in ('technical', 'mental', 'physical', 'goalkeeping'):
+        bundle = getattr(player.attributes, group, None)
+        if bundle is None:
+            continue
+        for field_item in fields(bundle):
+            raw = getattr(bundle, field_item.name)
+            if not isinstance(raw, (int, float)):
+                continue
+            token = sha256(f'attribute-band-v1|{player_id}|{group}|{field_item.name}'.encode('utf-8')).digest()
+            if report_quality is not None:
+                # Completed observations are substantially narrower, but still
+                # imperfect and never equivalent to exact player attributes.
+                spread = max(5, 10 - max(0, min(100, report_quality)) // 25) + token[1] % 2
+            else:
+                # No assignment: wide, plausible public first impression.
+                # As progress grows, scouting reduces uncertainty smoothly.
+                spread = max(8, 14 + token[1] % 3 - max(0, min(99, progress)) // 15)
+            skew = token[0] % 7 - 3
+            low = max(1, min(100, int(raw - spread - skew)))
+            high = max(1, min(100, int(raw + spread - skew)))
+            if low >= high:
+                low = max(1, high - 1)
+            output.append({'group': group, 'name': field_item.name.replace('_', ' ').title(),
+                           'range': [low, high]})
+    return output
+
+
 def scouting_hub_read_model(session) -> dict:
     """Global player directory with public facts and report-gated knowledge.
 
@@ -309,18 +348,8 @@ def scouting_hub_read_model(session) -> dict:
             uncertainty = max(.13, .31 - quality / 600)
             value = [round(report.value_gbp * (1-uncertainty), -3),
                      round(report.value_gbp * (1+uncertainty), -3)]
-            # Only scout-judged ranges, not the authoritative attribute integers.
-            # Reuse real recorded values, but preserve uncertainty and cap detail.
-            attribute_estimates = []
-            for group in ('technical', 'mental', 'physical'):
-                attrs = getattr(player.attributes, group, None)
-                if attrs is None:
-                    continue
-                for field_item in fields(attrs):
-                    raw = getattr(attrs, field_item.name)
-                    bounds = _estimation(raw, quality, pid, group + '.' + field_item.name, maximum=100)
-                    attribute_estimates.append({'group': group, 'name': field_item.name.replace('_', ' ').title(),
-                                                'range': bounds})
+            # Reported attributes remain scout estimates, not actual integers.
+            attribute_estimates = _attribute_indications(player, pid, report_quality=quality)
             item['report'] = {
                 'date': report.completed_on.isoformat(),
                 'scout': active[report.scout_id].name if report.scout_id in active else 'Former scout',
@@ -338,6 +367,12 @@ def scouting_hub_read_model(session) -> dict:
                 'days_left': ceil((100-assignment.progress_points)/_daily_points(active[assignment.scout_id]))
                 if assignment.scout_id in active else None,
             }
+        # Early indications are a separate knowledge tier: NO numeric GRL,
+        # transfer valuation or potential accompanies these attribute ranges.
+        # Established 85+ stars keep their existing public reputation rules.
+        if not report and not item['public_profile']:
+            item['attribute_estimates'] = _attribute_indications(
+                player, pid, progress=assignment.progress_points if assignment else 0)
         public.append(item)
     public.sort(key=lambda entry: (entry['club'], entry['name'], entry['id']))
 

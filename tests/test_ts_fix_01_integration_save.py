@@ -27,6 +27,10 @@ def test_quick_and_calendar_both_delegate_the_managed_team(base):
         captured.append(match)
         return match
     calendar._simulator.simulate = record
+    # This scenario tests match delegation, not the new transfer intervention.
+    for key, d in tuple(calendar._world_squads.transfer_offers.items()):
+        if calendar.home_club.id in (d.seller_id, d.buyer_id) and d.status in ('manager_turn', 'agreed'):
+            calendar._world_squads.transfer_offers[key] = replace(d, status='withdrawn')
     progress = simulate_until(calendar, calendar.current_date)
     assert progress['managed_matches'] == 1
     managed = next(r for r in captured if base.home_club.id in (r.home_club_id, r.away_club_id))
@@ -72,7 +76,7 @@ def test_sqlite_roundtrip_preserves_rhythm_ledger_and_future_results(base, tmp_p
     repo = SQLiteSaveRepository(tmp_path / 'fix01.sqlite3')
     save_manager_career(repo, slot_id='fix01', display_name='TS-FIX-01', session=s, expected_revision=0)
     loaded = load_manager_career(repo, 'fix01').session
-    assert capture_manager_graph(loaded)['version'] == GRAPH_VERSION == 26
+    assert capture_manager_graph(loaded)['version'] == GRAPH_VERSION == 27
     assert loaded._world_squads.youth == s._world_squads.youth
     assert loaded.quick_simulate() == s.quick_simulate()
     validate_manager_session(loaded)

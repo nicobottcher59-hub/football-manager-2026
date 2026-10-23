@@ -1,0 +1,34 @@
+{
+  "clean_pytest": {
+    "tests": 119,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "new_tests": 63,
+  "prior_fix01_tests": 56,
+  "javascript_checks": 30,
+  "browser_checks": 26,
+  "updated_regression_checks": {
+    "tests": 10,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "initial_regression_selection": {
+    "total": 118,
+    "passed": 109,
+    "failed": 9
+  },
+  "baseline_control_checks": {
+    "tests": 9,
+    "failures": 4,
+    "errors": 0,
+    "skipped": 0
+  },
+  "production_sources_identical_to_clean_test_overlay": true,
+  "browser_transport": "about:blank + actual local HTTP API/static assets; origin/history adapted due host navigation policy",
+  "full_repository_suite": false,
+  "actual_user_save_tested": false,
+  "new_full_season_tested": false
+}

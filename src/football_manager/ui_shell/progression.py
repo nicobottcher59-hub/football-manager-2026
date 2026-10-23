@@ -27,6 +27,26 @@ def pending_managed_match(session: DevelopmentSession):
     return session._next_unplayed_managed_match()
 
 
+def pending_transfer_decisions(session) -> list[dict]:
+    """Unanswered club offers or signed club terms awaiting player consent."""
+    cid, today = session.home_club.id, session.current_date
+    pending = []
+    for deal in session._world_squads.transfer_offers.values():
+        if cid not in (deal.seller_id, deal.buyer_id) or deal.expires_on < today:
+            continue
+        if not (deal.status == 'manager_turn' and deal.proposed_by != cid or deal.status == 'agreed'):
+            continue
+        contract = session._world_squads.contracts.get(deal.player_id)
+        player = None
+        if contract and contract.club_id in session._world_squads.clubs:
+            player = session._world_squads.clubs[contract.club_id].squad._players.get(deal.player_id)
+        pending.append({'deal_id':deal.deal_id, 'player_id':deal.player_id,
+            'player':player.full_name if player else deal.player_id,
+            'kind':'incoming_offer' if deal.seller_id == cid else 'negotiation_response',
+            'status':deal.status, 'expires_on':deal.expires_on.isoformat()})
+    return sorted(pending, key=lambda row:(row['expires_on'],row['deal_id']))
+
+
 def progression_read_model(session: DevelopmentSession) -> dict:
     upcoming = pending_managed_match(session)
     today_match = (upcoming is not None and upcoming.match_date <= session.current_date)
@@ -51,7 +71,9 @@ def progression_read_model(session: DevelopmentSession) -> dict:
             "home": upcoming.fixture.home_club_id == session.home_club.id,
         } if upcoming else None),
         "season_complete": session.season_finished,
-        "intervention_events_supported": False,
+        "intervention_events_supported": True,
+        "pending_transfer_decisions": pending_transfer_decisions(session),
+        "resume_target": getattr(session, '_calendar_resume_target', None),
         "auto_sim_includes_managed_matches": True,
         "match_screen_supported": True,
         "saving_supported": False,
@@ -189,46 +211,58 @@ def simulate_until(
     # Explicit request to simulate through today resolves a same-day match too.
     # Continue, unlike this action, always stops on a managed match day.
     before = set(session._world.results) if on_day is not None else None
+    def publish_day():
+        nonlocal before
+        if on_day is None:
+            return
+        # A single day may include dozens of background fixtures and one
+        # or more managed matches. Every emitted result exists in the world
+        # ledger; none is a demo score or a fabricated fixture.
+        ids = session._world.results.keys() - before
+        fixtures = session._world.fixtures
+        ordered = sorted(ids, key=lambda fid: (
+            fixtures[fid].kickoff.isoformat() if fixtures[fid].kickoff else "", fid,
+        ))
+        day_results = []
+        for fid in ordered:
+            fixture = fixtures[fid]
+            score = session._world.results[fid]
+            own = session.home_club.id in (fixture.home_club_id, fixture.away_club_id)
+            home_name = session._world_club_names.get(fixture.home_club_id, fixture.home_club_id)
+            away_name = session._world_club_names.get(fixture.away_club_id, fixture.away_club_id)
+            day_results.append({
+                'type': 'result', 'id': fid, 'date': (fixture.match_date or session.current_date).isoformat(),
+                'competition_id': fixture.competition_id,
+                'home_club': home_name, 'away_club': away_name,
+                'home_goals': score.home_goals, 'away_goals': score.away_goals,
+                'penalties_home': score.penalties_home,
+                'penalties_away': score.penalties_away,
+                'managed': own, 'resolver': score.resolver,
+            })
+        on_day(session.current_date, day_results)
+        before = set(session._world.results)
+
     while True:
+        if pending_transfer_decisions(session):
+            publish_day()
+            break
         background += _finish_day(session, auto_results)
         from football_manager.services.manager_inbox import synchronize_manager_inbox
         synchronize_manager_inbox(session)
-        if on_day is not None:
-            # A single day may include dozens of background fixtures and one
-            # or more managed matches. Every emitted result exists in the world
-            # ledger; none is a demo score or a fabricated fixture.
-            ids = session._world.results.keys() - before
-            fixtures = session._world.fixtures
-            ordered = sorted(ids, key=lambda fid: (
-                fixtures[fid].kickoff.isoformat() if fixtures[fid].kickoff else "", fid,
-            ))
-            day_results = []
-            for fid in ordered:
-                fixture = fixtures[fid]
-                score = session._world.results[fid]
-                own = session.home_club.id in (fixture.home_club_id, fixture.away_club_id)
-                home_name = session._world_club_names.get(fixture.home_club_id, fixture.home_club_id)
-                away_name = session._world_club_names.get(fixture.away_club_id, fixture.away_club_id)
-                day_results.append({
-                    'type': 'result', 'id': fid, 'date': (fixture.match_date or session.current_date).isoformat(),
-                    'competition_id': fixture.competition_id,
-                    'home_club': home_name, 'away_club': away_name,
-                    'home_goals': score.home_goals, 'away_goals': score.away_goals,
-                    'penalties_home': score.penalties_home,
-                    'penalties_away': score.penalties_away,
-                    'managed': own, 'resolver': score.resolver,
-                })
-            on_day(session.current_date, day_results)
-            before = set(session._world.results)
-        if session.current_date == target:
+        publish_day()
+        if session.current_date == target or pending_transfer_decisions(session):
             break
         background += _move_day(session)
+    decisions = pending_transfer_decisions(session)
+    session._calendar_resume_target = target.isoformat() if decisions else None
     return {
         "mode": "calendar_auto_sim", "from_date": start.isoformat(),
         "to_date": session.current_date.isoformat(),
         "managed_matches": len(auto_results),
         "background_matches": background,
         "auto_results": auto_results,
-        "stopped_for_decision": False,
+        "stopped_for_decision": bool(decisions),
+        "decisions": decisions,
+        "requested_target": target.isoformat(),
         "state": progression_read_model(session),
     }
