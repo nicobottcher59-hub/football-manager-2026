@@ -23,6 +23,7 @@ from .club_economy import ClubFinances, PlayerContract
 from .contract_negotiation import ContractTalk, PlayerBonusLedger
 from .transfer_negotiation import TransferNegotiation
 from .loan_market import LoanAgreement, FreeAgent
+from .loan_negotiation import LoanTalk
 from .club_support import ClubSupport
 from .career_recognition import RatingSnapshot, IndividualAward
 
@@ -113,6 +114,8 @@ class FootballWorld:
     # TS-24.6; registrations on loan differ from contractual ownership.
     loan_next_id: int = 1
     loans: dict[str, LoanAgreement] = field(default_factory=dict)
+    loan_talks: dict[str, LoanTalk] = field(default_factory=dict)
+    manager_sale_posture: dict[str, str] = field(default_factory=dict)
     free_agents: dict[str, FreeAgent] = field(default_factory=dict)
     # TS-26: small club staff, group training, and dated medical choices.
     club_support: dict[str, ClubSupport] = field(default_factory=dict)
@@ -200,6 +203,12 @@ class FootballWorld:
             raise ValueError('uninitialized transfer market')
         if type(self.loan_next_id) is not int or self.loan_next_id < 1:
             raise ValueError('Invalid loan sequence')
+        for key, talk in self.loan_talks.items():
+            if key != talk.talk_id or not isinstance(talk, LoanTalk) or talk.parent_id not in self.clubs or talk.borrower_id not in self.clubs:
+                raise ValueError('Invalid loan discussion registry')
+            talk.validate()
+        if any(state not in ('normal','transfer_listed','loan_listed','untouchable') for state in self.manager_sale_posture.values()):
+            raise ValueError('Invalid transfer availability state')
         loaned=set()
         for key,loan in self.loans.items():
             if (key != loan.loan_id or not isinstance(loan, LoanAgreement)

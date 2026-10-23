@@ -1,0 +1,31 @@
+/* TS-FIX-06: Transfer Negotiation rhythm with club-contextual loan terms. */
+.ln-negotiation{display:grid;gap:14px;color:#e6f5ff}
+.ln-hero{display:grid;grid-template-columns:minmax(280px,1.8fr) minmax(175px,1fr) minmax(175px,1fr);border:1px solid #376280;border-radius:11px;overflow:hidden;background:linear-gradient(112deg,#14384f,#0b2c46 70%,#0b2139)}
+.ln-player,.ln-identity{padding:16px;display:flex;align-items:center;gap:14px;min-width:0}
+.ln-player{background:linear-gradient(105deg,rgba(28,109,145,.3),transparent)}
+.ln-player .tr-player-face,.ln-avatar{height:87px;width:78px;flex-shrink:0;object-fit:cover;border-radius:9px;background:#18455e}
+.ln-avatar{display:grid;place-items:center;font-size:34px}
+.ln-player h2{font-size:23px;margin:5px 0}.ln-player p{margin:6px 0;font-size:12px;color:#accbe0}
+.ln-identity{border-left:1px solid #28516c}.ln-identity .tr-small-club-image{height:55px;width:55px;object-fit:contain;flex-shrink:0}
+.ln-identity div{display:grid;gap:7px}.ln-identity small{font-size:9px;letter-spacing:1.4px;color:#56baf1;font-weight:700}
+.ln-identity strong{font-size:14px}.ln-identity span{color:#accbe0;font-size:11px}
+.ln-columns{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:15px;align-items:start}
+.ln-form,.ln-right>.tr-panel{padding:19px!important}.ln-form h3,.ln-right h3{margin:6px 0;font-size:19px}.ln-form>p,.ln-section>p,.ln-right p{color:#a1c3d6;font-size:12px;line-height:1.55}
+.ln-form label{display:grid;gap:7px;color:#b5d3e5;font-size:11px;font-weight:600}
+.ln-form select,.ln-form input:not([type=checkbox]):not([type=range]){background:#0c2a40;color:#e9faff;border:1px solid #356987;border-radius:7px;padding:9px;min-width:0;width:100%;box-sizing:border-box}
+.ln-form .tr-money{display:flex;align-items:center;background:#0b2c44;border:1px solid #3182ab;border-radius:8px;padding-left:10px;gap:6px}
+.ln-form .tr-money input{border:0!important;background:transparent!important;font-size:15px!important;font-weight:700;padding:8px!important}
+.ln-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
+.ln-full{margin:12px 0}.ln-form .ln-slider{margin:16px 0;font-size:13px}.ln-slider strong{color:#fff;font-size:15px}.ln-slider input{accent-color:#18a2e1;width:100%}
+.ln-form .ln-check{display:flex;align-items:center;gap:9px;margin:14px 0;color:#e5f4ff;font-size:12px}
+.ln-section{border-top:1px solid #2d546f;padding-top:15px;margin-top:16px}.ln-section .ln-section{margin:15px 0}
+.ln-section[hidden],#ln-purchase[hidden],#ln-install-fields[hidden],#ln-buyback-fields[hidden]{display:none!important}
+.ln-payment-summary{padding:10px;border:1px solid #285a78;background:#10354b;border-radius:7px}.ln-actions{border-top:1px solid #2f5c76;display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;padding-top:16px}
+.ln-right{display:grid;gap:14px}.ln-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px}.ln-tolerance{height:11px;border-radius:999px;background:linear-gradient(90deg,#bc353a,#eea147,#24c889);overflow:hidden;margin:17px 0 6px}.ln-tolerance span{height:100%;display:block;background:rgba(8,42,62,.65);border-right:3px solid #fff;box-sizing:border-box}
+.ln-timeline{display:grid;max-height:400px;overflow:auto;gap:9px;margin-top:13px}.ln-message{display:flex;gap:11px;padding:10px;border:1px solid #265773;background:#12334a;border-radius:8px}.ln-message>div{flex:1;min-width:0}.ln-message .tr-small-club-image{flex-shrink:0;width:34px;height:34px;object-fit:contain}.ln-message p{margin:7px 0}.ln-message small{font-size:10px;color:#98bfd4}
+.ln-bonus-row{display:grid;grid-template-columns:minmax(0,1fr) 73px minmax(125px,1fr) 36px;gap:6px;align-items:center;margin:8px 0}.ln-bonus-row .tr-money{padding-left:6px}
+#ln-feedback{color:#f5c3a7;font-size:12px;margin:9px 0}#ln-feedback:empty{display:none}
+@media(max-width:980px){.ln-hero{grid-template-columns:1fr 1fr}.ln-player{grid-column:1/-1}.ln-columns{grid-template-columns:1fr}.ln-right{grid-template-columns:1fr 1fr}.ln-right>.tr-panel:last-child{grid-column:1/-1}}
+@media(max-width:580px){.ln-hero{grid-template-columns:1fr}.ln-player{grid-column:auto}.ln-identity{border-left:0;border-top:1px solid #31546d}.ln-right{grid-template-columns:1fr}.ln-right>.tr-panel:last-child{grid-column:auto}.ln-fields{grid-template-columns:1fr}.ln-bonus-row{grid-template-columns:1fr 75px}.ln-bonus-row .tr-money{grid-column:1}.ln-player .tr-player-face{width:65px;height:72px}}
+
+.ln-sliders label{min-width:0}.ln-sliders input[type=range]{width:100%;accent-color:#18a2e1;padding:0!important}.ln-marks{display:flex;justify-content:space-between;gap:4px;color:#9dbbd0;font-size:10px;font-weight:400}

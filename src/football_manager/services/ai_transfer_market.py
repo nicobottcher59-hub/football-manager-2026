@@ -188,6 +188,18 @@ def process_ai_market(world, today: date) -> list[dict]:
     buys=defaultdict(int)
     sales=defaultdict(int)
     outcomes=[]
+    # Single-offer scarcity: clubs scout widely but bother the manager only
+    # for a justified need. Transfer-listed players receive priority.
+    previous_incoming=[d for d in registry.transfer_offers.values() if d.seller_id==manager]
+    manager_bids_this_review=0
+    manager_bids_window=sum(d.started_on.year==window.year and d.started_on.month in (1,7,8)
+                            and (d.started_on.month==1)==(window.month==1)
+                            and d.seller_id==manager for d in previous_incoming)
+    manager_unlisted_window=sum(d.started_on.year==window.year and d.started_on.month in (1,7,8)
+                            and (d.started_on.month==1)==(window.month==1)
+                            and d.seller_id==manager
+                            and registry.manager_sale_posture.get(d.player_id,'normal')!='transfer_listed'
+                            for d in previous_incoming)
     buyers=[cid for cid in registry.clubs if cid != manager and registry.identities[cid].tier in (1,2,3,4)]
     buyers.sort(key=lambda cid:(_unit(registry.seed,'ai-buyer',today,cid),cid))
     # A second pass lets clubs that just sold a backup seek a replacement
@@ -250,6 +262,8 @@ def process_ai_market(world, today: date) -> list[dict]:
                 for seller_id,player in stock[position]:
                     if seller_id==buyer_id or player.id in changed or sales[seller_id]>=2:
                         continue
+                    if seller_id==manager and registry.manager_sale_posture.get(player.id)=='untouchable':
+                        continue
                     if seller_id != manager and len(registry.clubs[seller_id].squad)<=20:
                         continue
                     if player.primary_position is Position.GK and seller_id!=manager:
@@ -268,7 +282,8 @@ def process_ai_market(world, today: date) -> list[dict]:
                     score=(player.familiarity_for(position)*.35+player.overall_rating*.80
                            - (market/max(1,capacity))*14
                            + (4 if player.age_on(today) < 24 and layer <= 2 else 0)
-                           + _unit(registry.seed,'target',buyer_id,player.id,today)*2)
+                           + _unit(registry.seed,'target',buyer_id,player.id,today)*2
+                           + (20 if seller_id==manager and registry.manager_sale_posture.get(player.id)=='transfer_listed' else 0))
                     prelim.append((score,seller_id,player))
                 # Only evaluate expensive contracts/asking bands/coverage for a
                 # short ranked shortlist, rather than all 2000+ professionals.
@@ -298,10 +313,18 @@ def process_ai_market(world, today: date) -> list[dict]:
                     continue
                 _,seller_id,player,fee,demand=max(contenders,key=lambda item:(item[0],item[2].id))
                 if seller_id==manager:
+                    posture=registry.manager_sale_posture.get(player.id,'normal')
+                    if manager_bids_this_review>=1 or manager_bids_window>=3:
+                        continue
+                    if posture!='transfer_listed':
+                        if manager_unlisted_window>=1:
+                            continue
+                        if _unit(registry.seed,'unsolicited-bid',buyer_id,player.id,registry.season_label)<.83:
+                            continue
                     # Only an OFFER. No AI can accept on behalf of the manager.
                     if any(d.player_id==player.id and d.buyer_id==buyer_id
                            and ((d.status in ('manager_turn','agreed','pending_window') and d.expires_on>=today)
-                                or (today-d.events[-1].on_date).days<45)
+                                or (today-d.events[-1].on_date).days<120)
                            for d in registry.transfer_offers.values()):
                         continue
                     number=registry.transfer_next_id
@@ -320,6 +343,9 @@ def process_ai_market(world, today: date) -> list[dict]:
                     # Do not mark as a completed purchase or change budgets.
                     changed.add(player.id)
                     buys[buyer_id]+=1
+                    manager_bids_this_review+=1
+                    manager_bids_window+=1
+                    if posture!='transfer_listed':manager_unlisted_window+=1
                     continue
                 result=_finalize(world,seller_id,buyer_id,player,fee,demand,today)
                 outcomes.append(result)

@@ -25,18 +25,28 @@ def create_incoming_interest(world, today: date) -> int:
         return 0
     if world._active_journal is None:
         raise RuntimeError('Incoming interest requires a world transaction')
-    live = [d for d in registry.transfer_offers.values() if d.seller_id == manager
-            and d.status in ('manager_turn', 'agreed', 'pending_window') and d.expires_on >= today]
-    if len(live) >= 5:
+    previous = [d for d in registry.transfer_offers.values() if d.seller_id == manager]
+    live = [d for d in previous if d.status in ('manager_turn', 'agreed', 'pending_window')
+            and d.expires_on >= today]
+    is_winter = today.month == 1
+    in_window = [d for d in previous if d.started_on.year == today.year
+                 and (d.started_on.month == 1 if is_winter else d.started_on.month in (7, 8))]
+    unsolicited = sum(registry.manager_sale_posture.get(d.player_id,'normal') != 'transfer_listed'
+                      for d in in_window)
+    # All paths share the same scarcity budget, including monthly AI bids:
+    # three per window, one unsolicited, and no weekly barrage of live offers.
+    if (len(live) >= 2 or len(in_window) >= 3
+            or any(0 <= (today-d.started_on).days < 14 for d in previous)):
         return 0
     stock = [p for p in registry.clubs[manager].squad.players
              if p.id in registry.contracts and registry.contracts[p.id].club_id == manager
-             and registry.contracts[p.id].kind == 'professional']
+             and registry.contracts[p.id].kind == 'professional'
+             and registry.manager_sale_posture.get(p.id,'normal') != 'untouchable']
     buyers = [cid for cid in registry.clubs if cid != manager and registry.identities[cid].tier > 0]
     buyers.sort(key=lambda cid: (_unit(registry.seed, 'incoming-review', today, cid), cid))
     created = 0
     for buyer_id in buyers:
-        if created >= 2 or len(live) + created >= 5:
+        if created >= 1 or len(in_window) + created >= 3:
             break
         club = registry.clubs[buyer_id]
         if len(club.squad) >= 32:
@@ -58,9 +68,14 @@ def create_incoming_interest(world, today: date) -> int:
         candidates = []
         strength = sum(sorted((p.overall_rating for p in club.squad.players), reverse=True)[:11]) / 11
         for player in stock:
+            posture=registry.manager_sale_posture.get(player.id,'normal')
+            if posture != 'transfer_listed':
+                if unsolicited >= 1 or _unit(registry.seed,'fix06-weekly-unlisted',buyer_id,player.id,
+                        today.year,'winter' if is_winter else 'summer') < .85:
+                    continue
             recent = any(d.player_id == player.id and d.buyer_id == buyer_id
                          and (d.status in ('manager_turn', 'agreed', 'pending_window') and d.expires_on >= today
-                              or (today - d.events[-1].on_date).days < 45)
+                              or (today - d.events[-1].on_date).days < 120)
                          for d in registry.transfer_offers.values())
             if recent:
                 continue
@@ -79,6 +94,8 @@ def create_incoming_interest(world, today: date) -> int:
                 continue
             urgency = max(9 if layer == 1 else 5 if layer == 2 else 0 for _, _, layer in matches)
             score = player.overall_rating + urgency - 12 * fee / max(1, budget)
+            if posture == 'transfer_listed':
+                score += 16
             candidates.append((score, player.id, player, fee))
         if not candidates:
             continue
@@ -95,6 +112,8 @@ def create_incoming_interest(world, today: date) -> int:
             reason='A buying club submitted a real offer. Your decision is required; no player has moved.')
         deal.validate()
         world._put(registry.transfer_offers, key, deal)
+        if registry.manager_sale_posture.get(player.id,'normal') != 'transfer_listed':
+            unsolicited += 1
         created += 1
     return created
 

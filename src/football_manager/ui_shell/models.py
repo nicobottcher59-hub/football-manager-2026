@@ -331,6 +331,9 @@ def apply_squad_command(session: DevelopmentSession, command: dict, admin: UIRos
                 admin.transfer_statuses.pop(player_id, None)
             else:
                 admin.transfer_statuses[player_id] = status
+            # Mirror disposition inside the world runner, where AI buyers run
+            # without access to UI-only administration state.
+            session._world_squads.manager_sale_posture[player_id] = status
     elif action in ("player_instruction", "reset_player_instructions"):
         slot_id = str(command.get("slot_id", ""))
         assignment = session.home_tactic.role_assignments.get(slot_id)

@@ -7,6 +7,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date
 from .player import Player
+from .transfer_negotiation import TransferTerms
 
 
 @dataclass(frozen=True, slots=True)
@@ -24,6 +25,9 @@ class LoanAgreement:
     completed_on: date | None = None
     appearances_at_start: int = 0
     minutes_at_start: int = 0
+    recall_allowed: bool = True  # compatibility: TS-24 loans allowed recall
+    purchase_terms: TransferTerms | None = None
+    option_pending_deal_id: str | None = None
 
     def validate(self) -> None:
         from football_manager.services.club_economy import _date_plus_months
@@ -40,9 +44,16 @@ class LoanAgreement:
                 or (self.status == 'active') != (self.completed_on is None)
                 or self.completed_on is not None and (type(self.completed_on) is not date
                     or self.completed_on < self.started_on)
+                or (self.option_pending_deal_id is not None and
+                    (not isinstance(self.option_pending_deal_id,str) or not self.option_gbp))
+                or type(self.recall_allowed) is not bool
+                or (self.purchase_terms is not None and not isinstance(self.purchase_terms, TransferTerms))
+                or (self.purchase_terms is not None and self.option_gbp != self.purchase_terms.guaranteed_gbp)
                 or any(type(n) is not int or n < 0 for n in
                        (self.appearances_at_start,self.minutes_at_start))):
             raise ValueError('Invalid loan agreement')
+        if self.purchase_terms is not None:
+            self.purchase_terms.validate()
 
 
 @dataclass(frozen=True, slots=True)

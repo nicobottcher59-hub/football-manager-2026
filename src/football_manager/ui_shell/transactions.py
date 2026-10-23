@@ -42,9 +42,12 @@ def preserve_squad_edit(session: DevelopmentSession, admin: UIRosterAdmin | None
         numbers_before = dict(numbers)
         statuses = admin.transfer_statuses
         statuses_before = dict(statuses)
+    posture_before = dict(session._world_squads.manager_sale_posture)
     try:
         yield
     except BaseException:
+        session._world_squads.manager_sale_posture.clear()
+        session._world_squads.manager_sale_posture.update(posture_before)
         session.set_piece_orders.clear()
         session.set_piece_orders.update(set_pieces_before)
         for name in ("library", "plans", "rules", "revision", "sequence", "active_id"):

@@ -1,0 +1,22 @@
+TS-FIX-06 - Market offers and loan negotiations
+
+Prerequisite: current game includes TS-FIX-05 (and the earlier TS-UI-08.04,
+TS-FIX-01 to TS-FIX-04 patches).
+
+1. Stop Python and close the game.
+2. Back up the football-manager-2026 folder and all career saves.
+3. Extract TS_FIX_06_Mercado_Cesiones_IA.zip into the ROOT of the
+   football-manager-2026 project (the directory containing pyproject.toml).
+4. Preserve relative folder paths and overwrite only the included files.
+5. Restart the game and hard-refresh the browser with Ctrl+F5.
+
+This changes graph save format 29 to 30. Older saves migrate when loaded.
+Save files written by TS-FIX-06 cannot be opened by the previous version;
+to roll back restore BOTH the previous code and the save backup.
+
+GitHub Desktop:
+Branch (new): fix/ts-fix-06-market-loans-ai
+Summary: feat(market,loans): TS-FIX-06 AI offer balance and loan negotiation
+
+The SHA256 file in the archive lists the precise modified/new code files.
+See TS_FIX_06_TEST_REPORT.md for all validations and known limitations.

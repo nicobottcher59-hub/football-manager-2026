@@ -82,14 +82,16 @@
        <p class="tr-footnote">New bids open during January, July and August. Professional scout reports are now available and optional. Unknown general OVR and market values remain hidden until observed. Club offers reserve money until player and agent agree personal terms; a completed deal moves the player and money.</p>
        </div>`;
   }
-  const loanPlayer=(p)=>`<span class="tr-loan-person"><strong>${esc(p.name)}</strong><small>${esc(p.position||'?')} · ${Number(p.ovr||0).toFixed(1)} GRL · ${p.age||'?'} yrs</small></span>`;
-  const loanMoney=(n)=>brief(n||0);
+  const loanPlayer=(p)=>`<span class="tr-loan-person"><strong>${esc(p.name)}</strong><small>${esc(p.position||'?')} · ${p.ovr==null?'??':Number(p.ovr).toFixed(1)} GRL · ${p.age||'?'} yrs</small></span>`;
+  const loanMoney=(n)=>n==null?'??':brief(n);
   function loanHub(){
     if(!loansModel)return '<section class="tr-panel"><h3>Loans & free agents</h3><p>Loading live player and loan records...</p><button type="button" class="tr-btn" data-tr-loan-reload>Reload</button></section>';
     const data=loansModel;
     let rows='';const filter=loanQuery.trim().toLowerCase();
     if(loanMode==='active'){
-      rows=data.loans.filter(l=>!filter||`${l.player.name} ${l.parent} ${l.borrower}`.toLowerCase().includes(filter)).map(l=>`<article class="tr-loan-row">${loanPlayer(l.player)}<div><strong>${esc(l.status)}</strong><small>${esc(l.parent)} → ${esc(l.borrower)}</small></div><div><strong>${esc(l.ends_on)}</strong><small>${l.wage_percent}% borrower wage · ${esc(l.playing_time)} · ${l.appearances} apps · ${l.minutes||0} min${l.target_minutes>0?` / ${l.target_minutes} min target`:``}${l.playing_time_on_track===false?` · BELOW TARGET`:``}</small></div><div class="tr-loan-buttons">${l.status==='active'&&l.parent_id===data.manager_club_id?`<button class="tr-btn" type="button" data-tr-loan-recall="${esc(l.id)}">Recall</button>`:''}${l.status==='active'&&l.borrower_id===data.manager_club_id&&l.option_gbp!==null?`<button class="tr-btn tr-btn-primary" type="button" data-tr-loan-buy="${esc(l.id)}">Buy ${brief(l.option_gbp)}</button>`:''}</div></article>`).join('');
+      rows=data.loans.filter(l=>!filter||`${l.player.name} ${l.parent} ${l.borrower}`.toLowerCase().includes(filter)).map(l=>`<article class="tr-loan-row">${loanPlayer(l.player)}<div><strong>${esc(l.status)}</strong><small>${esc(l.parent)} → ${esc(l.borrower)}</small></div><div><strong>${esc(l.ends_on)}</strong><small>${l.wage_percent}% borrower wage · ${esc(l.playing_time)} · ${l.appearances} apps · ${l.minutes||0} min${l.target_minutes>0?` / ${l.target_minutes} min target`:``}${l.playing_time_on_track===false?` · BELOW TARGET`:``}</small></div><div class="tr-loan-buttons">${l.status==='active'&&l.recall_allowed&&l.parent_id===data.manager_club_id?`<button class="tr-btn" type="button" data-tr-loan-recall="${esc(l.id)}">Recall</button>`:''}${l.option_exercisable&&l.borrower_id===data.manager_club_id&&l.option_gbp!==null?`<button class="tr-btn tr-btn-primary" type="button" data-tr-loan-buy="${esc(l.id)}">Buy ${brief(l.option_gbp)}</button>`:''}</div></article>`).join('');
+    }else if(loanMode==='talks'){
+      rows=(data.negotiations||[]).filter(t=>!filter||`${t.parent} ${t.borrower} ${t.player_id}`.toLowerCase().includes(filter)).map(t=>`<article class="tr-loan-row"><div><strong>${esc(t.parent)} → ${esc(t.borrower)}</strong><small>${esc(t.status)} · ${esc(t.reason)}</small></div><div><strong>${t.terms.months} months · ${t.terms.borrower_wage_percent}% borrower wage</strong><small>Patience ${t.patience}% · ${t.history.length} messages</small></div><button class="tr-btn tr-btn-primary" type="button" data-tr-loan-talk="${esc(t.id)}">Review discussion</button></article>`).join('');
     }else if(loanMode==='outgoing'||loanMode==='incoming'){
       const items=loanMode==='outgoing'?data.outgoing:data.incoming;
       rows=items.filter(p=>!filter||`${p.name} ${p.club}`.toLowerCase().includes(filter)).slice(0,80).map(p=>`<article class="tr-loan-row">${loanPlayer(p)}<div><strong>${loanMoney(p.weekly_gbp)}/week</strong><small>${esc(p.club)}</small></div><button class="tr-btn tr-btn-primary" type="button" data-tr-loan-select="${esc(p.id)}" data-tr-loan-owner="${esc(p.club_id)}">Prepare loan →</button></article>`).join('');
@@ -101,24 +103,31 @@
     let form='';
     if(loanSelected){
       if(loanSelected.mode==='loan'){
-        const choices=loanSelected.owner===data.manager_club_id?data.destinations:[{id:data.manager_club_id,name:'Your club'}];
-        form=`<form id="tr-loan-form" class="tr-loan-form"><div class="tr-heading-row"><h3>Loan proposal</h3><button class="tr-btn" type="button" data-tr-loan-cancel>Cancel</button></div><div class="tr-loan-fields"><label>Borrowing club<select name="borrower_id" required>${choices.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')}</select></label><label>Duration<select name="months"><option value="6">6 months</option><option value="12">1 year</option><option value="24">2 years</option></select></label><label>Borrower pays salary (%)<input name="borrower_wage_percent" type="number" min="0" max="100" step="5" value="50" required></label><label>Promised playing time<select name="playing_time"><option value="rotation">Rotation</option><option value="starter">Regular starter</option><option value="backup">Backup</option></select></label><label class="tr-loan-option"><input type="checkbox" id="tr-loan-option-check"> Optional purchase price</label><label>Option fee (£)<input name="option_gbp" type="number" min="5000" step="5000" value="500000" disabled></label></div><button class="tr-btn tr-btn-primary" type="submit">Propose loan</button><p>Loan is subject to the borrowing club's needs, the player's wishes and both clubs' finances.</p></form>`;
+        const talk=(data.negotiations||[]).find(t=>t.id===loanSelected.talkId);
+        const entity=[...data.outgoing,...data.incoming].find(p=>p.id===loanSelected.id)||{id:loanSelected.id,name:loanSelected.name||'Player',position:'?',age:'?',ovr:null,nationality:''};
+        const owner=loanSelected.owner||talk?.parent_id;
+        const borrower=talk?.borrower_id||loanSelected.borrower||data.manager_club_id;
+        const counter=talk?.parent_id||owner;
+        form=window.FMLoanNegotiations?.render({player:entity,managerId:data.manager_club_id,managerName:data.manager_club_name||model.club,
+          parentId:counter,parentName:talk?.parent||(data.destinations.find(x=>x.id===counter)?.name||entity.club||model.club),
+          borrowerId:borrower,borrowerName:talk?.borrower||(data.destinations.find(x=>x.id===borrower)?.name||model.club),
+          talk,day:data.as_of,destinations:data.destinations})||'<p>Loan negotiation panel unavailable. Reload the game.</p>';
       }else if(loanSelected.mode==='free'){
         const a=data.free_agents.find(p=>p.id===loanSelected.id);
         if(a)form=`<form id="tr-free-form" class="tr-loan-form"><div class="tr-heading-row"><h3>Offer contract · ${esc(a.name)}</h3><button class="tr-btn" data-tr-loan-cancel type="button">Cancel</button></div><p>Agent expectation: ${brief(a.minimum_weekly_gbp)}/week · ${esc(a.role)} role</p><div class="tr-loan-fields"><label>Weekly salary (£)<input name="weekly_wage_gbp" type="number" min="75" max="1500000" value="${a.minimum_weekly_gbp}" required></label><label>Duration<select name="years">${[1,2,3,4,5].filter(y=>y<=a.max_years).map(y=>`<option value="${y}">${y} year${y>1?'s':''}</option>`).join('')}</select></label><label>Squad role<select name="role">${['star','important','regular','rotation','backup'].map(r=>`<option value="${r}" ${r===a.role?'selected':''}>${r}</option>`).join('')}</select></label></div><button class="tr-btn tr-btn-primary" type="submit">Offer professional contract</button></form>`;
       }
     }
-    return `<section class="tr-panel tr-loan-hub"><div class="tr-heading-row"><div><h3>Loans, free agents & buybacks</h3><p>Half-season, one-season and two-season loans. Optional purchase clauses; no installment payments.</p></div><span class="tr-tag">${data.summary.active} world loans · ${data.summary.unsigned} free agents</span></div><nav class="tr-loan-tabs">${[['active','My loans'],['outgoing','Loan out'],['incoming','Loan in'],['free','Free agents'],['buyback','Buybacks']].map(([id,name])=>`<button type="button" class="tr-btn" data-tr-loan-tab="${id}" aria-pressed="${loanMode===id}">${name}</button>`).join('')}</nav><label class="tr-loan-search">Search <input type="search" id="tr-loan-search" value="${esc(loanQuery)}" placeholder="Search players or clubs"></label>${form}<div class="tr-loan-list">${rows||'<p class="tr-empty">No eligible players or agreements in this category.</p>'}</div>${!data.window_open?'<p class="tr-footnote">New loans and permanent buybacks require an open transfer window (January, July, August). Free agents can sign outside the window.</p>':''}</section>`;
+    return `<section class="tr-panel tr-loan-hub"><div class="tr-heading-row"><div><h3>Loans, free agents & buybacks</h3><p>Multi-round loan negotiations, salary sharing and complete options to buy. Registrations respect the transfer window.</p></div><span class="tr-tag">${data.summary.active} world loans · ${data.summary.unsigned} free agents</span></div><nav class="tr-loan-tabs">${[['active','My loans'],['talks',`Discussions (${(data.negotiations||[]).length})`],['outgoing','Loan out'],['incoming','Loan in'],['free','Free agents'],['buyback','Buybacks']].map(([id,name])=>`<button type="button" class="tr-btn" data-tr-loan-tab="${id}" aria-pressed="${loanMode===id}">${name}</button>`).join('')}</nav><div id="tr-loan-confirm" hidden></div><label class="tr-loan-search">Search <input type="search" id="tr-loan-search" value="${esc(loanQuery)}" placeholder="Search players or clubs"></label>${form}<div class="tr-loan-list">${rows||'<p class="tr-empty">No eligible players or agreements in this category.</p>'}</div>${!data.window_open?'<p class="tr-footnote">Loans can be negotiated now; registration occurs at the next window. Options to buy can be exercised in the eligible registration window.</p>':''}</section>`;
   }
   async function loadLoans(){
     try{const response=await fetch('/api/loans',{cache:'no-store'});if(!response.ok)throw Error('HTTP '+response.status);loansModel=await response.json();if(host&&tab==='loans')draw();}
-    catch(error){window.alert('Loans: '+error.message);}
+    catch(error){const message=host?.querySelector('#ln-feedback');if(message)message.textContent='Loans: '+error.message;else console.error('Loan read:',error.message);}
   }
   async function postLoan(command){
     if(busy)return false;
     busy=true;host.setAttribute('aria-busy','true');
-    try{const response=await fetch('/api/loans',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(command)});const data=await response.json();if(!response.ok)throw Error(data.error||'HTTP '+response.status);return true;}
-    catch(error){window.alert('Loans: '+error.message);return false;}
+    try{const response=await fetch('/api/loans',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(command)});const data=await response.json();if(!response.ok)throw Error(data.error||'HTTP '+response.status);return data;}
+    catch(error){const message=host?.querySelector('#ln-feedback');if(message)message.textContent=error.message;else showFeedback('Loans: '+error.message);return null;}
     finally{busy=false;host?.setAttribute('aria-busy','false');}
   }
   function rowBonus(i,bonus){
@@ -256,6 +265,7 @@
       }
     }
     updatePayments();
+    window.FMLoanNegotiations?.sync?.(host);
     for(const type of ['sell','buy']){const section=host.querySelector(`#tr-${type}-fields`);if(section)section.querySelectorAll('input,select').forEach(f=>f.disabled=section.hidden);}
     if(lastError)showFeedback(lastError);
     window.FMClubIdentity?.paintWithin?.(host);
@@ -296,6 +306,20 @@
     let box=host?.querySelector('#tr-feedback');
     if(!box&&host){box=document.createElement('div');box.id='tr-feedback';host.prepend(box);}
     if(box){box.hidden=false;box.className='tr-feedback '+(error?'is-error':'');box.setAttribute('role',error?'alert':'status');box.textContent=message;}
+  }
+  function askLoanConfirmation(message, title='Confirm loan action'){
+    const box=host.querySelector('#tr-loan-confirm');
+    if(!box)return Promise.resolve(false);
+    box.hidden=false;box.className='tr-inline-confirm';
+    box.setAttribute('role','region');box.setAttribute('aria-label',title);
+    box.innerHTML=`<strong>${esc(title)}</strong><p>${esc(message)}</p><button type="button" class="tr-btn tr-btn-primary" data-ln-confirm-yes>Confirm</button><button type="button" class="tr-btn" data-ln-confirm-no>Cancel</button>`;
+    box.scrollIntoView({block:'nearest'});
+    return new Promise(resolve=>{
+      const finish=value=>{box.hidden=true;box.replaceChildren();resolve(value);};
+      box.querySelector('[data-ln-confirm-yes]').addEventListener('click',()=>finish(true),{once:true});
+      box.querySelector('[data-ln-confirm-no]').addEventListener('click',()=>finish(false),{once:true});
+      box.querySelector('[data-ln-confirm-no]').focus();
+    });
   }
   function askConfirmation(message){
     const box=host.querySelector('#tr-confirm');
@@ -368,10 +392,14 @@
       if(button.hasAttribute('data-tr-loan-reload')){await loadLoans();return;}
       if(button.hasAttribute('data-tr-loan-cancel')){loanSelected=null;draw();return;}
       if(button.dataset.trLoanSelect){loanSelected={mode:'loan',id:button.dataset.trLoanSelect,owner:button.dataset.trLoanOwner};draw();return;}
+      if(button.dataset.trLoanTalk){const talk=(loansModel?.negotiations||[]).find(t=>t.id===button.dataset.trLoanTalk);if(talk){loanSelected={mode:'loan',id:talk.player_id,owner:talk.parent_id,borrower:talk.borrower_id,talkId:talk.id};draw();}return;}
+      if(button.hasAttribute('data-ln-add-bonus')){const holder=host.querySelector('#ln-bonuses');if(holder&&holder.children.length<3)holder.insertAdjacentHTML('beforeend',window.FMLoanNegotiations.bonus());return;}
+      if(button.hasAttribute('data-ln-remove')){button.closest('[data-ln-bonus]')?.remove();window.FMLoanNegotiations.sync(host);return;}
+      if(button.dataset.lnAccept||button.dataset.lnWalk){const action=button.dataset.lnAccept?'loan_accept_counter':'loan_walk';const id=button.dataset.lnAccept||button.dataset.lnWalk;const result=await postLoan({action,talk_id:id});if(result){if(action==='loan_walk')loanSelected=null;await loadLoans();}return;}
       if(button.dataset.trLoanFree){loanSelected={mode:'free',id:button.dataset.trLoanFree};draw();return;}
-      if(button.dataset.trLoanRecall){if(window.confirm('Recall player from loan?')){if(await postLoan({action:'loan_recall',loan_id:button.dataset.trLoanRecall}))await loadLoans();}return;}
-      if(button.dataset.trLoanBuy){if(window.confirm('Exercise the agreed purchase option and sign the player immediately?')){if(await postLoan({action:'loan_buy_option',loan_id:button.dataset.trLoanBuy}))await loadLoans();}return;}
-      if(button.dataset.trLoanBuyback){if(window.confirm('Activate the agreed buyback and negotiate an immediate return?')){if(await postLoan({action:'buyback',deal_id:button.dataset.trLoanBuyback}))await loadLoans();}return;}
+      if(button.dataset.trLoanRecall){if(await askLoanConfirmation('Return this player to the parent club? This ends the loan early.','Recall player')){if(await postLoan({action:'loan_recall',loan_id:button.dataset.trLoanRecall}))await loadLoans();}return;}
+      if(button.dataset.trLoanBuy){if(await askLoanConfirmation('Exercise the previously agreed purchase package? If the market is closed, registration and the upfront payment wait until the next window.','Activate purchase option')){if(await postLoan({action:'loan_buy_option',loan_id:button.dataset.trLoanBuy}))await loadLoans();}return;}
+      if(button.dataset.trLoanBuyback){if(await askLoanConfirmation('Activate the agreed buyback at its contract price?','Activate buyback')){if(await postLoan({action:'buyback',deal_id:button.dataset.trLoanBuyback}))await loadLoans();}return;}
       if(button.dataset.trScoutAssign){await postScout({action:'assign',player_id:button.dataset.trScoutAssign});return;}
       if(button.dataset.trScoutCancel){if(window.confirm('Cancel this scouting observation?'))await postScout({action:'cancel',player_id:button.dataset.trScoutCancel});return;}
       if(button.dataset.trScoutReports){tab='reports';draw();return;}
@@ -419,7 +447,7 @@
     host.addEventListener('change',ev=>{
       const field=ev.target;
       if(field.id==='tr-installments-enabled'||field.type==='range'){updatePayments();return;}
-      if(field.id==='tr-loan-option-check'){const amount=host.querySelector('[name=option_gbp]');if(amount)amount.disabled=!field.checked;return;}
+      if(field.closest('#tr-loan-form')){window.FMLoanNegotiations?.sync(host);return;}
       if(field.id==='tr-position'){position=field.value;draw();return;}
       if(field.id==='tr-min-ovr'){minOvr=field.value;draw();return;}
       if(field.id==='tr-max-age'){maxAge=field.value;draw();return;}
@@ -431,6 +459,8 @@
       }
     });
     host.addEventListener('input',ev=>{
+      if(ev.target.matches('[data-loan-money]')){const input=ev.target;const cleaned=input.value.replace(/[^0-9]/g,'');if(cleaned&&Number(cleaned)<=500000000)input.value=window.FMTransferPayments.format(Number(cleaned));window.FMLoanNegotiations.sync(host);return;}
+      if(ev.target.closest('#tr-loan-form')){window.FMLoanNegotiations.sync(host);return;}
       if(ev.target.matches('[data-tr-money]')){
         const field=ev.target,raw=field.value,caret=field.selectionStart;
         if(/^[0-9,]+$/.test(raw)){
@@ -449,13 +479,18 @@
     host.addEventListener('submit',async ev=>{
       if(ev.target.id==='tr-loan-form'){
         ev.preventDefault();const f=ev.target;if(!f.reportValidity()||!loanSelected)return;
-        const cmd={action:'loan_offer',player_id:loanSelected.id,parent_id:loanSelected.owner,borrower_id:f.elements.namedItem('borrower_id').value,months:Number(f.elements.namedItem('months').value),borrower_wage_percent:Number(f.elements.namedItem('borrower_wage_percent').value),playing_time:f.elements.namedItem('playing_time').value,option_gbp:f.elements.namedItem('option_gbp').disabled?null:Number(f.elements.namedItem('option_gbp').value)};
-        if(window.confirm('Send this temporary loan proposal?')){if(await postLoan(cmd)){loanSelected=null;loanMode='active';await loadLoans();}}return;
+        try{
+          const cmd={action:'loan_propose',player_id:loanSelected.id,parent_id:loanSelected.owner,borrower_id:f.elements.namedItem('borrower_id').value,
+                     ...(loanSelected.talkId?{talk_id:loanSelected.talkId}:{}),terms:window.FMLoanNegotiations.read(f)};
+          const reply=await postLoan(cmd);
+          if(reply){loanSelected.talkId=reply.talk_id||loanSelected.talkId;loanSelected.borrower=cmd.borrower_id;await loadLoans();}
+        }catch(error){const notice=host.querySelector('#ln-feedback');if(notice)notice.textContent=error.message;}
+        return;
       }
       if(ev.target.id==='tr-free-form'){
         ev.preventDefault();const f=ev.target;if(!f.reportValidity()||!loanSelected)return;
         const cmd={action:'sign_free_agent',player_id:loanSelected.id,weekly_wage_gbp:Number(f.elements.namedItem('weekly_wage_gbp').value),years:Number(f.elements.namedItem('years').value),role:f.elements.namedItem('role').value};
-        if(window.confirm('Offer a professional contract to this free agent?')){if(await postLoan(cmd)){loanSelected=null;await loadLoans();}}return;
+        if(await askLoanConfirmation('Offer this free agent a professional contract under the displayed terms?','Offer contract')){if(await postLoan(cmd)){loanSelected=null;await loadLoans();}}return;
       }
       if(ev.target.id==='tr-personal-form'){
         ev.preventDefault();const form=ev.target,d=deal();if(!d||!form.reportValidity())return;

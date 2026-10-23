@@ -123,6 +123,11 @@ def _settle_scheduled_registrations(session: DevelopmentSession) -> None:
         # If conditions materially changed, do not fabricate a completed deal.
         try:
             _finish(session,deal,deal.personal_terms)
+            # Link activated loan options to the completed permanent purchase.
+            # Completion is never recorded before the transfer actually settles.
+            for loan_id, loan in tuple(registry.loans.items()):
+                if loan.option_pending_deal_id==deal.deal_id:
+                    registry.loans[loan_id]=replace(loan,status='purchased',completed_on=today)
         except ValueError as exc:
             registry.transfer_offers[key]=replace(deal,status='failed',
                 reason=f'Scheduled transfer could not complete: {str(exc)[:165]}')

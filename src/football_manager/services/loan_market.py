@@ -21,7 +21,7 @@ from football_manager.services.transfer_personal import (
     _finish, career_player_totals,
 )
 from football_manager.services.transfer_negotiation import _availability
-from football_manager.services.ai_transfer_market import window_open
+from football_manager.services.transfer_windows import window_open
 from football_manager.services.ai_squad_planning import squad_plan, can_spare, imminent_succession_needs
 
 LOAN_MONTHS = (6, 12, 24)
@@ -72,9 +72,9 @@ def loan_monthly_adjustments(registry, start: date, end: date) -> dict[str, int]
 
 def _can_loan(registry, pid: str, parent: str, borrower: str, now: date, months: int,
               wage_percent: int, playing_time: str, option: int | None,
-              *, registration_on: date | None = None):
-    if not window_open(now):
-        raise ValueError('Loans may start during January, July and August')
+              *, registration_on: date | None = None, purchase_terms: TransferTerms | None = None):
+    if not window_open(registration_on or now, registry.clubs[borrower].country if borrower in registry.clubs else 'England'):
+        raise ValueError('Loan registration requires an open market window')
     actual_start = registration_on or now
     if actual_start < now:
         raise ValueError('Loan registration cannot precede the market offer')
@@ -101,7 +101,17 @@ def _can_loan(registry, pid: str, parent: str, borrower: str, now: date, months:
     if option is not None and parent != (registry.youth.managed_club_id if registry.youth else None):
         from football_manager.services.transfer_negotiation import _seller_target
         minimum = max(5_000,round(_seller_target(registry,parent,borrower,player,contract,now)*.82/5000)*5000)
-        if option<minimum:
+        if purchase_terms is not None:
+            # A seller may trade guaranteed cash for conditional bonuses or
+            # resale participation. Value the complete option exactly as the
+            # bargaining AI did, rather than reintroducing an upfront-only
+            # minimum after the counterpart has already agreed.
+            from football_manager.services.transfer_negotiation import assess_terms
+            option_value = assess_terms(registry,player,borrower,purchase_terms,now)['risk_adjusted_gbp']
+        else:
+            # Compatibility with existing TS-24 loans that specify only a price.
+            option_value = option
+        if option_value < minimum:
             raise ValueError('Lender rejects an undervalued future purchase option')
     if contract.expires_on < _date_plus_months(actual_start,months):
         raise ValueError('Parent contract must cover the entire loan; renew first')
@@ -172,7 +182,15 @@ def _begin(session,cmd):
     share=cmd.get('borrower_wage_percent')
     playing=cmd.get('playing_time')
     option=cmd.get('option_gbp')
-    player,contract=_can_loan(registry,pid,parent,borrower,now,months,share,playing,option)
+    purchase=cmd.get('purchase_terms')
+    recall=cmd.get('recall_allowed',True)
+    if type(recall) is not bool:
+        raise ValueError('Recall rights must be true or false')
+    if purchase is not None:
+        purchase.validate()
+        if option!=purchase.guaranteed_gbp:
+            raise ValueError('Purchase guarantee does not match option terms')
+    player,contract=_can_loan(registry,pid,parent,borrower,now,months,share,playing,option,purchase_terms=purchase)
     # A rival lender requires reasonable salary cover for an important player.
     if parent!=manager and share<25 and contract.weekly_wage_gbp>2000:
         raise ValueError('Parent club wants at least 25% of the wages covered')
@@ -187,7 +205,8 @@ def _begin(session,cmd):
         _date_plus_months(now,months),share,playing,option,
         appearances_at_start=career_player_totals(registry,pid)[0],
         minutes_at_start=sum(u.minutes for u in (*[h.get(pid) for h in registry.history.values()],
-                                         registry.usage.get(pid)) if u is not None))
+                                         registry.usage.get(pid)) if u is not None),
+        recall_allowed=recall,purchase_terms=purchase)
     loan.validate()
     _move(registry,player,parent,borrower)
     registry.loans[loan.loan_id]=loan
@@ -230,6 +249,8 @@ def _return(session,cmd):
     loan=registry.loans.get(cmd.get('loan_id'))
     if loan is None or loan.status!='active' or loan.parent_id!=session.home_club.id:
         raise ValueError('Only the parent manager can recall an active loan')
+    if not loan.recall_allowed:
+        raise ValueError('This loan has no negotiated recall right')
     if (session.current_date-loan.started_on).days<30:
         raise ValueError('Loan recall requires a minimum of 30 days')
     _finish_loan(registry,loan,session.current_date)
@@ -248,16 +269,16 @@ def _register_transfer(session,player, seller_id, buyer_id, price,now, note):
     if not willing:
         raise ValueError(reason)
     quote=agent_demand(registry,player,seller_id,buyer_id,now)
-    buyer_budget=_availability(registry,buyer_id,now)
-    if price>buyer_budget:
-        raise ValueError('Club transfer budget is insufficient')
+    # The agreed GUARANTEED total can exceed today's transfer budget when
+    # financing is within the club's approved deferred-credit capacity.
+    # _finish validates the actual upfront payment and future obligations.
     wage=quote['weekly_wage_gbp']
-    terms=TransferTerms(price)
+    terms=note if isinstance(note, TransferTerms) else TransferTerms(price)
     personal=PersonalTerms(wage,quote['years'],quote['role'],0)
     index=registry.transfer_next_id
     registry.transfer_next_id+=1
     deal_id=f't24-{index:06d}'
-    event=NegotiationEvent(now,buyer_id,terms,note)
+    event=NegotiationEvent(now,buyer_id,terms,'Borrower exercises the agreed purchase package' if isinstance(note,TransferTerms) else note)
     record=TransferNegotiation(deal_id,player.id,seller_id,buyer_id,now,now+timedelta(days=30),
         'agreed',buyer_id,terms,(event,),personal_status='not_started')
     result=_finish(session,record,personal)
@@ -273,8 +294,10 @@ def _loan_purchase(session,cmd):
         raise ValueError('No exercisable purchase option for your club')
     if now < loan.ends_on-timedelta(days=90):
         raise ValueError('Purchase option is exercisable only during the final 90 days of the loan')
-    if not window_open(now):
-        raise ValueError('Purchase options require an open transfer window')
+    if not window_open(now,registry.clubs[loan.borrower_id].country):
+        return _schedule_loan_purchase(session,loan)
+    if loan.option_pending_deal_id:
+        raise ValueError('The purchase option has already been exercised and scheduled')
     # A consented permanent purchase converts the temporary registration back
     # into a full transfer without modifying or duplicating the Player object.
     player=registry.clubs[loan.borrower_id].squad.get(loan.player_id)
@@ -286,7 +309,7 @@ def _loan_purchase(session,cmd):
     registry.loans[loan.loan_id]=replace(loan,status='purchased',completed_on=now)
     try:
         result=_register_transfer(session,player,loan.parent_id,loan.borrower_id,
-                                  loan.option_gbp,now,'Borrower exercises agreed loan purchase option')
+                                  loan.option_gbp,now,loan.purchase_terms or 'Borrower exercises agreed loan purchase option')
     except Exception:
         # The caller owns a deep-copied session, so this partial graph is
         # discarded by GameApplication on any exception.
@@ -304,6 +327,50 @@ def _loan_purchase(session,cmd):
         _repair_selected_team(session,cid)
     registry.validate()
     return {'loan_id':loan.loan_id,'status':'purchased','transfer':result}
+
+
+def _schedule_loan_purchase(session,loan):
+    """Agree an option outside the window, settle only on registration day.
+
+    No cash, parent contract or player registration changes at exercise time.
+    If registration fails, the player remains at the parent club.
+    """
+    registry=session._world_squads
+    now=session.current_date
+    if loan.option_pending_deal_id:
+        raise ValueError('This option has already been exercised')
+    from football_manager.services.transfer_windows import next_opening
+    from football_manager.services.transfer_installments import validate_financing
+    from football_manager.services.transfer_personal import _player_interest, agent_demand
+    arrival=next_opening(now,registry.clubs[loan.borrower_id].country)
+    player=registry.clubs[loan.borrower_id].squad.get(loan.player_id)
+    willing, reason=_player_interest(registry,player,loan.parent_id,loan.borrower_id,now)
+    if not willing:raise ValueError(reason)
+    quote=agent_demand(registry,player,loan.parent_id,loan.borrower_id,now)
+    terms=loan.purchase_terms or TransferTerms(loan.option_gbp)
+    validate_financing(registry,loan.borrower_id,terms,now)
+    from football_manager.services.club_economy import weekly_payroll
+    existing=registry.contracts[player.id].weekly_wage_gbp*loan.borrower_wage_percent//100
+    acc=registry.club_finances[loan.borrower_id]
+    if weekly_payroll(registry,loan.borrower_id)-existing+quote['weekly_wage_gbp']>acc.wage_budget_weekly_gbp:
+        raise ValueError('Buyer cannot support the permanent contract wage')
+    if registry.contracts[player.id].expires_on < arrival:
+        raise ValueError('Parent player contract ends before registration')
+    index=registry.transfer_next_id
+    registry.transfer_next_id+=1
+    deal_id=f't24-{index:06d}'
+    personal=PersonalTerms(quote['weekly_wage_gbp'],quote['years'],quote['role'],0)
+    event=NegotiationEvent(now,loan.borrower_id,terms,'Borrower exercises the purchase option at the agreed terms')
+    negotiation=TransferNegotiation(deal_id,player.id,loan.parent_id,loan.borrower_id,
+        now,arrival+timedelta(days=35),'pending_window',loan.borrower_id,terms,(event,),
+        reason=f'Loan option signed; registration expected {arrival.isoformat()}',
+        personal_status='completed',personal_terms=personal)
+    negotiation.validate()
+    registry.transfer_offers[deal_id]=negotiation
+    registry.loans[loan.loan_id]=replace(loan,option_pending_deal_id=deal_id)
+    registry.validate()
+    return {'loan_id':loan.loan_id,'status':'pending_window','deal_id':deal_id,
+            'arrival_on':arrival.isoformat(),'note':'Purchase option activated; registration and payment deferred'}
 
 
 def _buyback(session,cmd):
@@ -392,6 +459,9 @@ def _sign_free(session,cmd):
 
 def loan_command(session,command:dict)->dict:
     action=command.get('action')
+    if action in ('loan_propose','loan_accept_counter','loan_walk'):
+        from football_manager.services.loan_bargaining import loan_talk_command
+        return loan_talk_command(session,command)
     if action=='loan_offer':return _begin(session,command)
     if action=='loan_recall':return _return(session,command)
     if action=='loan_buy_option':return _loan_purchase(session,command)
@@ -599,7 +669,7 @@ def process_ai_loans(world, boundary: date) -> list[dict]:
     never gain or lose players from this autonomous routine.
     """
     from football_manager.data.english_players import stable_seed
-    from football_manager.services.ai_transfer_market import window_open
+    from football_manager.services.transfer_windows import window_open
     reg=world.football_world
     if reg is None or world._active_journal is None:
         raise RuntimeError('AI loan market requires a world transaction')
@@ -724,7 +794,11 @@ def review_loan_month(world,boundary:date)->dict:
     for loan in tuple(reg.loans.values()):
         if loan.status!='active':
             continue
-        if loan.ends_on<=boundary:
+        if (loan.option_pending_deal_id and
+                window_open(boundary,reg.clubs[loan.borrower_id].country)):
+            _finish_loan(reg,loan,boundary,world=world)
+            returned+=1
+        elif loan.ends_on<=boundary:
             _finish_loan(reg,loan,boundary,world=world)
             returned+=1
         elif (loan.loan_id.startswith('t2411-ai-loan-')
@@ -736,10 +810,12 @@ def review_loan_month(world,boundary:date)->dict:
             if assessment['assessable'] and assessment['ratio'] < .25:
                 _finish_loan(reg,loan,boundary,world=world)
                 recalled+=1
+    from football_manager.services.loan_bargaining import settle_pending_loan_talks
+    pending_registered=settle_pending_loan_talks(world,boundary)
     released=_expire_professionals(world,boundary)
     signed=_sign_ai_free(world,boundary)
     retired=_retire_old_unsigned(world,boundary)
-    return {'returned':returned,'breach_recalls':recalled,
+    return {'returned':returned,'newly_registered':pending_registered,'breach_recalls':recalled,
             'released':released,'free_agent_signings':signed,'unsigned_retired':retired}
 
 
@@ -747,8 +823,12 @@ def loan_read_model(session)->dict:
     reg=session._world_squads
     manager=session.home_club.id
     day=session.current_date
-    def person(p):return {'id':p.id,'name':p.full_name,'position':p.primary_position.value,
-                          'age':p.age_on(day),'ovr':round(p.overall_rating,1)}
+    reports=reg.club_support[manager].scouting_reports if manager in reg.club_support else {}
+    def person(p, own=True):
+        known=own or p.overall_rating >= 85 or p.id in reports
+        return {'id':p.id,'name':p.full_name,'position':p.primary_position.value,
+                'nationality':p.identity.nationality,'age':p.age_on(day),
+                'ovr':round(p.overall_rating,1) if known else None}
     deals=[]
     for item in sorted(reg.loans.values(),key=lambda x:x.started_on,reverse=True):
         if manager not in (item.parent_id,item.borrower_id): continue
@@ -775,7 +855,11 @@ def loan_read_model(session)->dict:
                       'status':item.status,'ends_on':item.ends_on.isoformat(),
                       'completed_on':item.completed_on.isoformat() if item.completed_on else None,
                       'wage_percent':item.borrower_wage_percent,'playing_time':item.playing_time,
-                      'option_gbp':item.option_gbp,'appearances':max(0,appearances),
+                      'option_gbp':item.option_gbp,'recall_allowed':item.recall_allowed,
+                      'option_pending_deal_id':item.option_pending_deal_id,
+                      'purchase_terms':( __import__('football_manager.services.transfer_negotiation',fromlist=['terms_as_json']).terms_as_json(item.purchase_terms) if item.purchase_terms else None),
+                      'option_exercisable':item.status=='active' and item.option_gbp is not None and item.option_pending_deal_id is None and day>=item.ends_on-timedelta(days=90),
+                      'appearances':max(0,appearances),
                       'minutes':loan_minutes,'target_minutes':target_minutes,
                       'playing_time_on_track':(review is None or not review['assessable'] or
                                                review['ratio']>=.75),
@@ -794,8 +878,8 @@ def loan_read_model(session)->dict:
             con=reg.contracts.get(p.id)
             if (con and con.club_id==cid and con.kind=='professional'
                     and active_loan(reg,p.id) is None and con.expires_on>_date_plus_months(day,6)):
-                incoming.append(person(p)|{'club_id':cid,'club':club.name,
-                          'weekly_gbp':con.weekly_wage_gbp})
+                incoming.append(person(p,own=False)|{'club_id':cid,'club':club.name,
+                          'weekly_gbp':None})
     # The loan search should surface attainable young reinforcements first,
     # instead of truncating a worldwide OVR-descending list to 250 stars.
     manager_account=reg.club_finances[manager]
@@ -804,10 +888,8 @@ def loan_read_model(session)->dict:
     needs={v['position'] for v in plan['vacancies'] if v['layer']<=2}
     mean_ovr=(sum(p.overall_rating for p in reg.clubs[manager].squad.players) /
               max(1,len(reg.clubs[manager].squad)))
-    incoming.sort(key=lambda p:(p['weekly_gbp']*.25>wage_room,
-          p['position'] not in needs, p['age']>23,
-          abs(p['ovr']-mean_ovr),
-          p['weekly_gbp'],p['id']))
+    # Sorting must not expose a player's hidden OVR or salary indirectly.
+    incoming.sort(key=lambda p:(p['position'] not in needs,p['age']>23,p['age'],p['name'],p['id']))
     free=[]
     for pid,entry in reg.free_agents.items():
         demand=_free_demand(reg,entry,manager,day)
@@ -827,7 +909,10 @@ def loan_read_model(session)->dict:
             buybacks.append({'deal_id':offer.deal_id,'player':person(pl),
                 'club':reg.clubs[offer.buyer_id].name,
                 'price_gbp':offer.terms.buyback_gbp,'until':offer.terms.buyback_until.isoformat()})
+    from football_manager.services.loan_bargaining import public_loan_talk
     return {'as_of':day.isoformat(),'window_open':window_open(day),
+            'manager_club_name':reg.clubs[manager].name,
+            'negotiations':[public_loan_talk(t,reg) for t in sorted(reg.loan_talks.values(),key=lambda t:t.started_on,reverse=True) if manager in (t.parent_id,t.borrower_id)],
             'manager_club_id':manager,'loans':deals,'outgoing':outgoing,
             'incoming':incoming[:250],'free_agents':free[:150],'buybacks':buybacks,
             'destinations':[{'id':cid,'name':club.name,'tier':reg.identities[cid].tier}
