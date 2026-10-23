@@ -48,3 +48,15 @@
 .fm-sim-confirm-actions{display:flex;justify-content:flex-end;gap:11px}.fm-sim-confirm-actions button{border-radius:7px;font:inherit;font-size:12px;font-weight:800;padding:12px 19px;cursor:pointer}.fm-sim-confirm-cancel{background:#0e2b43;border:1px solid #355d79;color:#c4d7e7}.fm-sim-confirm-accept{background:linear-gradient(140deg,#0d8cea,#075fa9);border:1px solid #4eb9ff;color:#fff;box-shadow:0 5px 20px #0b80d338}.fm-sim-confirm-accept span{margin-left:8px}
 .fm-sim-confirm-actions button:focus-visible{outline:2px solid #8ed8ff;outline-offset:3px}.fm-sim-confirm-actions button:hover{filter:brightness(1.12)}
 @media(max-width:600px){.fm-sim-confirm-dialog{padding:20px 17px}.fm-sim-confirm-head h2{font-size:20px}.fm-sim-confirm-date{font-size:17px}.fm-sim-confirm-actions{flex-direction:column-reverse}.fm-sim-confirm-actions button{width:100%}}
+
+/* TS-FIX-04: reuse competition/club artwork on Calendar simulation results. */
+.fm-sim-result.fm-sim-own{border-left:3px solid var(--fm-sim-comp-accent,#4fbfff)}
+.fm-sim-result-meta .fm-sim-comp{display:flex;align-items:center;gap:7px;color:var(--fm-sim-comp-accent,#64bfea);min-width:0}
+.fm-sim-comp>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fm-sim-comp-logo{width:22px;height:22px;max-width:22px;object-fit:contain;flex:none}
+.fm-sim-team{display:flex;align-items:center;gap:7px;min-width:0}
+.fm-sim-team>span:not(.fm-sim-crest){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fm-sim-away{justify-content:flex-end;text-align:right}
+.fm-sim-crest{width:23px;height:23px;object-fit:contain;flex:none}
+.fm-sim-crest-fallback{display:grid;place-items:center;border-radius:5px;background:#1d425e;color:#c2e3f4;font-size:9px;font-weight:850}
+@media(max-width:740px){.fm-sim-comp-logo{width:18px;height:18px}.fm-sim-crest{width:19px;height:19px}}

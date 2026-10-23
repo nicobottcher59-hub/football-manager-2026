@@ -25,15 +25,16 @@ from football_manager.services.transfer_personal import (
     agent_demand, _player_interest, career_player_totals, _sell_on_payout,
 )
 
-WINDOW_MONTHS = frozenset((1, 7, 8))
+WINDOW_MONTHS = frozenset((1, 7, 8))  # compatibility constant; calendar is authoritative
 MAX_AI_TRANSFERS_PER_MONTH = 28
 MAX_BUYS_PER_CLUB_MONTH = 2
 MAX_SQUAD_SIZE = 32  # independent of wider 45-player registration ceiling
 
 
 def window_open(day: date) -> bool:
-    """First market pass uses English January and July/August windows."""
-    return day.month in WINDOW_MONTHS
+    """Compatibility adapter for the world-wide English simulation market."""
+    from football_manager.services.transfer_windows import window_open as registered_window
+    return registered_window(day)
 
 
 def _eligible_at_position(player, position: Position) -> bool:
@@ -138,7 +139,7 @@ def _finalize(world, seller_id: str, buyer_id: str, player, fee: int,
         _,due=registry.medical_followups[player.id]
         world._put(registry.medical_followups,player.id,(buyer_id,due))
     for key,record in tuple(registry.transfer_offers.items()):
-        if record.player_id==player.id and record.status in ('manager_turn','agreed'):
+        if record.player_id==player.id and record.status in ('manager_turn','agreed','pending_window'):
             world._put(registry.transfer_offers,key,
                 replace(record,status='expired',reason='Player joined another club'))
     world._put(registry.transfer_offers,deal_id,completed)
@@ -274,7 +275,7 @@ def process_ai_market(world, today: date) -> list[dict]:
                 prelim.sort(key=lambda item:(-item[0],item[2].id))
                 contenders=[]
                 for score,seller_id,player in prelim[:35]:
-                    if any(d.player_id==player.id and d.status=='agreed' and d.expires_on>=today
+                    if any(d.player_id==player.id and d.status in ('agreed','pending_window') and d.expires_on>=today
                            for d in registry.transfer_offers.values()):
                         continue
                     player_ok,_ = _player_interest(registry,player,seller_id,buyer_id,today)
@@ -299,7 +300,7 @@ def process_ai_market(world, today: date) -> list[dict]:
                 if seller_id==manager:
                     # Only an OFFER. No AI can accept on behalf of the manager.
                     if any(d.player_id==player.id and d.buyer_id==buyer_id
-                           and ((d.status in ('manager_turn','agreed') and d.expires_on>=today)
+                           and ((d.status in ('manager_turn','agreed','pending_window') and d.expires_on>=today)
                                 or (today-d.events[-1].on_date).days<45)
                            for d in registry.transfer_offers.values()):
                         continue

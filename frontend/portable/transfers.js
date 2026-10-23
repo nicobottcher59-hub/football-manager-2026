@@ -9,12 +9,12 @@
   const money=n=>`\u00a3${Math.max(0,Number(n)||0).toLocaleString('en-GB',{maximumFractionDigits:0})}`;
   const brief=n=>{const v=Math.max(0,Number(n)||0);return v>=1e6?`\u00a3${(v/1e6).toFixed(1).replace(/\.0$/,'')}M`:v>=1e3?`\u00a3${(v/1e3).toFixed(v<1e4?1:0).replace(/\.0$/,'')}K`:money(v);};
   const seasonDate=(str,years)=>{const [y,m,d]=(str||'2026-08-01').split('-').map(Number);return `${y+years}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;};
-  const statuses={manager_turn:'Decision required',agreed:'Club agreement reached',completed:'Transfer completed',failed:'Player talks failed',rejected:'Rejected',withdrawn:'Withdrawn',expired:'Expired'};
+  const statuses={manager_turn:'Decision required',agreed:'Club agreement reached',pending_window:'Awaiting registration',completed:'Transfer completed',failed:'Player talks failed',rejected:'Rejected',withdrawn:'Withdrawn',expired:'Expired'};
   const opt=(v,t,s)=>`<option value="${esc(v)}" ${String(v)===String(s)?'selected':''}>${esc(t)}</option>`;
   const player=()=>model?.targets?.find(p=>p.id===chosen)||model?.offers?.find(d=>d.id===dealId)?.player_profile||null;
   const payments=()=>window.FMTransferPayments;
   const deal=()=>model?.offers?.find(d=>d.id===dealId)||null;
-  const openDeal=pid=>model?.offers?.find(d=>d.player_id===pid&&['manager_turn','agreed'].includes(d.status))||null;
+  const openDeal=pid=>model?.offers?.find(d=>d.player_id===pid&&['manager_turn','agreed','pending_window'].includes(d.status))||null;
   const scoutInfo=()=>model?.professional_scouting||{assignments:[],reports:[],free_slots:0,capacity:0,occupied:0,scout_count:0};
   const pendingScout=id=>scoutInfo().assignments.find(a=>a.player_id===id);
   const completedScout=id=>scoutInfo().reports.find(r=>r.player_id===id);
@@ -67,7 +67,7 @@
     const marketNews=model.world_transfers||[];
     return `<div class="tr-hub">
        <header class="tr-hub-hero"><div class="tr-kicker">RECRUITMENT \u00b7 FIRST TEAM</div><h2>Scouting centre</h2><p>Discover players across England, review club offers and start a dedicated negotiation when you are ready.</p>
-         <div class="tr-hub-facts"><span>Available budget <b>${brief(model.available_transfer_budget_gbp)}</b></span><span>Active negotiations <b>${offers.filter(d=>d.status==='manager_turn').length}</b></span><span>Offers received <b>${incoming.length}</b></span><span>Window <b>${model.window_open?'Open':'Closed'}</b></span></div></header>
+         <div class="tr-hub-facts"><span>Available budget <b>${brief(model.available_transfer_budget_gbp)}</b></span><span>Active negotiations <b>${offers.filter(d=>d.status==='manager_turn').length}</b></span><span>Offers received <b>${incoming.length}</b></span><span>Window <b>${model.window_open?'Open':'Closed'}</b>${model.window?.closes_on&&model.window_open?` · until ${esc(model.window.closes_on)}`:model.window?.opens_on?` · next ${esc(model.window.opens_on)}`:''}</span></div></header>
        <nav class="tr-tabs" role="tablist" aria-label="Scouting sections">
         ${[['players','Player search'],['reports',`Scout reports (${scoutInfo().reports.length})`],['negotiations',`Negotiations (${offers.length})`],['received',`Offers received (${incoming.length})`],['world',`World transfers (${marketNews.length})`],['loans','Loans & free agents']].map(([id,label])=>`<button type="button" data-tr-tab="${id}" role="tab" aria-selected="${tab===id}">${label}</button>`).join('')}</nav>
        ${tab==='loans'?loanHub():tab==='reports'?scoutingReportsHub():tab==='world'?`<section class="tr-panel tr-negotiations-list"><div class="tr-heading-row"><div><h3>Recent world transfers</h3><p>Completed purchases between AI-managed clubs. No transfers are created by opening this page.</p></div></div>${marketNews.length?marketNews.map(d=>`<article class="tr-discussion-card"><div class="tr-discussion-primary"><span class="tr-kicker">${esc(d.date)}</span><strong>${esc(d.player)}</strong><small>${esc(d.from_club)} → ${esc(d.to_club)}</small></div><div class="tr-discussion-price"><strong>${brief(d.fee_gbp)}</strong><span>Guaranteed transfer fee</span></div></article>`).join(''):'<div class="tr-empty">No AI transfers recorded yet. Clubs review their squads during the transfer windows.</div>'}</section>`:tab==='players'?`<section class="tr-panel tr-discover"><div class="tr-heading-row"><div><h3>Find your next signing</h3><p>These are estimates, not guaranteed asking prices. Open the player profile or make an offer.</p></div><span class="tr-tag">${list.length} matches</span></div>
@@ -136,11 +136,11 @@
     const fixed=t?.fixed_gbp??0;
     const bs=t?.bonuses||[],isSell=!!t&&t.sell_on_type!=='none',isBuy=!!t&&t.buyback_gbp!==null;
     const scheduled=!!t?.installments_gbp, count=t?.installment_count||2, interval=t?.installment_interval_months||6;
-    const newOfferClosed=!model.window_open&&!dealRecord;
+    const newOfferClosed=false;
     const moneyField=(name,value,label)=>`<div class="tr-money"><span aria-hidden="true">£</span><input type="text" inputmode="numeric" autocomplete="off" name="${name}" ${name==='fixed_gbp'?'id="tr-upfront-field"':''} data-tr-money required value="${payments().format(value)}" aria-label="${label}"><button type="button" class="tr-money-step" data-tr-step="${name}" data-tr-delta="-10000" aria-label="Reduce ${label} by ten thousand pounds">−</button><button type="button" class="tr-money-step" data-tr-step="${name}" data-tr-delta="10000" aria-label="Increase ${label} by ten thousand pounds">+</button></div>`;
     const increments=name=>`<div class="tr-money-increments" aria-label="Manual amount increments">${[1,5,10].map(n=>`<button type="button" class="tr-btn" data-tr-step="${name}" data-tr-delta="${n*1000000}" title="Add ${money(n*1000000)} to your own amount">+£${n}M</button>`).join('')}</div>`;
     return `<section class="tr-panel tr-proposal"><div class="tr-panel-top"><div><div class="tr-kicker">YOUR OFFER</div><h3>Build your offer</h3><p>Set your upfront payment. Add installments or optional clauses only when you need them.</p></div></div>
-      ${newOfferClosed?'<p class="tr-terms-warning">Transfer window closed. New offers open in January, July and August.</p>':''}
+      ${!model.window_open?`<p class="tr-terms-warning">Window closed: you can negotiate now. A signed deal will be registered no earlier than ${esc(model.window?.opens_on||'the next window')}.</p>`:''}
       <form id="tr-offer-form" novalidate>
         <div class="tr-upfront-section"><label for="tr-upfront-field">Upfront payment (£)</label><div class="tr-amount-row">${moneyField('fixed_gbp',fixed,'Upfront payment')}${increments('fixed_gbp')}</div></div>
         <div class="tr-installments-section"><div class="tr-clause-heading"><div><strong>Installments <span class="tr-muted">(optional)</span></strong><small>Add a separate amount, payable after registration.</small></div><label class="tr-switch"><input id="tr-installments-enabled" type="checkbox" role="switch" aria-label="Add payment in installments" ${scheduled?'checked':''}><span></span></label></div>
@@ -186,7 +186,7 @@
     const other=clubVisual(otherId,otherName);
     const lastOther=[...history].reverse().find(e=>!e.by_manager);
     const terms=lastOther?.terms;
-    const accepted=d?.status==='agreed'||d?.status==='completed';
+    const accepted=['agreed','pending_window','completed'].includes(d?.status);
     const label=d?.status==='manager_turn'?'Counteroffer received':d?statuses[d.status]:'Opening talks';
     const tension=['Closed','Critical'].includes(tolerance.level)?'is-critical':tolerance.level==='Tense'?'is-tense':'';
     const termRows=terms?`<dl class="tr-stance-list"><div><dt>Upfront payment</dt><dd>${brief(terms.fixed_gbp)}</dd></div><div><dt>Total installments</dt><dd>${brief(terms.installments_gbp||0)}</dd></div>${terms.installments_gbp?`<div><dt>Payment schedule</dt><dd>${terms.installment_count} · every ${terms.installment_interval_months} months</dd></div>`:''}<div><dt>Guaranteed total</dt><dd>${brief(terms.fixed_gbp+(terms.installments_gbp||0))}</dd></div><div><dt>Conditional bonuses</dt><dd>${terms.bonuses.length?brief(terms.bonuses.reduce((s,b)=>s+b.amount_gbp,0)):'None'}</dd></div></dl>`:'<p class="tr-empty-stance">No club terms received yet. Submit your own proposal to start the discussion.</p>';
@@ -226,7 +226,8 @@
     const editable=(!d&&!previous)||d?.may_answer;
     const knowledge=actual.knowledge_source==='scout_report'?`Report: ${actual.observed_on}`:actual.knowledge_source==='public'?'Public knowledge':actual.knowledge_source==='own_club'?'Your player':'Not scouted';
     let content;
-    if(d?.status==='agreed')content=personalPane(d);
+    if(d?.status==='pending_window')content=`<section class="tr-panel tr-personal-complete"><div class="tr-kicker">SIGNED · AWAITING REGISTRATION</div><h3>Transfer agreed</h3><p>The club and player have agreed. The player stays with ${esc(clubVisual(d.seller_id,d.seller).display_name)} until the next buying-club transfer window opens.</p><strong>Planned arrival: ${esc(d.arrival_on||'Next available window')}</strong><p>No fee has been charged and no registration has taken place yet. Financial and squad eligibility are checked at registration.</p></section>`;
+    else if(d?.status==='agreed')content=personalPane(d);
     else if(d?.status==='completed')content=`<section class="tr-panel tr-personal-complete"><div class="tr-kicker">REGISTRATION CONFIRMED</div><h3>Transfer completed</h3><p>${esc(d.player)} joined ${esc(clubVisual(d.buyer_id,d.buyer).display_name)}.</p><p>${money(d.fixed_gbp)} paid upfront · ${money(d.outstanding_installments_gbp||0)} in outstanding installments.</p>${d.installment_schedule?.length?`<div class="tr-completion-schedule">${d.installment_schedule.map(r=>`<div><span>${esc(r.due_on)}</span><strong>${money(r.amount_gbp)}</strong><span>${r.paid?'Paid':'Scheduled'}</span></div>`).join('')}</div>`:''}<p>Performance bonuses and future-sale clauses remain recorded obligations.</p></section>`;
     else if(previous)content=`<section class="tr-panel"><h3>Existing discussion</h3><p>Continue the active negotiation for this player.</p><button type="button" class="tr-btn tr-btn-primary" data-tr-deal="${esc(previous.id)}">Open negotiation →</button></section>`;
     else if(editable)content=compose(d);

@@ -80,7 +80,7 @@ def create_manager_inbox(session) -> ManagerInbox:
     # Existing actionable bids are real pending decisions, not invented history.
     for key, status in sorted(state.offers.items()):
         deal = session._world_squads.transfer_offers[key]
-        if deal.status in ('manager_turn', 'agreed') and deal.expires_on >= now:
+        if deal.status in ('manager_turn', 'agreed', 'pending_window') and deal.expires_on >= now:
             _transfer_notice(session, state, deal, status, now)
     return state
 

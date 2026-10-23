@@ -71,7 +71,7 @@ def _availability(registry, club_id: str, on_date: date, exclude_id: str = '') -
     account=registry.club_finances[club_id]
     reserve=sum(deal.terms.fixed_gbp for deal in registry.transfer_offers.values()
                 if deal.deal_id != exclude_id and deal.buyer_id==club_id
-                and (deal.status=='agreed' or (deal.status=='manager_turn'
+                and (deal.status in ('agreed','pending_window') or (deal.status=='manager_turn'
                      and registry.youth is not None
                      and deal.seller_id==registry.youth.managed_club_id))
                 and deal.expires_on >= on_date)
@@ -268,7 +268,7 @@ def _can_start(registry, player_id: str, seller_id: str, buyer_id: str, on_date:
     if closed:
         until = max(d.events[-1].on_date for d in closed) + timedelta(days=14)
         raise ValueError(f'The other club will not reopen talks before {until.isoformat()}')
-    if any(d.player_id==player_id and d.status in ('manager_turn','agreed') and d.expires_on>=on_date
+    if any(d.player_id==player_id and d.status in ('manager_turn','agreed','pending_window') and d.expires_on>=on_date
            and d.buyer_id==buyer_id for d in registry.transfer_offers.values()):
         raise ValueError('A live negotiation already exists for this player and buyer')
 
@@ -309,9 +309,7 @@ def negotiate(session, command: dict) -> dict:
                 'available_installment_credit_gbp':deferred_capacity(registry,manager,now),
                 'note':'Your financial commitment only. This does not predict seller acceptance.'}
     if action=='submit':
-        from football_manager.services.ai_transfer_market import window_open
-        if not window_open(now):
-            raise ValueError('Transfer window is closed. New club offers open in January, July and August.')
+        # Negotiations run year-round. Only player registration is window-bound.
         seller=command.get('seller_id')
         pid=command.get('player_id')
         if type(seller) is not str or type(pid) is not str or seller==manager:
@@ -441,7 +439,7 @@ def review_transfers(world, boundary: date) -> int:
         m=month.month%12+1
         month=date(y,m,1)
         for deal_id,record in tuple(registry.transfer_offers.items()):
-            if record.status in ('manager_turn','agreed') and record.expires_on < month:
+            if record.status in ('manager_turn','agreed','pending_window') and record.expires_on < month:
                 world._put(registry.transfer_offers,deal_id,replace(record,status='expired',
                            reason='Club agreement or offer expired without completion'))
         # TS-24.5: retire the random quarterly manager bids. All new AI
@@ -459,9 +457,10 @@ def transfer_read_model(session) -> dict:
     registry=session._world_squads
     now=session.current_date
     manager=_manager_club(session)
+    from football_manager.services.transfer_windows import window_open, window_info, next_opening
     offers=[]
     managed_deals = [d for d in registry.transfer_offers.values() if manager in (d.seller_id, d.buyer_id)]
-    for item in sorted(managed_deals, key=lambda d:(d.status in ('manager_turn','agreed'), d.deal_id), reverse=True)[:80]:
+    for item in sorted(managed_deals, key=lambda d:(d.status in ('manager_turn','agreed','pending_window'), d.deal_id), reverse=True)[:80]:
         if manager not in (item.seller_id,item.buyer_id):
             continue
         try:
@@ -512,6 +511,8 @@ def transfer_read_model(session) -> dict:
             'installment_schedule':[{'due_on':due.isoformat(),'amount_gbp':amount,'paid':i<item.installments_paid}
                 for i,(due,amount) in enumerate(schedule(terms,item.settled_on or now))],
             'expires_on':item.expires_on.isoformat(),'updated_on':item.events[-1].on_date.isoformat(),
+            'arrival_on': (next_opening(now,registry.clubs[item.buyer_id].country).isoformat()
+                            if item.status=='pending_window' else None),
             'events':len(item.events),'personal_status':item.personal_status,
             'personal_terms':terms_json(item.personal_terms),
             'personal_quote':public_personal,'personal_patience':item.personal_patience,
@@ -538,7 +539,7 @@ def transfer_read_model(session) -> dict:
             from football_manager.services.transfer_knowledge import player_knowledge
             targets.append(player_knowledge(session,cid,p))
     targets.sort(key=lambda x:(x['club'],x['name']))
-    from football_manager.services.ai_transfer_market import window_open
+    from football_manager.services.transfer_windows import window_open, window_info, next_opening
     world_deals=[d for d in registry.transfer_offers.values()
                  if d.status=='completed' and manager not in (d.seller_id,d.buyer_id)]
     world_deals.sort(key=lambda d:(d.started_on,d.deal_id),reverse=True)
@@ -554,7 +555,9 @@ def transfer_read_model(session) -> dict:
     from football_manager.services.professional_scouting import scouting_read_model
     from football_manager.services.transfer_installments import finance_summary
     return {'schema_version':2,'source':'ts-fix-02-structured-negotiation','date':now.isoformat(),
-            'window_open': window_open(now), 'world_transfers':transfer_news,
+            'window_open': window_open(now, registry.clubs[manager].country),
+            'window': window_info(now, registry.clubs[manager].country),
+            'world_transfers':transfer_news,
             'club_id':manager,'club':registry.clubs[manager].name,
             'available_transfer_budget_gbp':_availability(registry,manager,now),
             'transfer_budget_gbp':registry.club_finances[manager].transfer_budget_gbp,

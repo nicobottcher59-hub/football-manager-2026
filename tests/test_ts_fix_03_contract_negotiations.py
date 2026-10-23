@@ -76,7 +76,7 @@ def test_agent_can_trade_bonus_and_promised_role_for_wage(base):
 
 
 def test_accept_agent_counter_settles_real_bonus_and_changes_role(base):
-    s=deepcopy(base);p,q=player_and_quote(s);r=s._world_squads
+    s=deepcopy(base);s.current_date+=__import__("datetime").timedelta(days=1);p,q=player_and_quote(s);r=s._world_squads
     renewal_command(s,{'action':'contract_offer','player_id':p.id,'terms':offer(q)})
     prev=r.contracts[p.id];account=r.club_finances[s.home_club.id]
     counter=r.contract_talks[p.id].counter
@@ -125,7 +125,7 @@ def test_graph_v28_roundtrip_keeps_agent_persistence(base):
     s=deepcopy(base);p,q=player_and_quote(s)
     renewal_command(s,{'action':'contract_offer','player_id':p.id,'terms':offer(q)})
     graph=capture_manager_graph(s)
-    assert GRAPH_VERSION==28 and graph['version']==28
+    assert GRAPH_VERSION==29 and graph['version']==29
     reloaded=restore_manager_graph(graph)
     assert reloaded._world_squads.contract_talks[p.id]==s._world_squads.contract_talks[p.id]
     reloaded._world_squads.validate()

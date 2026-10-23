@@ -71,7 +71,7 @@ def progression_read_model(session: DevelopmentSession) -> dict:
             "home": upcoming.fixture.home_club_id == session.home_club.id,
         } if upcoming else None),
         "season_complete": session.season_finished,
-        "intervention_events_supported": True,
+        "intervention_events_supported": False,
         "pending_transfer_decisions": pending_transfer_decisions(session),
         "resume_target": getattr(session, '_calendar_resume_target', None),
         "auto_sim_includes_managed_matches": True,
@@ -109,6 +109,25 @@ def _bind_next_match(session: DevelopmentSession) -> None:
         session.match_played = False
 
 
+def _settle_scheduled_registrations(session: DevelopmentSession) -> None:
+    """Finish only agreements signed by a manager or agent before the window."""
+    from dataclasses import replace
+    from football_manager.services.transfer_windows import window_open
+    from football_manager.services.transfer_personal import _finish
+    registry=session._world_squads
+    today=session.current_date
+    for key, deal in tuple(sorted(registry.transfer_offers.items())):
+        if deal.status!='pending_window' or not window_open(today,registry.clubs[deal.buyer_id].country):
+            continue
+        # Existing transfer and contract safety checks are reused at execution.
+        # If conditions materially changed, do not fabricate a completed deal.
+        try:
+            _finish(session,deal,deal.personal_terms)
+        except ValueError as exc:
+            registry.transfer_offers[key]=replace(deal,status='failed',
+                reason=f'Scheduled transfer could not complete: {str(exc)[:165]}')
+
+
 def _move_day(session: DevelopmentSession) -> int:
     new_day = session.current_date + timedelta(days=1)
     if new_day > season_cutoff(session):
@@ -130,6 +149,9 @@ def _move_day(session: DevelopmentSession) -> int:
     from football_manager.services.club_support import recover_managed_players
     recover_managed_players(session, days=1, start_date=session.current_date)
     session.current_date = new_day
+    # Registration of already-signed agreements is a dated market event, not
+    # an unanswered decision. No automatic acceptance of incoming proposals.
+    _settle_scheduled_registrations(session)
     from football_manager.services.professional_scouting import advance_professional_scouting
     advance_professional_scouting(session, new_day)
     # Re-select/recover the canonical rival when the fixture becomes playable;
@@ -210,6 +232,7 @@ def simulate_until(
     background = 0
     # Explicit request to simulate through today resolves a same-day match too.
     # Continue, unlike this action, always stops on a managed match day.
+    _settle_scheduled_registrations(session)
     before = set(session._world.results) if on_day is not None else None
     def publish_day():
         nonlocal before
@@ -230,10 +253,13 @@ def simulate_until(
             own = session.home_club.id in (fixture.home_club_id, fixture.away_club_id)
             home_name = session._world_club_names.get(fixture.home_club_id, fixture.home_club_id)
             away_name = session._world_club_names.get(fixture.away_club_id, fixture.away_club_id)
+            from football_manager.ui_shell.career_history import _competition_name
             day_results.append({
                 'type': 'result', 'id': fid, 'date': (fixture.match_date or session.current_date).isoformat(),
                 'competition_id': fixture.competition_id,
+                'competition': _competition_name(session._world, fixture.competition_id),
                 'home_club': home_name, 'away_club': away_name,
+                'home_id': fixture.home_club_id, 'away_id': fixture.away_club_id,
                 'home_goals': score.home_goals, 'away_goals': score.away_goals,
                 'penalties_home': score.penalties_home,
                 'penalties_away': score.penalties_away,
@@ -243,25 +269,24 @@ def simulate_until(
         before = set(session._world.results)
 
     while True:
-        if pending_transfer_decisions(session):
-            publish_day()
-            break
+        # TS-FIX-04: Calendar is deliberately unattended delegation. Offers
+        # may expire while fast-forwarding; never auto-consent or auto-sell.
         background += _finish_day(session, auto_results)
         from football_manager.services.manager_inbox import synchronize_manager_inbox
         synchronize_manager_inbox(session)
         publish_day()
-        if session.current_date == target or pending_transfer_decisions(session):
+        if session.current_date == target:
             break
         background += _move_day(session)
     decisions = pending_transfer_decisions(session)
-    session._calendar_resume_target = target.isoformat() if decisions else None
+    session._calendar_resume_target = None
     return {
         "mode": "calendar_auto_sim", "from_date": start.isoformat(),
         "to_date": session.current_date.isoformat(),
         "managed_matches": len(auto_results),
         "background_matches": background,
         "auto_results": auto_results,
-        "stopped_for_decision": bool(decisions),
+        "stopped_for_decision": False,
         "decisions": decisions,
         "requested_target": target.isoformat(),
         "state": progression_read_model(session),

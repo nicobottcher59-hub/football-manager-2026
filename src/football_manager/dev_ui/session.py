@@ -272,7 +272,7 @@ class DevelopmentSession:
         self._seed = self._next_seed
         self._next_seed += 1
         self._calendar_resume_target = None
-        self.current_date = date(2026, 8, 15)
+        self.current_date = date(2026, 7, 1)
         self.home_club, self.home_lineup, self.home_tactic = _build_side(
             club_id="northbridge",
             name="Northbridge FC",
@@ -1913,7 +1913,8 @@ class DevelopmentSession:
         if first is None:
             raise RuntimeError("development schedule has no managed fixtures")
         self._active_match = first
-        self.current_date = first.match_date
+        # TS-FIX-04: new careers begin in July, before the first official match.
+        # Keep fixture dates intact; do not advance the world to the first kickoff.
         if first.competition_key == "league":
             self._current_league_fixture = first.fixture
 
@@ -1996,9 +1997,8 @@ class DevelopmentSession:
         if first is None:
             raise RuntimeError("development world has no opening match")
         self._active_match = first
-        self.current_date = first.match_date
-        self._world.advance_until(self.current_date, protected_club_id=self.home_club.id)
-        self._sync_world_view()
+        # Do not fast-forward new careers to the first competitive game.
+        # World and clubs are already initialized at 1 July.
 
     def _sync_world_view(self) -> None:
         """Project the canonical world ledger into existing lightweight DEV views."""
@@ -2232,7 +2232,8 @@ class DevelopmentSession:
         self.match_played = False
         self.last_result = None
         if first:
-            self.current_date = first.match_date
+            # New seasons have a July planning period before fixtures start.
+            self.current_date = date(int(self._world.season_label[:4]), 7, 1)
             self._world.advance_until(self.current_date, protected_club_id=self.home_club.id)
             self._sync_world_view()
             self._prepare_development_opponent()
@@ -2240,6 +2241,10 @@ class DevelopmentSession:
             self.current_date = date(int(self._world.season_label[:4])+1, 6, 30)
             from football_manager.services.player_development import advance_world_development
             advance_world_development(self._world, self.current_date)
+        # Resolve old-season agreements scheduled for this July before the
+        # manager makes their first new-season decisions.
+        from football_manager.ui_shell.progression import _settle_scheduled_registrations
+        _settle_scheduled_registrations(self)
         self.update_dressing_room()
 
     def save_career_results(self, path: str | Path) -> None:

@@ -200,7 +200,7 @@ def finalize_season_retirements(world, on_date: date, *, managed_club_id=None,
                 # Terminate an unresolved bid; an agreement cannot buy a
                 # player who is already recorded in the retirement archive.
                 for deal_id, deal in tuple(registry.transfer_offers.items()):
-                    if deal.player_id == player.id and deal.status in ('manager_turn', 'agreed'):
+                    if deal.player_id == player.id and deal.status in ('manager_turn', 'agreed', 'pending_window'):
                         world._put(registry.transfer_offers, deal_id,
                                    replace(deal, status='expired', reason='Player retired'))
                 world._put(registry.retired_players, player.id, archive)

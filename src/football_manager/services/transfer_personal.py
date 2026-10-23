@@ -153,18 +153,37 @@ def _repair_selected_team(session, club_id: str) -> None:
 
 
 def _finish(session, deal, terms: PersonalTerms) -> dict:
-    """Runs against a transactionally cloned session supplied by GameApplication."""
+    """Register only in an open buying-club window; agreements can precede it."""
     registry=session._world_squads
     now=session.current_date
-    if deal.status!='agreed' or deal.expires_on<now:
+    if deal.status not in ('agreed','pending_window') or deal.expires_on<now:
         raise ValueError('Club agreement expired or is no longer valid')
+    from football_manager.services.transfer_windows import window_open, next_opening
+    buyer_country = registry.clubs[deal.buyer_id].country
+    if not window_open(now,buyer_country):
+        arrival = next_opening(now,buyer_country)
+        old = registry.contracts.get(deal.player_id)
+        if old is None or old.expires_on < arrival:
+            raise ValueError('The player contract expires before the next registration window')
+        # Reserve a genuinely affordable commitment at agreement time; payment
+        # still occurs only when the player registers.
+        _financing(registry,deal,terms,now)
+        pending=replace(deal, status='pending_window', personal_status='completed',
+                        personal_terms=terms, expires_on=arrival+timedelta(days=35),
+                        reason=f'Contract agreed; registration scheduled for {arrival.isoformat()}')
+        pending.validate()
+        registry.transfer_offers[deal.deal_id]=pending
+        return {'deal_id':deal.deal_id,'status':'pending_window','player_id':deal.player_id,
+                'arrival_on':arrival.isoformat(),
+                'reason':'Agreement signed; fees and player registration are deferred until the transfer window opens.'}
     player,old_contract=_player(registry,deal.player_id,deal.seller_id)
-    can_move,reason=_player_interest(registry,player,deal.seller_id,deal.buyer_id,now)
-    if not can_move:
-        raise ValueError(reason)
-    demand=agent_demand(registry,player,deal.seller_id,deal.buyer_id,now)
-    if terms.years>demand['max_years']:
-        raise ValueError('Player declines an excessively long contract')
+    if deal.status != 'pending_window':
+        can_move,reason=_player_interest(registry,player,deal.seller_id,deal.buyer_id,now)
+        if not can_move:
+            raise ValueError(reason)
+        demand=agent_demand(registry,player,deal.seller_id,deal.buyer_id,now)
+        if terms.years>demand['max_years']:
+            raise ValueError('Player declines an excessively long contract')
     if terms.weekly_wage_gbp < 75:
         raise ValueError('A registered professional contract requires a positive wage')
     _financing(registry,deal,terms,now)
@@ -218,7 +237,7 @@ def _finish(session, deal, terms: PersonalTerms) -> dict:
         from football_manager.services.contract_promises import record_contract_role_promise
         record_contract_role_promise(session,player.id,terms.role)
     for key,other in tuple(registry.transfer_offers.items()):
-        if key!=deal.deal_id and other.player_id==player.id and other.status in ('agreed','manager_turn'):
+        if key!=deal.deal_id and other.player_id==player.id and other.status in ('agreed','manager_turn','pending_window'):
             registry.transfer_offers[key]=replace(other,status='expired',reason='Player transferred to another club')
     completed=replace(deal,status='completed',personal_status='completed',
         personal_terms=terms,reason='Transfer completed after player consent',settled_on=now,

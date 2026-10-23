@@ -158,6 +158,15 @@ def calendar_read_model(session: DevelopmentSession) -> dict:
         and event.end_date >= date(year, 8, 1)
         and event.start_date <= date(year + 1, 7, 31)
     ]
+    from football_manager.services.transfer_windows import windows_for_year
+    # Registration windows are separate from FIFA international breaks.
+    country = session._world_squads.clubs[managed_id].country
+    transfer_windows = [
+        {"start": first.isoformat(), "end": last.isoformat(), "name": "Transfer window"}
+        for season_year in (year, year+1)
+        for first, last in windows_for_year(season_year,country)
+        if first <= date(year+1,6,30) and last >= date(year,7,1)
+    ]
     return {
         "source": "python-development-session",
         "persistent": False,
@@ -168,6 +177,7 @@ def calendar_read_model(session: DevelopmentSession) -> dict:
         "competitions": [{"id": key, "name": name} for key, name in sorted(competitions.items(), key=lambda e: e[1])],
         "matches": games,
         "fifa_windows": fifa_windows,
+        "transfer_windows": transfer_windows,
         "limitations": {
             "fictional_pairings": True,
             "match_previews": False,

@@ -26,7 +26,7 @@ def create_incoming_interest(world, today: date) -> int:
     if world._active_journal is None:
         raise RuntimeError('Incoming interest requires a world transaction')
     live = [d for d in registry.transfer_offers.values() if d.seller_id == manager
-            and d.status in ('manager_turn', 'agreed') and d.expires_on >= today]
+            and d.status in ('manager_turn', 'agreed', 'pending_window') and d.expires_on >= today]
     if len(live) >= 5:
         return 0
     stock = [p for p in registry.clubs[manager].squad.players
@@ -59,7 +59,7 @@ def create_incoming_interest(world, today: date) -> int:
         strength = sum(sorted((p.overall_rating for p in club.squad.players), reverse=True)[:11]) / 11
         for player in stock:
             recent = any(d.player_id == player.id and d.buyer_id == buyer_id
-                         and (d.status in ('manager_turn', 'agreed') and d.expires_on >= today
+                         and (d.status in ('manager_turn', 'agreed', 'pending_window') and d.expires_on >= today
                               or (today - d.events[-1].on_date).days < 45)
                          for d in registry.transfer_offers.values())
             if recent:

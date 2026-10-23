@@ -23,7 +23,7 @@ from football_manager.domain.world_runner import WorldSeasonRunner
 
 from .models import SaveIntegrityError, UnsupportedSaveVersionError
 
-GRAPH_VERSION = 28
+GRAPH_VERSION = 29
 # TS-24.13: a fully populated 92-club career already needs ~286k live
 # graph nodes after its first season (TS-24.12 rejected that save). Keep
 # the integrity limit finite but accommodate normal longitudinal growth.

@@ -127,3 +127,5 @@
 
 /* Universal art: real crests must retain their native silhouette. */
 .cal-crest.cal-crest-real{clip-path:none!important;background:transparent!important;box-shadow:none!important;border:0!important;object-fit:contain;padding:0;filter:drop-shadow(0 2px 3px #0008)}
+
+.cal-market-mark{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:5px;background:#294b38;border:1px solid #55a47d;color:#b0ffd7;font-size:11px;font-weight:850;margin-left:3px}

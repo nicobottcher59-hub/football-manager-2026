@@ -50,8 +50,13 @@ window.FMHistory = (() => {
   }
   function institutionPanel(d){
     const o=d.institution||{};
+    const brand=window.FMClubIdentity?.resolve?.(d.id,d.name)||{};
+    const location=brand.location||null;
+    const founded=o.founded??brand.founded??null;
+    const stadium=o.stadium||brand.stadium||null;
+    const city=o.city||location||null;
     if(!o.registered)return section('Club identity',`<p class="ch-muted">${h(o.note||'No professional club record is available.')}</p>`);
-    const info=`<div class="ch-facts">${fact('Country',o.country)}${fact('City',o.city)}${fact('Stadium',o.stadium)}${fact('Stadium capacity',o.stadium_capacity)}${fact('Founded',o.founded)}
+    const info=`<div class="ch-facts">${fact('Country',o.country)}${fact('Location',city)}${fact('Stadium',stadium)}${fact('Stadium capacity',o.stadium_capacity)}${fact('Founded',founded)}
       ${fact('Current tier',o.current_tier)}${fact('League',o.league)}${fact('Playing style',o.playing_style)}${fact('Simulator team strength',o.team_strength)}</div>`;
     const finances=o.finance?`<div class="ch-facts">${fact('Available cash',money(o.finance.cash_gbp))}${fact('Transfer budget',money(o.finance.transfer_budget_gbp))}${fact('Weekly wage budget',money(o.finance.wage_budget_weekly_gbp))}</div>`:'<p class="ch-muted">Finances unavailable for this club.</p>';
     const staffing=table(['Department','Current staff','Provisional capacity','Average staff quality'],(o.facilities?.staffing_slots||[]).map(x=>
@@ -66,7 +71,7 @@ window.FMHistory = (() => {
   }
   function playerPage(d){
     const timeline=table(['Season','Clubs (verified match appearances)','Apps','Minutes','Goals','Assists','Avg','Coverage'],d.seasons.map(stats).join(''),'No season performance registered.');
-    const transfers=table(['Recorded agreement','From','To','Guaranteed fee'],d.transfers.map(t=>`<tr><td title="${h(t.date_note)}">${column(t.date)} *</td><td>${button('club',t.from_id,t.from)}</td><td>${button('club',t.to_id,t.to)}</td><td>${money(t.fee_gbp)}</td></tr>`).join(''));
+    const transfers=table(['Transfer date','From','To','Guaranteed fee'],d.transfers.map(t=>`<tr><td title="${h(t.date_note)}">${column(t.date)} *</td><td>${button('club',t.from_id,t.from)}</td><td>${button('club',t.to_id,t.to)}</td><td>${money(t.fee_gbp)}</td></tr>`).join(''));
     const loans=table(['Start','Club','Loaned to','Ends','Status'],d.loans.map(t=>`<tr><td>${h(t.date)}</td><td>${button('club',t.from_id,t.from)}</td><td>${button('club',t.to_id,t.to)}</td><td>${h(t.ends_on)}</td><td>${h(t.status)}</td></tr>`).join(''));
     const titles=table(['Season','Competition','Club'],d.honours.map(t=>`<tr><td>${h(t.season)}</td><td>${button('competition',t.competition_id,t.competition)}</td><td>${button('club',t.club_id,t.club)}</td></tr>`).join(''));
     const current=d.current_club_id?button('club',d.current_club_id,d.current_club):'Free agent';
@@ -74,7 +79,7 @@ window.FMHistory = (() => {
       ${progressionPanel(d)}
       ${awardPanel(d.awards)}
       ${section('Season-by-season career',timeline)}
-      ${section('Confirmed transfers',transfers,'* Agreement date; registration day not recorded')}
+      ${section('Confirmed transfers',transfers,'* Registration date for new transfers; legacy entries may retain the agreement date')}
       ${section('Loans',loans)}
       ${section('Club honours at season end',titles,'No retroactive awards; not individual player prizes')}`;
   }
@@ -88,7 +93,7 @@ window.FMHistory = (() => {
     const choices=d.seasons.map(x=>`<option value="${h(x.season)}" ${x.season===d.season?'selected':''}>${h(x.season)}</option>`).join('');
     const seasons=table(['Season','League','Finish','Promotion / relegation','Titles'],d.seasons.map(s=>`<tr><td>${h(s.season)} ${s.complete?'':'(ongoing)'}</td><td>${s.league_id?button('competition',s.league_id,s.league):'—'}</td><td>${s.position??'—'}</td><td>${s.promoted.length?'Promoted':s.relegated.length?'Relegated':'—'}</td><td>${s.titles.map(t=>button('competition',t.id,t.name)).join(', ')||'—'}</td></tr>`).join(''));
     const cups=table(['Season','Competition'],d.trophies.map(t=>`<tr><td>${h(t.season)}</td><td>${button('competition',t.id,t.name)}</td></tr>`).join(''));
-    const moves=table(['Agreement','Player','From','To','Fee'],d.transfers.map(t=>`<tr><td>${column(t.date)}</td><td>${button('player',t.player_id,t.player_name)}</td><td>${button('club',t.from_id,t.from)}</td><td>${button('club',t.to_id,t.to)}</td><td>${money(t.fee_gbp)}</td></tr>`).join(''));
+    const moves=table(['Transfer date','Player','From','To','Fee'],d.transfers.map(t=>`<tr><td>${column(t.date)}</td><td>${button('player',t.player_id,t.player_name)}</td><td>${button('club',t.from_id,t.from)}</td><td>${button('club',t.to_id,t.to)}</td><td>${money(t.fee_gbp)}</td></tr>`).join(''));
     const veterans=table(['Retired player','Retired on'],d.retired_players.map(p=>`<tr><td>${button('player',p.id,p.name)}</td><td>${h(p.retired_on)}</td></tr>`).join(''));
     return `<div class="ch-actions">${d.has_active_squad?`<button type="button" class="ch-primary" data-history-squad="${h(d.id)}">View current squad and attributes →</button>`:''}<label>Season <select data-history-season>${choices}</select></label></div>
     ${institutionPanel(d)}${recordsPanel(d.records)}${awardPanel(d.awards)}${section('Season record',seasons)}${section('Trophy cabinet',cups)}${matchPanel(d)}${section('Confirmed transfer history',moves)}${section('Retired players at this club',veterans)}`;
@@ -113,7 +118,12 @@ window.FMHistory = (() => {
       if(data.source!=='verified-career-ledgers'||data.type!==entity||data.id!==identifier)throw Error('Invalid career archive response');
       selectedSeason=data.season||'';cached=data;
       const body=entity==='player'?playerPage(data):entity==='club'?clubPage(data):competitionPage(data);
-      host.innerHTML=`<div class="ch-root"><div class="ch-hero"><span class="ch-eyebrow">${h(entity.toUpperCase())} · VERIFIED CAREER ARCHIVE</span><h2>${h(data.name)}</h2><button type="button" class="ch-back" data-history-back>← Back</button></div>${body}<p class="ch-note">${h(data.note)}</p></div>`;
+      const club=entity==='club' ? window.FMClubIdentity?.resolve?.(data.id,data.name) : null;
+      const art=club?.crest ? `<img class="ch-hero-club-crest" src="${h(window.FMEntityAssets?.url?.(club.crest)||club.crest)}" data-fm-asset="optional" alt="" loading="lazy">` : '';
+      const shown=club?.display_name||data.name;
+      const subtitle='';
+      host.innerHTML=`<div class="ch-root"><div class="ch-hero ch-hero-with-crest">${art}<div><span class="ch-eyebrow">${h(entity.toUpperCase())} · VERIFIED CAREER ARCHIVE</span><h2>${h(shown)}</h2>${subtitle}</div><button type="button" class="ch-back" data-history-back>← Back</button></div>${body}<p class="ch-note">${h(data.note)}</p></div>`;
+      window.FMClubIdentity?.paintWithin?.(host);
     }catch(err){if(token===request&&host)host.innerHTML=`<section class="ch-card" role="alert"><h3>Career history unavailable</h3><p>${h(err.message)}</p><button type="button" data-history-retry>Retry</button></section>`;}
   }
   function mount(element,type,id){

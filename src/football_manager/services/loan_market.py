@@ -439,7 +439,7 @@ def _expire_professionals(world,as_of:date):
             reg.contracts.pop(player.id,None)
             world._put(reg.free_agents,player.id,FreeAgent(player,cid,as_of,contract.weekly_wage_gbp))
             for did,offer in tuple(reg.transfer_offers.items()):
-                if offer.player_id==player.id and offer.status in ('manager_turn','agreed'):
+                if offer.player_id==player.id and offer.status in ('manager_turn','agreed','pending_window'):
                     world._put(reg.transfer_offers,did,replace(offer,status='expired',reason='Contract expired'))
             dropped+=1
     return dropped

@@ -8,6 +8,20 @@ window.FMSimulationOverlay = (() => {
     ? new Intl.DateTimeFormat('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date(`${d}T12:00:00Z`))
     : 'Waiting for world progress';
   const competitionText = id => ({league:'Premier League','dev-premier':'Premier League','fa-cup':'FA Cup','carabao-cup':'Carabao Cup','champions-league':'Champions League','europa-league':'Europa League','conference-league':'Conference League','efl-trophy':'EFL Trophy'})[id] || String(id || 'Fixture').replace(/^dev-/,'').replace(/[-_]/g,' ');
+  const clubBrand=(id,name)=>window.FMClubIdentity?.resolve?.(id,name)||{display_name:name||id||'Club',crest:null};
+  const clubLabel=(id,name)=>safe(clubBrand(id,name).display_name);
+  const clubCrest=(id,name)=>{
+    const identity=clubBrand(id,name);
+    if(!identity.crest)return `<span class="fm-sim-crest fm-sim-crest-fallback" aria-hidden="true">${safe((identity.short_name||identity.display_name||'C').split(/\s+/).slice(0,2).map(s=>s.charAt(0)).join('').toUpperCase())}</span>`;
+    const src=window.FMEntityAssets?.url?.(identity.crest)||identity.crest;
+    return `<img class="fm-sim-crest" data-fm-asset="optional" src="${safe(src)}" alt="" loading="lazy">`;
+  };
+  const compBrand=(id)=>{
+    const brand=window.FMCompetitionBranding;
+    const theme=brand?.resolve?.(id);
+    return {logo:brand?.badge?.(id,'fm-sim-comp-logo')||'',
+      colour:theme?.accent||'#79bce4'};
+  };
   let active = false;
   let confirming = false;
 
@@ -23,7 +37,7 @@ window.FMSimulationOverlay = (() => {
     backdrop.className = 'fm-sim-confirm-backdrop';
     backdrop.innerHTML = `<section class="fm-sim-confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="fm-sim-confirm-title" aria-describedby="fm-sim-confirm-desc">
       <div class="fm-sim-confirm-head"><div class="fm-sim-confirm-icon" aria-hidden="true">↠</div><div>
-        <span class="fm-sim-eyebrow">FM PROJECT · CALENDAR</span>
+        <span class="fm-sim-eyebrow">CAREER · CALENDAR</span>
         <h2 id="fm-sim-confirm-title">Simulate to this date?</h2></div></div>
       <p id="fm-sim-confirm-desc">The entire football world will advance, including your club's matches. Only <strong>your team's results</strong> will appear in the simulation feed.</p>
       <div class="fm-sim-confirm-stats">
@@ -69,7 +83,7 @@ window.FMSimulationOverlay = (() => {
     const modal = document.createElement('div');
     modal.className = 'fm-sim-overlay';
     modal.innerHTML = `<section class="fm-sim-window" role="dialog" aria-modal="true" aria-labelledby="fm-sim-title">
-      <header class="fm-sim-top"><div><span class="fm-sim-eyebrow">FM PROJECT · LIVE PYTHON WORLD</span>
+      <header class="fm-sim-top"><div><span class="fm-sim-eyebrow">CALENDAR · LIVE PYTHON WORLD</span>
         <h2 id="fm-sim-title">Simulating your season</h2><p class="fm-sim-range"></p></div>
         <span class="fm-sim-pulse">● WORLD RUNNING</span></header>
       <div class="fm-sim-status"><div><small>PYTHON WORLD DATE</small><strong class="fm-sim-date">Starting...</strong>
@@ -110,10 +124,14 @@ window.FMSimulationOverlay = (() => {
       const penalties = Number(item.penalties_home) || Number(item.penalties_away);
       const row = document.createElement('div');
       row.className = 'fm-sim-result fm-sim-own';
-      row.innerHTML = `<div class="fm-sim-result-meta"><span>${safe(dateText(item.date))}</span><span>${safe(competitionText(item.competition_id))}</span></div>
-        <div class="fm-sim-result-main"><span class="fm-sim-team">${safe(item.home_club)}</span>
+      const competition=compBrand(item.competition_id);
+      // Only competition branding owns the local accent. The main game shell
+      // retains the managed club identity for all careers.
+      row.style.setProperty('--fm-sim-comp-accent',competition.colour);
+      row.innerHTML = `<div class="fm-sim-result-meta"><span>${safe(dateText(item.date))}</span><span class="fm-sim-comp">${competition.logo}<span>${safe(item.competition||competitionText(item.competition_id))}</span></span></div>
+        <div class="fm-sim-result-main"><span class="fm-sim-team">${clubCrest(item.home_id,item.home_club)}<span>${clubLabel(item.home_id,item.home_club)}</span></span>
           <strong class="fm-sim-score">${homeScore} – ${awayScore}</strong>
-          <span class="fm-sim-team fm-sim-away">${safe(item.away_club)}</span></div>
+          <span class="fm-sim-team fm-sim-away"><span>${clubLabel(item.away_id,item.away_club)}</span>${clubCrest(item.away_id,item.away_club)}</span></div>
         ${penalties?`<div class="fm-sim-shootout">Penalties ${Number(item.penalties_home)}–${Number(item.penalties_away)}</div>`:''}`;
       const feed = select('.fm-sim-feed');
       feed.querySelector('.fm-sim-feed-empty')?.remove();

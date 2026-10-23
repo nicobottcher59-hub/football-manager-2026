@@ -25,3 +25,9 @@
 .ch-graph-wrap{overflow:auto;background:#0b2337;border:1px solid #244963;border-radius:9px;padding:12px;margin:0 0 15px}
 .ch-graph{display:block;width:100%;min-width:350px;max-height:290px}
 @media(max-width:700px){.ch-facts{grid-template-columns:repeat(2,minmax(0,1fr))}.ch-fact{padding:10px}}
+
+/* TS-FIX-04: visual identity sourced from the same stable club ID as Home. */
+.ch-hero-with-crest{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.ch-hero-with-crest>div{min-width:0;flex:1}
+.ch-hero-with-crest .ch-hero-club-crest{height:68px;width:68px;object-fit:contain;flex:none}
+.ch-hero-internal{display:block;font-size:11px;color:#99b9c9;margin-top:4px}

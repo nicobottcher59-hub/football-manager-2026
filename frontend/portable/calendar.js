@@ -61,6 +61,11 @@ window.FMCalendar = (() => {
   function fifaWindow(iso){
     return (snapshot?.fifa_windows||[]).find(w=>w.start<=iso&&iso<=w.end)||null;
   }
+  function marketMark(iso){
+    const hit=(snapshot?.transfer_windows||[]).find(w=>w.start===iso||w.end===iso);
+    if(!hit)return '';
+    return `<span class="cal-market-mark" title="Transfer window ${hit.start===iso?'opens':'closes'} ${html(iso)}" aria-label="Transfer window ${hit.start===iso?'opens':'closes'}">${hit.start===iso?'↗':'↘'}</span>`;
+  }
   function grid(){
     const [year,m]=month.split('-').map(Number);
     const first=new Date(Date.UTC(year,m-1,1));
@@ -82,7 +87,7 @@ window.FMCalendar = (() => {
       const past=valid && iso<today();
       const ghost=new Date(Date.UTC(year,m-1,day)).getUTCDate();
       return `<div class="cal-day ${valid?'':'cal-outside'} ${past?'cal-past':''} ${active?'cal-today':''} ${iso>today()?'cal-future':''} ${iso===selectedDate?'cal-selected-day':''}"${valid?` data-cal-cell="${iso}" role="gridcell" tabindex="0" aria-label="${html(fmtDay(iso))}, ${games.length} fixtures${international?', FIFA window':''}"`:''}${active?' aria-current="date"':''}>
-        ${valid?`<div class="cal-day-label"><button type="button" class="cal-day-select" data-cal-date="${iso}" title="Select ${iso}" aria-label="Select ${iso} to auto-simulate through this date">${day}</button>${active?'<small>TODAY</small>':''}${marker}</div>${games.map(fixture).join('')}`:`<div class="cal-day-label"><span>${ghost}</span></div>`}
+        ${valid?`<div class="cal-day-label"><button type="button" class="cal-day-select" data-cal-date="${iso}" title="Select ${iso}" aria-label="Select ${iso} to auto-simulate through this date">${day}</button>${active?'<small>TODAY</small>':''}${marker}${valid?marketMark(iso):''}</div>${games.map(fixture).join('')}`:`<div class="cal-day-label"><span>${ghost}</span></div>`}
       </div>`;
     }).join('')}</div>`;
   }
@@ -116,7 +121,7 @@ window.FMCalendar = (() => {
     const past=target<today();
     const beyond=target>(window.FMProgression?.state()?.season_cutoff||'9999-12-31');
     return `<section class="cal-sim-card panel"><div class="cal-sim-heading"><span>Selected day</span><strong>${html(fmtDay(target))}</strong></div>
-      <p>Auto-simulates every fixture, including your club's matches, until this day. Pauses for transfer offers or negotiations that need your decision.</p>
+      <p>Auto-simulates every fixture, including your club's matches, without interruptions. Unanswered offers may expire while you skip ahead.</p>
       <button type="button" data-cal-simulate="${html(target)}" ${past||beyond||simulating?'disabled':''}>
       ${simulating?'Simulating...':past?'Past date':beyond?'Outside current season':'Simulate to this date →'}</button>
       ${resume&&resume>=today()?`<button type="button" data-cal-simulate="${html(resume)}" ${simulating?'disabled':''}>Resume to ${html(fmtDay(resume))} →</button>`:''}
@@ -174,7 +179,7 @@ window.FMCalendar = (() => {
     const accepted=await window.FMSimulationOverlay.confirm({target,fromDate:today(),knownMatches});
     if(!accepted || simulating || target<today())return;
     simulating=true;render();
-    try{await window.FMProgression.simulateUntil(target);await refresh();}
+    try{await window.FMProgression.simulateUntil(target);month=null;selectedDate=null;selectedId=null;await refresh();}
     finally{simulating=false;render();}
   }
   async function refresh(){
@@ -197,6 +202,9 @@ window.FMCalendar = (() => {
     }
   }
   function mount(element){
+    // Called whenever Calendar is entered. Do not reuse a previously browsed
+    // month after the manager has advanced the in-game date elsewhere.
+    month=null;selectedDate=null;selectedId=null;
     if(root!==element){if(root){root.removeEventListener('click',click);root.removeEventListener('click',cellClick);root.removeEventListener('keydown',cellKeydown);}root=element;root.addEventListener('click',click);root.addEventListener('click',cellClick);root.addEventListener('keydown',cellKeydown);root.addEventListener('click',e=>{if(e.target.closest('[data-cal-retry]'))refresh();});}
     refresh();
   }

@@ -44,13 +44,12 @@ def _completed_deals(registry, *, player_id=None, club_id=None):
             continue
         if club_id is not None and club_id not in (deal.seller_id, deal.buyer_id):
             continue
-        # The acceptance date is recorded; exact registration day isn't.
-        accepted = deal.personal_events[-1].on_date if deal.personal_events else None
+        accepted = deal.settled_on or (deal.personal_events[-1].on_date if deal.personal_events else None)
         rows.append({'id': deal.deal_id, 'player_id': deal.player_id,
                      'from_id': deal.seller_id, 'to_id': deal.buyer_id,
                      'fee_gbp': deal.terms.fixed_gbp,
                      'date': accepted.isoformat() if accepted else None,
-                     'date_note': 'Player agreement date (exact registration date not stored)'})
+                     'date_note': 'Actual registration date' if deal.settled_on else 'Legacy player agreement date (registration date unavailable)'})
     return sorted(rows, key=lambda row: (row['date'] or '', row['id']), reverse=True)
 
 

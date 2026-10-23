@@ -1,0 +1,16 @@
+TS-FIX-04 - Calendario, temporada e identidad
+
+Base requerida: TS-UI-08.04 + TS-FIX-03 (con TS-FIX-01 y TS-FIX-02).
+1. Cerrar Python y el juego.
+2. Guardar copia del proyecto y de todas las partidas.
+3. Descomprimir este ZIP en la raiz football-manager-2026, al lado de pyproject.toml.
+4. Mantener la estructura de carpetas y reemplazar los archivos incluidos.
+5. Reiniciar y refrescar el navegador con Ctrl+F5.
+
+Version de guardado: 29 (era 28). No volver al codigo antiguo sin restaurar tambien una partida antigua.
+GitHub Desktop, rama nueva desde tu ultima rama con TS-FIX-03:
+  fix/ts-fix-04-calendar-season-identity
+Summary:
+  fix(calendar,market): TS-FIX-04 season start, unattended sim and transfer windows
+
+Para ver la evidencia y las limitaciones consulta TS_FIX_04_TEST_REPORT.md.

@@ -34,7 +34,7 @@ def outstanding_deferred(registry, club_id: str, now: date, exclude_id: str = ''
                for d in registry.transfer_offers.values()
                if d.deal_id != exclude_id and d.buyer_id == club_id
                and (d.status == 'completed' or
-                    (d.expires_on >= now and (d.status == 'agreed' or
+                    (d.expires_on >= now and (d.status in ('agreed','pending_window') or
                      (d.status == 'manager_turn' and d.seller_id == manager)))))
 
 

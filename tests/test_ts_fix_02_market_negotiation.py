@@ -245,7 +245,7 @@ def test_installment_commitments_survive_reload_and_resale(s):
 def test_roundtrip_preserves_debt_and_tolerance(s):
     d=complete(s);talk=submit(s)
     with s._world.transaction():settle_due_installments(s._world,schedule(d.terms,d.settled_on)[0][0])
-    graph=capture_manager_graph(s);assert graph['version']==GRAPH_VERSION==27
+    graph=capture_manager_graph(s);assert graph['version']==GRAPH_VERSION==29
     loaded=restore_manager_graph(graph)
     assert loaded._world_squads.transfer_offers==s._world_squads.transfer_offers
     with loaded._world.transaction():assert settle_due_installments(loaded._world,schedule(d.terms,d.settled_on)[0][0])==0
@@ -273,13 +273,13 @@ def test_credit_counts_existing_guaranteed_commitments(s):
     with pytest.raises(ValueError,match='credit'):validate_financing(r,mid,t,s.current_date)
 
 
-def test_calendar_stops_before_simulating_past_a_decision(s):
+def test_calendar_skips_decisions_without_selling_players(s):
     d=submit(s);today=s.current_date;target_day=today+timedelta(days=10);events=[]
     result=simulate_until(s,target_day,on_day=lambda day,rows:events.append((day,rows)))
-    assert result['stopped_for_decision'] and s.current_date==today
+    assert not result['stopped_for_decision'] and s.current_date==target_day
     assert result['managed_matches']==0 and any(x['deal_id']==d.deal_id for x in result['decisions'])
-    assert events and events[-1][0]==today
-    assert progression_read_model(s)['resume_target']==target_day.isoformat()
+    assert events and events[-1][0]==target_day
+    assert progression_read_model(s)['resume_target'] is None
     negotiate(s,{'action':'withdraw','deal_id':d.deal_id})
     assert not any(x['deal_id']==d.deal_id for x in pending_transfer_decisions(s))
 
@@ -354,7 +354,7 @@ def test_sell_on_settlement_uses_received_cash_and_guaranteed_acquisition_cost(s
     r.validate()
 
 
-def test_result_stream_does_not_lose_results_generated_on_interruption_day(s,monkeypatch):
+def test_result_stream_does_not_lose_results_while_skipping_decisions(s,monkeypatch):
     import football_manager.ui_shell.progression as progression
     from types import SimpleNamespace
     r=s._world_squads
@@ -376,7 +376,7 @@ def test_result_stream_does_not_lose_results_generated_on_interruption_day(s,mon
         return 1
     monkeypatch.setattr(progression,'_move_day',move)
     out=simulate_until(s,s.current_date+timedelta(days=4),on_day=lambda day,rows:captured.extend(rows))
-    assert out['stopped_for_decision'] and any(x['id']==fid for x in captured)
+    assert not out['stopped_for_decision'] and any(x['id']==fid for x in captured)
     assert len([x for x in captured if x['id']==fid])==1
 
 
@@ -393,7 +393,7 @@ def test_counter_rounds_generate_distinct_inbox_updates_without_read_side_effect
     assert len(s.manager_inbox.messages)==before
 
 
-def test_pending_calendar_target_is_valid_persistent_career_state(s,tmp_path):
+def test_completed_calendar_target_is_valid_persistent_career_state(s,tmp_path):
     from football_manager.persistence.manager_career import validate_manager_session,save_manager_career,load_manager_career
     from football_manager.persistence import SQLiteSaveRepository
     submit(s);target_day=s.current_date+timedelta(days=10)
@@ -401,7 +401,8 @@ def test_pending_calendar_target_is_valid_persistent_career_state(s,tmp_path):
     repo=SQLiteSaveRepository(tmp_path/'calendar-pause.sqlite3')
     save_manager_career(repo,slot_id='pause',display_name='Pause',session=s,expected_revision=0)
     restored=load_manager_career(repo,'pause').session
-    assert progression_read_model(restored)['resume_target']==target_day.isoformat()
+    assert progression_read_model(restored)['resume_target'] is None
+    assert restored.current_date==target_day
     assert pending_transfer_decisions(restored)==pending_transfer_decisions(s)
     validate_manager_session(restored)
 

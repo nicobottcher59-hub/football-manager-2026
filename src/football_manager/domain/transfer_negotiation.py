@@ -110,7 +110,7 @@ class TransferNegotiation:
     buyer_id: str
     started_on: date
     expires_on: date
-    status: str  # manager_turn, agreed, completed, failed, rejected, withdrawn, expired
+    status: str  # manager_turn, agreed, pending_window, completed, failed, rejected, withdrawn, expired
     proposed_by: str
     terms: TransferTerms
     events: tuple[NegotiationEvent, ...]
@@ -133,7 +133,7 @@ class TransferNegotiation:
         if (not self.deal_id or not self.player_id or not self.seller_id or not self.buyer_id
                 or self.seller_id == self.buyer_id or type(self.started_on) is not date
                 or type(self.expires_on) is not date or self.expires_on < self.started_on
-                or self.status not in ('manager_turn', 'agreed', 'completed', 'failed', 'rejected', 'withdrawn', 'expired')
+                or self.status not in ('manager_turn', 'agreed', 'pending_window', 'completed', 'failed', 'rejected', 'withdrawn', 'expired')
                 or self.proposed_by not in (self.seller_id, self.buyer_id)
                 or not isinstance(self.terms, TransferTerms) or not isinstance(self.events, tuple)
                 or not self.events or len(self.events) > 32 or not 0 <= self.refusal_count <= 32):
@@ -167,8 +167,10 @@ class TransferNegotiation:
             self.personal_terms.validate()
         if self.personal_status in ('counter','completed') and self.personal_terms is None:
             raise ValueError('Agent counter/agreement is missing contract terms')
-        if self.status == 'completed' and self.personal_status != 'completed':
+        if self.status in ('completed','pending_window') and self.personal_status != 'completed':
             raise ValueError('Completed transfer requires player consent')
+        if self.status == 'pending_window' and self.personal_terms is None:
+            raise ValueError('Scheduled registration requires accepted personal terms')
         if self.personal_events and self.personal_terms != self.personal_events[-1].terms:
             raise ValueError('Latest personal event differs from recorded terms')
         for event in self.personal_events:
