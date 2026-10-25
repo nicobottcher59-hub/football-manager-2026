@@ -230,3 +230,74 @@
 .cmp-filter-field select option{background:#102c43;color:#f2f9ff}
 
 .cmp-crest.cmp-crest-real{clip-path:none!important;background:transparent!important;border:0!important;box-shadow:none!important;object-fit:contain!important;padding:0!important;filter:drop-shadow(0 2px 3px #0009)}
+
+
+/* TS-UI-13 — club-themed Competitions presentation only.
+   --ci-* is intentionally untouched: each competition keeps its own badge,
+   selected tab, table category and knockout branding. */
+.cmp-root[data-fm-club-theme]{
+  --cmp-manager-rgb:var(--player-club-rgb,var(--ui-club-rgb,20,135,216));
+  --cmp-manager-bright:var(--player-club-highlight,var(--ui-club-highlight,#429bde));
+}
+.cmp-manager-hero{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:space-between;
+  gap:18px;min-width:0;min-height:134px;margin:1px 2px 12px;padding:17px 21px;overflow:hidden;
+  border:1px solid rgba(var(--cmp-manager-rgb,20,135,216),.62);border-radius:11px;
+  background:#091d31;box-shadow:0 8px 24px #0003,inset 0 1px #ffffff18;box-sizing:border-box;}
+.cmp-manager-hero::before{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;
+  background:linear-gradient(90deg,rgba(5,17,29,.97) 0%,rgba(7,24,38,.90) 28%,rgba(7,24,38,.48) 58%,rgba(5,17,29,.76) 100%),
+    linear-gradient(180deg,rgba(255,255,255,.04),rgba(0,0,0,.12)),
+    url('assets/competitions/competition-centre-hero.webp') center 42% / cover no-repeat;}
+.cmp-manager-hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(ellipse at 5% 4%,rgba(var(--cmp-manager-rgb,20,135,216),.43),transparent 58%),
+    linear-gradient(94deg,rgba(var(--cmp-manager-rgb,20,135,216),.19),transparent 45%),
+    repeating-linear-gradient(145deg,transparent 0 98px,rgba(var(--cmp-manager-rgb,20,135,216),.055) 99px 100px,transparent 101px 205px);}
+.cmp-manager-identity{display:flex;align-items:center;gap:17px;min-width:0;max-width:80%;}
+.cmp-manager-crest{flex:0 0 75px;width:75px;height:79px;border-radius:12px;
+  display:grid;place-items:center;border:1px solid rgba(var(--cmp-manager-rgb,20,135,216),.68);
+  background:linear-gradient(150deg,#0a263acf,#07121fec);box-shadow:inset 0 1px #ffffff1d,0 4px 16px #0007;}
+.cmp-manager-crest img{display:block;max-height:66px;max-width:66px;object-fit:contain;filter:drop-shadow(0 3px 5px #0009);}
+.cmp-manager-initials{font-size:20px;font-weight:900;color:#fff;letter-spacing:.6px;}
+.cmp-manager-copy{min-width:0;}
+.cmp-manager-eyebrow{display:block;color:var(--cmp-manager-bright,#58b4ef);letter-spacing:1.15px;
+  font-size:10px;font-weight:900;text-transform:uppercase;}
+.cmp-manager-copy h2{margin:5px 0;font-size:clamp(23px,2.25vw,31px);letter-spacing:-.8px;
+  font-weight:900;color:#fff;line-height:1.12;}
+.cmp-manager-copy p{margin:0;color:#c1d2e0;font-size:11px;line-height:1.45;}
+.cmp-manager-season{flex:0 0 auto;min-width:132px;display:grid;gap:3px;padding:11px 15px;
+  background:#081a2dda;border:1px solid rgba(var(--cmp-manager-rgb,20,135,216),.45);border-radius:9px;}
+.cmp-manager-season>span{font-size:9px;font-weight:850;letter-spacing:1px;color:#93bdd0;}
+.cmp-manager-season>strong{font-size:16px;font-weight:900;color:#fff;}
+.cmp-manager-season>small{font-size:10px;color:#adc3d3;}
+/* Only the managed club's participation uses the manager palette. */
+.cmp-root[data-fm-club-theme] .cmp-table tbody tr.cmp-my-team,
+.cmp-root[data-fm-club-theme][data-competition-brand] .cmp-table tr.cmp-my-team:has(.cmp-team-cell small){
+  background:linear-gradient(90deg,rgba(var(--cmp-manager-rgb),.36),rgba(var(--cmp-manager-rgb),.12) 70%,#0b2b3d);
+  box-shadow:inset 3px 0 var(--cmp-manager-bright),inset 0 0 0 1px rgba(var(--cmp-manager-rgb),.34);}
+.cmp-root[data-fm-club-theme] .cmp-table tr.cmp-my-team .cmp-team-cell small{
+  background:rgba(var(--cmp-manager-rgb),.74);color:#fff;}
+.cmp-root[data-fm-club-theme] .cmp-fixture-row.cmp-highlight{
+  border-color:var(--cmp-manager-bright);background:linear-gradient(120deg,rgba(var(--cmp-manager-rgb),.42),#11334a 87%);
+  box-shadow:inset 3px 0 var(--cmp-manager-bright);}
+.cmp-root[data-fm-club-theme] .cmp-bilateral-tie.cmp-tie-managed{
+  border-color:var(--cmp-manager-bright);background:linear-gradient(110deg,rgba(var(--cmp-manager-rgb),.40),#0c2b43 90%);
+  box-shadow:0 0 15px rgba(var(--cmp-manager-rgb),.32),inset 3px 0 var(--cmp-manager-bright);}
+/* Selected sidebar item is club-coloured only while the manager competition view is visible. */
+body:has(.fm-competitions-screen[style*="display: block"] .cmp-manager-hero) .sidebar{
+  background:linear-gradient(175deg,#071420,#06111c 55%,var(--ui-club-soft,#122b3c) 160%);
+  border-right-color:rgba(var(--ui-club-highlight-rgb,66,155,222),.23);}
+body:has(.fm-competitions-screen[style*="display: block"] .cmp-manager-hero) .sidebar::before{
+  background:repeating-linear-gradient(38deg,transparent 0 45px,rgba(var(--ui-club-rgb,20,135,216),.10) 46px 48px),
+    radial-gradient(ellipse at 25% 94%,rgba(var(--ui-club-rgb,20,135,216),.21),transparent 68%);}
+body:has(.fm-competitions-screen[style*="display: block"] .cmp-manager-hero) .sidebar .nav-item.is-active{
+  color:#fff;background:linear-gradient(105deg,rgba(var(--ui-club-rgb,20,135,216),.36),#12283b 92%);
+  border-color:rgba(var(--ui-club-highlight-rgb,66,155,222),.64);
+  box-shadow:inset 3px 0 var(--ui-club-highlight,#429bde),0 6px 18px #020b1b44;}
+body:has(.fm-competitions-screen[style*="display: block"] .cmp-manager-hero) .sidebar .nav-item.is-active svg{
+  color:var(--ui-club-highlight,#429bde);}
+@media(max-width:850px){.cmp-manager-identity{max-width:100%;}.cmp-manager-hero{padding:14px 15px;min-height:121px;}
+  .cmp-manager-crest{flex-basis:59px;width:59px;height:65px;}.cmp-manager-crest img{max-width:53px;max-height:56px;}
+  .cmp-manager-season{min-width:110px;padding:9px 11px;}}
+@media(max-width:560px){.cmp-manager-hero{flex-wrap:wrap;gap:10px;min-height:0;}
+  .cmp-manager-identity{gap:12px;}.cmp-manager-copy h2{font-size:22px;}
+  .cmp-manager-season{width:100%;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .cmp-manager-season>strong{font-size:13px;}.cmp-manager-season>small{margin-left:auto;}}

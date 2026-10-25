@@ -46,6 +46,34 @@ window.FMCompetitions = (() => {
     return `<label class="cmp-filter-field"><span>${h(label)}</span><select data-cmp-filter="${field}" aria-label="${h(label)}">${options.map(([v,n])=>
       `<option value="${h(v)}" ${String(filters[field])===String(v)?'selected':''}>${h(n)}</option>`).join('')}</select></label>`;
   }
+  // TS-UI-13: presentation-only manager-club identity, separate from each
+  // competition's existing ci-* palette and competition detail/fixture logic.
+  const managerId=()=>index?.managed_id||data?.managed_id||'';
+  const managerName=()=>index?.managed_club||data?.managed_club||'Your club';
+  function managerThemeAttrs(){
+    return explorerView==='mine' && managerId()
+      ? ` data-fm-club-theme="${h(managerId())}" data-fm-club-name="${h(managerName())}"` : '';
+  }
+  function managerHero(){
+    if(explorerView!=='mine')return '';
+    const club=window.FMClubIdentity?.resolve?.(managerId(),managerName())||{display_name:managerName()};
+    const name=club.display_name||managerName();
+    const crestPath=club.crest && (window.FMEntityAssets?.url?.(club.crest)||'/portable/'+club.crest);
+    const initials=abbr(club.short_name||name)||'FC';
+    const emblem=crestPath
+      ? `<img data-fm-asset="optional" src="${h(crestPath)}" alt="${h(name)} crest" loading="lazy">`
+      : `<span class="cmp-manager-initials" aria-label="${h(name)} crest">${h(initials)}</span>`;
+    const count=Array.isArray(index?.competitions)?index.competitions.length:0;
+    const season=index?.season||data?.season||'—';
+    return `<section class="cmp-manager-hero" aria-label="Your club competition centre">
+      <div class="cmp-manager-identity"><span class="cmp-manager-crest">${emblem}</span>
+        <div class="cmp-manager-copy"><span class="cmp-manager-eyebrow">${h(name)} · FIRST TEAM</span>
+          <h2>Competition Centre</h2><p>League campaigns, cup runs, standings and confirmed fixtures.</p></div>
+      </div>
+      <div class="cmp-manager-season"><span>SEASON</span><strong>${h(season)}</strong>
+        <small>${count} registered ${count===1?'competition':'competitions'}</small></div>
+    </section>`;
+  }
   // Own competitions retain the original UI-3.3.1 horizontal selector.
   // Only Other Leagues exposes the worldwide directory filters.
   function clubTabs(){
@@ -110,7 +138,7 @@ window.FMCompetitions = (() => {
   function explorerFallback(){
     const navigation=explorerView==='mine'?clubTabs():directoryBrowser();
     const message=explorerView==='mine'?'Your club has no registered competitions for this season.':'Choose another region or filter above to explore the currently implemented leagues and cups.';
-    return `<div class="cmp-root">${navigation}<section class="cmp-empty-directory panel"><span>◇</span><h3>No competition selected</h3><p>${h(message)}</p></section></div>`;
+    return `<div class="cmp-root"${managerThemeAttrs()}>${managerHero()}${navigation}<section class="cmp-empty-directory panel"><span>◇</span><h3>No competition selected</h3><p>${h(message)}</p></section></div>`;
   }
   const isCup = () => stage === 'knockout' || data?.kind === 'cup';
   function rounds() {return isCup() ? (data?.knockout || []) : (data?.rounds || []);}
@@ -340,7 +368,8 @@ window.FMCompetitions = (() => {
   function layout(){
     const active=chosenRound();
     const hasSubtabs=data.stages?.length>1;
-    return `<div class="cmp-root" data-competition-brand="${h(ci(data.id).key)}" style="${ciVars(data.id)}">
+    return `<div class="cmp-root" data-competition-brand="${h(ci(data.id).key)}" style="${ciVars(data.id)}"${managerThemeAttrs()}>
+      ${managerHero()}
       ${explorerView==='mine'?clubTabs():directoryBrowser()}
       <div class="cmp-topline"><div class="cmp-title"><div class="cmp-title-emblem">${ciLogo(data.id,'ci-title-logo')}</div><div><span class="cmp-kicker">${h(data.kind==='cup'?'KNOCKOUT CUP':data.kind==='league'?'DOMESTIC LEAGUE':data.format==='uefa'?'EUROPEAN COMPETITION':'GROUP + KNOCKOUT')}</span><h2>${h(data.name)}</h2><p>Season ${h(data.season)} · Fictional participants · Real Python data</p></div></div>
         <div class="cmp-meta"><button type="button" class="ch-primary" data-career-type="competition" data-career-id="${h(data.id)}">Past seasons ↗</button><span><small>SEASON</small><strong>${h(data.season)}</strong></span><span><small>CURRENT VIEW</small><strong>${h(active?.label||'Pending draw')}</strong></span></div></div>
@@ -439,6 +468,7 @@ window.FMCompetitions = (() => {
     if(!root)return;
     if(!index){root.innerHTML='<div class="cmp-loading panel">Loading competitions from Python…</div>';return;}
     root.innerHTML=data?layout():explorerFallback();
+    window.FMClubIdentity?.paintWithin?.(root);
     if(data?.kind==='league' && window.FMWorldSquads){
       const squads=document.createElement('section');
       squads.className='ws-root panel';
@@ -485,7 +515,8 @@ window.FMCompetitions = (() => {
     const seq=++detailSerial;
     selectedComp=id;
     selectedByView[explorerView]=id;
-    root.innerHTML=`<div class="cmp-root">${explorerView==='mine'?clubTabs():directoryBrowser()}<section class="cmp-loading panel">Loading actual competition results and fixtures…</section></div>`;
+    root.innerHTML=`<div class="cmp-root"${managerThemeAttrs()}>${managerHero()}${explorerView==='mine'?clubTabs():directoryBrowser()}<section class="cmp-loading panel">Loading actual competition results and fixtures…</section></div>`;
+    window.FMClubIdentity?.paintWithin?.(root);
     try{
       const res=await fetch('/api/competitions/'+encodeURIComponent(id),{cache:'no-store'});
       if(!res.ok)throw Error(`HTTP ${res.status}`);
@@ -581,5 +612,10 @@ window.FMCompetitions = (() => {
     if(requested){selectedComp=requested;selectedByView[mode]=requested;}
     loadIndex();
   }
+  // Re-resolve the crest when an imported identity catalogue arrives late.
+  // The selected competition and matchday state are not altered by this redraw.
+  window.addEventListener('fm-identity-ready',()=>{
+    if(root && index && explorerView==='mine')render();
+  });
   return {mount,refresh:()=>loadIndex()};
 })();

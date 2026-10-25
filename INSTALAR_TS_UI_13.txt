@@ -1,0 +1,17 @@
+TS-UI-13 — Competitions: cabecera e identidad del club
+==========================================================
+BASE OBLIGATORIA: TS-UI-12.01, con todos los parches anteriores instalados.
+
+1) Hace una copia del proyecto football-manager-2026 y de tus partidas.
+2) Cierra el juego y detene Python.
+3) Extrae este ZIP en la carpeta RAIZ de football-manager-2026.
+4) Conserva la estructura de carpetas y reemplaza los archivos cuando se solicite.
+5) Reinicia Python y recarga el navegador con Ctrl + F5.
+
+NO se modifica el guardado (v32), el motor de partidos ni la BD.
+Archivos de aplicacion reemplazados: frontend/portable/competitions.js y competitions.css.
+La imagen generica del estadio ya existe en assets/stadium.svg de la base.
+
+GitHub Desktop
+Nueva rama: feat/ts-ui-13-competitions-identity-hero
+Summary: feat(competitions): TS-UI-13 club header and adaptive highlights

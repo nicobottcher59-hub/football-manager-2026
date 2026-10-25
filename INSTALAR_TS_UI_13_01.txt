@@ -1,0 +1,16 @@
+TS-UI-13.01 — Competition Centre: nueva imagen del encabezado
+===============================================================
+BASE REQUERIDA: TS-UI-13, con todos los parches anteriores.
+
+1. Respaldar el proyecto y las partidas.
+2. Cerrar el juego y detener Python.
+3. Extraer el ZIP en la raiz de football-manager-2026.
+4. Conservar las carpetas y reemplazar archivos cuando lo pida.
+5. Reiniciar el juego y presionar Ctrl + F5.
+
+Solo se cambia la imagen de fondo del hero de Competitions y su referencia CSS.
+No se tocan las competiciones, el motor, ni las partidas (schema v32).
+
+GitHub Desktop
+Branch: fix/ts-ui-13-01-competition-hero
+Summary: fix(competitions): TS-UI-13.01 enhanced stadium hero artwork
