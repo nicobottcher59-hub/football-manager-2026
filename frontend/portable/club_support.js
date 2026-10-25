@@ -60,6 +60,7 @@
   function staffOverview(){
     const d=state;
     const summary=`<div class="st-kpis">${staffStat('chart','Weekly staff wages',pay(d.weekly_payroll_gbp),'Active contracts','wage')}
+      ${staffStat('shield','Staff budget / week',pay(d.staff_budget_weekly_gbp),`${pay(d.staff_headroom_weekly_gbp)} remaining`,'wage')}
       ${staffRolesOrder.map(role=>{
         const n=d.members.filter(m=>m.role===role).length,capacity=d.capacity[role],details=staffRoles[role];
         return staffStat(details.icon,details.name,`${n} / ${capacity}`,`${Math.max(0,capacity-n)} positions available`,role);
@@ -113,7 +114,9 @@
     const after=Math.max(0,(state?.weekly_payroll_gbp||0) + staffView.offerWage - (staffView.page==='extension'?(previous?.wage_weekly_gbp||0):0));
     return `<div class="st-finance-forecast"><div><small>Current weekly staff wages</small><strong>${pay(state.weekly_payroll_gbp)}</strong></div>
       <div><small>Projected after acceptance</small><strong data-st-projected>${pay(after)}</strong></div>
-      <div><small>Current club cash</small><strong>${pay(state.cash_gbp)}</strong></div></div>`;
+      <div><small>Staff board limit / wk</small><strong>${pay(state.staff_budget_weekly_gbp)}</strong></div>
+      <div><small>Current club cash</small><strong>${pay(state.cash_gbp)}</strong></div></div>
+      ${after>Number(state.staff_budget_weekly_gbp||0)&&after>Number(state.weekly_payroll_gbp||0)?'<div class="st-feedback st-feedback-warn">This offer would exceed your staff wage budget.</div>':''}`;
   }
   function staffRecruit(){
     const role=staffView.role;

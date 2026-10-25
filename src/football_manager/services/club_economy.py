@@ -500,6 +500,28 @@ def financial_outlook(registry, cid: str) -> dict:
             'note':'Losses and imperfect decisions are allowed; this is a diagnostic, not a financial bailout.'}
 
 
+def staff_budget_weekly(registry, club_id: str) -> int:
+    """Deterministic independent board limit for staff salary commitments.
+
+    Based only on the saved season's recurring revenue, original staffing
+    baseline and division, never the wages of new hires. Thus a new hire cannot
+    increase their own budget. Relegation/promotion rebases this limit through
+    the existing annual club-economy process; no new save field is required.
+    Existing contracts survive a reduction, but increases over the limit are
+    rejected by staff_command.
+    """
+    account = registry.club_finances[club_id]
+    support = registry.club_support.get(club_id)
+    baseline = support.baseline_weekly_gbp if support else 0
+    tier = registry.identities[club_id].tier
+    floor = {0: 900, 1: 18000, 2: 5500, 3: 2500, 4: 1400}.get(tier, 1400)
+    # Recurring revenue is not changed by signing an employee. Keep the
+    # independent envelope proportional to the real economic size of the club.
+    from_income = round(account.recurring_income_gbp * 12 / 52 *
+                        (.018 + .004 * _unit(registry.seed, club_id, 'staff-policy')))
+    return max(floor, round(baseline * 1.85), from_income)
+
+
 def finances_read_model(session, club_id: str | None = None) -> dict:
     registry=session._world_squads
     cid=club_id or session.home_club.id
@@ -539,6 +561,17 @@ def finances_read_model(session, club_id: str | None = None) -> dict:
     rows.sort(key=lambda p:(p['expires_on'],p['name']))
     support=registry.club_support.get(cid)
     staff_weekly=sum(m.wage_weekly_gbp for m in support.members.values() if m.contract_until>=session.current_date) if support else 0
+    staff_limit=staff_budget_weekly(registry,cid)
+    staff_rows=sorted(({
+        'member_id':m.member_id,'name':m.name,'role':m.role,'quality':m.quality,
+        'weekly_wage_gbp':m.wage_weekly_gbp,
+        'expires_on':m.contract_until.isoformat()}
+        for m in support.members.values() if m.contract_until >= session.current_date),
+        key=lambda m:(-m['weekly_wage_gbp'],m['name'])) if support else []
+    loan_fees_paid=sum(loan.loan_fee_gbp for loan in registry.loans.values()
+                       if loan.borrower_id == cid and loan.started_on <= session.current_date)
+    loan_fees_received=sum(loan.loan_fee_gbp for loan in registry.loans.values()
+                           if loan.parent_id == cid and loan.started_on <= session.current_date)
     initial_allowance=min(round(account.recurring_operations_gbp*.12),
                           round(support.baseline_weekly_gbp*52/12)) if support else 0
     from football_manager.services.transfer_installments import finance_summary
@@ -546,6 +579,7 @@ def finances_read_model(session, club_id: str | None = None) -> dict:
             'installment_finance':finance_summary(registry,cid,session.current_date),
             'club_id':cid,'club':registry.clubs[cid].name,'managed':cid==session.home_club.id,
             'tier':registry.identities[cid].tier,'date':session.current_date.isoformat(),
+            'season':f"{session.current_date.year if session.current_date.month>=7 else session.current_date.year-1}/{str((session.current_date.year if session.current_date.month>=7 else session.current_date.year-1)+1)[-2:]}",
             'as_of_month':registry.finance_review_on.isoformat(),
             'cash_gbp':account.cash_gbp,'cash':format_gbp(account.cash_gbp) if account.cash_gbp>=0 else '-'+format_gbp(-account.cash_gbp),
             'transfer_budget_gbp':account.transfer_budget_gbp,
@@ -559,6 +593,11 @@ def finances_read_model(session, club_id: str | None = None) -> dict:
             'monthly_operating_costs_gbp':account.recurring_operations_gbp-initial_allowance,
             'forecast_monthly_wages_gbp':round((payroll+staff_weekly)*52/12),
             'staff_weekly_wages_gbp':staff_weekly,
+            'staff_budget_weekly_gbp':staff_limit,
+            'staff_headroom_weekly_gbp':staff_limit-staff_weekly,
+            'staff_contracts':staff_rows,
+            'loan_fees_paid_gbp':loan_fees_paid,
+            'loan_fees_received_gbp':loan_fees_received,
             'staff_baseline_allowance_gbp':initial_allowance,
             'season_income_gbp':account.season_income_gbp,
             'season_wages_gbp':account.season_wages_gbp,

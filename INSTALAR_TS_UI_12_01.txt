@@ -1,0 +1,22 @@
+TS-UI-12.01 - FINANCES: CABECERA NEUTRA
+
+BASE: TS-UI-12 - Finances & Staff Budget.
+
+CAMBIO PUNTUAL
+- Se reemplaza la fotografia de Sunderland (o de cualquier otro club) en
+  la cabecera de Finances por una imagen financiera generica y local.
+- Foto: escritorio de planificacion economica, documentos, graficos y calculadora.
+- Nombre, escudo y colores siguen siendo los del club activo segun su ID.
+- No se modifican saldos, presupuestos, graficos, contratos, APIs ni guardados.
+
+INSTALACION
+1. Respaldar proyecto y partidas.
+2. Cerrar el juego y detener Python.
+3. Extraer este ZIP en la raiz de football-manager-2026, conservando las carpetas.
+4. Sobrescribir los archivos y reiniciar el juego. Ctrl + F5.
+
+GITHUB DESKTOP
+Rama: fix/ts-ui-12-01-neutral-finance-hero
+Summary: fix(finances): use club-neutral finance artwork in header
+
+Version de guardado: v32 (sin cambios).

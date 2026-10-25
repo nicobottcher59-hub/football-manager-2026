@@ -591,3 +591,10 @@ body.tsui-staff-active .sidebar .nav-item.is-active{background:linear-gradient(1
 
 /* Very narrow windows can retain the full desktop sidebar: collapse controls. */
 @media(max-width:480px){.st-kpi{gap:5px;padding:8px}.st-kpi-icon{width:29px;height:30px}.st-kpi strong{font-size:16px}.st-kpi small,.st-kpi em{white-space:normal;overflow-wrap:anywhere}.st-title-line{flex-wrap:wrap}.st-department-head .st-recruit-btn{width:100%}.st-employee-actions{flex-wrap:wrap;justify-content:start}.st-employee-actions .st-action{flex:1 1 auto;white-space:normal;min-width:0}.st-vacancies{flex-wrap:wrap}.st-vacancies .st-action{width:100%}.st-candidate-controls,.st-finance-forecast{grid-template-columns:1fr}.st-recruit-tabs{grid-template-columns:1fr}.st-hero-left{align-items:flex-start}.st-hero p{overflow-wrap:anywhere}}
+
+/* TS-UI-12: finance-enforced staff allowance is visible inside staff negotiations. */
+.st-kpis{grid-template-columns:repeat(6,minmax(0,1fr))}
+.st-finance-forecast{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1100px){.st-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.st-finance-forecast{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:690px){.st-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.st-finance-forecast{grid-template-columns:1fr}}

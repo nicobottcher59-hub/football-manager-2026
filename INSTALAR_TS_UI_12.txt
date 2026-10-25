@@ -1,0 +1,20 @@
+TS-UI-12 — FINANCES & STAFF BUDGET (sobre TS-UI-11)
+
+INSTALACION
+1. Respaldar el proyecto y la partida; detener el servidor Python.
+2. Extraer este ZIP en la RAIZ de football-manager-2026, conservando carpetas.
+3. Reemplazar solo los archivos incluidos en este paquete.
+4. Reiniciar Python y refrescar con Ctrl+F5.
+5. Abrir Finances: comprobar Overview, Contracts, Transfer Finances y Financial History.
+6. Abrir Staff: verificar el nuevo limite de presupuesto al negociar un contrato.
+
+Formato de partida: 32 (SIN cambio). No se agregan dependencias.
+
+Branch nueva sugerida: feat/ts-ui-12-finances-staff-budget
+Commit: feat(finances): TS-UI-12 scalable finance hub and staff wage budget
+
+ADVERTENCIA: el Staff Budget se calcula deterministamente con la renta mensual
+registrada, la division y la base de salarios de personal. No es un presupuesto
+editable manualmente por el jugador. Los contratos anteriores siguen vigentes
+incluso si el club supera el nuevo tope, pero no se permiten aumentos que agraven
+ese exceso. El ahorro de salarios y los pagos siguen las reglas del motor original.

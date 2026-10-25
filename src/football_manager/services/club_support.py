@@ -288,9 +288,12 @@ def staff_read_model(session) -> dict:
                         for candidate in _staff_market(registry, cid, role, day)]
     account = registry.club_finances[cid]
     weekly = sum(m['wage_weekly_gbp'] for m in staff)
+    from football_manager.services.club_economy import staff_budget_weekly
+    staff_budget = staff_budget_weekly(registry, cid)
     return {'club_id': cid, 'club': session.home_club.name, 'date': day.isoformat(),
             'capacity': dict(dept.capacity), 'capacity_source': dept.capacity_source,
             'members': staff, 'market': market, 'weekly_payroll_gbp': weekly,
+            'staff_budget_weekly_gbp': staff_budget, 'staff_headroom_weekly_gbp': staff_budget-weekly,
             'cash_gbp': account.cash_gbp,
             'bonuses': {role: round(department_bonus(dept, role, day), 3) for role in ROLES},
             'note': 'Staff improvements influence the real training, medical and scouting calculations. Contract offers alter club finances.'}
@@ -335,6 +338,14 @@ def staff_command(session, command: dict) -> dict:
         if not existing and len(active_staff(dept, member.role, day)) >= dept.capacity[member.role]:
             raise ValueError('The department has no free staff places')
         account = registry.club_finances[dept.club_id]
+        from football_manager.services.club_economy import staff_budget_weekly
+        committed = sum(m.wage_weekly_gbp for m in dept.members.values()
+                        if m.contract_until >= day)
+        proposed = committed - (current.wage_weekly_gbp if existing else 0) + wage
+        # Honour contracts that pre-date this policy, and permit pay reductions,
+        # but never let an offer grow an over-limit staff payroll.
+        if proposed > staff_budget_weekly(registry, dept.club_id) and proposed > committed:
+            raise ValueError('Staff offer would exceed the board staff wage budget')
         # Two months of staff salary reserve, plus any up-front commitment.
         if account.cash_gbp < bonus + wage * 8:
             raise ValueError('Club cash is insufficient for this staff contract')

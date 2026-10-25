@@ -1,0 +1,6 @@
+# SHA-256 for TS-UI-12.01 (excluding this manifest)
+ab8d1e2808f822bb188138b8bf50ce990f7b83281e6d3444d4466e34100554c2  INSTALAR_TS_UI_12_01.txt
+0cb18d0150c1451ad782f249a63b0206210938aee40cb36d6fed9765f6f71b2a  TS_UI_12_01_TEST_REPORT.md
+235e0ef93d51509cbd2ab757d6442aa3b7cfdee3c0c89c3df3b3b8dd7bdcc834  frontend/portable/assets/finances/finance-operations.webp
+d8e01d038553a35ebcb12fecabbfe5b223aff750971bc5f22523b0be0278f4a6  frontend/portable/finances.css
+5580eab959f96c7bd89da3d9695259780bd24c67a36ce020c4007f64dd00c792  frontend/portable/finances.js

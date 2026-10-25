@@ -353,6 +353,7 @@
     const clubSupport = ['Staff','Training','Medical Centre'].includes(page);
     const youthAcademy = page === 'Youth Academy';
     const finances = page === 'Finances';
+    document.body.classList.toggle('tsui-finances-active',finances);
     const transfers = page === 'Scouting' || negotiationPage || loanPage;
     const competitions = page === 'Competitions';
     const otherLeagues = page === 'Other Leagues';
