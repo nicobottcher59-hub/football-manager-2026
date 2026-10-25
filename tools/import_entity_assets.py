@@ -11,7 +11,8 @@ Layout (only IDs, never display names):
     source/clubs/CLUB_ID/medical.jpg
     source/competitions/COMPETITION_ID.png
 
-Optional metadata JSON: {"clubs":{"ID":{"display_name":"...", "primary_color":"#RRGGBB"}}}
+Optional metadata JSON: {"clubs":{"ID":{"display_name":"...", "primary_color":"#RRGGBB"}},
+                         "competitions":{"COMPETITION_ID":{"primary_color":"#RRGGBB", "secondary_color":"#RRGGBB"}}}
 An absent photo remains a deterministic illustrated portrait, not another player's photo.
 """
 from __future__ import annotations
@@ -63,8 +64,9 @@ def import_assets(source: Path, destination: Path, metadata_path: Path | None = 
     if not source.is_dir():
         raise ValueError('Source must be a directory')
     metadata = json.loads(metadata_path.read_text(encoding='utf8')) if metadata_path else {}
-    if not isinstance(metadata, dict) or not isinstance(metadata.get('clubs', {}), dict):
-        raise ValueError('Invalid club metadata')
+    if (not isinstance(metadata, dict) or not isinstance(metadata.get('clubs', {}), dict)
+            or not isinstance(metadata.get('competitions', {}), dict)):
+        raise ValueError('Invalid club or competition metadata')
     manifest = {'schema_version': 1, 'clubs': {}, 'players': {}, 'competitions': {}}
 
     def put(file: Path, key: str, name: str) -> str:
@@ -111,6 +113,16 @@ def import_assets(source: Path, destination: Path, metadata_path: Path | None = 
             if isinstance(value, str) and 0 < len(value) <= 160:
                 fields[name] = value
         for name in ('primary_color', 'secondary_color', 'accent_color'):
+            value = record.get(name)
+            if isinstance(value, str) and RGB.fullmatch(value):
+                fields[name] = value.lower()
+    # Optional brand palette for any league/cup by its permanent ID.
+    # It may accompany a PNG or be imported before that PNG exists.
+    for cid, record in metadata.get('competitions', {}).items():
+        if not valid_id(cid) or not isinstance(record, dict):
+            raise ValueError(f'Invalid competition identity: {cid}')
+        fields = manifest['competitions'].setdefault(cid, {})
+        for name in ('primary_color', 'secondary_color'):
             value = record.get(name)
             if isinstance(value, str) and RGB.fullmatch(value):
                 fields[name] = value.lower()

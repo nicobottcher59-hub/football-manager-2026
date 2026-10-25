@@ -301,3 +301,87 @@ body:has(.fm-competitions-screen[style*="display: block"] .cmp-manager-hero) .si
   .cmp-manager-identity{gap:12px;}.cmp-manager-copy h2{font-size:22px;}
   .cmp-manager-season{width:100%;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
   .cmp-manager-season>strong{font-size:13px;}.cmp-manager-season>small{margin-left:auto;}}
+
+/* TS-UI-14: neutral editorial header for the Other Leagues directory.
+   Reuses the installed TS-UI-13.01 stadium photo and does not read club colours. */
+.cmp-other-hero{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:space-between;
+  gap:18px;min-height:126px;margin:1px 2px 13px;padding:17px 21px;overflow:hidden;
+  border:1px solid #49728c;border-radius:11px;box-shadow:0 8px 24px #0004,inset 0 1px #ffffff19;
+  background:#0a2335;box-sizing:border-box}
+.cmp-other-hero::before{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;
+  background:linear-gradient(90deg,rgba(6,21,35,.98),rgba(7,27,45,.88) 34%,rgba(6,23,39,.33) 65%,rgba(5,18,31,.8)),
+    url('assets/competitions/competition-centre-hero.webp') center 42%/cover no-repeat}
+.cmp-other-hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(ellipse at 4% 3%,rgba(50,150,198,.27),transparent 62%),
+    repeating-linear-gradient(144deg,transparent 0 113px,#90c7ee0b 114px 115px,transparent 116px 218px)}
+.cmp-other-hero-copy{min-width:0;max-width:78%}
+.cmp-other-hero-eyebrow{display:block;font-size:10px;letter-spacing:1.1px;font-weight:900;color:#92d8f3}
+.cmp-other-hero-copy h2{font-weight:900;font-size:clamp(23px,2.25vw,31px);line-height:1.16;letter-spacing:-.6px;color:white;margin:5px 0}
+.cmp-other-hero-copy p{font-size:11px;color:#c5d9e9;line-height:1.45;margin:0}
+.cmp-other-hero-meta{flex:0 0 auto;display:grid;gap:3px;min-width:158px;padding:12px 15px;
+  background:#071b2de0;border:1px solid #547b998a;border-radius:9px}
+.cmp-other-hero-meta span{font-size:9px;letter-spacing:1px;color:#9fbed5;font-weight:800}
+.cmp-other-hero-meta strong{color:#fff;font-size:16px;font-weight:900}
+.cmp-other-hero-meta small{color:#acc7d9;font-size:10px}
+/* The selected league colours stay scoped to its own directory/competition panel. */
+.cmp-root.cmp-other-leagues[data-competition-brand] .cmp-directory{
+  border-top:2px solid rgba(var(--ci-rgb),.64);
+  background:linear-gradient(160deg,rgba(var(--ci-rgb),.085),#092339 82%)}
+@media(max-width:850px){.cmp-other-hero{padding:14px 15px;min-height:113px}
+  .cmp-other-hero-meta{min-width:128px;padding:9px 11px}}
+@media(max-width:560px){.cmp-other-hero{flex-wrap:wrap;gap:10px;min-height:0}
+  .cmp-other-hero-copy{max-width:100%}.cmp-other-hero-copy h2{font-size:22px}
+  .cmp-other-hero-meta{width:100%;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .cmp-other-hero-meta strong{font-size:13px}.cmp-other-hero-meta small{margin-left:auto}}
+
+/* TS-UI-14.01 — Other Leagues shell follows the managed club's identity.
+   The competition detail remains branded by --ci-* for the selected league.
+   All --ui-club-* variables are supplied by FMClubIdentity.applyShell(). */
+.cmp-root.cmp-other-leagues{
+  --cmp-shell-rgb:var(--ui-club-rgb,20,135,216);
+  --cmp-shell-accent:var(--ui-club-highlight,#429bde);
+}
+.cmp-root.cmp-other-leagues .cmp-other-hero{
+  border-color:rgba(var(--cmp-shell-rgb),.65);
+  box-shadow:inset 3px 0 var(--cmp-shell-accent),0 8px 24px #0004,inset 0 1px #ffffff19;
+}
+.cmp-root.cmp-other-leagues .cmp-other-hero::after{
+  background:radial-gradient(ellipse at 4% 3%,rgba(var(--cmp-shell-rgb),.44),transparent 62%),
+    linear-gradient(90deg,rgba(var(--cmp-shell-rgb),.18),transparent 56%),
+    repeating-linear-gradient(144deg,transparent 0 113px,rgba(var(--cmp-shell-rgb),.07) 114px 115px,transparent 116px 218px);
+}
+.cmp-root.cmp-other-leagues .cmp-other-hero-eyebrow{color:var(--cmp-shell-accent)}
+.cmp-root.cmp-other-leagues .cmp-other-hero-meta{border-color:rgba(var(--cmp-shell-rgb),.56)}
+/* Directory, unlike the selected league profile, is a manager-facing control. */
+.cmp-root.cmp-other-leagues[data-competition-brand] .cmp-directory{
+  border-color:rgba(var(--cmp-shell-rgb),.48);
+  border-top:2px solid rgba(var(--cmp-shell-rgb),.82);
+  background:linear-gradient(155deg,rgba(var(--cmp-shell-rgb),.14),#092339 78%);
+}
+.cmp-root.cmp-other-leagues .cmp-filter-field select:hover{border-color:var(--cmp-shell-accent)}
+.cmp-root.cmp-other-leagues .cmp-filter-field select:focus-visible{
+  border-color:var(--cmp-shell-accent);
+  box-shadow:0 0 0 2px rgba(var(--cmp-shell-rgb),.28);
+}
+.cmp-root.cmp-other-leagues .cmp-filter-competition select{
+  border-color:rgba(var(--cmp-shell-rgb),.78);
+  background:linear-gradient(105deg,rgba(var(--cmp-shell-rgb),.26),#102a40 88%);
+}
+/* Keep the club accent in navigation only while Other Leagues is visible. */
+body:has(.fm-competitions-screen[style*="display: block"] .cmp-other-hero) .sidebar{
+  background:linear-gradient(175deg,#071420,#06111c 55%,var(--ui-club-soft,#122b3c) 160%);
+  border-right-color:rgba(var(--ui-club-highlight-rgb,66,155,222),.23);
+}
+body:has(.fm-competitions-screen[style*="display: block"] .cmp-other-hero) .sidebar::before{
+  background:repeating-linear-gradient(38deg,transparent 0 45px,rgba(var(--ui-club-rgb,20,135,216),.10) 46px 48px),
+    radial-gradient(ellipse at 25% 94%,rgba(var(--ui-club-rgb,20,135,216),.21),transparent 68%);
+}
+body:has(.fm-competitions-screen[style*="display: block"] .cmp-other-hero) .sidebar .nav-item.is-active{
+  color:#fff;
+  background:linear-gradient(105deg,rgba(var(--ui-club-rgb,20,135,216),.36),#12283b 92%);
+  border-color:rgba(var(--ui-club-highlight-rgb,66,155,222),.64);
+  box-shadow:inset 3px 0 var(--ui-club-highlight,#429bde),0 6px 18px #020b1b44;
+}
+body:has(.fm-competitions-screen[style*="display: block"] .cmp-other-hero) .sidebar .nav-item.is-active svg{
+  color:var(--ui-club-highlight,#429bde);
+}

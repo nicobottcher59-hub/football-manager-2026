@@ -1,0 +1,18 @@
+{
+  "patch": "TS-UI-14.01",
+  "base": "TS-UI-14",
+  "type": "incremental",
+  "save_version": 32,
+  "production_changed": [
+    "frontend/portable/competitions.css"
+  ],
+  "production_added": [],
+  "files": [
+    "frontend/portable/competitions.css",
+    "tests/test_ts_ui_14_01_other_leagues_club_theme.py",
+    "INSTALAR_TS_UI_14_01.txt",
+    "TS_UI_14_01_TEST_REPORT.md",
+    "TS_UI_14_01_SHA256.txt",
+    "TS_UI_14_01_PATCH_MANIFEST.json"
+  ]
+}

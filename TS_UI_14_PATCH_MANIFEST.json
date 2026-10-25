@@ -1,0 +1,28 @@
+{
+  "patch": "TS-UI-14",
+  "base": "TS-UI-13.01",
+  "kind": "incremental",
+  "save_schema": 32,
+  "app_files": [
+    "frontend/portable/competitions.js",
+    "frontend/portable/competitions.css",
+    "frontend/portable/competition_branding.js",
+    "frontend/portable/competition_branding.css",
+    "frontend/portable/assets_registry.js",
+    "tools/import_entity_assets.py"
+  ],
+  "tests": [
+    "tests/test_ts_ui_14_other_leagues.py",
+    "tests/ui/test_ts_ui_14_branding.cjs"
+  ],
+  "documentation": [
+    "TS_UI_14_TEST_REPORT.md",
+    "INSTALAR_TS_UI_14.txt"
+  ],
+  "features": [
+    "other_leagues_hero",
+    "competition_id_palettes",
+    "scalable_league_pngs",
+    "no_world_squad_archive_in_other_leagues"
+  ]
+}

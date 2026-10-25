@@ -1,0 +1,20 @@
+TS-UI-14.01 - Other Leagues: colores dinamicos del club
+
+REQUISITOS
+- Tener instalado TS-UI-14 - Other Leagues Identity, con todas las actualizaciones anteriores.
+- No aplicar directamente sobre TS-UI-13.01 ni sobre una base mas antigua.
+
+INSTALACION
+1. Hacer una copia de seguridad del proyecto y las partidas.
+2. Cerrar el juego y detener el servidor Python.
+3. Extraer el ZIP en la raiz de football-manager-2026.
+4. Conservar la estructura de carpetas y reemplazar competitions.css.
+5. Iniciar el juego y recargar con Ctrl + F5.
+
+CAMBIOS
+- Barra lateral y estado activo de Other Leagues: paleta del equipo dirigido.
+- Encabezado general, contorno, brillo y caja de temporada: paleta del equipo dirigido.
+- Directorio, contornos, selector y estados de foco: paleta del equipo dirigido.
+- La ficha de la liga conserva sus colores y PNG importado propios.
+- No se tocan los filtros, tablas, resultados, calendario, datos, ni guardados.
+- Sin cambios en el motor Python o la version de guardado (v32).

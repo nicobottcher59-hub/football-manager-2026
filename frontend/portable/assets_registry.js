@@ -22,7 +22,12 @@
      }
      if(kind==='competitions'){
        const logo=typeof record==='string'?record:record.logo;
-       if(safePath(logo))registry.competitions[id]={logo};
+       const fields={};
+       if(safePath(logo))fields.logo=logo;
+       // Optional competition palette can be imported independently of its PNG.
+       if(typeof record==='object')for(const k of ['primary_color','secondary_color'])
+         if(safeColor(record[k]))fields[k]=record[k].toLowerCase();
+       if(Object.keys(fields).length)registry.competitions[id]=fields;
        continue;
      }
      const fields={};
@@ -36,6 +41,7 @@
  const getClub=id=>safeId(String(id??'')) ? registry.clubs[String(id)]||null : null;
  const getPhoto=id=>registry.players[String(id??'')]?.photo||null;
  const getCompetition=id=>registry.competitions[String(id??'')]?.logo||null;
+ const getCompetitionTheme=id=>registry.competitions[String(id??'')]||null;
  const getKit=(id,kind='home')=>{
    const rec=getClub(id);return rec?.[kind==='away'?'away_kit_image':kind==='goalkeeper'?'goalkeeper_kit_image':'kit_image']||null;
  };
@@ -51,20 +57,7 @@
    const element=event.target;
    if(!(element instanceof HTMLImageElement)||!element.hasAttribute('data-fm-asset'))return;
    if(element.classList.contains('fm-photo-real'))element.remove();
-   else if(element.dataset.fmAsset==='flag') {
-     // A missing local flag is not a football symbol or a guessed country.
-     const fallback=document.createElement('span');fallback.className='fm-flag-unavailable';
-     fallback.textContent='◇';fallback.setAttribute('aria-hidden','true');element.replaceWith(fallback);
-   } else if(element.hasAttribute('data-fm-crest-fallback')) {
-     const fallback=document.createElement('span');
-     fallback.className=element.className+' sc-crest-placeholder';
-     fallback.textContent=element.dataset.fmCrestFallback||'?';
-     fallback.style.setProperty('--sc-placeholder-color',
-       window.FMClubIdentity?.fallbackColour?.(element.dataset.fmCrestClubId) || '#447d9d');
-     fallback.setAttribute('role','img');fallback.setAttribute('aria-label',element.alt||'Club crest unavailable');
-     fallback.title=element.title||'';
-     element.replaceWith(fallback);
-   } else {
+   else{
      const fallback=document.createElement('span');fallback.className='fm-asset-fallback';fallback.textContent='⚽';
      fallback.setAttribute('aria-hidden','true');element.replaceWith(fallback);
    }
@@ -76,5 +69,5 @@
      window.dispatchEvent(new CustomEvent('fm-assets-ready'));
      return true;
    }).catch(()=>false);
- window.FMEntityAssets=Object.freeze({getClub,getPhoto,getCompetition,getKit,url,image,safePath,ready});
+ window.FMEntityAssets=Object.freeze({getClub,getPhoto,getCompetition,getCompetitionTheme,getKit,url,image,safePath,ready});
 })();

@@ -160,3 +160,21 @@
 @media(prefers-reduced-motion:reduce) {
   .tsui-home .tsui-competition-tabs button[data-competition-brand] {transition:none!important;transform:none!important;}
 }
+
+/* TS-UI-14: flexible PNG container for league logos, including wide crests.
+   The original selector in 'My Competitions' keeps its previous dimensions. */
+.cmp-root.cmp-other-leagues .cmp-title-emblem{width:clamp(78px,8vw,112px);height:79px;flex:0 0 clamp(78px,8vw,112px);
+  box-sizing:border-box;padding:7px;overflow:hidden}
+.cmp-root.cmp-other-leagues .cmp-title-emblem img.ci-title-logo{display:block;width:100%;height:100%;max-width:100%;max-height:100%;
+  object-fit:contain;object-position:center;filter:drop-shadow(0 2px 4px #0009)}
+.cmp-root.cmp-other-leagues .cmp-title-emblem .ci-generic-logo{font-size:31px;color:var(--ci-accent)}
+@media(max-width:600px){.cmp-root.cmp-other-leagues .cmp-title-emblem{width:70px;height:65px;flex-basis:70px;padding:5px}}
+
+/* Make the selected league's own palette immediately recognizable in the
+   header, while keeping the neutral Other Leagues hero club-independent. */
+.cmp-root.cmp-other-leagues[data-competition-brand] .cmp-topline{
+  border-color:rgba(var(--ci-rgb),.66);
+  background:linear-gradient(110deg,rgba(var(--ci-rgb),.27),var(--ci-shade) 38%,#0b283b 100%);
+  box-shadow:inset 3px 0 var(--ci-accent),inset 0 1px #ffffff13}
+.cmp-root.cmp-other-leagues[data-competition-brand] .cmp-title-emblem{
+  border-color:rgba(var(--ci-rgb),.68);box-shadow:0 4px 18px rgba(var(--ci-rgb),.15),inset 0 1px #ffffff1b}

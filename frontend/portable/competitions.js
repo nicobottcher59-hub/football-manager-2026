@@ -74,6 +74,19 @@ window.FMCompetitions = (() => {
         <small>${count} registered ${count===1?'competition':'competitions'}</small></div>
     </section>`;
   }
+  // TS-UI-14: Other Leagues has its own neutral world-directory header.
+  // It deliberately never inherits the manager club's colours or crest.
+  function otherHero(){
+    if(explorerView!=='other')return '';
+    const count=Array.isArray(index?.other_competitions)?index.other_competitions.length:0;
+    const season=index?.season||data?.season||'—';
+    return `<section class="cmp-other-hero" aria-label="Explore world competitions">
+      <div class="cmp-other-hero-copy"><span class="cmp-other-hero-eyebrow">WORLD FOOTBALL · COMPETITION DIRECTORY</span>
+        <h2>Other Leagues</h2><p>Explore leagues and cups across countries and divisions.</p></div>
+      <div class="cmp-other-hero-meta"><span>SEASON ${h(season)}</span>
+        <strong>${count} ${count===1?'competition':'competitions'}</strong><small>Available in your current world</small></div>
+    </section>`;
+  }
   // Own competitions retain the original UI-3.3.1 horizontal selector.
   // Only Other Leagues exposes the worldwide directory filters.
   function clubTabs(){
@@ -136,9 +149,9 @@ window.FMCompetitions = (() => {
     </section>`;
   }
   function explorerFallback(){
-    const navigation=explorerView==='mine'?clubTabs():directoryBrowser();
+    const navigation=explorerView==='mine'?clubTabs():otherHero()+directoryBrowser();
     const message=explorerView==='mine'?'Your club has no registered competitions for this season.':'Choose another region or filter above to explore the currently implemented leagues and cups.';
-    return `<div class="cmp-root"${managerThemeAttrs()}>${managerHero()}${navigation}<section class="cmp-empty-directory panel"><span>◇</span><h3>No competition selected</h3><p>${h(message)}</p></section></div>`;
+    return `<div class="cmp-root${explorerView==='other'?' cmp-other-leagues':''}"${managerThemeAttrs()}>${managerHero()}${navigation}<section class="cmp-empty-directory panel"><span>◇</span><h3>No competition selected</h3><p>${h(message)}</p></section></div>`;
   }
   const isCup = () => stage === 'knockout' || data?.kind === 'cup';
   function rounds() {return isCup() ? (data?.knockout || []) : (data?.rounds || []);}
@@ -368,10 +381,10 @@ window.FMCompetitions = (() => {
   function layout(){
     const active=chosenRound();
     const hasSubtabs=data.stages?.length>1;
-    return `<div class="cmp-root" data-competition-brand="${h(ci(data.id).key)}" style="${ciVars(data.id)}"${managerThemeAttrs()}>
+    return `<div class="cmp-root${explorerView==='other'?' cmp-other-leagues':''}" data-competition-brand="${h(ci(data.id).key)}" style="${ciVars(data.id)}"${managerThemeAttrs()}>
       ${managerHero()}
-      ${explorerView==='mine'?clubTabs():directoryBrowser()}
-      <div class="cmp-topline"><div class="cmp-title"><div class="cmp-title-emblem">${ciLogo(data.id,'ci-title-logo')}</div><div><span class="cmp-kicker">${h(data.kind==='cup'?'KNOCKOUT CUP':data.kind==='league'?'DOMESTIC LEAGUE':data.format==='uefa'?'EUROPEAN COMPETITION':'GROUP + KNOCKOUT')}</span><h2>${h(data.name)}</h2><p>Season ${h(data.season)} · Fictional participants · Real Python data</p></div></div>
+      ${explorerView==='mine'?clubTabs():otherHero()+directoryBrowser()}
+      <div class="cmp-topline"><div class="cmp-title"><div class="cmp-title-emblem">${ciLogo(data.id,explorerView==='other'?'ci-title-logo ci-full-logo':'ci-title-logo')}</div><div><span class="cmp-kicker">${h(data.kind==='cup'?'KNOCKOUT CUP':data.kind==='league'?'DOMESTIC LEAGUE':data.format==='uefa'?'EUROPEAN COMPETITION':'GROUP + KNOCKOUT')}</span><h2>${h(data.name)}</h2><p>Season ${h(data.season)} · Fictional participants · Real Python data</p></div></div>
         <div class="cmp-meta"><button type="button" class="ch-primary" data-career-type="competition" data-career-id="${h(data.id)}">Past seasons ↗</button><span><small>SEASON</small><strong>${h(data.season)}</strong></span><span><small>CURRENT VIEW</small><strong>${h(active?.label||'Pending draw')}</strong></span></div></div>
       ${hasSubtabs?`<div class="cmp-stages" role="group" aria-label="Competition stage">${data.stages.map(s=>`<button type="button" data-cmp-stage="${h(s.id)}" class="${s.id===stage?'active':''}" aria-pressed="${s.id===stage}">${h(s.label)}</button>`).join('')}</div>`:''}
       <div class="cmp-round-toolbar"><div><span>SELECT ${isCup()?'ROUND':'MATCHDAY'}</span><select data-cmp-round aria-label="Select ${isCup()?'round':'matchday'}">${rounds().map(r=>`<option value="${h(r.id)}" ${r.id===roundId?'selected':''}>${h(r.label)}${isCup()&&!r.drawn?' · not drawn':''}</option>`).join('')}</select><button type="button" data-cmp-current>Current</button></div>
@@ -469,7 +482,9 @@ window.FMCompetitions = (() => {
     if(!index){root.innerHTML='<div class="cmp-loading panel">Loading competitions from Python…</div>';return;}
     root.innerHTML=data?layout():explorerFallback();
     window.FMClubIdentity?.paintWithin?.(root);
-    if(data?.kind==='league' && window.FMWorldSquads){
+    // The club-squad/tactical-identity archive is not part of Other Leagues.
+    // Keep the existing attachment on the managed Competitions page only.
+    if(explorerView==='mine' && data?.kind==='league' && window.FMWorldSquads){
       const squads=document.createElement('section');
       squads.className='ws-root panel';
       root.appendChild(squads);
@@ -515,7 +530,7 @@ window.FMCompetitions = (() => {
     const seq=++detailSerial;
     selectedComp=id;
     selectedByView[explorerView]=id;
-    root.innerHTML=`<div class="cmp-root"${managerThemeAttrs()}>${managerHero()}${explorerView==='mine'?clubTabs():directoryBrowser()}<section class="cmp-loading panel">Loading actual competition results and fixtures…</section></div>`;
+    root.innerHTML=`<div class="cmp-root${explorerView==='other'?' cmp-other-leagues':''}"${managerThemeAttrs()}>${managerHero()}${otherHero()}${explorerView==='mine'?clubTabs():directoryBrowser()}<section class="cmp-loading panel">Loading actual competition results and fixtures…</section></div>`;
     window.FMClubIdentity?.paintWithin?.(root);
     try{
       const res=await fetch('/api/competitions/'+encodeURIComponent(id),{cache:'no-store'});
@@ -616,6 +631,11 @@ window.FMCompetitions = (() => {
   // The selected competition and matchday state are not altered by this redraw.
   window.addEventListener('fm-identity-ready',()=>{
     if(root && index && explorerView==='mine')render();
+  });
+  // Imported logos can arrive after the first render. A redraw retains
+  // competition, directory filters, matchday and knockout selection.
+  window.addEventListener('fm-assets-ready',()=>{
+    if(root && index && explorerView==='other')render();
   });
   return {mount,refresh:()=>loadIndex()};
 })();

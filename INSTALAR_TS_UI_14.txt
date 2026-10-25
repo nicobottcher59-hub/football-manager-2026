@@ -1,0 +1,15 @@
+TS-UI-14 — Other Leagues · INSTALL
+
+BASE REQUERIDA: TS-UI-13.01 (Competition Centre Hero) instalada.
+1. Guardar copia del proyecto y partidas.
+2. Cerrar el juego y detener el servidor Python.
+3. Extraer el ZIP en la raiz de football-manager-2026,
+   manteniendo la estructura de carpetas y reemplazando los archivos.
+4. Reiniciar servidor/juego y actualizar el navegador con Ctrl+F5.
+
+No hay migracion del formato de guardado: version 32.
+No se modifica la pantalla Competitions del club, sus tablas ni su motor.
+
+GITHUB DESKTOP
+Branch (nueva): feat/ts-ui-14-other-leagues-identity
+Summary: feat(other-leagues): TS-UI-14 worldwide competition identity and PNG support
