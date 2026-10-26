@@ -1,0 +1,107 @@
+{
+  "base": "TS-UI-14.01",
+  "patch": "TS-UI-15",
+  "save_version": 32,
+  "files": [
+    {
+      "path": "frontend/portable/index.html",
+      "sha256": "d01379d866426def0cbf99f4a1b0c4f54af5b1e2ae14607d4bb7ebd867d64ad3",
+      "bytes": 41507
+    },
+    {
+      "path": "frontend/portable/portable.js",
+      "sha256": "86e16d9ee8005f3e49b62a9b4f6612bfda1de1a9834ecae9dbe0898cb7527501",
+      "bytes": 43316
+    },
+    {
+      "path": "frontend/portable/inbox.js",
+      "sha256": "ec182b782246907f8409b8529d44bea8c9d6c93c2d8e238e3f39c1dd66c4feb2",
+      "bytes": 13475
+    },
+    {
+      "path": "frontend/portable/inbox.css",
+      "sha256": "0364888eb51f2ad6b0f402dad10a50aae093c7182888821f8361b7eaefa254c4",
+      "bytes": 7926
+    },
+    {
+      "path": "frontend/portable/news_media.js",
+      "sha256": "a95b1e4a21aca311d7a4fc776ff7eae9ca29241ee458e836e7c6bca7ee1ecf1d",
+      "bytes": 4519
+    },
+    {
+      "path": "frontend/portable/news.js",
+      "sha256": "6df31a2362056367b073e2339e4f916aeb06bbafc69076e0e91f39e46c1f31ba",
+      "bytes": 11514
+    },
+    {
+      "path": "frontend/portable/news.css",
+      "sha256": "42999f8c229cf33d9da455b1acdaa04e31984f1da331118cfeea03df88b85cc7",
+      "bytes": 11453
+    },
+    {
+      "path": "frontend/portable/assets/news/board-agreement-03.webp",
+      "sha256": "1a3c063e0ce2228f62a8634321535d313e76c00556394ef4a2016c91856f5aad",
+      "bytes": 48530
+    },
+    {
+      "path": "frontend/portable/assets/news/board-review-02.webp",
+      "sha256": "78a7f632d7a1b4fc68c0fc55b28d0e5209b63723c20c0139421665ed13b792cf",
+      "bytes": 69974
+    },
+    {
+      "path": "frontend/portable/assets/news/board-signing-01.webp",
+      "sha256": "d52592d4db7471eff2d4e02be6102a3271d191ea5473ad7fa1d8b143f9b8e419",
+      "bytes": 59340
+    },
+    {
+      "path": "frontend/portable/assets/news/press-conference-02.webp",
+      "sha256": "e97255e0b5fd76bcc62001278e60155a21f033c0ac82ce22867454d4e72f85e3",
+      "bytes": 50202
+    },
+    {
+      "path": "frontend/portable/assets/news/press-interview-03.webp",
+      "sha256": "1b8b38d6dbe592845a963433e6206307065af23667f65241af1856e36a975b33",
+      "bytes": 39332
+    },
+    {
+      "path": "frontend/portable/assets/news/press-scrum-01.webp",
+      "sha256": "ab76f7dacc1459b939c1eda7f419dfa26da6748d8e833947d2cba451fe17aea6",
+      "bytes": 37922
+    },
+    {
+      "path": "frontend/portable/assets/news/stadium-crowd-02.webp",
+      "sha256": "22fd897c220fca35f737821acf3f3cee12ea96aeea7f8b82c41570d3a2b726bd",
+      "bytes": 147648
+    },
+    {
+      "path": "frontend/portable/assets/news/stadium-floodlights-01.webp",
+      "sha256": "eb21dd7163067da1cd001799085976399844539eaba176e148f26f4684f4862d",
+      "bytes": 172840
+    },
+    {
+      "path": "frontend/portable/assets/news/stadium-night-03.webp",
+      "sha256": "9b85d67f4950df3279cf712d3bacd27435e30cfc13373a5caaee83cff802c509",
+      "bytes": 198250
+    },
+    {
+      "path": "frontend/portable/assets/news/training-pitch-01.webp",
+      "sha256": "2ba2f0f919e02c591848c269bb2d629f79fa0f8fa36add237aefd7cf1c1efa23",
+      "bytes": 117118
+    },
+    {
+      "path": "frontend/portable/assets/news/training-session-02.webp",
+      "sha256": "4aeb30bfaef4c24ea9126e45737e0628fbe60548c5f07d716b8262ccda572ff8",
+      "bytes": 97180
+    },
+    {
+      "path": "tests/test_ts_ui_15_newsroom_media.py",
+      "sha256": "d570d5f80aa452764926f0510fc6fe15b0296def3be50ad278c93c98f80bb019",
+      "bytes": 1902
+    },
+    {
+      "path": "tests/ui/test_ts_ui_15_media.cjs",
+      "sha256": "cd3b7f592f8c31008b96e5d8b3c9c571956320ecefae53ef81fad9bc2dd70c96",
+      "bytes": 1702
+    }
+  ]
+}

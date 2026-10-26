@@ -1,0 +1,26 @@
+TS-UI-15 -- NEWSROOM, INBOX Y BIBLIOTECA DE IMAGENES
+
+BASE REQUERIDA: TS-UI-14.01 (Other Leagues Club Colors) y todos los parches anteriores.
+
+1. Cerrar la interfaz del juego y detener el proceso Python.
+2. Respaldar proyecto y partidas guardadas.
+3. Extraer este ZIP EN LA RAIZ de football-manager-2026, conservando las carpetas.
+4. Sobrescribir los archivos afectados cuando se solicite.
+5. Iniciar el juego normalmente y actualizar el navegador con Ctrl + F5.
+
+Cambios:
+- Menu Newsroom independiente de Manager Inbox.
+- Feed y articulos de noticias confirmadas, con diferentes disenios y categorias.
+- 11 imagenes genericas nuevas (assets/news/*.webp) y reutilizacion de otras ya incluidas.
+- La imagen ilustrativa por categoria se asigna por ID de noticia y se evita repetir en noticias vecinas.
+- Si el jugador tiene fotografia importada por ID en data/entity-assets.json, se usa esa foto.
+- Cuando no existe fotografia del jugador, NO se le atribuye la imagen de otra persona.
+- Inbox conserva las conversaciones reales y las acciones del backend, con presentacion actualizada.
+- Oferta recibida desde Inbox abre Transfers.
+
+No se modifica el motor, las negociaciones, las partidas ni la version de guardado.
+No se agregan paquetes ni dependencias para ejecutar el juego.
+
+NOTA: El feed esta basado en acontecimientos confirmados del motor. Al inicio de
+la temporada puede estar vacio. El nuevo banco de imagenes no genera noticias falsas.
+La biblioteca puede ampliarse a 20-30 fotos en una proxima entrega sin alterar el motor.

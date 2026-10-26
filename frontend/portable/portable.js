@@ -277,6 +277,9 @@
   const inboxPanel=document.createElement('section');
   inboxPanel.className='fm-inbox-screen';inboxPanel.style.display='none';
   main.insertBefore(inboxPanel,footer);
+  const newsroomPanel=document.createElement('section');
+  newsroomPanel.className='fm-newsroom-screen';newsroomPanel.style.display='none';
+  main.insertBefore(newsroomPanel,footer);
   const financesPanel=document.createElement('section');
   financesPanel.className='fm-finances-screen';financesPanel.style.display='none';
   main.insertBefore(financesPanel,footer);
@@ -350,6 +353,7 @@
     const calendar = page === 'Calendar';
     const dressingRoom = page === 'Dressing Room';
     const inbox = page === 'Inbox';
+    const newsroom = page === 'Newsroom';
     const clubSupport = ['Staff','Training','Medical Centre'].includes(page);
     const youthAcademy = page === 'Youth Academy';
     const finances = page === 'Finances';
@@ -367,12 +371,14 @@
       else button.removeAttribute('aria-current');
     });
     dashboard.style.display = home ? '' : 'none';
-    placeholder.style.display = !home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !clubSupport && !youthAcademy && !finances && !transfers && !transferCentrePage && !contractPage && !matchPage && !clubPage && !careerPage && !clubInfoPage ? 'flex' : 'none';
+    placeholder.style.display = !home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !newsroom && !clubSupport && !youthAcademy && !finances && !transfers && !transferCentrePage && !contractPage && !matchPage && !clubPage && !careerPage && !clubInfoPage ? 'flex' : 'none';
     supportPanel.style.display = clubSupport ? 'block' : 'none';
     if(clubSupport)window.FMSupport?.mount(supportPanel,page==='Staff'?'staff':page==='Training'?'training':'medical');
     dressingPanel.style.display = dressingRoom ? 'block' : 'none';
     inboxPanel.style.display = inbox ? 'block' : 'none';
     if(inbox)window.FMInbox?.mount(inboxPanel,extra.player||null);
+    newsroomPanel.style.display = newsroom ? 'block' : 'none';
+    if(newsroom)window.FMNews?.mount(newsroomPanel);
     youthPanel.style.display = youthAcademy ? 'block' : 'none';
     transferCentrePanel.style.display = transferCentrePage ? 'block' : 'none';
     if(transferCentrePage)window.FMTransferCentre?.mount(transferCentrePanel);
@@ -445,6 +451,7 @@
       : clubPage ? 'Persistent squad, player profiles and recorded club information. Read-only.'
       : clubSupport ? (page==='Staff'?'Hire coaching, medical and fitness specialists.':page==='Training'?'Manage one automatic training plan and individual workloads.':'Injury timelines, recovery treatments and player opinions.')
       : inbox ? 'Live club messages, scouting reports, medical news and player conversations.'
+      : newsroom ? 'Verified football news, match results, transfers and honours from your career.'
       : youthAcademy ? 'U15 preview, automated U17/U21 leagues and quarterly scouting.'
       : contractPage ? 'Agent-led personal contracts: wage, role, duration and performance incentives.'
       : negotiationPage ? 'Dedicated negotiation: guaranteed fees, optional clauses and club replies.'
@@ -457,7 +464,7 @@
       : competitions ? 'Your club competitions, standings, fixtures and confirmed cup brackets.'
       : otherLeagues ? 'Browse other leagues and cups by continent, country and division.'
       : 'This section is planned for a future update.';
-    if (!home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !clubSupport && !youthAcademy && !finances && !transfers && !transferCentrePage && !contractPage) $('h2', placeholder).textContent = page;
+    if (!home && !squad && !calendar && !competitionPage && !dressingRoom && !inbox && !newsroom && !clubSupport && !youthAcademy && !finances && !transfers && !transferCentrePage && !contractPage) $('h2', placeholder).textContent = page;
     window.scrollTo({top:0, behavior:'auto'});
   }
   window.addEventListener('message', event => {
@@ -597,7 +604,7 @@
   inboxButton.addEventListener('click',()=>activityTab('inbox'));
   storiesButton.addEventListener('click',()=>activityTab('stories'));
   $('.inbox-card .text-action').addEventListener('click',()=>{if(storiesButton.classList.contains('active'))window.FMNews?.renderPanel(activityPanel);else navigate('Inbox');});
-  $('.club-news .text-action').addEventListener('click',()=>activityTab('stories'));
+  $('.club-news .text-action').addEventListener('click',()=>navigate('Newsroom'));
   activityTab('inbox');
   window.FMInbox?.refresh();
 

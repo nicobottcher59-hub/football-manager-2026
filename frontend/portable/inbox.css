@@ -30,3 +30,43 @@
 .mi-detail-actions{flex-wrap:wrap}
 .mi-promise{display:flex;align-items:center;gap:8px;padding-top:8px}
 .mi-promise[hidden],.mi-promise-note[hidden]{display:none}
+
+/* TS-UI-15 — modern Manager Inbox, no change to conversation/decision logic. */
+.fm-inbox-screen{max-width:1550px;padding:6px 4px 34px;--mi-club:var(--ui-club-rgb,20,135,216);color:#eaf6ff}
+.mi-header{min-height:128px;position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;padding:20px 24px;border:1px solid rgba(var(--mi-club),.65);border-radius:11px;background:#0a2438;margin-bottom:12px}
+.mi-header::before{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,#07192cf5 0%,#0a223ad9 38%,#091b2ab5 85%),url('assets/staff/football-analysis-room.webp') center/cover no-repeat}
+.mi-header::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(var(--mi-club),.31),transparent 65%),repeating-linear-gradient(140deg,transparent 0 100px,rgba(var(--mi-club),.05) 101px 102px,transparent 103px 180px)}
+.mi-header h2{color:#fff;font-weight:900;font-size:clamp(24px,2.3vw,30px);margin:5px 0}
+.mi-header p{color:#c7dae8;opacity:1;font-size:12px;margin:0}
+.mi-header .mi-eyebrow{color:var(--ui-club-highlight,#67b8e8);font-size:10px;font-weight:850;opacity:1}
+.mi-pill{background:#081c30d9;border-color:rgba(var(--mi-club),.64);font-size:11px;color:#d7effc;border-radius:8px}
+.mi-toolbar{padding:10px 12px;border:1px solid #29516a;border-radius:10px;background:#0c293e}
+.mi-toolbar label{color:#bcd7e7;font-size:12px}
+.mi-toolbar select,.mi-editor select{background:#0c263e;border-color:#356580;color:#e7f7ff}
+.mi-toolbar-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mi-open-news{background:#0e354f;color:#e1f6ff;border:1px solid #43748e;border-radius:7px;padding:10px 13px;cursor:pointer;font-weight:650}
+.mi-talk-open,.mi-confirm{border:1px solid rgba(var(--mi-club),.75);background:rgba(var(--mi-club),.85);color:#fff;font-weight:700}
+.mi-grid{grid-template-columns:minmax(270px,.72fr) minmax(0,1.28fr);gap:11px;min-height:440px}
+.mi-list,.mi-detail,.mi-editor{border:1px solid #2e5169;background:#0c263c;box-shadow:inset 0 1px #ffffff0c;border-radius:10px}
+.mi-item{position:relative;padding:13px 12px 13px 61px;min-height:86px;border:1px solid #24475f;background:#102e46;transition:border-color .15s ease,background .15s ease}
+.mi-item:hover,.mi-item.mi-selected{border-color:rgba(var(--mi-club),.85);background:linear-gradient(100deg,rgba(var(--mi-club),.19),#0e2b43)}
+.mi-item.mi-unread{border-left:3px solid var(--ui-club-highlight,#67b8e8)}
+.mi-item-avatar{position:absolute;left:10px;top:13px;width:40px;height:41px;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(var(--mi-club),.52);border-radius:8px;background:#173d59;color:#9fd5f0}
+.mi-item-avatar>span{font-size:19px}
+.mi-item-avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
+.mi-item-top strong{font-size:13px;color:#fff}
+.mi-item-copy{margin:6px 0;font-size:11px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.mi-item-meta{flex-wrap:wrap;font-size:10px;color:#a3c6dd}
+.mi-item-meta em{color:#ffccab}
+.mi-detail{position:relative;min-height:365px;padding:22px 23px}
+.mi-detail .mi-eyebrow{font-size:10px;font-weight:750;opacity:1;color:#78c3e9}
+.mi-detail h3{color:#fff;font-size:25px;line-height:1.25;margin:10px 0 18px}
+.mi-detail p{font-size:13px;color:#c6dceb;opacity:1;line-height:1.8}
+.mi-detail-player-photo{float:right;width:108px;height:115px;margin:0 0 13px 20px;border-radius:9px;border:1px solid rgba(var(--mi-club),.52);overflow:hidden;background:#102c45}
+.mi-detail-player-photo img{width:100%;height:100%;object-fit:contain}
+.mi-detail-actions{clear:both;gap:8px}
+.mi-reply,.mi-detail-actions button{background:#123e5e;border:1px solid rgba(var(--mi-club),.6);color:#eef9ff;font-size:12px;border-radius:7px}
+.mi-decline{border-color:#bc6673!important;color:#ffd4da!important;background:#3b202e!important}
+.mi-editor{background:#102e44}
+@media(max-width:880px){.mi-grid{grid-template-columns:minmax(240px,.78fr) minmax(0,1.22fr)}}
+@media(max-width:740px){.mi-grid{grid-template-columns:1fr}.mi-list{max-height:330px}.mi-header{padding:17px;flex-wrap:wrap}.mi-toolbar{align-items:stretch}.mi-toolbar-actions{width:100%}.mi-toolbar-actions>*{flex:1}}

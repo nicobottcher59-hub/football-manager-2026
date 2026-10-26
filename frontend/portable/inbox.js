@@ -16,8 +16,15 @@
   function sendSafe(command){ send(command).catch(error=>{
     const field=host?.querySelector('.mi-footnote');if(field)field.textContent=String(error.message||error);
   }); }
+  const messageIcon = {medical:'✚',contracts:'✎',scouting:'⌕',calendar:'▦',results:'⚽',market:'⇄',dressing_room:'♟',conversations:'◉',academy:'★',system:'◆'};
+  function playerPhoto(id){
+    const path=id&&window.FMEntityAssets?.getPhoto?.(id);
+    return path&&window.FMEntityAssets?.safePath?.(path) ? window.FMEntityAssets.url(path) : null;
+  }
   function messageRow(m) {
+    const photo=playerPhoto(m.player_id);
     return `<button class="mi-item ${!m.read?'mi-unread':''} ${m.id===selected?'mi-selected':''}" type="button" data-mi-id="${m.id}">
+      <span class="mi-item-avatar">${photo?`<img class="fm-photo-real" data-fm-asset="optional" src="${esc(photo)}" alt="" loading="lazy">`:''}<span aria-hidden="true">${messageIcon[m.category]||'✉'}</span></span>
       <span class="mi-item-top"><strong>${esc(m.title)}</strong><small>${esc(m.date)}</small></span>
       <span class="mi-item-copy">${esc(m.body)}</span>
       <span class="mi-item-meta"><span>${esc(labels[m.category]||m.category)}</span>${outstanding(m)?'<em>Player request · respond by '+esc(m.decision_due)+'</em>':''}</span>
@@ -28,13 +35,13 @@
     const list = messages().filter(m=>filter==='all'||(filter==='unread'&&!m.read)||(filter==='pending'&&outstanding(m))||filter===m.category);
     if (!list.some(m=>m.id===selected)) selected = list[0]?.id ?? null;
     const current = messages().find(m=>m.id===selected);
-    host.innerHTML = `<div class="mi-header"><div><span class="mi-eyebrow">TS-25 · LIVE CAREER EVENTS</span><h2>Manager Inbox</h2><p>Club news, medical reports, scouting and player relationships. Changes come from your career.</p></div>
+    host.innerHTML = `<div class="mi-header"><div><span class="mi-eyebrow">CLUB COMMUNICATIONS · MANAGER'S OFFICE</span><h2>Manager Inbox</h2><p>Direct conversations, reports and decisions from your real career.</p></div>
       <span class="mi-pill">${data.unread} unread · ${data.requests} player requests · ${(data.active_promises||[]).length} commitments</span></div>
       <div class="mi-toolbar"><label>Filter <select id="mi-filter"><option value="all">All messages</option><option value="unread">Unread</option><option value="pending">Pending decisions</option>
       ${Object.keys(labels).map(key=>`<option value="${key}">${esc(labels[key])}</option>`).join('')}</select></label>
-      <button class="mi-talk-open" type="button">Start player conversation</button></div>
+      <div class="mi-toolbar-actions"><button class="mi-open-news" type="button">Open Newsroom</button><button class="mi-talk-open" type="button">Start player conversation</button></div></div>
       <div class="mi-grid"><div class="mi-list" aria-label="Messages">${list.map(messageRow).join('')||'<p class="mi-empty">No messages in this category.</p>'}</div>
-      <section class="mi-detail" aria-label="Message details">${current?`<span class="mi-eyebrow">${esc(labels[current.category]||current.category)} · ${esc(current.date)}</span>
+      <section class="mi-detail" aria-label="Message details">${current?`${playerPhoto(current.player_id)?`<div class="mi-detail-player-photo"><img class="fm-photo-real" data-fm-asset="optional" src="${esc(playerPhoto(current.player_id))}" alt="" loading="lazy"></div>`:''}<span class="mi-eyebrow">${esc(labels[current.category]||current.category)} · ${esc(current.date)}</span>
         <h3>${esc(current.title)}</h3><p>${esc(current.body)}</p><div class="mi-detail-actions">
         ${current.player_id?`<button type="button" class="mi-reply" data-career-type="player" data-career-id="${esc(current.player_id)}">View player history →</button>`:''}
         ${!current.read?button('Mark as read','mi-read'):''}
@@ -43,7 +50,7 @@
         ${current.read && !current.requires_reply && !current.resolved?button('Archive notice','mi-resolve'):''}
         ${current.category==='scouting'?(current.source_key?.startsWith('professional-scout:')?button('Open Scouting','mi-route-transfers'):button('Open Youth Academy','mi-route-youth')):''}
         ${current.category==='contracts'?button('Open Finances','mi-route-finance'):''}
-        ${current.category==='market'?button('Open Scouting','mi-route-transfers'):''}
+        ${current.category==='market'?button('Open Transfers','mi-route-market'):''}
         ${current.category==='calendar'||current.category==='results'?button('Open Calendar','mi-route-calendar'):''}
         </div>`:'<h3>No notifications yet</h3><p>Your real career updates will appear as the world advances.</p>'}</section></div>
       <div class="mi-editor" hidden></div><p class="mi-footnote">${esc(data.notice||'')}</p>`;
@@ -54,11 +61,12 @@
       render();if(m&&!m.read)sendSafe({action:'read',message_id:m.id});
     }));
     host.querySelector('.mi-talk-open').addEventListener('click',()=>openTalk(chosen));
+    host.querySelector('.mi-open-news').addEventListener('click',()=>window.FMNavigation?.navigate?.('Newsroom'));
     host.querySelector('.mi-read')?.addEventListener('click',()=>sendSafe({action:'read',message_id:selected}));
-    host.querySelector('.mi-reply')?.addEventListener('click',e=>{chosenTopic=current?.suggested_topic||null;openTalk(e.currentTarget.dataset.player);});
+    host.querySelector('.mi-reply[data-player]')?.addEventListener('click',e=>{chosenTopic=current?.suggested_topic||null;openTalk(e.currentTarget.dataset.player);});
     host.querySelector('.mi-decline')?.addEventListener('click',()=>sendSafe({action:'respond',message_id:selected,choice:'decline'}));
     host.querySelector('.mi-resolve')?.addEventListener('click',()=>sendSafe({action:'resolve',message_id:selected}));
-    for(const [cls,route] of [['mi-route-youth','Youth Academy'],['mi-route-finance','Finances'],['mi-route-transfers','Scouting'],['mi-route-calendar','Calendar']])
+    for(const [cls,route] of [['mi-route-youth','Youth Academy'],['mi-route-finance','Finances'],['mi-route-transfers','Scouting'],['mi-route-market','Transfers'],['mi-route-calendar','Calendar']])
       host.querySelector('.'+cls)?.addEventListener('click',()=>window.FMNavigation?.navigate(route));
     if(chosen) openTalk(chosen,true);
   }
@@ -146,5 +154,6 @@
     }));
     const badge=document.querySelector('#activity-inbox .unread-count');if(badge)badge.textContent=String(data.unread);
   }
+  window.addEventListener('fm-assets-ready',()=>{if(host&&data&&host.isConnected)render();});
   window.FMInbox = {mount:(target,playerId)=>{host=target;chosen=playerId||null;refresh();},refresh,renderHome};
 })();
